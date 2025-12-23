@@ -9,22 +9,37 @@ import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import { toast } from 'sonner';
 
-type AuthMode = 'login' | 'register';
+type AuthMode = 'login' | 'register' | 'forgot-password' | 'reset-password';
 
 export default function AuthPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user, loading: authLoading, signIn, signUp } = useAuth();
+  const { user, loading: authLoading, signIn, signUp, resetPassword, updatePassword } = useAuth();
   const { profile, loading: profileLoading, createProfile } = usePlumberProfile();
   
-  // Default to 'register', use 'login' only if explicitly set in URL
-  const initialMode = searchParams.get('mode') === 'login' ? 'login' : 'register';
-  const [mode, setMode] = useState<AuthMode>(initialMode);
+  // Determine initial mode from URL
+  const getInitialMode = (): AuthMode => {
+    const urlMode = searchParams.get('mode');
+    if (urlMode === 'login') return 'login';
+    if (urlMode === 'forgot-password') return 'forgot-password';
+    if (urlMode === 'reset-password') return 'reset-password';
+    return 'register';
+  };
+  
+  const [mode, setMode] = useState<AuthMode>(getInitialMode());
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Login form
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  
+  // Forgot password form
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [emailSent, setEmailSent] = useState(false);
+  
+  // Reset password form
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
   // Register form
   const [registerData, setRegisterData] = useState({
@@ -38,12 +53,64 @@ export default function AuthPage() {
   });
 
   useEffect(() => {
+    // Don't redirect if user is resetting password
+    if (mode === 'reset-password') return;
+    
     if (user && !authLoading && !profileLoading) {
       // Redirect to dashboard regardless of profile status
       // Dashboard will handle missing profile case
       navigate('/dashboard');
     }
-  }, [user, profile, authLoading, profileLoading, navigate]);
+  }, [user, profile, authLoading, profileLoading, navigate, mode]);
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!forgotEmail) {
+      toast.error('Inserisci la tua email');
+      return;
+    }
+
+    setIsSubmitting(true);
+    const { error } = await resetPassword(forgotEmail);
+    setIsSubmitting(false);
+
+    if (error) {
+      toast.error('Errore durante l\'invio dell\'email');
+    } else {
+      setEmailSent(true);
+      toast.success('Email inviata! Controlla la tua casella di posta');
+    }
+  };
+
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!newPassword || !confirmNewPassword) {
+      toast.error('Compila tutti i campi');
+      return;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      toast.error('Le password non corrispondono');
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      toast.error('La password deve essere di almeno 6 caratteri');
+      return;
+    }
+
+    setIsSubmitting(true);
+    const { error } = await updatePassword(newPassword);
+    setIsSubmitting(false);
+
+    if (error) {
+      toast.error('Errore durante l\'aggiornamento della password');
+    } else {
+      toast.success('Password aggiornata con successo!');
+      navigate('/dashboard');
+    }
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -226,18 +293,115 @@ export default function AuthPage() {
                 <Wrench className="h-8 w-8 text-primary" />
               </div>
               <h2 className="text-2xl font-bold text-foreground">
-                {mode === 'login' ? 'Accedi come Idraulico' : 'Inizia la registrazione'}
+                {mode === 'login' && 'Accedi come Idraulico'}
+                {mode === 'register' && 'Inizia la registrazione'}
+                {mode === 'forgot-password' && 'Recupera password'}
+                {mode === 'reset-password' && 'Nuova password'}
               </h2>
               <p className="text-muted-foreground mt-2">
-                {mode === 'login' 
-                  ? 'Accedi per visualizzare le richieste nella tua zona' 
-                  : 'Crea il tuo profilo professionale in pochi minuti'}
+                {mode === 'login' && 'Accedi per visualizzare le richieste nella tua zona'}
+                {mode === 'register' && 'Crea il tuo profilo professionale in pochi minuti'}
+                {mode === 'forgot-password' && 'Ti invieremo un link per reimpostare la password'}
+                {mode === 'reset-password' && 'Inserisci la tua nuova password'}
               </p>
             </div>
 
             <div className="bg-card rounded-lg border border-border p-6 shadow-sm">
 
-              {mode === 'login' ? (
+              {mode === 'forgot-password' && (
+                emailSent ? (
+                  <div className="text-center space-y-4">
+                    <div className="bg-success/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto">
+                      <Mail className="h-8 w-8 text-success" />
+                    </div>
+                    <h3 className="font-semibold text-foreground">Email inviata!</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Controlla la tua casella di posta e clicca sul link per reimpostare la password.
+                    </p>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setMode('login');
+                        setEmailSent(false);
+                      }}
+                      className="w-full"
+                    >
+                      Torna al login
+                    </Button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleForgotPassword} className="space-y-4">
+                    <div>
+                      <Label htmlFor="forgot-email" className="mb-2 block">Email</Label>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          id="forgot-email"
+                          type="email"
+                          placeholder="La tua email"
+                          value={forgotEmail}
+                          onChange={(e) => setForgotEmail(e.target.value)}
+                          className="pl-10"
+                        />
+                      </div>
+                    </div>
+
+                    <Button type="submit" className="w-full" disabled={isSubmitting}>
+                      {isSubmitting ? 'Invio...' : 'Invia link di recupero'}
+                    </Button>
+
+                    <p className="text-sm text-center text-muted-foreground mt-4">
+                      <button
+                        type="button"
+                        onClick={() => setMode('login')}
+                        className="text-primary hover:underline font-medium"
+                      >
+                        Torna al login
+                      </button>
+                    </p>
+                  </form>
+                )
+              )}
+
+              {mode === 'reset-password' && (
+                <form onSubmit={handleResetPassword} className="space-y-4">
+                  <div>
+                    <Label htmlFor="new-password" className="mb-2 block">Nuova password</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="new-password"
+                        type="password"
+                        placeholder="Minimo 6 caratteri"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        className="pl-10"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="confirm-new-password" className="mb-2 block">Conferma password</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="confirm-new-password"
+                        type="password"
+                        placeholder="Ripeti la password"
+                        value={confirmNewPassword}
+                        onChange={(e) => setConfirmNewPassword(e.target.value)}
+                        className="pl-10"
+                      />
+                    </div>
+                  </div>
+
+                  <Button type="submit" className="w-full" disabled={isSubmitting}>
+                    {isSubmitting ? 'Aggiornamento...' : 'Aggiorna password'}
+                  </Button>
+                </form>
+              )}
+
+              {mode === 'login' && (
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div>
                     <Label htmlFor="login-email" className="mb-2 block">Email</Label>
@@ -269,6 +433,16 @@ export default function AuthPage() {
                     </div>
                   </div>
 
+                  <div className="text-right">
+                    <button
+                      type="button"
+                      onClick={() => setMode('forgot-password')}
+                      className="text-sm text-primary hover:underline"
+                    >
+                      Password dimenticata?
+                    </button>
+                  </div>
+
                   <Button type="submit" className="w-full" disabled={isSubmitting}>
                     {isSubmitting ? 'Accesso...' : 'Accedi'}
                   </Button>
@@ -280,7 +454,9 @@ export default function AuthPage() {
                     </Link>
                   </p>
                 </form>
-              ) : (
+              )}
+
+              {mode === 'register' && (
                 <form onSubmit={handleRegister} className="space-y-4">
                   <div>
                     <Label htmlFor="reg-name" className="mb-2 block">Nome e Cognome</Label>

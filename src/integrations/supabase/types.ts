@@ -470,6 +470,10 @@ export type Database = {
       }
     }
     Functions: {
+      get_current_plumber_plan: {
+        Args: never
+        Returns: Database["public"]["Enums"]["subscription_plan"]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -478,6 +482,10 @@ export type Database = {
         Returns: boolean
       }
       is_plumber: { Args: { _user_id: string }; Returns: boolean }
+      is_request_visible_for_basic: {
+        Args: { request_created_at: string; request_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       accessibility_type: "facile" | "media" | "difficile"

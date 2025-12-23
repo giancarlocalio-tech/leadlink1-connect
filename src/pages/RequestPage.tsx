@@ -25,7 +25,7 @@ import {
 } from '@/lib/types';
 
 const URGENCY_TYPES: UrgencyType[] = ['subito', 'entro_24_ore', 'prossimi_giorni'];
-const PROPERTY_TYPES: PropertyType[] = ['casa', 'appartamento', 'negozio'];
+const PROPERTY_TYPES: PropertyType[] = ['casa', 'appartamento', 'negozio', 'ufficio', 'condominio'];
 const ACCESSIBILITY_TYPES: AccessibilityType[] = ['facile', 'media', 'difficile'];
 
 // Step definitions
@@ -119,20 +119,23 @@ export default function RequestPage() {
 
     setIsSubmitting(true);
 
+    // Using type assertion as the database types will be regenerated
+    const insertData = {
+      intervention_type: formData.interventionType,
+      city: formData.city,
+      description: formData.description,
+      urgency: formData.urgency,
+      property_type: formData.propertyType,
+      accessibility: formData.accessibility,
+      client_name: formData.clientName,
+      client_phone: formData.clientPhone,
+      client_email: formData.clientEmail || null,
+      privacy_accepted: formData.privacyAccepted,
+    };
+
     const { error } = await supabase
       .from('service_requests')
-      .insert({
-        intervention_type: formData.interventionType,
-        city: formData.city,
-        description: formData.description,
-        urgency: formData.urgency as UrgencyType,
-        property_type: formData.propertyType as PropertyType,
-        accessibility: formData.accessibility as AccessibilityType,
-        client_name: formData.clientName,
-        client_phone: formData.clientPhone,
-        client_email: formData.clientEmail || null,
-        privacy_accepted: formData.privacyAccepted,
-      });
+      .insert(insertData as any);
 
     setIsSubmitting(false);
 

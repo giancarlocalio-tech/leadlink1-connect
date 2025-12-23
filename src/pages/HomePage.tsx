@@ -34,6 +34,7 @@ import type { InterventionType } from '@/lib/types';
 import { INTERVENTION_LABELS } from '@/lib/types';
 import { CATEGORY_FLOWS, getNextQuestionId, type WizardQuestion } from '@/lib/wizardConfig';
 import { CityAutocomplete, type ItalianCity } from '@/components/CityAutocomplete';
+import { AnimatedCard } from '@/components/AnimatedCard';
 
 // All intervention types for the first selection
 const ALL_INTERVENTION_TYPES: InterventionType[] = [
@@ -453,65 +454,77 @@ export default function HomePage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-              <div className="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-shadow">
-                <div className="bg-primary/10 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
-                  <Users className="h-6 w-6 text-primary" />
+              <AnimatedCard delay={0}>
+                <div className="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-shadow h-full">
+                  <div className="bg-primary/10 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
+                    <Users className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-2">Clienti qualificati</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Ricevi solo richieste di clienti reali che hanno bisogno di un idraulico nella tua zona.
+                  </p>
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">Clienti qualificati</h3>
-                <p className="text-sm text-muted-foreground">
-                  Ricevi solo richieste di clienti reali che hanno bisogno di un idraulico nella tua zona.
-                </p>
-              </div>
+              </AnimatedCard>
 
-              <div className="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-shadow">
-                <div className="bg-primary/10 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
-                  <MapPin className="h-6 w-6 text-primary" />
+              <AnimatedCard delay={100}>
+                <div className="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-shadow h-full">
+                  <div className="bg-primary/10 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
+                    <MapPin className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-2">Solo nella tua zona</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Definisci le aree in cui lavori e ricevi solo le richieste pertinenti alla tua copertura.
+                  </p>
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">Solo nella tua zona</h3>
-                <p className="text-sm text-muted-foreground">
-                  Definisci le aree in cui lavori e ricevi solo le richieste pertinenti alla tua copertura.
-                </p>
-              </div>
+              </AnimatedCard>
 
-              <div className="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-shadow">
-                <div className="bg-primary/10 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
-                  <Clock className="h-6 w-6 text-primary" />
+              <AnimatedCard delay={200}>
+                <div className="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-shadow h-full">
+                  <div className="bg-primary/10 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
+                    <Clock className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-2">Notifiche istantanee</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Ricevi le nuove richieste in tempo reale e rispondi prima della concorrenza.
+                  </p>
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">Notifiche istantanee</h3>
-                <p className="text-sm text-muted-foreground">
-                  Ricevi le nuove richieste in tempo reale e rispondi prima della concorrenza.
-                </p>
-              </div>
+              </AnimatedCard>
 
-              <div className="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-shadow">
-                <div className="bg-primary/10 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
-                  <Shield className="h-6 w-6 text-primary" />
+              <AnimatedCard delay={300}>
+                <div className="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-shadow h-full">
+                  <div className="bg-primary/10 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
+                    <Shield className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-2">Contatti esclusivi</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Con i piani premium, sei l'unico a ricevere il contatto del cliente.
+                  </p>
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">Contatti esclusivi</h3>
-                <p className="text-sm text-muted-foreground">
-                  Con i piani premium, sei l'unico a ricevere il contatto del cliente.
-                </p>
-              </div>
+              </AnimatedCard>
 
-              <div className="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-shadow">
-                <div className="bg-primary/10 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
-                  <Star className="h-6 w-6 text-primary" />
+              <AnimatedCard delay={400}>
+                <div className="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-shadow h-full">
+                  <div className="bg-primary/10 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
+                    <Star className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-2">Costruisci la reputazione</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Raccogli recensioni verificate e migliora il tuo posizionamento sulla piattaforma.
+                  </p>
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">Costruisci la reputazione</h3>
-                <p className="text-sm text-muted-foreground">
-                  Raccogli recensioni verificate e migliora il tuo posizionamento sulla piattaforma.
-                </p>
-              </div>
+              </AnimatedCard>
 
-              <div className="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-shadow">
-                <div className="bg-primary/10 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
-                  <Zap className="h-6 w-6 text-primary" />
+              <AnimatedCard delay={500}>
+                <div className="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-shadow h-full">
+                  <div className="bg-primary/10 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
+                    <Zap className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-2">Zero pensieri</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Nessun contratto, disdici quando vuoi. Paghi solo se decidi di continuare.
+                  </p>
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">Zero pensieri</h3>
-                <p className="text-sm text-muted-foreground">
-                  Nessun contratto, disdici quando vuoi. Paghi solo se decidi di continuare.
-                </p>
-              </div>
+              </AnimatedCard>
             </div>
 
             <div className="text-center">

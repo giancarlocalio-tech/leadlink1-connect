@@ -177,6 +177,24 @@ export function useSubscription() {
     return Math.max(0, plan.max_exclusive_contacts - (subscription?.exclusive_contacts_used || 0));
   };
 
+  const getBasicContactsRemaining = (): { used: number; max: number; remaining: number } | null => {
+    if (!subscription || subscription.plan_type !== 'basic') return null;
+    
+    const now = new Date();
+    const thisMonthUnlocks = unlocks.filter(u => {
+      const unlockDate = new Date(u.unlocked_at);
+      return unlockDate.getMonth() === now.getMonth() && 
+             unlockDate.getFullYear() === now.getFullYear();
+    }).length;
+    
+    const maxBasicContacts = 3;
+    return {
+      used: thisMonthUnlocks,
+      max: maxBasicContacts,
+      remaining: Math.max(0, maxBasicContacts - thisMonthUnlocks)
+    };
+  };
+
   return {
     subscription,
     plans,
@@ -187,6 +205,7 @@ export function useSubscription() {
     unlockContact,
     getCurrentPlan,
     getMonthlyUnlocksRemaining,
+    getBasicContactsRemaining,
     refreshSubscription: fetchSubscription,
     refreshUnlocks: fetchUnlocks,
   };

@@ -9,6 +9,7 @@ interface SubscriptionCardProps {
   subscription: PlumberSubscription | null;
   currentPlan: SubscriptionPlanInfo | null;
   unlocksRemaining: number | null;
+  basicContactsRemaining?: { used: number; max: number; remaining: number } | null;
   onUpgrade?: () => void;
 }
 
@@ -16,6 +17,7 @@ export function SubscriptionCard({
   subscription, 
   currentPlan,
   unlocksRemaining,
+  basicContactsRemaining,
   onUpgrade 
 }: SubscriptionCardProps) {
   const getPlanIcon = (planType: string) => {
@@ -89,6 +91,23 @@ export function SubscriptionCard({
           <span className="text-muted-foreground">/mese</span>
         </div>
 
+        {currentPlan.plan_type === 'basic' && basicContactsRemaining && (
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Contatti usati questo mese</span>
+              <span className="font-medium">
+                {basicContactsRemaining.used}/{basicContactsRemaining.max}
+              </span>
+            </div>
+            <Progress value={(basicContactsRemaining.used / basicContactsRemaining.max) * 100} className="h-2" />
+            {basicContactsRemaining.remaining <= 1 && (
+              <p className="text-xs text-amber-600">
+                ⚠️ Ti {basicContactsRemaining.remaining === 0 ? 'non rimangono più' : `rimane solo ${basicContactsRemaining.remaining}`} contatti questo mese
+              </p>
+            )}
+          </div>
+        )}
+
         {currentPlan.plan_type === 'medium' && currentPlan.max_exclusive_contacts && (
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
@@ -99,7 +118,7 @@ export function SubscriptionCard({
             </div>
             <Progress value={usagePercentage} className="h-2" />
             {unlocksRemaining !== null && unlocksRemaining <= 2 && (
-              <p className="text-xs text-warning">
+              <p className="text-xs text-amber-600">
                 ⚠️ Ti rimangono solo {unlocksRemaining} contatti esclusivi questo mese
               </p>
             )}

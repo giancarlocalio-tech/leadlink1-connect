@@ -45,37 +45,53 @@ export default function DashboardPage() {
   }, [user, profile]);
 
   const fetchRequests = async () => {
+    if (!profile) return;
+    
     setLoadingRequests(true);
     
+    // Use the plumber view which shows all requests in plumber's service areas
     const { data, error } = await supabase
-      .from('service_requests')
+      .from('service_requests_plumber_view')
       .select('*')
-      .order('created_at', { ascending: false })
-      .limit(5);
+      .order('created_at', { ascending: false });
 
     if (error) {
       console.error('Error fetching requests:', error);
       toast.error('Errore nel caricamento delle richieste');
-    } else {
-      let filteredData = data || [];
-      if (profile?.service_areas && profile.service_areas.length > 0) {
-        filteredData = (data || []).filter(request => 
-          profile.service_areas.some(area => 
-            request.city.toLowerCase().includes(area.toLowerCase()) ||
-            area.toLowerCase().includes(request.city.toLowerCase())
-          )
-        );
-      }
-      
-      setRequests(filteredData.map(r => ({
-        ...r,
-        intervention_type: r.intervention_type as InterventionType,
-        urgency: r.urgency as UrgencyType,
-        property_type: r.property_type as PropertyType,
-        accessibility: r.accessibility as AccessibilityType,
-        is_exclusive: r.is_exclusive ?? false,
-      })));
+      setLoadingRequests(false);
+      return;
     }
+    
+    // Filter by plumber's service areas
+    let filteredData = data || [];
+    if (profile.service_areas && profile.service_areas.length > 0) {
+      filteredData = filteredData.filter(request => 
+        request.city && profile.service_areas!.some(area => 
+          request.city!.toLowerCase().includes(area.toLowerCase()) ||
+          area.toLowerCase().includes(request.city!.toLowerCase())
+        )
+      );
+    }
+    
+    setRequests(filteredData.map(r => ({
+      id: r.id!,
+      intervention_type: r.intervention_type as InterventionType,
+      city: r.city!,
+      description: r.description!,
+      urgency: r.urgency as UrgencyType,
+      property_type: r.property_type as PropertyType,
+      accessibility: r.accessibility as AccessibilityType,
+      client_name: r.client_name!,
+      client_phone: r.client_phone!,
+      client_email: r.client_email,
+      privacy_accepted: r.privacy_accepted!,
+      status: r.status,
+      is_exclusive: r.is_exclusive ?? false,
+      assigned_plumber_id: r.assigned_plumber_id,
+      assigned_at: r.assigned_at,
+      created_at: r.created_at,
+      updated_at: r.updated_at,
+    })));
     
     setLoadingRequests(false);
   };

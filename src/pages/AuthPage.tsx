@@ -132,6 +132,41 @@ export default function AuthPage() {
     }
   };
 
+  // Store pending profile data to create after auth state updates
+  const [pendingProfileData, setPendingProfileData] = useState<{
+    full_name: string;
+    business_name: string;
+    email: string;
+    phone: string;
+    main_city: string;
+    description: string;
+    intervention_types: [];
+    availability: [];
+    service_areas: string[];
+  } | null>(null);
+
+  // Effect to create profile when user becomes authenticated and we have pending data
+  useEffect(() => {
+    const createPendingProfile = async () => {
+      if (user && pendingProfileData && !profile) {
+        const { error: profileError } = await createProfile(pendingProfileData);
+        
+        setPendingProfileData(null);
+        setIsSubmitting(false);
+
+        if (profileError) {
+          console.error('Profile creation error:', profileError);
+          toast.error('Errore durante la creazione del profilo');
+        } else {
+          toast.success('Registrazione completata!');
+          navigate('/dashboard');
+        }
+      }
+    };
+
+    createPendingProfile();
+  }, [user, pendingProfileData, profile, createProfile, navigate]);
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -153,11 +188,25 @@ export default function AuthPage() {
 
     setIsSubmitting(true);
 
-    // First create the auth user
+    // Store the profile data to be created after auth state updates
+    setPendingProfileData({
+      full_name: registerData.fullName,
+      business_name: registerData.businessName,
+      email: registerData.email,
+      phone: registerData.phone,
+      main_city: registerData.mainCity,
+      description: '',
+      intervention_types: [],
+      availability: [],
+      service_areas: [registerData.mainCity],
+    });
+
+    // Create the auth user
     const { error: signUpError } = await signUp(registerData.email, registerData.password);
 
     if (signUpError) {
       setIsSubmitting(false);
+      setPendingProfileData(null);
       if (signUpError.message.includes('already registered')) {
         toast.error('Questa email è già registrata');
       } else {
@@ -165,31 +214,8 @@ export default function AuthPage() {
       }
       return;
     }
-
-    // Wait a moment for auth state to update, then create profile
-    setTimeout(async () => {
-      const { error: profileError } = await createProfile({
-        full_name: registerData.fullName,
-        business_name: registerData.businessName,
-        email: registerData.email,
-        phone: registerData.phone,
-        main_city: registerData.mainCity,
-        description: '',
-        intervention_types: [],
-        availability: [],
-        service_areas: [registerData.mainCity],
-      });
-
-      setIsSubmitting(false);
-
-      if (profileError) {
-        console.error('Profile creation error:', profileError);
-        toast.error('Errore durante la creazione del profilo');
-      } else {
-        toast.success('Registrazione completata!');
-        navigate('/dashboard');
-      }
-    }, 1000);
+    
+    // The profile will be created by the useEffect when auth state updates
   };
 
   if (authLoading) {

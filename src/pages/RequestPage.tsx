@@ -67,6 +67,7 @@ export default function RequestPage() {
       subOption?: string;
       subSubOption?: string;
       provider?: string;
+      quantity?: string;
       city?: string 
     } | null;
     
@@ -77,6 +78,9 @@ export default function RequestPage() {
         initialDescription = state.subOption;
         if (state.subSubOption) {
           initialDescription += ` (${state.subSubOption})`;
+        }
+        if (state.quantity) {
+          initialDescription += ` x${state.quantity}`;
         }
         if (state.provider) {
           initialDescription += ` - Fornito da: ${state.provider}`;

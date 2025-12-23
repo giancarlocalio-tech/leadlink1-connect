@@ -35,9 +35,9 @@ export default function AuthPage() {
 
   useEffect(() => {
     if (user && !authLoading && !profileLoading) {
-      if (profile) {
-        navigate('/dashboard');
-      }
+      // Redirect to dashboard regardless of profile status
+      // Dashboard will handle missing profile case
+      navigate('/dashboard');
     }
   }, [user, profile, authLoading, profileLoading, navigate]);
 

@@ -242,11 +242,11 @@ export default function HomePage() {
           <div className="max-w-xl mx-auto">
             <Button 
               onClick={() => setShowModal(true)}
-              className="w-full text-lg py-7 shadow-lg hover:shadow-xl transition-all"
+              className="w-full text-base md:text-lg py-6 px-6 shadow-lg hover:shadow-xl transition-all gap-3"
               size="lg"
             >
-              <Search className="h-5 w-5 mr-2" />
-              Di quale servizio idraulico hai bisogno?
+              <Search className="h-5 w-5 shrink-0" />
+              <span>Di cosa hai bisogno?</span>
             </Button>
           </div>
         </div>

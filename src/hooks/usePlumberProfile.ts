@@ -40,7 +40,7 @@ export function usePlumberProfile() {
     setLoading(false);
   };
 
-  const createProfile = async (profileData: Omit<PlumberProfile, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'email_verified'>) => {
+  const createProfile = async (profileData: Omit<PlumberProfile, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'email_verified' | 'photo_url' | 'rating' | 'review_count'>) => {
     if (!user) return { error: new Error('User not authenticated') };
 
     const { data, error } = await supabase

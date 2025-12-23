@@ -50,6 +50,45 @@ export type Database = {
           },
         ]
       }
+      contact_unlocks: {
+        Row: {
+          id: string
+          is_exclusive: boolean
+          plumber_id: string
+          request_id: string
+          unlocked_at: string
+        }
+        Insert: {
+          id?: string
+          is_exclusive?: boolean
+          plumber_id: string
+          request_id: string
+          unlocked_at?: string
+        }
+        Update: {
+          id?: string
+          is_exclusive?: boolean
+          plumber_id?: string
+          request_id?: string
+          unlocked_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_unlocks_plumber_id_fkey"
+            columns: ["plumber_id"]
+            isOneToOne: false
+            referencedRelation: "plumber_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contact_unlocks_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "service_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       plumber_profiles: {
         Row: {
           availability:
@@ -67,6 +106,9 @@ export type Database = {
             | null
           main_city: string
           phone: string
+          photo_url: string | null
+          rating: number | null
+          review_count: number | null
           service_areas: string[] | null
           updated_at: string | null
           user_id: string
@@ -87,6 +129,9 @@ export type Database = {
             | null
           main_city: string
           phone: string
+          photo_url?: string | null
+          rating?: number | null
+          review_count?: number | null
           service_areas?: string[] | null
           updated_at?: string | null
           user_id: string
@@ -107,15 +152,70 @@ export type Database = {
             | null
           main_city?: string
           phone?: string
+          photo_url?: string | null
+          rating?: number | null
+          review_count?: number | null
           service_areas?: string[] | null
           updated_at?: string | null
           user_id?: string
         }
         Relationships: []
       }
+      plumber_subscriptions: {
+        Row: {
+          created_at: string
+          current_period_end: string | null
+          current_period_start: string | null
+          exclusive_contacts_used: number
+          id: string
+          plan_type: Database["public"]["Enums"]["subscription_plan"]
+          plumber_id: string
+          status: Database["public"]["Enums"]["subscription_status"]
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          exclusive_contacts_used?: number
+          id?: string
+          plan_type: Database["public"]["Enums"]["subscription_plan"]
+          plumber_id: string
+          status?: Database["public"]["Enums"]["subscription_status"]
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          exclusive_contacts_used?: number
+          id?: string
+          plan_type?: Database["public"]["Enums"]["subscription_plan"]
+          plumber_id?: string
+          status?: Database["public"]["Enums"]["subscription_status"]
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plumber_subscriptions_plumber_id_fkey"
+            columns: ["plumber_id"]
+            isOneToOne: true
+            referencedRelation: "plumber_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       service_requests: {
         Row: {
           accessibility: Database["public"]["Enums"]["accessibility_type"]
+          assigned_at: string | null
+          assigned_plumber_id: string | null
           city: string
           client_email: string | null
           client_name: string
@@ -124,6 +224,7 @@ export type Database = {
           description: string
           id: string
           intervention_type: Database["public"]["Enums"]["intervention_type"]
+          is_exclusive: boolean
           privacy_accepted: boolean
           property_type: Database["public"]["Enums"]["property_type"]
           status: string | null
@@ -132,6 +233,8 @@ export type Database = {
         }
         Insert: {
           accessibility: Database["public"]["Enums"]["accessibility_type"]
+          assigned_at?: string | null
+          assigned_plumber_id?: string | null
           city: string
           client_email?: string | null
           client_name: string
@@ -140,6 +243,7 @@ export type Database = {
           description: string
           id?: string
           intervention_type: Database["public"]["Enums"]["intervention_type"]
+          is_exclusive?: boolean
           privacy_accepted?: boolean
           property_type: Database["public"]["Enums"]["property_type"]
           status?: string | null
@@ -148,6 +252,8 @@ export type Database = {
         }
         Update: {
           accessibility?: Database["public"]["Enums"]["accessibility_type"]
+          assigned_at?: string | null
+          assigned_plumber_id?: string | null
           city?: string
           client_email?: string | null
           client_name?: string
@@ -156,11 +262,56 @@ export type Database = {
           description?: string
           id?: string
           intervention_type?: Database["public"]["Enums"]["intervention_type"]
+          is_exclusive?: boolean
           privacy_accepted?: boolean
           property_type?: Database["public"]["Enums"]["property_type"]
           status?: string | null
           updated_at?: string | null
           urgency?: Database["public"]["Enums"]["urgency_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_requests_assigned_plumber_id_fkey"
+            columns: ["assigned_plumber_id"]
+            isOneToOne: false
+            referencedRelation: "plumber_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscription_plans: {
+        Row: {
+          contacts_are_exclusive: boolean
+          created_at: string
+          description: string | null
+          id: string
+          max_exclusive_contacts: number | null
+          name: string
+          plan_type: Database["public"]["Enums"]["subscription_plan"]
+          price_monthly: number
+          updated_at: string
+        }
+        Insert: {
+          contacts_are_exclusive?: boolean
+          created_at?: string
+          description?: string | null
+          id?: string
+          max_exclusive_contacts?: number | null
+          name: string
+          plan_type: Database["public"]["Enums"]["subscription_plan"]
+          price_monthly: number
+          updated_at?: string
+        }
+        Update: {
+          contacts_are_exclusive?: boolean
+          created_at?: string
+          description?: string | null
+          id?: string
+          max_exclusive_contacts?: number | null
+          name?: string
+          plan_type?: Database["public"]["Enums"]["subscription_plan"]
+          price_monthly?: number
+          updated_at?: string
         }
         Relationships: []
       }
@@ -210,6 +361,8 @@ export type Database = {
         | "caldaia"
         | "altro"
       property_type: "casa" | "appartamento" | "negozio"
+      subscription_plan: "basic" | "medium" | "premium"
+      subscription_status: "active" | "cancelled" | "expired" | "pending"
       urgency_type: "subito" | "entro_24_ore" | "prossimi_giorni"
     }
     CompositeTypes: {
@@ -349,6 +502,8 @@ export const Constants = {
         "altro",
       ],
       property_type: ["casa", "appartamento", "negozio"],
+      subscription_plan: ["basic", "medium", "premium"],
+      subscription_status: ["active", "cancelled", "expired", "pending"],
       urgency_type: ["subito", "entro_24_ore", "prossimi_giorni"],
     },
   },

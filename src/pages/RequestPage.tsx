@@ -25,7 +25,7 @@ import {
 } from '@/lib/types';
 
 const URGENCY_TYPES: UrgencyType[] = ['subito', 'entro_24_ore', 'prossimi_giorni'];
-const PROPERTY_TYPES: PropertyType[] = ['casa', 'appartamento', 'negozio', 'ufficio', 'condominio'];
+const PROPERTY_TYPES: PropertyType[] = ['casa', 'appartamento', 'negozio'];
 const ACCESSIBILITY_TYPES: AccessibilityType[] = ['facile', 'media', 'difficile'];
 
 // Step definitions

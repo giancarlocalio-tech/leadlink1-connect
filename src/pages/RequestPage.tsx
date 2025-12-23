@@ -106,6 +106,7 @@ export default function RequestPage() {
       case 'contact':
         return formData.clientName.trim().length > 0 && 
                formData.clientPhone.trim().length > 0 && 
+               formData.clientEmail.trim().length > 0 &&
                formData.privacyAccepted;
       default:
         return false;
@@ -293,7 +294,7 @@ export default function RequestPage() {
 
             <div>
               <Label htmlFor="email" className="text-base font-medium mb-2 block">
-                Email <span className="text-muted-foreground font-normal">(opzionale)</span>
+                Email *
               </Label>
               <Input
                 id="email"

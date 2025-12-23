@@ -74,8 +74,8 @@ export default {
           to: { opacity: "1", transform: "translateY(0)" },
         },
         "slide-out": {
-          from: { opacity: "1", transform: "translateX(0)" },
-          to: { opacity: "0", transform: "translateX(100%)" },
+          from: { opacity: "1", transform: "translateX(0)", height: "var(--height)" },
+          to: { opacity: "0", transform: "translateX(-100%)", height: "0" },
         },
       },
       animation: {

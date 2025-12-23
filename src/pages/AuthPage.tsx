@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import { Wrench, Mail, Lock, User, Phone, Building, MapPin } from 'lucide-react';
+import { Wrench, Mail, Lock, User, Phone, Building, MapPin, Users, Clock, Shield, Star, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -139,18 +139,99 @@ export default function AuthPage() {
     <Layout>
       <div className="py-8 md:py-12">
         <div className="container mx-auto px-4">
+          {mode === 'register' && (
+            <div className="max-w-4xl mx-auto mb-12">
+              {/* Hero section for registration */}
+              <div className="text-center mb-10">
+                <div className="inline-flex items-center gap-2 bg-primary/20 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
+                  <Zap className="h-4 w-4" />
+                  7 giorni di prova gratuita
+                </div>
+                <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                  Sei un idraulico? Prova gratuitamente!
+                </h1>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                  Trova subito nuovi clienti nella tua zona. Nessun costo iniziale, nessun impegno.
+                </p>
+              </div>
+
+              {/* Benefits grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
+                <div className="bg-card border border-border rounded-xl p-5 hover:shadow-lg transition-shadow">
+                  <div className="bg-primary/10 rounded-lg w-10 h-10 flex items-center justify-center mb-3">
+                    <Users className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-1 text-sm">Clienti qualificati</h3>
+                  <p className="text-xs text-muted-foreground">
+                    Ricevi solo richieste di clienti reali nella tua zona.
+                  </p>
+                </div>
+
+                <div className="bg-card border border-border rounded-xl p-5 hover:shadow-lg transition-shadow">
+                  <div className="bg-primary/10 rounded-lg w-10 h-10 flex items-center justify-center mb-3">
+                    <MapPin className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-1 text-sm">Solo nella tua zona</h3>
+                  <p className="text-xs text-muted-foreground">
+                    Definisci le aree in cui lavori e ricevi richieste pertinenti.
+                  </p>
+                </div>
+
+                <div className="bg-card border border-border rounded-xl p-5 hover:shadow-lg transition-shadow">
+                  <div className="bg-primary/10 rounded-lg w-10 h-10 flex items-center justify-center mb-3">
+                    <Clock className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-1 text-sm">Notifiche istantanee</h3>
+                  <p className="text-xs text-muted-foreground">
+                    Ricevi le richieste in tempo reale e rispondi prima degli altri.
+                  </p>
+                </div>
+
+                <div className="bg-card border border-border rounded-xl p-5 hover:shadow-lg transition-shadow">
+                  <div className="bg-primary/10 rounded-lg w-10 h-10 flex items-center justify-center mb-3">
+                    <Shield className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-1 text-sm">Contatti esclusivi</h3>
+                  <p className="text-xs text-muted-foreground">
+                    Con i piani premium, sei l'unico a ricevere il contatto.
+                  </p>
+                </div>
+
+                <div className="bg-card border border-border rounded-xl p-5 hover:shadow-lg transition-shadow">
+                  <div className="bg-primary/10 rounded-lg w-10 h-10 flex items-center justify-center mb-3">
+                    <Star className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-1 text-sm">Costruisci la reputazione</h3>
+                  <p className="text-xs text-muted-foreground">
+                    Raccogli recensioni verificate e migliora il posizionamento.
+                  </p>
+                </div>
+
+                <div className="bg-card border border-border rounded-xl p-5 hover:shadow-lg transition-shadow">
+                  <div className="bg-primary/10 rounded-lg w-10 h-10 flex items-center justify-center mb-3">
+                    <Zap className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-1 text-sm">Zero pensieri</h3>
+                  <p className="text-xs text-muted-foreground">
+                    Nessun contratto, disdici quando vuoi.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="max-w-md mx-auto">
             <div className="text-center mb-8">
               <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <Wrench className="h-8 w-8 text-primary" />
               </div>
-              <h1 className="text-2xl font-bold text-foreground">
-                {mode === 'login' ? 'Accedi come Idraulico' : 'Registrati come Idraulico'}
-              </h1>
+              <h2 className="text-2xl font-bold text-foreground">
+                {mode === 'login' ? 'Accedi come Idraulico' : 'Inizia la registrazione'}
+              </h2>
               <p className="text-muted-foreground mt-2">
                 {mode === 'login' 
                   ? 'Accedi per visualizzare le richieste nella tua zona' 
-                  : 'Crea il tuo profilo professionale'}
+                  : 'Crea il tuo profilo professionale in pochi minuti'}
               </p>
             </div>
 

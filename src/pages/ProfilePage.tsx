@@ -15,10 +15,25 @@ import { INTERVENTION_LABELS, AVAILABILITY_LABELS } from '@/lib/types';
 import { CityAutocomplete, type ItalianCity } from '@/components/CityAutocomplete';
 
 const INTERVENTION_TYPES: InterventionType[] = [
+  'installazione_sostituzione',
   'perdita_acqua',
+  'sturare_spurgo',
+  'riparazione',
+  'impianto_idraulico',
+  'box_doccia',
+  'caldaia',
+  'impianto_riscaldamento',
+  'termoidraulico',
+  'condizionatori',
+  'ristrutturazione',
+  'certificazione',
+  'termosifone',
+  'contatore',
+  'addolcitore_acqua',
+  'depuratore_acqua',
+  'sostituzione_rubinetto',
   'rubinetto_rotto',
   'scarico_intasato',
-  'caldaia',
   'altro',
 ];
 

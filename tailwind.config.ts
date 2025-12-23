@@ -50,9 +50,13 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        completed: {
-          DEFAULT: "hsl(var(--completed))",
-          bg: "hsl(var(--completed-bg))",
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
         },
       },
       borderRadius: {
@@ -73,16 +77,11 @@ export default {
           from: { opacity: "0", transform: "translateY(-4px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
-        "slide-out": {
-          from: { opacity: "1", transform: "translateX(0)", height: "var(--height)" },
-          to: { opacity: "0", transform: "translateX(-100%)", height: "0" },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.2s ease-out",
-        "slide-out": "slide-out 0.2s ease-out forwards",
       },
     },
   },

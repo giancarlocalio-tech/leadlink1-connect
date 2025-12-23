@@ -26,6 +26,7 @@ import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import type { InterventionType } from '@/lib/types';
 import { INTERVENTION_LABELS } from '@/lib/types';
+import { CATEGORY_FLOWS, getNextQuestionId, type WizardQuestion } from '@/lib/wizardConfig';
 
 // All intervention types for the first selection
 const ALL_INTERVENTION_TYPES: InterventionType[] = [
@@ -49,96 +50,6 @@ const ALL_INTERVENTION_TYPES: InterventionType[] = [
   'altro',
 ];
 
-// Sub-options for "Installazione e sostituzione"
-const INSTALLATION_SUB_OPTIONS = [
-  'Rubinetto',
-  'Lavandino',
-  'WC',
-  'Bidet',
-  'Caldaia',
-  'Scaldabagno',
-  'Doccia',
-  'Box doccia',
-  'Colonna doccia',
-  'Vasca con doccia',
-  'Vasca da bagno',
-  'Impianto idraulico',
-  'Lavatrice',
-  'Lavastoviglie',
-  'Condizionatori',
-  'Pompa di calore',
-  'Piano cottura',
-  'Termosifoni',
-  'Depuratore acqua',
-  'Addolcitore acqua',
-  'Contatore acqua',
-  'Contatore gas',
-  'Riscaldamento a pavimento',
-  'Filtro anticalcare caldaia',
-  'Altro',
-];
-
-// Sub-options for "Sturare / spurgo"
-const SPURGO_SUB_OPTIONS = [
-  'Lavandino',
-  'WC',
-  'Doccia',
-  'Vasca da bagno',
-  'Bidet',
-  'Scarico cucina',
-  'Colonna di scarico',
-  'Pozzetto',
-  'Fognatura',
-  'Altro',
-];
-
-// Sub-options for "Riparazione"
-const RIPARAZIONE_SUB_OPTIONS = [
-  'Rubinetto',
-  'Tubo',
-  'Scarico',
-  'WC',
-  'Lavandino',
-  'Doccia',
-  'Vasca',
-  'Caldaia',
-  'Scaldabagno',
-  'Termosifone',
-  'Altro',
-];
-
-// Third-level options for "Rubinetto" under "Installazione e sostituzione"
-const RUBINETTO_SUB_OPTIONS = [
-  'Cucina',
-  'Bagno',
-  'Lavabo',
-  'Lavello',
-  'Lavastoviglie',
-  'Altro',
-];
-
-// Fourth-level: who provides the faucet
-const PROVIDER_OPTIONS = [
-  'Li fornirò',
-  'Il professionista',
-];
-
-// Fifth-level: quantity
-const QUANTITY_OPTIONS = [
-  '1',
-  '2',
-  '3',
-  '4 o più',
-];
-
-// Price ranges for different selections
-const PRICE_RANGES: Record<string, string> = {
-  'installazione_sostituzione': '70 € - 750 €',
-  'Rubinetto': '50 € - 250 €',
-  'provider_step': '60 € - 180 €',
-  'quantity_step': '60 € - 150 €',
-};
-
 // Icons for intervention types
 const INTERVENTION_ICONS: Partial<Record<InterventionType, React.ReactNode>> = {
   installazione_sostituzione: <Wrench className="h-5 w-5" />,
@@ -161,157 +72,78 @@ const INTERVENTION_ICONS: Partial<Record<InterventionType, React.ReactNode>> = {
   altro: <HelpCircle className="h-5 w-5" />,
 };
 
-// Types that have sub-questions
-const TYPES_WITH_SUB_QUESTIONS: InterventionType[] = [
-  'installazione_sostituzione',
-  'sturare_spurgo',
-  'riparazione',
-];
-
-type WizardStep = 'intervention' | 'sub_question' | 'sub_sub_question' | 'provider_question' | 'quantity_question' | 'city';
+interface WizardAnswer {
+  questionId: string;
+  answer: string;
+}
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const [step, setStep] = useState<WizardStep>('intervention');
+  const [step, setStep] = useState<'intervention' | 'questions' | 'city'>('intervention');
   const [selectedType, setSelectedType] = useState<InterventionType | null>(null);
-  const [selectedSubOption, setSelectedSubOption] = useState<string | null>(null);
-  const [selectedSubSubOption, setSelectedSubSubOption] = useState<string | null>(null);
-  const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
-  const [selectedQuantity, setSelectedQuantity] = useState<string | null>(null);
+  const [answers, setAnswers] = useState<WizardAnswer[]>([]);
+  const [currentQuestionId, setCurrentQuestionId] = useState<string | null>(null);
   const [city, setCity] = useState('');
   const [searchFilter, setSearchFilter] = useState('');
   const [showModal, setShowModal] = useState(false);
-
-  // Check if selected sub-option has third-level options
-  const hasThirdLevelOptions = selectedSubOption === 'Rubinetto' && selectedType === 'installazione_sostituzione';
-
-  const getThirdLevelOptions = (): string[] => {
-    if (selectedSubOption === 'Rubinetto') {
-      return RUBINETTO_SUB_OPTIONS;
-    }
-    return [];
-  };
-
-  const getThirdLevelTitle = (): string => {
-    if (selectedSubOption === 'Rubinetto') {
-      return 'Quali rubinetti vorresti sostituire?';
-    }
-    return '';
-  };
-
-  const getCurrentPriceRange = (): string | null => {
-    if (step === 'quantity_question') {
-      return PRICE_RANGES['quantity_step'];
-    }
-    if (step === 'provider_question') {
-      return PRICE_RANGES['provider_step'];
-    }
-    if (selectedSubOption && PRICE_RANGES[selectedSubOption]) {
-      return PRICE_RANGES[selectedSubOption];
-    }
-    if (selectedType && PRICE_RANGES[selectedType]) {
-      return PRICE_RANGES[selectedType];
-    }
-    return null;
-  };
-
-  const getTotalSteps = () => {
-    if (selectedType && TYPES_WITH_SUB_QUESTIONS.includes(selectedType)) {
-      if (hasThirdLevelOptions || selectedSubSubOption) {
-        return 6; // intervention -> sub -> sub_sub -> provider -> quantity -> city
-      }
-      return 3;
-    }
-    return 2;
-  };
-
-  const getCurrentStepNumber = () => {
-    switch (step) {
-      case 'intervention': return 1;
-      case 'sub_question': return 2;
-      case 'sub_sub_question': return 3;
-      case 'provider_question': return 4;
-      case 'quantity_question': return 5;
-      case 'city': 
-        if (selectedQuantity) return 6;
-        if (selectedProvider) return 6;
-        if (hasThirdLevelOptions || selectedSubSubOption) return 6;
-        return selectedType && TYPES_WITH_SUB_QUESTIONS.includes(selectedType) ? 3 : 2;
-      default: return 1;
-    }
-  };
-
-  const progress = (getCurrentStepNumber() / getTotalSteps()) * 100;
 
   const filteredTypes = ALL_INTERVENTION_TYPES.filter(type =>
     INTERVENTION_LABELS[type].toLowerCase().includes(searchFilter.toLowerCase())
   );
 
-  const getSubOptions = (): string[] => {
-    switch (selectedType) {
-      case 'installazione_sostituzione':
-        return INSTALLATION_SUB_OPTIONS;
-      case 'sturare_spurgo':
-        return SPURGO_SUB_OPTIONS;
-      case 'riparazione':
-        return RIPARAZIONE_SUB_OPTIONS;
-      default:
-        return [];
-    }
+  const getCurrentFlow = () => {
+    if (!selectedType) return null;
+    return CATEGORY_FLOWS[selectedType] || null;
   };
 
-  const getSubQuestionTitle = (): string => {
-    switch (selectedType) {
-      case 'installazione_sostituzione':
-        return 'Cosa vorresti sostituire / installare?';
-      case 'sturare_spurgo':
-        return 'Cosa si è intasato?';
-      case 'riparazione':
-        return 'Cosa devi riparare?';
-      default:
-        return '';
-    }
+  const getCurrentQuestion = (): WizardQuestion | null => {
+    const flow = getCurrentFlow();
+    if (!flow || !currentQuestionId) return null;
+    return flow.questions[currentQuestionId] || null;
+  };
+
+  const getCurrentPriceRange = (): string | null => {
+    const question = getCurrentQuestion();
+    return question?.priceRange || null;
+  };
+
+  const getAnswersSummary = (): string => {
+    return answers.map(a => a.answer).join(' → ');
   };
 
   const handleSelectType = (type: InterventionType) => {
     setSelectedType(type);
-    setSelectedSubOption(null);
+    setAnswers([]);
     
-    if (TYPES_WITH_SUB_QUESTIONS.includes(type)) {
-      setStep('sub_question');
+    const flow = CATEGORY_FLOWS[type];
+    if (flow) {
+      // Special case for sostituzione_rubinetto - preselect Rubinetto
+      if (type === 'sostituzione_rubinetto') {
+        setAnswers([{ questionId: 'cosa_sostituire', answer: 'Rubinetto' }]);
+        setCurrentQuestionId('rubinetto_tipo');
+        setStep('questions');
+      } else {
+        setCurrentQuestionId(flow.startQuestionId);
+        setStep('questions');
+      }
     } else {
       setStep('city');
     }
   };
 
-  const handleSelectSubOption = (option: string) => {
-    setSelectedSubOption(option);
-    setSelectedSubSubOption(null);
-    
-    // Check if this option needs a third-level question
-    if (option === 'Rubinetto' && selectedType === 'installazione_sostituzione') {
-      setStep('sub_sub_question');
+  const handleSelectAnswer = (answer: string) => {
+    const question = getCurrentQuestion();
+    if (!question) return;
+
+    const newAnswers = [...answers, { questionId: question.id, answer }];
+    setAnswers(newAnswers);
+
+    const nextId = getNextQuestionId(question, answer);
+    if (nextId) {
+      setCurrentQuestionId(nextId);
     } else {
       setStep('city');
     }
-  };
-
-  const handleSelectSubSubOption = (option: string) => {
-    setSelectedSubSubOption(option);
-    setSelectedProvider(null);
-    // After selecting faucet type, ask who provides it
-    setStep('provider_question');
-  };
-
-  const handleSelectProvider = (option: string) => {
-    setSelectedProvider(option);
-    setSelectedQuantity(null);
-    setStep('quantity_question');
-  };
-
-  const handleSelectQuantity = (option: string) => {
-    setSelectedQuantity(option);
-    setStep('city');
   };
 
   const handleContinue = () => {
@@ -319,10 +151,7 @@ export default function HomePage() {
       navigate('/richiesta', {
         state: {
           interventionType: selectedType,
-          subOption: selectedSubOption,
-          subSubOption: selectedSubSubOption,
-          provider: selectedProvider,
-          quantity: selectedQuantity,
+          answers: answers,
           city: city.trim(),
         },
       });
@@ -330,53 +159,62 @@ export default function HomePage() {
   };
 
   const handleBack = () => {
-    switch (step) {
-      case 'city':
-        if (selectedQuantity) {
-          setStep('quantity_question');
-        } else if (selectedProvider) {
-          setStep('provider_question');
-        } else if (selectedSubSubOption) {
-          setStep('sub_sub_question');
-        } else if (selectedType && TYPES_WITH_SUB_QUESTIONS.includes(selectedType)) {
-          setStep('sub_question');
-        } else {
-          setStep('intervention');
+    if (step === 'city') {
+      if (answers.length > 0) {
+        const prevAnswers = answers.slice(0, -1);
+        setAnswers(prevAnswers);
+        
+        const flow = getCurrentFlow();
+        if (flow && prevAnswers.length > 0) {
+          const lastAnswer = prevAnswers[prevAnswers.length - 1];
+          const lastQuestion = flow.questions[lastAnswer.questionId];
+          const nextId = getNextQuestionId(lastQuestion, lastAnswer.answer);
+          setCurrentQuestionId(nextId || lastAnswer.questionId);
+        } else if (flow) {
+          setCurrentQuestionId(flow.startQuestionId);
         }
-        break;
-      case 'quantity_question':
-        setStep('provider_question');
-        setSelectedQuantity(null);
-        break;
-      case 'provider_question':
-        setStep('sub_sub_question');
-        setSelectedProvider(null);
-        break;
-      case 'sub_sub_question':
-        setStep('sub_question');
-        setSelectedSubSubOption(null);
-        break;
-      case 'sub_question':
+        setStep('questions');
+      } else {
         setStep('intervention');
         setSelectedType(null);
-        break;
-      default:
-        break;
+      }
+    } else if (step === 'questions') {
+      if (answers.length > 0) {
+        const prevAnswers = answers.slice(0, -1);
+        setAnswers(prevAnswers);
+        
+        if (prevAnswers.length > 0) {
+          const lastAnswer = prevAnswers[prevAnswers.length - 1];
+          const flow = getCurrentFlow();
+          if (flow) {
+            const lastQuestion = flow.questions[lastAnswer.questionId];
+            const nextId = getNextQuestionId(lastQuestion, lastAnswer.answer);
+            setCurrentQuestionId(nextId || lastAnswer.questionId);
+          }
+        } else {
+          const flow = getCurrentFlow();
+          if (flow) {
+            setCurrentQuestionId(flow.startQuestionId);
+          }
+        }
+      } else {
+        setStep('intervention');
+        setSelectedType(null);
+      }
     }
   };
 
-  const openModal = () => setShowModal(true);
   const closeModal = () => {
     setShowModal(false);
     setSearchFilter('');
     setStep('intervention');
     setSelectedType(null);
-    setSelectedSubOption(null);
-    setSelectedSubSubOption(null);
-    setSelectedProvider(null);
-    setSelectedQuantity(null);
+    setAnswers([]);
+    setCurrentQuestionId(null);
     setCity('');
   };
+
+  const progress = step === 'intervention' ? 20 : step === 'questions' ? 50 + (answers.length * 10) : 90;
 
   return (
     <Layout>
@@ -392,10 +230,9 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* CTA Button to open modal */}
           <div className="max-w-xl mx-auto">
             <Button 
-              onClick={openModal}
+              onClick={() => setShowModal(true)}
               className="w-full text-lg py-7 shadow-lg hover:shadow-xl transition-all"
               size="lg"
             >
@@ -427,11 +264,9 @@ export default function HomePage() {
 
             {/* Progress */}
             <div className="px-4 pt-4">
-              <div className="flex items-center justify-between mb-2">
-                <Progress value={progress} className="h-1.5 flex-1" />
-              </div>
+              <Progress value={Math.min(progress, 100)} className="h-1.5" />
               {getCurrentPriceRange() && (
-                <div className="flex items-center justify-between text-sm text-muted-foreground">
+                <div className="flex items-center justify-between text-sm text-muted-foreground mt-2">
                   <span>Fascia di prezzo:</span>
                   <span className="font-medium text-foreground">{getCurrentPriceRange()}</span>
                 </div>
@@ -446,7 +281,6 @@ export default function HomePage() {
                     Di quale servizio idraulico hai bisogno?
                   </h2>
                   
-                  {/* Search filter */}
                   <div className="relative mb-4">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -478,207 +312,36 @@ export default function HomePage() {
                 </div>
               )}
 
-              {step === 'sub_question' && (
+              {step === 'questions' && getCurrentQuestion() && (
                 <div className="animate-fade-in">
                   <h2 className="text-lg font-semibold mb-4">
-                    {getSubQuestionTitle()}
-                  </h2>
-
-                  <ScrollArea className="h-[350px] pr-4">
-                    <div className="space-y-2">
-                      {getSubOptions().map((option) => (
-                        <button
-                          key={option}
-                          onClick={() => handleSelectSubOption(option)}
-                          className={`w-full flex items-center gap-3 p-4 rounded-lg border transition-all text-left ${
-                            selectedSubOption === option
-                              ? 'border-primary bg-accent'
-                              : 'border-border bg-background hover:bg-accent hover:border-primary/50'
-                          }`}
-                        >
-                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
-                            selectedSubOption === option
-                              ? 'border-primary bg-primary'
-                              : 'border-muted-foreground'
-                          }`}>
-                            {selectedSubOption === option && (
-                              <div className="w-2 h-2 rounded-full bg-primary-foreground" />
-                            )}
-                          </div>
-                          <span className="font-medium text-foreground">{option}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </ScrollArea>
-
-                  {/* Info banner */}
-                  <div className="mt-4 p-3 bg-success/10 rounded-lg flex items-center gap-2 text-sm text-success">
-                    <CheckCircle className="h-4 w-4 shrink-0" />
-                    <span>Questo servizio è molto richiesto in questo momento!</span>
-                  </div>
-
-                  {/* Navigation */}
-                  <div className="flex gap-3 mt-4">
-                    <Button variant="outline" onClick={handleBack} className="flex-1">
-                      <ArrowLeft className="h-4 w-4 mr-2" />
-                      Indietro
-                    </Button>
-                    <Button 
-                      onClick={() => selectedSubOption && setStep('city')}
-                      disabled={!selectedSubOption}
-                      className="flex-1"
-                    >
-                      Avanti
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {step === 'sub_sub_question' && (
-                <div className="animate-fade-in">
-                  <h2 className="text-lg font-semibold mb-4">
-                    {getThirdLevelTitle()}
+                    {getCurrentQuestion()?.title}
                   </h2>
 
                   <ScrollArea className="h-[300px] pr-4">
                     <div className="space-y-2">
-                      {getThirdLevelOptions().map((option) => (
+                      {getCurrentQuestion()?.options.map((option) => (
                         <button
                           key={option}
-                          onClick={() => handleSelectSubSubOption(option)}
-                          className={`w-full flex items-center gap-3 p-4 rounded-lg border transition-all text-left ${
-                            selectedSubSubOption === option
-                              ? 'border-primary bg-accent'
-                              : 'border-border bg-background hover:bg-accent hover:border-primary/50'
-                          }`}
+                          onClick={() => handleSelectAnswer(option)}
+                          className="w-full flex items-center gap-3 p-4 rounded-lg border border-border bg-background hover:bg-accent hover:border-primary/50 transition-all text-left"
                         >
-                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
-                            selectedSubSubOption === option
-                              ? 'border-primary bg-primary'
-                              : 'border-muted-foreground'
-                          }`}>
-                            {selectedSubSubOption === option && (
-                              <div className="w-2 h-2 rounded-full bg-primary-foreground" />
-                            )}
-                          </div>
+                          <div className="w-5 h-5 rounded-full border-2 border-muted-foreground" />
                           <span className="font-medium text-foreground">{option}</span>
                         </button>
                       ))}
                     </div>
                   </ScrollArea>
 
-                  {/* Navigation */}
+                  <div className="mt-4 p-3 bg-success/10 rounded-lg flex items-center gap-2 text-sm text-success">
+                    <CheckCircle className="h-4 w-4 shrink-0" />
+                    <span>Questo servizio è molto richiesto!</span>
+                  </div>
+
                   <div className="flex gap-3 mt-4">
                     <Button variant="outline" onClick={handleBack} className="flex-1">
                       <ArrowLeft className="h-4 w-4 mr-2" />
                       Indietro
-                    </Button>
-                    <Button 
-                      onClick={() => selectedSubSubOption && setStep('provider_question')}
-                      disabled={!selectedSubSubOption}
-                      className="flex-1"
-                    >
-                      Avanti
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {step === 'provider_question' && (
-                <div className="animate-fade-in">
-                  <h2 className="text-lg font-semibold mb-4">
-                    Chi fornirà il rubinetto?
-                  </h2>
-
-                  <div className="space-y-2">
-                    {PROVIDER_OPTIONS.map((option) => (
-                      <button
-                        key={option}
-                        onClick={() => handleSelectProvider(option)}
-                        className={`w-full flex items-center gap-3 p-4 rounded-lg border transition-all text-left ${
-                          selectedProvider === option
-                            ? 'border-primary bg-accent'
-                            : 'border-border bg-background hover:bg-accent hover:border-primary/50'
-                        }`}
-                      >
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
-                          selectedProvider === option
-                            ? 'border-primary bg-primary'
-                            : 'border-muted-foreground'
-                        }`}>
-                          {selectedProvider === option && (
-                            <div className="w-2 h-2 rounded-full bg-primary-foreground" />
-                          )}
-                        </div>
-                        <span className="font-medium text-foreground">{option}</span>
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Navigation */}
-                  <div className="flex gap-3 mt-4">
-                    <Button variant="outline" onClick={handleBack} className="flex-1">
-                      <ArrowLeft className="h-4 w-4 mr-2" />
-                      Indietro
-                    </Button>
-                    <Button 
-                      onClick={() => selectedProvider && setStep('quantity_question')}
-                      disabled={!selectedProvider}
-                      className="flex-1"
-                    >
-                      Avanti
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {step === 'quantity_question' && (
-                <div className="animate-fade-in">
-                  <h2 className="text-lg font-semibold mb-4">
-                    Di quanti rubinetti hai bisogno per la sostituzione?
-                  </h2>
-
-                  <div className="space-y-2">
-                    {QUANTITY_OPTIONS.map((option) => (
-                      <button
-                        key={option}
-                        onClick={() => handleSelectQuantity(option)}
-                        className={`w-full flex items-center gap-3 p-4 rounded-lg border transition-all text-left ${
-                          selectedQuantity === option
-                            ? 'border-primary bg-accent'
-                            : 'border-border bg-background hover:bg-accent hover:border-primary/50'
-                        }`}
-                      >
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
-                          selectedQuantity === option
-                            ? 'border-primary bg-primary'
-                            : 'border-muted-foreground'
-                        }`}>
-                          {selectedQuantity === option && (
-                            <div className="w-2 h-2 rounded-full bg-primary-foreground" />
-                          )}
-                        </div>
-                        <span className="font-medium text-foreground">{option}</span>
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Navigation */}
-                  <div className="flex gap-3 mt-4">
-                    <Button variant="outline" onClick={handleBack} className="flex-1">
-                      <ArrowLeft className="h-4 w-4 mr-2" />
-                      Indietro
-                    </Button>
-                    <Button 
-                      onClick={() => selectedQuantity && setStep('city')}
-                      disabled={!selectedQuantity}
-                      className="flex-1"
-                    >
-                      Avanti
-                      <ArrowRight className="h-4 w-4 ml-2" />
                     </Button>
                   </div>
                 </div>
@@ -687,21 +350,14 @@ export default function HomePage() {
               {step === 'city' && (
                 <div className="animate-fade-in">
                   <div className="mb-4 pb-4 border-b border-border">
-                    <p className="text-sm text-muted-foreground">
-                      Servizio selezionato:
-                    </p>
+                    <p className="text-sm text-muted-foreground">Servizio selezionato:</p>
                     <p className="font-semibold text-primary">
                       {selectedType && INTERVENTION_LABELS[selectedType]}
-                      {selectedSubOption && ` → ${selectedSubOption}`}
-                      {selectedSubSubOption && ` → ${selectedSubSubOption}`}
-                      {selectedQuantity && ` (${selectedQuantity})`}
-                      {selectedProvider && ` - ${selectedProvider}`}
+                      {getAnswersSummary() && ` → ${getAnswersSummary()}`}
                     </p>
                   </div>
 
-                  <h2 className="text-lg font-semibold mb-4">
-                    Dove ti trovi?
-                  </h2>
+                  <h2 className="text-lg font-semibold mb-4">Dove ti trovi?</h2>
                   
                   <Input
                     placeholder="Inserisci la tua città o CAP"
@@ -712,19 +368,11 @@ export default function HomePage() {
                   />
 
                   <div className="flex gap-3">
-                    <Button 
-                      variant="outline" 
-                      onClick={handleBack}
-                      className="flex-1"
-                    >
+                    <Button variant="outline" onClick={handleBack} className="flex-1">
                       <ArrowLeft className="h-4 w-4 mr-2" />
                       Indietro
                     </Button>
-                    <Button 
-                      onClick={handleContinue}
-                      disabled={!city.trim()}
-                      className="flex-1"
-                    >
+                    <Button onClick={handleContinue} disabled={!city.trim()} className="flex-1">
                       Avanti
                       <ArrowRight className="h-4 w-4 ml-2" />
                     </Button>

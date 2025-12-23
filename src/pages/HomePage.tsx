@@ -7,6 +7,7 @@ import {
   Flame, 
   HelpCircle, 
   ArrowRight,
+  ArrowLeft,
   ShowerHead,
   Thermometer,
   Wind,
@@ -15,7 +16,8 @@ import {
   Gauge,
   Pipette,
   X,
-  Search
+  Search,
+  CheckCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -47,6 +49,64 @@ const ALL_INTERVENTION_TYPES: InterventionType[] = [
   'altro',
 ];
 
+// Sub-options for "Installazione e sostituzione"
+const INSTALLATION_SUB_OPTIONS = [
+  'Rubinetto',
+  'Lavandino',
+  'WC',
+  'Bidet',
+  'Caldaia',
+  'Scaldabagno',
+  'Doccia',
+  'Box doccia',
+  'Colonna doccia',
+  'Vasca con doccia',
+  'Vasca da bagno',
+  'Impianto idraulico',
+  'Lavatrice',
+  'Lavastoviglie',
+  'Condizionatori',
+  'Pompa di calore',
+  'Piano cottura',
+  'Termosifoni',
+  'Depuratore acqua',
+  'Addolcitore acqua',
+  'Contatore acqua',
+  'Contatore gas',
+  'Riscaldamento a pavimento',
+  'Filtro anticalcare caldaia',
+  'Altro',
+];
+
+// Sub-options for "Sturare / spurgo"
+const SPURGO_SUB_OPTIONS = [
+  'Lavandino',
+  'WC',
+  'Doccia',
+  'Vasca da bagno',
+  'Bidet',
+  'Scarico cucina',
+  'Colonna di scarico',
+  'Pozzetto',
+  'Fognatura',
+  'Altro',
+];
+
+// Sub-options for "Riparazione"
+const RIPARAZIONE_SUB_OPTIONS = [
+  'Rubinetto',
+  'Tubo',
+  'Scarico',
+  'WC',
+  'Lavandino',
+  'Doccia',
+  'Vasca',
+  'Caldaia',
+  'Scaldabagno',
+  'Termosifone',
+  'Altro',
+];
+
 // Icons for intervention types
 const INTERVENTION_ICONS: Partial<Record<InterventionType, React.ReactNode>> = {
   installazione_sostituzione: <Wrench className="h-5 w-5" />,
@@ -69,24 +129,85 @@ const INTERVENTION_ICONS: Partial<Record<InterventionType, React.ReactNode>> = {
   altro: <HelpCircle className="h-5 w-5" />,
 };
 
-type WizardStep = 'intervention' | 'city';
+// Types that have sub-questions
+const TYPES_WITH_SUB_QUESTIONS: InterventionType[] = [
+  'installazione_sostituzione',
+  'sturare_spurgo',
+  'riparazione',
+];
+
+type WizardStep = 'intervention' | 'sub_question' | 'city';
 
 export default function HomePage() {
   const navigate = useNavigate();
   const [step, setStep] = useState<WizardStep>('intervention');
   const [selectedType, setSelectedType] = useState<InterventionType | null>(null);
+  const [selectedSubOption, setSelectedSubOption] = useState<string | null>(null);
   const [city, setCity] = useState('');
   const [searchFilter, setSearchFilter] = useState('');
   const [showModal, setShowModal] = useState(false);
 
-  const progress = step === 'intervention' ? 50 : 100;
+  const getTotalSteps = () => {
+    if (selectedType && TYPES_WITH_SUB_QUESTIONS.includes(selectedType)) {
+      return 3;
+    }
+    return 2;
+  };
+
+  const getCurrentStepNumber = () => {
+    switch (step) {
+      case 'intervention': return 1;
+      case 'sub_question': return 2;
+      case 'city': return selectedType && TYPES_WITH_SUB_QUESTIONS.includes(selectedType) ? 3 : 2;
+      default: return 1;
+    }
+  };
+
+  const progress = (getCurrentStepNumber() / getTotalSteps()) * 100;
 
   const filteredTypes = ALL_INTERVENTION_TYPES.filter(type =>
     INTERVENTION_LABELS[type].toLowerCase().includes(searchFilter.toLowerCase())
   );
 
+  const getSubOptions = (): string[] => {
+    switch (selectedType) {
+      case 'installazione_sostituzione':
+        return INSTALLATION_SUB_OPTIONS;
+      case 'sturare_spurgo':
+        return SPURGO_SUB_OPTIONS;
+      case 'riparazione':
+        return RIPARAZIONE_SUB_OPTIONS;
+      default:
+        return [];
+    }
+  };
+
+  const getSubQuestionTitle = (): string => {
+    switch (selectedType) {
+      case 'installazione_sostituzione':
+        return 'Cosa vorresti sostituire / installare?';
+      case 'sturare_spurgo':
+        return 'Cosa si è intasato?';
+      case 'riparazione':
+        return 'Cosa devi riparare?';
+      default:
+        return '';
+    }
+  };
+
   const handleSelectType = (type: InterventionType) => {
     setSelectedType(type);
+    setSelectedSubOption(null);
+    
+    if (TYPES_WITH_SUB_QUESTIONS.includes(type)) {
+      setStep('sub_question');
+    } else {
+      setStep('city');
+    }
+  };
+
+  const handleSelectSubOption = (option: string) => {
+    setSelectedSubOption(option);
     setStep('city');
   };
 
@@ -95,6 +216,7 @@ export default function HomePage() {
       navigate('/richiesta', {
         state: {
           interventionType: selectedType,
+          subOption: selectedSubOption,
           city: city.trim(),
         },
       });
@@ -102,8 +224,20 @@ export default function HomePage() {
   };
 
   const handleBack = () => {
-    if (step === 'city') {
-      setStep('intervention');
+    switch (step) {
+      case 'city':
+        if (selectedType && TYPES_WITH_SUB_QUESTIONS.includes(selectedType)) {
+          setStep('sub_question');
+        } else {
+          setStep('intervention');
+        }
+        break;
+      case 'sub_question':
+        setStep('intervention');
+        setSelectedType(null);
+        break;
+      default:
+        break;
     }
   };
 
@@ -111,6 +245,10 @@ export default function HomePage() {
   const closeModal = () => {
     setShowModal(false);
     setSearchFilter('');
+    setStep('intervention');
+    setSelectedType(null);
+    setSelectedSubOption(null);
+    setCity('');
   };
 
   return (
@@ -151,7 +289,9 @@ export default function HomePage() {
                 <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
                   <Wrench className="h-4 w-4 text-primary-foreground" />
                 </div>
-                <span className="font-semibold text-foreground">Idraulico</span>
+                <span className="font-semibold text-foreground">
+                  {selectedType ? INTERVENTION_LABELS[selectedType] : 'Idraulico'}
+                </span>
               </div>
               <Button variant="ghost" size="icon" onClick={closeModal}>
                 <X className="h-5 w-5" />
@@ -160,7 +300,15 @@ export default function HomePage() {
 
             {/* Progress */}
             <div className="px-4 pt-4">
-              <Progress value={progress} className="h-1.5" />
+              <div className="flex items-center justify-between mb-2">
+                <Progress value={progress} className="h-1.5 flex-1" />
+              </div>
+              {selectedType === 'installazione_sostituzione' && (
+                <div className="flex items-center justify-between text-sm text-muted-foreground">
+                  <span>Fascia di prezzo:</span>
+                  <span className="font-medium text-foreground">70 € - 750 €</span>
+                </div>
+              )}
             </div>
 
             {/* Content */}
@@ -203,6 +351,63 @@ export default function HomePage() {
                 </div>
               )}
 
+              {step === 'sub_question' && (
+                <div className="animate-fade-in">
+                  <h2 className="text-lg font-semibold mb-4">
+                    {getSubQuestionTitle()}
+                  </h2>
+
+                  <ScrollArea className="h-[350px] pr-4">
+                    <div className="space-y-2">
+                      {getSubOptions().map((option) => (
+                        <button
+                          key={option}
+                          onClick={() => handleSelectSubOption(option)}
+                          className={`w-full flex items-center gap-3 p-4 rounded-lg border transition-all text-left ${
+                            selectedSubOption === option
+                              ? 'border-primary bg-accent'
+                              : 'border-border bg-background hover:bg-accent hover:border-primary/50'
+                          }`}
+                        >
+                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+                            selectedSubOption === option
+                              ? 'border-primary bg-primary'
+                              : 'border-muted-foreground'
+                          }`}>
+                            {selectedSubOption === option && (
+                              <div className="w-2 h-2 rounded-full bg-primary-foreground" />
+                            )}
+                          </div>
+                          <span className="font-medium text-foreground">{option}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </ScrollArea>
+
+                  {/* Info banner */}
+                  <div className="mt-4 p-3 bg-success/10 rounded-lg flex items-center gap-2 text-sm text-success">
+                    <CheckCircle className="h-4 w-4 shrink-0" />
+                    <span>Questo servizio è molto richiesto in questo momento!</span>
+                  </div>
+
+                  {/* Navigation */}
+                  <div className="flex gap-3 mt-4">
+                    <Button variant="outline" onClick={handleBack} className="flex-1">
+                      <ArrowLeft className="h-4 w-4 mr-2" />
+                      Indietro
+                    </Button>
+                    <Button 
+                      onClick={() => selectedSubOption && setStep('city')}
+                      disabled={!selectedSubOption}
+                      className="flex-1"
+                    >
+                      Avanti
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  </div>
+                </div>
+              )}
+
               {step === 'city' && (
                 <div className="animate-fade-in">
                   <div className="mb-4 pb-4 border-b border-border">
@@ -211,6 +416,7 @@ export default function HomePage() {
                     </p>
                     <p className="font-semibold text-primary">
                       {selectedType && INTERVENTION_LABELS[selectedType]}
+                      {selectedSubOption && ` → ${selectedSubOption}`}
                     </p>
                   </div>
 
@@ -232,6 +438,7 @@ export default function HomePage() {
                       onClick={handleBack}
                       className="flex-1"
                     >
+                      <ArrowLeft className="h-4 w-4 mr-2" />
                       Indietro
                     </Button>
                     <Button 

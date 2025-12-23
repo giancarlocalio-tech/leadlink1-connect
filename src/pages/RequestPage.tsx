@@ -62,12 +62,21 @@ export default function RequestPage() {
   const progress = ((currentStepIndex + 1) / STEPS.length) * 100;
 
   useEffect(() => {
-    const state = location.state as { interventionType?: InterventionType; city?: string } | null;
+    const state = location.state as { 
+      interventionType?: InterventionType; 
+      subOption?: string;
+      city?: string 
+    } | null;
+    
     if (state?.interventionType && state?.city) {
+      // If subOption is provided, prepend it to description
+      const initialDescription = state.subOption ? `${state.subOption}: ` : '';
+      
       setFormData(prev => ({
         ...prev,
         interventionType: state.interventionType!,
         city: state.city!,
+        description: initialDescription,
       }));
     } else {
       navigate('/');

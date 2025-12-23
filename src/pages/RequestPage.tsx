@@ -70,24 +70,16 @@ export default function RequestPage() {
     const state = location.state as { 
       interventionType?: InterventionType; 
       answers?: WizardAnswer[];
-      city?: string 
+      city?: string;
+      cityData?: { province_code: string } | null;
     } | null;
     
     if (state?.interventionType && state?.city) {
-      // Build initial description from wizard answers
-      let initialDescription = '';
-      
-      if (state.answers && state.answers.length > 0) {
-        // Format answers as a readable summary
-        const answersSummary = state.answers.map(a => a.answer).join(' → ');
-        initialDescription = answersSummary + ': ';
-      }
-      
       setFormData(prev => ({
         ...prev,
         interventionType: state.interventionType!,
         city: state.city!,
-        description: initialDescription,
+        description: '', // Empty - user will describe their problem freely
       }));
     } else {
       navigate('/');

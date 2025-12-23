@@ -66,6 +66,7 @@ export default function RequestPage() {
       interventionType?: InterventionType; 
       subOption?: string;
       subSubOption?: string;
+      provider?: string;
       city?: string 
     } | null;
     
@@ -76,6 +77,9 @@ export default function RequestPage() {
         initialDescription = state.subOption;
         if (state.subSubOption) {
           initialDescription += ` (${state.subSubOption})`;
+        }
+        if (state.provider) {
+          initialDescription += ` - Fornito da: ${state.provider}`;
         }
         initialDescription += ': ';
       }

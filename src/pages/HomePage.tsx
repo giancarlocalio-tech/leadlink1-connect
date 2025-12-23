@@ -27,6 +27,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import type { InterventionType } from '@/lib/types';
 import { INTERVENTION_LABELS } from '@/lib/types';
 import { CATEGORY_FLOWS, getNextQuestionId, type WizardQuestion } from '@/lib/wizardConfig';
+import { CityAutocomplete, type ItalianCity } from '@/components/CityAutocomplete';
 
 // All intervention types for the first selection
 const ALL_INTERVENTION_TYPES: InterventionType[] = [
@@ -84,6 +85,7 @@ export default function HomePage() {
   const [answers, setAnswers] = useState<WizardAnswer[]>([]);
   const [currentQuestionId, setCurrentQuestionId] = useState<string | null>(null);
   const [city, setCity] = useState('');
+  const [selectedCity, setSelectedCity] = useState<ItalianCity | null>(null);
   const [searchFilter, setSearchFilter] = useState('');
   const [showModal, setShowModal] = useState(false);
 
@@ -153,9 +155,15 @@ export default function HomePage() {
           interventionType: selectedType,
           answers: answers,
           city: city.trim(),
+          cityData: selectedCity, // Pass full city data for matching
         },
       });
     }
+  };
+
+  const handleCityChange = (cityData: ItalianCity | null, displayValue: string) => {
+    setCity(displayValue);
+    setSelectedCity(cityData);
   };
 
   const handleBack = () => {
@@ -212,6 +220,7 @@ export default function HomePage() {
     setAnswers([]);
     setCurrentQuestionId(null);
     setCity('');
+    setSelectedCity(null);
   };
 
   const progress = step === 'intervention' ? 20 : step === 'questions' ? 50 + (answers.length * 10) : 90;
@@ -359,11 +368,11 @@ export default function HomePage() {
 
                   <h2 className="text-lg font-semibold mb-4">Dove ti trovi?</h2>
                   
-                  <Input
-                    placeholder="Inserisci la tua città o CAP"
+                  <CityAutocomplete
                     value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    className="text-base mb-6"
+                    onChange={handleCityChange}
+                    placeholder="Cerca città o CAP..."
+                    className="mb-6"
                     autoFocus
                   />
 

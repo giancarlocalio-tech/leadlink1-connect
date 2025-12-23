@@ -89,6 +89,36 @@ export type Database = {
           },
         ]
       }
+      italian_cities: {
+        Row: {
+          cap: string[]
+          created_at: string
+          id: string
+          name: string
+          province_code: string
+          province_name: string
+          region: string
+        }
+        Insert: {
+          cap?: string[]
+          created_at?: string
+          id?: string
+          name: string
+          province_code: string
+          province_name: string
+          region: string
+        }
+        Update: {
+          cap?: string[]
+          created_at?: string
+          id?: string
+          name?: string
+          province_code?: string
+          province_name?: string
+          region?: string
+        }
+        Relationships: []
+      }
       plumber_profiles: {
         Row: {
           availability:

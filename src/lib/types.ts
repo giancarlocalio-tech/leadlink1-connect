@@ -25,6 +25,9 @@ export type AvailabilityType =
   | 'weekend'
   | 'emergenze';
 
+export type SubscriptionPlan = 'basic' | 'medium' | 'premium';
+export type SubscriptionStatus = 'active' | 'cancelled' | 'expired' | 'pending';
+
 export interface ServiceRequest {
   id: string;
   intervention_type: InterventionType;
@@ -40,6 +43,9 @@ export interface ServiceRequest {
   status: string;
   created_at: string;
   updated_at: string;
+  assigned_plumber_id?: string;
+  is_exclusive: boolean;
+  assigned_at?: string;
 }
 
 export interface PlumberProfile {
@@ -55,8 +61,45 @@ export interface PlumberProfile {
   availability: AvailabilityType[];
   service_areas: string[];
   email_verified: boolean;
+  photo_url?: string;
+  rating: number;
+  review_count: number;
   created_at: string;
   updated_at: string;
+}
+
+export interface SubscriptionPlanInfo {
+  id: string;
+  plan_type: SubscriptionPlan;
+  name: string;
+  description?: string;
+  price_monthly: number;
+  max_exclusive_contacts?: number;
+  contacts_are_exclusive: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PlumberSubscription {
+  id: string;
+  plumber_id: string;
+  plan_type: SubscriptionPlan;
+  status: SubscriptionStatus;
+  current_period_start?: string;
+  current_period_end?: string;
+  exclusive_contacts_used: number;
+  stripe_customer_id?: string;
+  stripe_subscription_id?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ContactUnlock {
+  id: string;
+  plumber_id: string;
+  request_id: string;
+  is_exclusive: boolean;
+  unlocked_at: string;
 }
 
 export interface RequestFormData {
@@ -102,4 +145,10 @@ export const AVAILABILITY_LABELS: Record<AvailabilityType, string> = {
   giorni_feriali: 'Giorni feriali',
   weekend: 'Weekend',
   emergenze: 'Emergenze',
+};
+
+export const SUBSCRIPTION_LABELS: Record<SubscriptionPlan, string> = {
+  basic: 'Basic',
+  medium: 'Medium',
+  premium: 'Premium',
 };

@@ -48,6 +48,13 @@ export type Database = {
             referencedRelation: "service_requests"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "contact_logs_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "service_requests_plumber_view"
+            referencedColumns: ["id"]
+          },
         ]
       }
       contact_unlocks: {
@@ -85,6 +92,13 @@ export type Database = {
             columns: ["request_id"]
             isOneToOne: false
             referencedRelation: "service_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contact_unlocks_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "service_requests_plumber_view"
             referencedColumns: ["id"]
           },
         ]
@@ -371,7 +385,89 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      service_requests_plumber_view: {
+        Row: {
+          accessibility:
+            | Database["public"]["Enums"]["accessibility_type"]
+            | null
+          assigned_at: string | null
+          assigned_plumber_id: string | null
+          city: string | null
+          client_email: string | null
+          client_name: string | null
+          client_phone: string | null
+          created_at: string | null
+          description: string | null
+          id: string | null
+          intervention_type:
+            | Database["public"]["Enums"]["intervention_type"]
+            | null
+          is_contact_unlocked: boolean | null
+          is_exclusive: boolean | null
+          privacy_accepted: boolean | null
+          property_type: Database["public"]["Enums"]["property_type"] | null
+          status: string | null
+          updated_at: string | null
+          urgency: Database["public"]["Enums"]["urgency_type"] | null
+        }
+        Insert: {
+          accessibility?:
+            | Database["public"]["Enums"]["accessibility_type"]
+            | null
+          assigned_at?: string | null
+          assigned_plumber_id?: string | null
+          city?: string | null
+          client_email?: never
+          client_name?: never
+          client_phone?: never
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          intervention_type?:
+            | Database["public"]["Enums"]["intervention_type"]
+            | null
+          is_contact_unlocked?: never
+          is_exclusive?: boolean | null
+          privacy_accepted?: boolean | null
+          property_type?: Database["public"]["Enums"]["property_type"] | null
+          status?: string | null
+          updated_at?: string | null
+          urgency?: Database["public"]["Enums"]["urgency_type"] | null
+        }
+        Update: {
+          accessibility?:
+            | Database["public"]["Enums"]["accessibility_type"]
+            | null
+          assigned_at?: string | null
+          assigned_plumber_id?: string | null
+          city?: string | null
+          client_email?: never
+          client_name?: never
+          client_phone?: never
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          intervention_type?:
+            | Database["public"]["Enums"]["intervention_type"]
+            | null
+          is_contact_unlocked?: never
+          is_exclusive?: boolean | null
+          privacy_accepted?: boolean | null
+          property_type?: Database["public"]["Enums"]["property_type"] | null
+          status?: string | null
+          updated_at?: string | null
+          urgency?: Database["public"]["Enums"]["urgency_type"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_requests_assigned_plumber_id_fkey"
+            columns: ["assigned_plumber_id"]
+            isOneToOne: false
+            referencedRelation: "plumber_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       has_role: {

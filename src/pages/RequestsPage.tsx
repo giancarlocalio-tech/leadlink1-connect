@@ -46,8 +46,9 @@ export default function RequestsPage() {
   const fetchRequests = async () => {
     setLoadingRequests(true);
     
+    // Use the secure view that masks contact info for non-unlocked requests
     const { data, error } = await supabase
-      .from('service_requests')
+      .from('service_requests_plumber_view')
       .select('*')
       .order('created_at', { ascending: false });
 
@@ -170,7 +171,7 @@ export default function RequestsPage() {
               <RequestCard
                 key={request.id}
                 request={request}
-                isUnlocked={isRequestUnlocked(request.id)}
+                isUnlocked={(request as any).is_contact_unlocked || isRequestUnlocked(request.id)}
                 canUnlock={canUnlockContact()}
                 onUnlock={handleUnlock}
               />

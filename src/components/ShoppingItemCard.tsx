@@ -38,11 +38,18 @@ export function ShoppingItemCard({ item, onToggle, onDelete }: ShoppingItemCardP
     }
   };
 
+  const triggerHapticFeedback = () => {
+    if ('vibrate' in navigator) {
+      navigator.vibrate(50);
+    }
+  };
+
   const handleTouchEnd = () => {
     setIsDragging(false);
     
     if (offsetX >= DELETE_THRESHOLD) {
-      // Trigger delete with animation
+      // Trigger haptic feedback and delete with animation
+      triggerHapticFeedback();
       setIsDeleting(true);
       setTimeout(() => {
         onDelete(item.id);
@@ -57,6 +64,7 @@ export function ShoppingItemCard({ item, onToggle, onDelete }: ShoppingItemCardP
   };
 
   const handleDeleteClick = () => {
+    triggerHapticFeedback();
     setIsDeleting(true);
     setTimeout(() => {
       onDelete(item.id);

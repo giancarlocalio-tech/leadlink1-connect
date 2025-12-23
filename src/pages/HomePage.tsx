@@ -123,11 +123,20 @@ const PROVIDER_OPTIONS = [
   'Il professionista',
 ];
 
+// Fifth-level: quantity
+const QUANTITY_OPTIONS = [
+  '1',
+  '2',
+  '3',
+  '4 o più',
+];
+
 // Price ranges for different selections
 const PRICE_RANGES: Record<string, string> = {
   'installazione_sostituzione': '70 € - 750 €',
   'Rubinetto': '50 € - 250 €',
   'provider_step': '60 € - 180 €',
+  'quantity_step': '60 € - 150 €',
 };
 
 // Icons for intervention types
@@ -159,7 +168,7 @@ const TYPES_WITH_SUB_QUESTIONS: InterventionType[] = [
   'riparazione',
 ];
 
-type WizardStep = 'intervention' | 'sub_question' | 'sub_sub_question' | 'provider_question' | 'city';
+type WizardStep = 'intervention' | 'sub_question' | 'sub_sub_question' | 'provider_question' | 'quantity_question' | 'city';
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -168,6 +177,7 @@ export default function HomePage() {
   const [selectedSubOption, setSelectedSubOption] = useState<string | null>(null);
   const [selectedSubSubOption, setSelectedSubSubOption] = useState<string | null>(null);
   const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
+  const [selectedQuantity, setSelectedQuantity] = useState<string | null>(null);
   const [city, setCity] = useState('');
   const [searchFilter, setSearchFilter] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -190,7 +200,9 @@ export default function HomePage() {
   };
 
   const getCurrentPriceRange = (): string | null => {
-    // If on provider step, show the provider price
+    if (step === 'quantity_question') {
+      return PRICE_RANGES['quantity_step'];
+    }
     if (step === 'provider_question') {
       return PRICE_RANGES['provider_step'];
     }
@@ -206,7 +218,7 @@ export default function HomePage() {
   const getTotalSteps = () => {
     if (selectedType && TYPES_WITH_SUB_QUESTIONS.includes(selectedType)) {
       if (hasThirdLevelOptions || selectedSubSubOption) {
-        return 5; // intervention -> sub -> sub_sub -> provider -> city
+        return 6; // intervention -> sub -> sub_sub -> provider -> quantity -> city
       }
       return 3;
     }
@@ -219,9 +231,11 @@ export default function HomePage() {
       case 'sub_question': return 2;
       case 'sub_sub_question': return 3;
       case 'provider_question': return 4;
+      case 'quantity_question': return 5;
       case 'city': 
-        if (selectedProvider) return 5;
-        if (hasThirdLevelOptions || selectedSubSubOption) return 5;
+        if (selectedQuantity) return 6;
+        if (selectedProvider) return 6;
+        if (hasThirdLevelOptions || selectedSubSubOption) return 6;
         return selectedType && TYPES_WITH_SUB_QUESTIONS.includes(selectedType) ? 3 : 2;
       default: return 1;
     }
@@ -291,6 +305,12 @@ export default function HomePage() {
 
   const handleSelectProvider = (option: string) => {
     setSelectedProvider(option);
+    setSelectedQuantity(null);
+    setStep('quantity_question');
+  };
+
+  const handleSelectQuantity = (option: string) => {
+    setSelectedQuantity(option);
     setStep('city');
   };
 
@@ -302,6 +322,7 @@ export default function HomePage() {
           subOption: selectedSubOption,
           subSubOption: selectedSubSubOption,
           provider: selectedProvider,
+          quantity: selectedQuantity,
           city: city.trim(),
         },
       });
@@ -311,7 +332,9 @@ export default function HomePage() {
   const handleBack = () => {
     switch (step) {
       case 'city':
-        if (selectedProvider) {
+        if (selectedQuantity) {
+          setStep('quantity_question');
+        } else if (selectedProvider) {
           setStep('provider_question');
         } else if (selectedSubSubOption) {
           setStep('sub_sub_question');
@@ -320,6 +343,10 @@ export default function HomePage() {
         } else {
           setStep('intervention');
         }
+        break;
+      case 'quantity_question':
+        setStep('provider_question');
+        setSelectedQuantity(null);
         break;
       case 'provider_question':
         setStep('sub_sub_question');
@@ -347,6 +374,7 @@ export default function HomePage() {
     setSelectedSubOption(null);
     setSelectedSubSubOption(null);
     setSelectedProvider(null);
+    setSelectedQuantity(null);
     setCity('');
   };
 
@@ -596,8 +624,57 @@ export default function HomePage() {
                       Indietro
                     </Button>
                     <Button 
-                      onClick={() => selectedProvider && setStep('city')}
+                      onClick={() => selectedProvider && setStep('quantity_question')}
                       disabled={!selectedProvider}
+                      className="flex-1"
+                    >
+                      Avanti
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {step === 'quantity_question' && (
+                <div className="animate-fade-in">
+                  <h2 className="text-lg font-semibold mb-4">
+                    Di quanti rubinetti hai bisogno per la sostituzione?
+                  </h2>
+
+                  <div className="space-y-2">
+                    {QUANTITY_OPTIONS.map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => handleSelectQuantity(option)}
+                        className={`w-full flex items-center gap-3 p-4 rounded-lg border transition-all text-left ${
+                          selectedQuantity === option
+                            ? 'border-primary bg-accent'
+                            : 'border-border bg-background hover:bg-accent hover:border-primary/50'
+                        }`}
+                      >
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+                          selectedQuantity === option
+                            ? 'border-primary bg-primary'
+                            : 'border-muted-foreground'
+                        }`}>
+                          {selectedQuantity === option && (
+                            <div className="w-2 h-2 rounded-full bg-primary-foreground" />
+                          )}
+                        </div>
+                        <span className="font-medium text-foreground">{option}</span>
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Navigation */}
+                  <div className="flex gap-3 mt-4">
+                    <Button variant="outline" onClick={handleBack} className="flex-1">
+                      <ArrowLeft className="h-4 w-4 mr-2" />
+                      Indietro
+                    </Button>
+                    <Button 
+                      onClick={() => selectedQuantity && setStep('city')}
+                      disabled={!selectedQuantity}
                       className="flex-1"
                     >
                       Avanti
@@ -617,7 +694,8 @@ export default function HomePage() {
                       {selectedType && INTERVENTION_LABELS[selectedType]}
                       {selectedSubOption && ` → ${selectedSubOption}`}
                       {selectedSubSubOption && ` → ${selectedSubSubOption}`}
-                      {selectedProvider && ` (${selectedProvider})`}
+                      {selectedQuantity && ` (${selectedQuantity})`}
+                      {selectedProvider && ` - ${selectedProvider}`}
                     </p>
                   </div>
 

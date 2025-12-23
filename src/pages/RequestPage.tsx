@@ -62,30 +62,25 @@ export default function RequestPage() {
   const progress = ((currentStepIndex + 1) / STEPS.length) * 100;
 
   useEffect(() => {
+    interface WizardAnswer {
+      questionId: string;
+      answer: string;
+    }
+    
     const state = location.state as { 
       interventionType?: InterventionType; 
-      subOption?: string;
-      subSubOption?: string;
-      provider?: string;
-      quantity?: string;
+      answers?: WizardAnswer[];
       city?: string 
     } | null;
     
     if (state?.interventionType && state?.city) {
-      // Build initial description from sub-options
+      // Build initial description from wizard answers
       let initialDescription = '';
-      if (state.subOption) {
-        initialDescription = state.subOption;
-        if (state.subSubOption) {
-          initialDescription += ` (${state.subSubOption})`;
-        }
-        if (state.quantity) {
-          initialDescription += ` x${state.quantity}`;
-        }
-        if (state.provider) {
-          initialDescription += ` - Fornito da: ${state.provider}`;
-        }
-        initialDescription += ': ';
+      
+      if (state.answers && state.answers.length > 0) {
+        // Format answers as a readable summary
+        const answersSummary = state.answers.map(a => a.answer).join(' → ');
+        initialDescription = answersSummary + ': ';
       }
       
       setFormData(prev => ({

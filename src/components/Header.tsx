@@ -53,8 +53,8 @@ export function Header() {
                   </Button>
                 </Link>
                 <Link to="/auth">
-                  <Button variant="outline" size="sm">
-                    Registrati come Idraulico
+                  <Button size="sm">
+                    Registrati
                   </Button>
                 </Link>
               </>

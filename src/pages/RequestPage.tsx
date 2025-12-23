@@ -128,20 +128,34 @@ export default function RequestPage() {
   };
 
   const handleSubmit = async () => {
-    if (!formData.interventionType) return;
+    // Full validation before submit
+    if (
+      !formData.interventionType ||
+      !formData.city ||
+      !formData.description.trim() ||
+      !formData.urgency ||
+      !formData.propertyType ||
+      !formData.accessibility ||
+      !formData.clientName.trim() ||
+      !formData.clientPhone.trim() ||
+      !formData.privacyAccepted
+    ) {
+      toast.error('Compila tutti i campi obbligatori.');
+      return;
+    }
 
     setIsSubmitting(true);
 
     const requestPayload = {
       intervention_type: formData.interventionType,
       city: formData.city,
-      description: formData.description,
+      description: formData.description.trim(),
       urgency: formData.urgency,
       property_type: formData.propertyType,
       accessibility: formData.accessibility,
-      client_name: formData.clientName,
-      client_phone: formData.clientPhone,
-      client_email: formData.clientEmail || null,
+      client_name: formData.clientName.trim(),
+      client_phone: formData.clientPhone.trim(),
+      client_email: formData.clientEmail?.trim() || null,
       privacy_accepted: formData.privacyAccepted,
     };
 

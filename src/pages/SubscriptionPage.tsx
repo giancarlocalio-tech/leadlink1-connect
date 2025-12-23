@@ -53,23 +53,24 @@ export default function SubscriptionPage() {
       case 'premium':
         return [
           'Contatti esclusivi illimitati',
+          'Accesso immediato a tutte le richieste',
           'Nessun altro idraulico li vede',
-          'Priorità nelle notifiche',
           'Badge Premium visibile ai clienti',
           'Supporto prioritario',
         ];
       case 'medium':
         return [
           'Fino a 5 contatti esclusivi/mese',
+          'Accesso immediato a tutte le richieste',
           'Nessun altro idraulico li vede',
           'Notifiche in tempo reale',
           'Badge verificato',
         ];
       default:
         return [
-          'Accesso a tutti i contatti',
-          'Contatti condivisi con altri idraulici',
-          'Notifiche giornaliere',
+          'Fino a 3 contatti al mese',
+          'Accesso ai contatti dopo 1 ora',
+          'Solo se non sbloccati da piani superiori',
           'Profilo base',
         ];
     }

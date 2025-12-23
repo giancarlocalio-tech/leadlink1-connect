@@ -14,16 +14,203 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contact_logs: {
+        Row: {
+          contacted_at: string | null
+          id: string
+          plumber_id: string
+          request_id: string
+        }
+        Insert: {
+          contacted_at?: string | null
+          id?: string
+          plumber_id: string
+          request_id: string
+        }
+        Update: {
+          contacted_at?: string | null
+          id?: string
+          plumber_id?: string
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_logs_plumber_id_fkey"
+            columns: ["plumber_id"]
+            isOneToOne: false
+            referencedRelation: "plumber_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contact_logs_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "service_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plumber_profiles: {
+        Row: {
+          availability:
+            | Database["public"]["Enums"]["availability_type"][]
+            | null
+          business_name: string
+          created_at: string | null
+          description: string | null
+          email: string
+          email_verified: boolean | null
+          full_name: string
+          id: string
+          intervention_types:
+            | Database["public"]["Enums"]["intervention_type"][]
+            | null
+          main_city: string
+          phone: string
+          service_areas: string[] | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          availability?:
+            | Database["public"]["Enums"]["availability_type"][]
+            | null
+          business_name: string
+          created_at?: string | null
+          description?: string | null
+          email: string
+          email_verified?: boolean | null
+          full_name: string
+          id?: string
+          intervention_types?:
+            | Database["public"]["Enums"]["intervention_type"][]
+            | null
+          main_city: string
+          phone: string
+          service_areas?: string[] | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          availability?:
+            | Database["public"]["Enums"]["availability_type"][]
+            | null
+          business_name?: string
+          created_at?: string | null
+          description?: string | null
+          email?: string
+          email_verified?: boolean | null
+          full_name?: string
+          id?: string
+          intervention_types?:
+            | Database["public"]["Enums"]["intervention_type"][]
+            | null
+          main_city?: string
+          phone?: string
+          service_areas?: string[] | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      service_requests: {
+        Row: {
+          accessibility: Database["public"]["Enums"]["accessibility_type"]
+          city: string
+          client_email: string | null
+          client_name: string
+          client_phone: string
+          created_at: string | null
+          description: string
+          id: string
+          intervention_type: Database["public"]["Enums"]["intervention_type"]
+          privacy_accepted: boolean
+          property_type: Database["public"]["Enums"]["property_type"]
+          status: string | null
+          updated_at: string | null
+          urgency: Database["public"]["Enums"]["urgency_type"]
+        }
+        Insert: {
+          accessibility: Database["public"]["Enums"]["accessibility_type"]
+          city: string
+          client_email?: string | null
+          client_name: string
+          client_phone: string
+          created_at?: string | null
+          description: string
+          id?: string
+          intervention_type: Database["public"]["Enums"]["intervention_type"]
+          privacy_accepted?: boolean
+          property_type: Database["public"]["Enums"]["property_type"]
+          status?: string | null
+          updated_at?: string | null
+          urgency: Database["public"]["Enums"]["urgency_type"]
+        }
+        Update: {
+          accessibility?: Database["public"]["Enums"]["accessibility_type"]
+          city?: string
+          client_email?: string | null
+          client_name?: string
+          client_phone?: string
+          created_at?: string | null
+          description?: string
+          id?: string
+          intervention_type?: Database["public"]["Enums"]["intervention_type"]
+          privacy_accepted?: boolean
+          property_type?: Database["public"]["Enums"]["property_type"]
+          status?: string | null
+          updated_at?: string | null
+          urgency?: Database["public"]["Enums"]["urgency_type"]
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_plumber: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      accessibility_type: "facile" | "media" | "difficile"
+      app_role: "admin" | "plumber"
+      availability_type: "giorni_feriali" | "weekend" | "emergenze"
+      intervention_type:
+        | "perdita_acqua"
+        | "rubinetto_rotto"
+        | "scarico_intasato"
+        | "caldaia"
+        | "altro"
+      property_type: "casa" | "appartamento" | "negozio"
+      urgency_type: "subito" | "entro_24_ore" | "prossimi_giorni"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +337,19 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      accessibility_type: ["facile", "media", "difficile"],
+      app_role: ["admin", "plumber"],
+      availability_type: ["giorni_feriali", "weekend", "emergenze"],
+      intervention_type: [
+        "perdita_acqua",
+        "rubinetto_rotto",
+        "scarico_intasato",
+        "caldaia",
+        "altro",
+      ],
+      property_type: ["casa", "appartamento", "negozio"],
+      urgency_type: ["subito", "entro_24_ore", "prossimi_giorni"],
+    },
   },
 } as const

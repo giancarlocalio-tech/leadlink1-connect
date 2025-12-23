@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { Resend } from "https://esm.sh/resend@2.0.0";
-
+import { z } from "npm:zod@3.25.76";
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -48,36 +48,76 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { request_id }: { request_id: string } = await req.json();
-    console.log("Processing request_id:", request_id);
-
-    if (!request_id) {
-      throw new Error("request_id is required");
-    }
+    const body = (await req.json().catch(() => ({}))) as any;
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Fetch the service request details
-    const { data: serviceRequest, error: requestError } = await supabase
-      .from("service_requests")
-      .select("*")
-      .eq("id", request_id)
-      .maybeSingle();
+    const CreateRequestSchema = z
+      .object({
+        intervention_type: z.string().trim().min(1).max(80),
+        city: z.string().trim().min(1).max(120),
+        description: z.string().trim().min(1).max(2000),
+        urgency: z.string().trim().min(1).max(80),
+        property_type: z.string().trim().min(1).max(80),
+        accessibility: z.string().trim().min(1).max(80),
+        client_name: z.string().trim().min(1).max(120),
+        client_phone: z.string().trim().min(3).max(30),
+        client_email: z.string().trim().email().nullable().optional(),
+        privacy_accepted: z.literal(true),
+      })
+      .strict();
 
-    if (requestError) {
-      console.error("Error fetching service request:", requestError);
-      throw new Error(`Failed to fetch service request: ${requestError.message}`);
+    let request_id: string | undefined = body?.request_id;
+    let serviceRequest: any | null = null;
+
+    if (request_id) {
+      console.log("Processing request_id:", request_id);
+
+      // Fetch the service request details
+      const { data: existingRequest, error: requestError } = await supabase
+        .from("service_requests")
+        .select("*")
+        .eq("id", request_id)
+        .maybeSingle();
+
+      if (requestError) {
+        console.error("Error fetching service request:", requestError);
+        throw new Error(`Failed to fetch service request: ${requestError.message}`);
+      }
+
+      if (!existingRequest) {
+        console.log("Service request not found:", request_id);
+        return new Response(JSON.stringify({ error: "Service request not found" }), {
+          status: 404,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      serviceRequest = existingRequest;
+    } else {
+      // New flow: create the request from the frontend (avoids RLS on return=representation)
+      const parsed = CreateRequestSchema.parse(body?.request);
+
+      const { data: inserted, error: insertError } = await supabase
+        .from("service_requests")
+        .insert({
+          ...parsed,
+          client_email: parsed.client_email ?? null,
+        })
+        .select("*")
+        .single();
+
+      if (insertError) {
+        console.error("Error creating service request:", insertError);
+        throw new Error(`Failed to create service request: ${insertError.message}`);
+      }
+
+      serviceRequest = inserted;
+      request_id = inserted.id;
+      console.log("Created service request:", request_id);
     }
 
-    if (!serviceRequest) {
-      console.log("Service request not found:", request_id);
-      return new Response(
-        JSON.stringify({ error: "Service request not found" }),
-        { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    console.log("Service request found:", serviceRequest.city, serviceRequest.intervention_type);
+    console.log("Service request ready:", serviceRequest.city, serviceRequest.intervention_type);
 
     // Find plumbers who serve this city and handle this intervention type
     const { data: plumbers, error: plumbersError } = await supabase
@@ -211,6 +251,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     return new Response(
       JSON.stringify({
+        request_id,
         message: "Notifications sent",
         notified: successCount,
         failed: failedCount,

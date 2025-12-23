@@ -132,8 +132,7 @@ export default function RequestPage() {
 
     setIsSubmitting(true);
 
-    // Using type assertion as the database types will be regenerated
-    const insertData = {
+    const requestPayload = {
       intervention_type: formData.interventionType,
       city: formData.city,
       description: formData.description,
@@ -146,32 +145,15 @@ export default function RequestPage() {
       privacy_accepted: formData.privacyAccepted,
     };
 
-    const { data, error } = await supabase
-      .from('service_requests')
-      .insert(insertData as any)
-      .select('id')
-      .single();
+    const { data, error } = await supabase.functions.invoke('notify-plumbers', {
+      body: { request: requestPayload },
+    });
 
-    if (error) {
-      console.error('Error submitting request:', error);
+    if (error || (data as any)?.error) {
+      console.error('Error submitting request:', error || (data as any)?.error);
       toast.error('Si è verificato un errore. Riprova.');
       setIsSubmitting(false);
       return;
-    }
-
-    // Notify plumbers in the background
-    if (data?.id) {
-      supabase.functions
-        .invoke('notify-plumbers', {
-          body: { request_id: data.id },
-        })
-        .then(({ error: notifyError }) => {
-          if (notifyError) {
-            console.error('Error notifying plumbers:', notifyError);
-          } else {
-            console.log('Plumbers notified successfully');
-          }
-        });
     }
 
     setIsSubmitting(false);

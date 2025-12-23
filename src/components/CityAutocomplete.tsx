@@ -163,27 +163,45 @@ export function CityAutocomplete({
       </div>
 
       {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg overflow-hidden animate-fade-in">
-          <ScrollArea className="max-h-[200px]">
-            <div className="p-1">
+        <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-xl overflow-hidden animate-fade-in">
+          <ScrollArea className="max-h-[280px]">
+            <div className="p-1.5">
               {suggestions.map((city, index) => (
                 <button
                   key={city.id}
                   onClick={() => handleSelectCity(city)}
-                  className={`w-full flex items-start gap-3 p-3 rounded-md text-left transition-colors ${
+                  className={`w-full flex items-start gap-3 p-3 rounded-lg text-left transition-all duration-150 ${
                     index === selectedIndex
-                      ? 'bg-accent text-accent-foreground'
-                      : 'hover:bg-accent/50'
+                      ? 'bg-primary/10 border border-primary/20'
+                      : 'hover:bg-accent/60 border border-transparent'
                   }`}
                 >
-                  <MapPin className="h-4 w-4 mt-0.5 text-primary shrink-0" />
+                  <div className="flex items-center justify-center h-9 w-9 rounded-full bg-primary/10 shrink-0">
+                    <MapPin className="h-4 w-4 text-primary" />
+                  </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-foreground truncate">
-                      {city.name}
-                    </p>
-                    <p className="text-sm text-muted-foreground truncate">
-                      {city.province_name} ({city.province_code}) • {city.region}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className="font-semibold text-foreground">
+                        {city.name}
+                      </p>
+                      <span className="text-xs font-medium px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
+                        {city.province_code}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                      <p className="text-sm text-muted-foreground">
+                        {city.province_name}
+                      </p>
+                      <span className="text-muted-foreground/50">•</span>
+                      <p className="text-sm font-medium text-primary/80">
+                        {city.region}
+                      </p>
+                    </div>
+                    {city.cap && city.cap.length > 0 && (
+                      <p className="text-xs text-muted-foreground/70 mt-1">
+                        CAP: {city.cap.slice(0, 3).join(', ')}{city.cap.length > 3 ? ` +${city.cap.length - 3}` : ''}
+                      </p>
+                    )}
                   </div>
                 </button>
               ))}

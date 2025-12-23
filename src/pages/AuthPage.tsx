@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { Wrench, Mail, Lock, User, Phone, Building, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -155,23 +155,6 @@ export default function AuthPage() {
             </div>
 
             <div className="bg-card rounded-lg border border-border p-6 shadow-sm">
-              {/* Mode toggle */}
-              <div className="flex gap-2 mb-6">
-                <Button
-                  variant={mode === 'login' ? 'default' : 'outline'}
-                  onClick={() => setMode('login')}
-                  className="flex-1"
-                >
-                  Accedi
-                </Button>
-                <Button
-                  variant={mode === 'register' ? 'default' : 'outline'}
-                  onClick={() => setMode('register')}
-                  className="flex-1"
-                >
-                  Registrati
-                </Button>
-              </div>
 
               {mode === 'login' ? (
                 <form onSubmit={handleLogin} className="space-y-4">
@@ -208,6 +191,13 @@ export default function AuthPage() {
                   <Button type="submit" className="w-full" disabled={isSubmitting}>
                     {isSubmitting ? 'Accesso...' : 'Accedi'}
                   </Button>
+
+                  <p className="text-sm text-center text-muted-foreground mt-4">
+                    Non hai un account?{' '}
+                    <Link to="/auth" className="text-primary hover:underline font-medium">
+                      Registrati qui
+                    </Link>
+                  </p>
                 </form>
               ) : (
                 <form onSubmit={handleRegister} className="space-y-4">
@@ -319,6 +309,13 @@ export default function AuthPage() {
                   <Button type="submit" className="w-full" disabled={isSubmitting}>
                     {isSubmitting ? 'Registrazione...' : 'Registrati'}
                   </Button>
+
+                  <p className="text-sm text-center text-muted-foreground mt-4">
+                    Hai già un account?{' '}
+                    <Link to="/auth?mode=login" className="text-primary hover:underline font-medium">
+                      Accedi qui
+                    </Link>
+                  </p>
                 </form>
               )}
             </div>

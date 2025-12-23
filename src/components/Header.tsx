@@ -46,11 +46,18 @@ export function Header() {
                 </Button>
               </>
             ) : (
-              <Link to="/auth">
-                <Button variant="outline" size="sm">
-                  Accedi come Idraulico
-                </Button>
-              </Link>
+              <>
+                <Link to="/auth?mode=login">
+                  <Button variant="ghost" size="sm">
+                    Login
+                  </Button>
+                </Link>
+                <Link to="/auth">
+                  <Button variant="outline" size="sm">
+                    Registrati come Idraulico
+                  </Button>
+                </Link>
+              </>
             )}
           </nav>
         </div>

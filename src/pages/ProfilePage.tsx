@@ -12,6 +12,7 @@ import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import { toast } from 'sonner';
 import type { InterventionType, AvailabilityType } from '@/lib/types';
 import { INTERVENTION_LABELS, AVAILABILITY_LABELS } from '@/lib/types';
+import { CityAutocomplete, type ItalianCity } from '@/components/CityAutocomplete';
 
 const INTERVENTION_TYPES: InterventionType[] = [
   'perdita_acqua',
@@ -32,7 +33,7 @@ export default function ProfilePage() {
   const { user, loading: authLoading } = useAuth();
   const { profile, loading: profileLoading, updateProfile } = usePlumberProfile();
   const [isSaving, setIsSaving] = useState(false);
-  const [newArea, setNewArea] = useState('');
+  const [newAreaValue, setNewAreaValue] = useState('');
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -84,14 +85,14 @@ export default function ProfilePage() {
     }));
   };
 
-  const addServiceArea = () => {
-    const area = newArea.trim();
+  const addServiceArea = (city: ItalianCity | null, displayValue: string) => {
+    const area = displayValue.trim();
     if (area && !formData.serviceAreas.includes(area)) {
       setFormData(prev => ({
         ...prev,
         serviceAreas: [...prev.serviceAreas, area],
       }));
-      setNewArea('');
+      setNewAreaValue('');
     }
   };
 
@@ -188,10 +189,10 @@ export default function ProfilePage() {
 
                 <div>
                   <Label htmlFor="mainCity" className="mb-2 block">Città principale</Label>
-                  <Input
-                    id="mainCity"
+                  <CityAutocomplete
                     value={formData.mainCity}
-                    onChange={(e) => setFormData(prev => ({ ...prev, mainCity: e.target.value }))}
+                    onChange={(city, displayValue) => setFormData(prev => ({ ...prev, mainCity: displayValue }))}
+                    placeholder="Cerca la tua città..."
                   />
                 </div>
 
@@ -215,15 +216,17 @@ export default function ProfilePage() {
                 </p>
                 
                 <div className="flex gap-2">
-                  <Input
-                    placeholder="Aggiungi città o zona"
-                    value={newArea}
-                    onChange={(e) => setNewArea(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addServiceArea())}
+                  <CityAutocomplete
+                    value={newAreaValue}
+                    onChange={(city, displayValue) => {
+                      setNewAreaValue(displayValue);
+                      if (city) {
+                        addServiceArea(city, displayValue);
+                      }
+                    }}
+                    placeholder="Cerca e aggiungi città..."
+                    className="flex-1"
                   />
-                  <Button type="button" variant="outline" onClick={addServiceArea}>
-                    <Plus className="h-4 w-4" />
-                  </Button>
                 </div>
 
                 {formData.serviceAreas.length > 0 && (

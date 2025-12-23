@@ -146,18 +146,36 @@ export default function RequestPage() {
       privacy_accepted: formData.privacyAccepted,
     };
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('service_requests')
-      .insert(insertData as any);
-
-    setIsSubmitting(false);
+      .insert(insertData as any)
+      .select('id')
+      .single();
 
     if (error) {
       console.error('Error submitting request:', error);
       toast.error('Si è verificato un errore. Riprova.');
-    } else {
-      navigate('/conferma');
+      setIsSubmitting(false);
+      return;
     }
+
+    // Notify plumbers in the background
+    if (data?.id) {
+      supabase.functions
+        .invoke('notify-plumbers', {
+          body: { request_id: data.id },
+        })
+        .then(({ error: notifyError }) => {
+          if (notifyError) {
+            console.error('Error notifying plumbers:', notifyError);
+          } else {
+            console.log('Plumbers notified successfully');
+          }
+        });
+    }
+
+    setIsSubmitting(false);
+    navigate('/conferma');
   };
 
   const getStepTitle = (): string => {

@@ -3,6 +3,21 @@ export type InterventionType =
   | 'rubinetto_rotto'
   | 'scarico_intasato'
   | 'caldaia'
+  | 'installazione_sostituzione'
+  | 'sturare_spurgo'
+  | 'riparazione'
+  | 'impianto_idraulico'
+  | 'box_doccia'
+  | 'impianto_riscaldamento'
+  | 'termoidraulico'
+  | 'condizionatori'
+  | 'ristrutturazione'
+  | 'certificazione'
+  | 'termosifone'
+  | 'contatore'
+  | 'addolcitore_acqua'
+  | 'depuratore_acqua'
+  | 'sostituzione_rubinetto'
   | 'altro';
 
 export type UrgencyType = 
@@ -13,7 +28,9 @@ export type UrgencyType =
 export type PropertyType = 
   | 'casa'
   | 'appartamento'
-  | 'negozio';
+  | 'negozio'
+  | 'ufficio'
+  | 'condominio';
 
 export type AccessibilityType = 
   | 'facile'
@@ -116,10 +133,25 @@ export interface RequestFormData {
 }
 
 export const INTERVENTION_LABELS: Record<InterventionType, string> = {
-  perdita_acqua: 'Perdita d\'acqua',
+  installazione_sostituzione: 'Installazione e sostituzione',
+  perdita_acqua: 'Ricerca perdite acqua',
+  sturare_spurgo: 'Sturare / spurgo (lavandino, WC, ecc.)',
+  riparazione: 'Riparazione',
+  impianto_idraulico: 'Impianto idraulico',
+  box_doccia: 'Box doccia',
+  caldaia: 'Caldaia',
+  impianto_riscaldamento: 'Impianto riscaldamento',
+  termoidraulico: 'Termoidraulico',
+  condizionatori: 'Condizionatori e climatizzatori',
+  ristrutturazione: 'Ristrutturazione',
+  certificazione: 'Certificazione',
+  termosifone: 'Termosifone',
+  contatore: 'Contatore',
+  addolcitore_acqua: 'Addolcitore acqua',
+  depuratore_acqua: 'Depuratore acqua',
+  sostituzione_rubinetto: 'Sostituzione rubinetto',
   rubinetto_rotto: 'Rubinetto rotto',
   scarico_intasato: 'Scarico intasato',
-  caldaia: 'Caldaia',
   altro: 'Altro',
 };
 
@@ -133,6 +165,8 @@ export const PROPERTY_LABELS: Record<PropertyType, string> = {
   casa: 'Casa',
   appartamento: 'Appartamento',
   negozio: 'Negozio',
+  ufficio: 'Ufficio',
+  condominio: 'Condominio',
 };
 
 export const ACCESSIBILITY_LABELS: Record<AccessibilityType, string> = {

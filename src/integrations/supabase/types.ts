@@ -360,6 +360,21 @@ export type Database = {
         | "scarico_intasato"
         | "caldaia"
         | "altro"
+        | "installazione_sostituzione"
+        | "sturare_spurgo"
+        | "riparazione"
+        | "impianto_idraulico"
+        | "box_doccia"
+        | "impianto_riscaldamento"
+        | "termoidraulico"
+        | "condizionatori"
+        | "ristrutturazione"
+        | "certificazione"
+        | "termosifone"
+        | "contatore"
+        | "addolcitore_acqua"
+        | "depuratore_acqua"
+        | "sostituzione_rubinetto"
       property_type: "casa" | "appartamento" | "negozio"
       subscription_plan: "basic" | "medium" | "premium"
       subscription_status: "active" | "cancelled" | "expired" | "pending"
@@ -500,6 +515,21 @@ export const Constants = {
         "scarico_intasato",
         "caldaia",
         "altro",
+        "installazione_sostituzione",
+        "sturare_spurgo",
+        "riparazione",
+        "impianto_idraulico",
+        "box_doccia",
+        "impianto_riscaldamento",
+        "termoidraulico",
+        "condizionatori",
+        "ristrutturazione",
+        "certificazione",
+        "termosifone",
+        "contatore",
+        "addolcitore_acqua",
+        "depuratore_acqua",
+        "sostituzione_rubinetto",
       ],
       property_type: ["casa", "appartamento", "negozio"],
       subscription_plan: ["basic", "medium", "premium"],

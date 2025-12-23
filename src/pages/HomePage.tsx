@@ -107,6 +107,22 @@ const RIPARAZIONE_SUB_OPTIONS = [
   'Altro',
 ];
 
+// Third-level options for "Rubinetto" under "Installazione e sostituzione"
+const RUBINETTO_SUB_OPTIONS = [
+  'Cucina',
+  'Bagno',
+  'Lavabo',
+  'Lavello',
+  'Lavastoviglie',
+  'Altro',
+];
+
+// Price ranges for different selections
+const PRICE_RANGES: Record<string, string> = {
+  'installazione_sostituzione': '70 € - 750 €',
+  'Rubinetto': '50 € - 250 €',
+};
+
 // Icons for intervention types
 const INTERVENTION_ICONS: Partial<Record<InterventionType, React.ReactNode>> = {
   installazione_sostituzione: <Wrench className="h-5 w-5" />,
@@ -136,19 +152,50 @@ const TYPES_WITH_SUB_QUESTIONS: InterventionType[] = [
   'riparazione',
 ];
 
-type WizardStep = 'intervention' | 'sub_question' | 'city';
+type WizardStep = 'intervention' | 'sub_question' | 'sub_sub_question' | 'city';
 
 export default function HomePage() {
   const navigate = useNavigate();
   const [step, setStep] = useState<WizardStep>('intervention');
   const [selectedType, setSelectedType] = useState<InterventionType | null>(null);
   const [selectedSubOption, setSelectedSubOption] = useState<string | null>(null);
+  const [selectedSubSubOption, setSelectedSubSubOption] = useState<string | null>(null);
   const [city, setCity] = useState('');
   const [searchFilter, setSearchFilter] = useState('');
   const [showModal, setShowModal] = useState(false);
 
+  // Check if selected sub-option has third-level options
+  const hasThirdLevelOptions = selectedSubOption === 'Rubinetto' && selectedType === 'installazione_sostituzione';
+
+  const getThirdLevelOptions = (): string[] => {
+    if (selectedSubOption === 'Rubinetto') {
+      return RUBINETTO_SUB_OPTIONS;
+    }
+    return [];
+  };
+
+  const getThirdLevelTitle = (): string => {
+    if (selectedSubOption === 'Rubinetto') {
+      return 'Quali rubinetti vorresti sostituire?';
+    }
+    return '';
+  };
+
+  const getCurrentPriceRange = (): string | null => {
+    if (selectedSubOption && PRICE_RANGES[selectedSubOption]) {
+      return PRICE_RANGES[selectedSubOption];
+    }
+    if (selectedType && PRICE_RANGES[selectedType]) {
+      return PRICE_RANGES[selectedType];
+    }
+    return null;
+  };
+
   const getTotalSteps = () => {
     if (selectedType && TYPES_WITH_SUB_QUESTIONS.includes(selectedType)) {
+      if (hasThirdLevelOptions || selectedSubSubOption) {
+        return 4;
+      }
       return 3;
     }
     return 2;
@@ -158,7 +205,10 @@ export default function HomePage() {
     switch (step) {
       case 'intervention': return 1;
       case 'sub_question': return 2;
-      case 'city': return selectedType && TYPES_WITH_SUB_QUESTIONS.includes(selectedType) ? 3 : 2;
+      case 'sub_sub_question': return 3;
+      case 'city': 
+        if (hasThirdLevelOptions || selectedSubSubOption) return 4;
+        return selectedType && TYPES_WITH_SUB_QUESTIONS.includes(selectedType) ? 3 : 2;
       default: return 1;
     }
   };
@@ -208,6 +258,18 @@ export default function HomePage() {
 
   const handleSelectSubOption = (option: string) => {
     setSelectedSubOption(option);
+    setSelectedSubSubOption(null);
+    
+    // Check if this option needs a third-level question
+    if (option === 'Rubinetto' && selectedType === 'installazione_sostituzione') {
+      setStep('sub_sub_question');
+    } else {
+      setStep('city');
+    }
+  };
+
+  const handleSelectSubSubOption = (option: string) => {
+    setSelectedSubSubOption(option);
     setStep('city');
   };
 
@@ -217,6 +279,7 @@ export default function HomePage() {
         state: {
           interventionType: selectedType,
           subOption: selectedSubOption,
+          subSubOption: selectedSubSubOption,
           city: city.trim(),
         },
       });
@@ -226,11 +289,17 @@ export default function HomePage() {
   const handleBack = () => {
     switch (step) {
       case 'city':
-        if (selectedType && TYPES_WITH_SUB_QUESTIONS.includes(selectedType)) {
+        if (selectedSubSubOption) {
+          setStep('sub_sub_question');
+        } else if (selectedType && TYPES_WITH_SUB_QUESTIONS.includes(selectedType)) {
           setStep('sub_question');
         } else {
           setStep('intervention');
         }
+        break;
+      case 'sub_sub_question':
+        setStep('sub_question');
+        setSelectedSubSubOption(null);
         break;
       case 'sub_question':
         setStep('intervention');
@@ -248,6 +317,7 @@ export default function HomePage() {
     setStep('intervention');
     setSelectedType(null);
     setSelectedSubOption(null);
+    setSelectedSubSubOption(null);
     setCity('');
   };
 
@@ -303,10 +373,10 @@ export default function HomePage() {
               <div className="flex items-center justify-between mb-2">
                 <Progress value={progress} className="h-1.5 flex-1" />
               </div>
-              {selectedType === 'installazione_sostituzione' && (
+              {getCurrentPriceRange() && (
                 <div className="flex items-center justify-between text-sm text-muted-foreground">
                   <span>Fascia di prezzo:</span>
-                  <span className="font-medium text-foreground">70 € - 750 €</span>
+                  <span className="font-medium text-foreground">{getCurrentPriceRange()}</span>
                 </div>
               )}
             </div>
@@ -408,6 +478,57 @@ export default function HomePage() {
                 </div>
               )}
 
+              {step === 'sub_sub_question' && (
+                <div className="animate-fade-in">
+                  <h2 className="text-lg font-semibold mb-4">
+                    {getThirdLevelTitle()}
+                  </h2>
+
+                  <ScrollArea className="h-[300px] pr-4">
+                    <div className="space-y-2">
+                      {getThirdLevelOptions().map((option) => (
+                        <button
+                          key={option}
+                          onClick={() => handleSelectSubSubOption(option)}
+                          className={`w-full flex items-center gap-3 p-4 rounded-lg border transition-all text-left ${
+                            selectedSubSubOption === option
+                              ? 'border-primary bg-accent'
+                              : 'border-border bg-background hover:bg-accent hover:border-primary/50'
+                          }`}
+                        >
+                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+                            selectedSubSubOption === option
+                              ? 'border-primary bg-primary'
+                              : 'border-muted-foreground'
+                          }`}>
+                            {selectedSubSubOption === option && (
+                              <div className="w-2 h-2 rounded-full bg-primary-foreground" />
+                            )}
+                          </div>
+                          <span className="font-medium text-foreground">{option}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </ScrollArea>
+
+                  {/* Navigation */}
+                  <div className="flex gap-3 mt-4">
+                    <Button variant="outline" onClick={handleBack} className="flex-1">
+                      <ArrowLeft className="h-4 w-4 mr-2" />
+                      Indietro
+                    </Button>
+                    <Button 
+                      onClick={() => selectedSubSubOption && setStep('city')}
+                      disabled={!selectedSubSubOption}
+                      className="flex-1"
+                    >
+                      Avanti
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  </div>
+                </div>
+              )}
+
               {step === 'city' && (
                 <div className="animate-fade-in">
                   <div className="mb-4 pb-4 border-b border-border">
@@ -417,6 +538,7 @@ export default function HomePage() {
                     <p className="font-semibold text-primary">
                       {selectedType && INTERVENTION_LABELS[selectedType]}
                       {selectedSubOption && ` → ${selectedSubOption}`}
+                      {selectedSubSubOption && ` → ${selectedSubSubOption}`}
                     </p>
                   </div>
 

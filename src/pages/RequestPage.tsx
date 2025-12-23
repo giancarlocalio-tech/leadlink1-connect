@@ -65,12 +65,20 @@ export default function RequestPage() {
     const state = location.state as { 
       interventionType?: InterventionType; 
       subOption?: string;
+      subSubOption?: string;
       city?: string 
     } | null;
     
     if (state?.interventionType && state?.city) {
-      // If subOption is provided, prepend it to description
-      const initialDescription = state.subOption ? `${state.subOption}: ` : '';
+      // Build initial description from sub-options
+      let initialDescription = '';
+      if (state.subOption) {
+        initialDescription = state.subOption;
+        if (state.subSubOption) {
+          initialDescription += ` (${state.subSubOption})`;
+        }
+        initialDescription += ': ';
+      }
       
       setFormData(prev => ({
         ...prev,

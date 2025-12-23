@@ -26,6 +26,7 @@ export default function DashboardPage() {
     unlockContact,
     getCurrentPlan,
     getMonthlyUnlocksRemaining,
+    getBasicContactsRemaining,
     unlocks
   } = useSubscription();
   
@@ -157,6 +158,7 @@ export default function DashboardPage() {
               subscription={subscription}
               currentPlan={getCurrentPlan()}
               unlocksRemaining={getMonthlyUnlocksRemaining()}
+              basicContactsRemaining={getBasicContactsRemaining()}
               onUpgrade={() => navigate('/dashboard/abbonamento')}
             />
           </div>

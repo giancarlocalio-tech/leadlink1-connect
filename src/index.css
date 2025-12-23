@@ -2,32 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap');
 
-/* Idraulici Subito - Professional blue/gray design system */
+/* Idraulici Subito - Luigi-inspired Green & Blue design system */
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 215 25% 15%;
+    --background: 140 25% 97%;
+    --foreground: 220 30% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 215 25% 15%;
+    --card-foreground: 220 30% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 25% 15%;
+    --popover-foreground: 220 30% 15%;
 
-    --primary: 210 80% 50%;
+    /* Luigi Green - Primary */
+    --primary: 142 70% 40%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 15% 95%;
-    --secondary-foreground: 215 20% 25%;
+    /* Luigi Blue - Secondary */
+    --secondary: 220 65% 50%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 15% 95%;
-    --muted-foreground: 215 15% 50%;
+    --muted: 140 15% 93%;
+    --muted-foreground: 220 15% 45%;
 
-    --accent: 210 80% 95%;
-    --accent-foreground: 210 80% 40%;
+    --accent: 142 60% 92%;
+    --accent-foreground: 142 70% 30%;
 
     --destructive: 0 72% 55%;
     --destructive-foreground: 0 0% 100%;
@@ -38,34 +40,36 @@
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
 
-    --border: 210 15% 90%;
-    --input: 210 15% 90%;
-    --ring: 210 80% 50%;
+    --border: 140 20% 88%;
+    --input: 140 20% 88%;
+    --ring: 142 70% 40%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 
   .dark {
-    --background: 215 25% 10%;
-    --foreground: 210 15% 95%;
+    --background: 220 30% 8%;
+    --foreground: 140 20% 95%;
 
-    --card: 215 25% 13%;
-    --card-foreground: 210 15% 95%;
+    --card: 220 30% 12%;
+    --card-foreground: 140 20% 95%;
 
-    --popover: 215 25% 13%;
-    --popover-foreground: 210 15% 95%;
+    --popover: 220 30% 12%;
+    --popover-foreground: 140 20% 95%;
 
-    --primary: 210 80% 55%;
+    /* Luigi Green - Primary */
+    --primary: 142 65% 45%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 215 20% 18%;
-    --secondary-foreground: 210 15% 90%;
+    /* Luigi Blue - Secondary */
+    --secondary: 220 60% 45%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 215 20% 18%;
-    --muted-foreground: 210 10% 55%;
+    --muted: 220 25% 18%;
+    --muted-foreground: 140 15% 55%;
 
-    --accent: 210 50% 20%;
-    --accent-foreground: 210 80% 70%;
+    --accent: 142 40% 20%;
+    --accent-foreground: 142 65% 65%;
 
     --destructive: 0 65% 45%;
     --destructive-foreground: 0 0% 100%;
@@ -76,9 +80,9 @@
     --warning: 38 92% 45%;
     --warning-foreground: 0 0% 100%;
 
-    --border: 215 20% 20%;
-    --input: 215 20% 20%;
-    --ring: 210 80% 55%;
+    --border: 220 25% 20%;
+    --input: 220 25% 20%;
+    --ring: 142 65% 45%;
   }
 }
 

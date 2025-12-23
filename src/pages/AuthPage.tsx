@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Wrench, Mail, Lock, User, Phone, Building, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,9 +13,13 @@ type AuthMode = 'login' | 'register';
 
 export default function AuthPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user, loading: authLoading, signIn, signUp } = useAuth();
   const { profile, loading: profileLoading, createProfile } = usePlumberProfile();
-  const [mode, setMode] = useState<AuthMode>('login');
+  
+  // Default to 'register', use 'login' only if explicitly set in URL
+  const initialMode = searchParams.get('mode') === 'login' ? 'login' : 'register';
+  const [mode, setMode] = useState<AuthMode>(initialMode);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Login form

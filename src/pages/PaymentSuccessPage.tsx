@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckCircle, ArrowRight, Crown, Star, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -6,11 +6,16 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
 import { useStripeSubscription } from '@/hooks/useStripeSubscription';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
+import { supabase } from '@/integrations/supabase/client';
+import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 
 export default function PaymentSuccessPage() {
   const navigate = useNavigate();
   const { user, session, loading: authLoading } = useAuth();
+  const { profile } = usePlumberProfile();
   const [retryCount, setRetryCount] = useState(0);
+  const [emailSent, setEmailSent] = useState(false);
+  const emailSentRef = useRef(false);
   const { 
     currentPlan, 
     subscriptionEnd, 
@@ -36,6 +41,39 @@ export default function PaymentSuccessPage() {
       return () => clearTimeout(timer);
     }
   }, [subLoading, session?.access_token, isSubscribed, retryCount, checkSubscription]);
+
+  // Send welcome email once subscription is confirmed
+  useEffect(() => {
+    const sendWelcomeEmail = async () => {
+      if (isSubscribed && profile && !emailSentRef.current) {
+        emailSentRef.current = true;
+        
+        const planLabels = {
+          basic: 'Base',
+          medium: 'Professional',
+          premium: 'Premium',
+        };
+        
+        try {
+          await supabase.functions.invoke('send-welcome-email', {
+            body: {
+              email: profile.email,
+              fullName: profile.full_name,
+              businessName: profile.business_name,
+              planName: planLabels[currentPlan as keyof typeof planLabels] || 'Abbonamento',
+            },
+          });
+          console.log('Welcome email sent from PaymentSuccessPage');
+          setEmailSent(true);
+        } catch (emailError) {
+          console.error('Error sending welcome email:', emailError);
+          // Don't block the page if email fails
+        }
+      }
+    };
+    
+    sendWelcomeEmail();
+  }, [isSubscribed, profile, currentPlan]);
 
   // Redirect if not authenticated after loading
   useEffect(() => {

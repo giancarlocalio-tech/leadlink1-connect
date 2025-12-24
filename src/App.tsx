@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage";
 import RequestPage from "./pages/RequestPage";
 import ConfirmationPage from "./pages/ConfirmationPage";
 import AuthPage from "./pages/AuthPage";
+import AuthConfirmPage from "./pages/AuthConfirmPage";
 import DashboardPage from "./pages/DashboardPage";
 import RequestsPage from "./pages/RequestsPage";
 import SubscriptionPage from "./pages/SubscriptionPage";
@@ -27,10 +28,10 @@ const App = () => (
           <Route path="/richiesta" element={<RequestPage />} />
           <Route path="/conferma" element={<ConfirmationPage />} />
           <Route path="/auth" element={<AuthPage />} />
+          <Route path="/auth/confirm" element={<AuthConfirmPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/dashboard/richieste" element={<RequestsPage />} />
           <Route path="/dashboard/abbonamento" element={<SubscriptionPage />} />
-          <Route path="/profilo" element={<ProfilePage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/termini" element={<TermsPage />} />
           <Route path="/admin" element={<AdminPage />} />

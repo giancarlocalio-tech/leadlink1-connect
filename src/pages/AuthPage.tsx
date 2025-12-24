@@ -253,6 +253,7 @@ export default function AuthPage() {
                 full_name: profileData.full_name,
                 business_name: profileData.business_name,
                 plan_type: plan_type,
+                app_origin: window.location.origin,
               },
             });
           } catch (emailError) {

@@ -82,9 +82,7 @@ async function sendAssignmentEmail(
   const urgencyLabel = URGENCY_LABELS[request.urgency] || request.urgency;
   
   // Generate magic link for one-click login
-  // Use preview URL for testing, production URL for live
-  const appOrigin = "https://4cb044a8-da35-4069-9d51-2fe8de4fed9d.lovableproject.com";
-  const loginUrl = await generateMagicLink(supabase, email, appOrigin);
+  const loginUrl = await generateMagicLink(supabase, email);
   
   const plainTextContent = `Nuova richiesta assegnata a te!
 

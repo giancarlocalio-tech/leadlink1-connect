@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 import { CityAutocomplete, ItalianCity } from '@/components/CityAutocomplete';
 import { Badge } from '@/components/ui/badge';
 
-type AuthMode = 'login' | 'register' | 'forgot-password' | 'reset-password';
+type AuthMode = 'login' | 'register' | 'register-form' | 'forgot-password' | 'reset-password';
 
 export default function AuthPage() {
   const navigate = useNavigate();
@@ -243,12 +243,12 @@ export default function AuthPage() {
       <div className="py-8 md:py-12">
         <div className="container mx-auto px-4">
           {mode === 'register' && (
-            <div className="max-w-4xl mx-auto mb-12">
+            <div className="max-w-4xl mx-auto">
               {/* Hero section for registration */}
               <div className="text-center mb-10">
                 <div className="inline-flex items-center gap-2 bg-primary/20 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
                   <Zap className="h-4 w-4" />
-                  7 giorni di prova gratuita
+                  30 giorni di prova gratuita
                 </div>
                 <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
                   Sei un idraulico? Prova gratuitamente!
@@ -320,9 +320,27 @@ export default function AuthPage() {
                   </p>
                 </div>
               </div>
+
+              {/* CTA Button */}
+              <div className="text-center mb-10">
+                <Button 
+                  size="lg" 
+                  onClick={() => setMode('register-form')}
+                  className="text-lg px-8 py-6"
+                >
+                  Inizia la registrazione
+                </Button>
+                <p className="text-sm text-muted-foreground mt-4">
+                  Hai già un account?{' '}
+                  <Link to="/auth?mode=login" className="text-primary hover:underline font-medium">
+                    Accedi qui
+                  </Link>
+                </p>
+              </div>
             </div>
           )}
 
+          {(mode === 'login' || mode === 'register-form' || mode === 'forgot-password' || mode === 'reset-password') && (
           <div className="max-w-md mx-auto">
             <div className="text-center mb-8">
               <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
@@ -330,13 +348,13 @@ export default function AuthPage() {
               </div>
               <h2 className="text-2xl font-bold text-foreground">
                 {mode === 'login' && 'Accedi come Idraulico'}
-                {mode === 'register' && 'Inizia la registrazione'}
+                {mode === 'register-form' && 'Crea il tuo account'}
                 {mode === 'forgot-password' && 'Recupera password'}
                 {mode === 'reset-password' && 'Nuova password'}
               </h2>
               <p className="text-muted-foreground mt-2">
                 {mode === 'login' && 'Accedi per visualizzare le richieste nella tua zona'}
-                {mode === 'register' && 'Crea il tuo profilo professionale in pochi minuti'}
+                {mode === 'register-form' && 'Completa la registrazione per iniziare la prova gratuita di 30 giorni'}
                 {mode === 'forgot-password' && 'Ti invieremo un link per reimpostare la password'}
                 {mode === 'reset-password' && 'Inserisci la tua nuova password'}
               </p>
@@ -492,7 +510,7 @@ export default function AuthPage() {
                 </form>
               )}
 
-              {mode === 'register' && (
+              {mode === 'register-form' && (
                 <form onSubmit={handleRegister} className="space-y-4">
                   <div>
                     <Label htmlFor="reg-name" className="mb-2 block">Nome e Cognome</Label>
@@ -651,6 +669,7 @@ export default function AuthPage() {
               )}
             </div>
           </div>
+          )}
         </div>
       </div>
     </Layout>

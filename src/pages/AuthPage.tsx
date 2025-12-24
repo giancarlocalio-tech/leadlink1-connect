@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import { Wrench, Mail, Lock, User, Phone, Building, Users, Clock, Shield, Star, Zap, X, MapPin, Check, ArrowLeft } from 'lucide-react';
+import { Wrench, Mail, Lock, User, Phone, Building, Users, Clock, Shield, Star, Zap, X, MapPin, Check, ArrowLeft, Briefcase, CalendarDays } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,7 +11,11 @@ import { toast } from 'sonner';
 import { CityAutocomplete, ItalianCity } from '@/components/CityAutocomplete';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { supabase } from '@/integrations/supabase/client';
+import type { InterventionType, AvailabilityType } from '@/lib/types';
+import { INTERVENTION_LABELS, AVAILABILITY_LABELS } from '@/lib/types';
+
 
 type AuthMode = 'login' | 'register' | 'select-plan' | 'register-form' | 'forgot-password' | 'reset-password';
 type PlanType = 'basic' | 'medium' | 'premium';
@@ -113,7 +117,10 @@ export default function AuthPage() {
     confirmPassword: '',
     phone: '',
     mainCity: '',
+    interventionTypes: [] as InterventionType[],
+    availability: [] as AvailabilityType[],
   });
+
   
   // Selected plan for registration
   const [selectedPlan, setSelectedPlan] = useState<PlanType>('medium');
@@ -218,11 +225,12 @@ export default function AuthPage() {
     phone: string;
     main_city: string;
     description: string;
-    intervention_types: [];
-    availability: [];
+    intervention_types: InterventionType[];
+    availability: AvailabilityType[];
     service_areas: string[];
     plan_type: PlanType;
   } | null>(null);
+
 
   useEffect(() => {
     const createPendingProfile = async () => {
@@ -266,6 +274,17 @@ export default function AuthPage() {
       return;
     }
 
+    if (registerData.interventionTypes.length === 0) {
+      toast.error('Seleziona almeno un tipo di intervento');
+      return;
+    }
+
+    if (registerData.availability.length === 0) {
+      toast.error('Seleziona almeno una disponibilità');
+      return;
+    }
+
+
     if (registerData.password !== registerData.confirmPassword) {
       toast.error('Le password non corrispondono');
       return;
@@ -300,11 +319,12 @@ export default function AuthPage() {
       phone: registerData.phone,
       main_city: registerData.mainCity,
       description: '',
-      intervention_types: [],
-      availability: [],
+      intervention_types: registerData.interventionTypes,
+      availability: registerData.availability,
       service_areas: finalServiceAreas,
       plan_type: selectedPlan,
     });
+
 
     // Create the auth user
     const { error: signUpError } = await signUp(registerData.email, registerData.password);
@@ -833,7 +853,76 @@ export default function AuthPage() {
                     )}
                   </div>
 
-                  <div>
+                  {/* Intervention Types */}
+                  <div className="pt-4 border-t border-border">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Briefcase className="h-4 w-4 text-primary" />
+                      <Label className="font-semibold">Tipi di intervento *</Label>
+                    </div>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Seleziona i servizi che offri
+                    </p>
+                    <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-2">
+                      {Object.entries(INTERVENTION_LABELS).map(([key, label]) => (
+                        <div key={key} className="flex items-center gap-2">
+                          <Checkbox
+                            id={`intervention-${key}`}
+                            checked={registerData.interventionTypes.includes(key as InterventionType)}
+                            onCheckedChange={(checked) => {
+                              setRegisterData(prev => ({
+                                ...prev,
+                                interventionTypes: checked
+                                  ? [...prev.interventionTypes, key as InterventionType]
+                                  : prev.interventionTypes.filter(t => t !== key)
+                              }));
+                            }}
+                          />
+                          <Label htmlFor={`intervention-${key}`} className="text-xs font-normal cursor-pointer">
+                            {label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                    {registerData.interventionTypes.length > 0 && (
+                      <p className="text-xs text-primary mt-2">
+                        {registerData.interventionTypes.length} serviz{registerData.interventionTypes.length === 1 ? 'io' : 'i'} selezionat{registerData.interventionTypes.length === 1 ? 'o' : 'i'}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Availability */}
+                  <div className="pt-4 border-t border-border">
+                    <div className="flex items-center gap-2 mb-3">
+                      <CalendarDays className="h-4 w-4 text-primary" />
+                      <Label className="font-semibold">Disponibilità *</Label>
+                    </div>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Quando sei disponibile per lavorare?
+                    </p>
+                    <div className="space-y-2">
+                      {Object.entries(AVAILABILITY_LABELS).map(([key, label]) => (
+                        <div key={key} className="flex items-center gap-2">
+                          <Checkbox
+                            id={`availability-${key}`}
+                            checked={registerData.availability.includes(key as AvailabilityType)}
+                            onCheckedChange={(checked) => {
+                              setRegisterData(prev => ({
+                                ...prev,
+                                availability: checked
+                                  ? [...prev.availability, key as AvailabilityType]
+                                  : prev.availability.filter(t => t !== key)
+                              }));
+                            }}
+                          />
+                          <Label htmlFor={`availability-${key}`} className="text-sm font-normal cursor-pointer">
+                            {label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="pt-4 border-t border-border">
                     <Label htmlFor="reg-password" className="mb-2 block">Password</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -862,6 +951,7 @@ export default function AuthPage() {
                       />
                     </div>
                   </div>
+
 
                   <Button 
                     type="button" 

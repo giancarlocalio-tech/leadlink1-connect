@@ -20,6 +20,8 @@ interface PlanInfo {
   id: PlanType;
   name: string;
   price: number;
+  trialPrice: number;
+  trialLabel?: string;
   description: string;
   features: string[];
   recommended?: boolean;
@@ -30,6 +32,8 @@ const PLANS: PlanInfo[] = [
     id: 'basic',
     name: 'Basic',
     price: 29.99,
+    trialPrice: 0,
+    trialLabel: '30 giorni gratis',
     description: 'Per iniziare a ricevere clienti',
     features: [
       '2 contatti al mese',
@@ -41,7 +45,8 @@ const PLANS: PlanInfo[] = [
   {
     id: 'medium',
     name: 'Medium',
-    price: 79.99,
+    price: 49.99,
+    trialPrice: 9.99,
     description: 'Per professionisti in crescita',
     features: [
       '5 contatti esclusivi al mese',
@@ -55,7 +60,8 @@ const PLANS: PlanInfo[] = [
   {
     id: 'premium',
     name: 'Premium',
-    price: 149.99,
+    price: 99.99,
+    trialPrice: 19.99,
     description: 'Per i migliori professionisti',
     features: [
       'Contatti illimitati',
@@ -488,11 +494,18 @@ export default function AuthPage() {
                       <CardTitle className="text-xl">{plan.name}</CardTitle>
                       <CardDescription>{plan.description}</CardDescription>
                       <div className="mt-4">
-                        <span className="text-4xl font-bold text-primary">€0</span>
+                        <span className="text-4xl font-bold text-primary">
+                          {plan.trialPrice === 0 ? '€0' : `€${plan.trialPrice}`}
+                        </span>
                         <span className="text-muted-foreground">/mese</span>
                         <div className="text-sm text-muted-foreground mt-1">
-                          poi €{plan.price}/mese
+                          {plan.trialLabel || `poi €${plan.price}/mese`}
                         </div>
+                        {plan.trialLabel && (
+                          <div className="text-xs text-muted-foreground">
+                            poi €{plan.price}/mese
+                          </div>
+                        )}
                       </div>
                     </CardHeader>
                     <CardContent>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MapPin, AlertCircle, ArrowRight, Zap } from 'lucide-react';
+import { MapPin, AlertCircle, ArrowRight, Zap, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
@@ -195,6 +195,31 @@ export default function DashboardPage() {
   return (
     <DashboardLayout title={`Bentornato, ${profile.full_name}`}>
       <div className="space-y-6">
+        {/* Accepted Requests - Show client contact details */}
+        {acceptedRequests.length > 0 && (
+          <Card className="border-green-500/50 bg-green-500/5">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-green-700 dark:text-green-400">
+                <CheckCircle className="h-5 w-5" />
+                Richieste accettate
+              </CardTitle>
+              <CardDescription>
+                Contatta questi clienti per fissare un appuntamento
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {acceptedRequests.map((request) => (
+                <AssignedRequestCard
+                  key={request.id}
+                  request={request}
+                  onAccepted={() => fetchAssignedRequests()}
+                  onDeclined={() => fetchAssignedRequests()}
+                />
+              ))}
+            </CardContent>
+          </Card>
+        )}
+
         {/* Assigned Requests - Priority Section */}
         {assignedRequests.length > 0 && (
           <Card className="border-primary/50 bg-primary/5">

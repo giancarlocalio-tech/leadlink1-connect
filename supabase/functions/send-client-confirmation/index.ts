@@ -72,7 +72,7 @@ const handler = async (req: Request): Promise<Response> => {
     const interventionLabel = INTERVENTION_LABELS[intervention_type] || intervention_type;
 
     const emailResponse = await resend.emails.send({
-      from: "IdraulicoVicino <noreply@idraulicovicino.it>",
+      from: "IdraulicoVicino <onboarding@resend.dev>",
       to: [client_email],
       subject: "✅ Un idraulico ha accettato la tua richiesta!",
       html: `

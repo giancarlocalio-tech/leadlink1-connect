@@ -36,7 +36,7 @@ const handler = async (req: Request): Promise<Response> => {
     const planLabel = PLAN_LABELS[plan_type] || plan_type;
 
     const emailResponse = await resend.emails.send({
-      from: "IdraulicoVicino <noreply@idraulicovicino.it>",
+      from: "IdraulicoVicino <onboarding@resend.dev>",
       to: [email],
       subject: "🎉 Benvenuto su IdraulicoVicino!",
       html: `

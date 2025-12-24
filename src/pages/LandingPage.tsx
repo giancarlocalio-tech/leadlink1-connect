@@ -1,53 +1,56 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { 
-  Droplets, 
-  Wrench, 
-  Flame, 
-  ArrowRight,
-  CheckCircle,
+  Check, 
+  Star, 
+  Users, 
+  TrendingUp, 
+  Shield, 
   Clock,
-  Shield,
-  Star,
+  Wrench,
+  ArrowRight,
   Phone,
-  Users,
-  Zap
+  Zap,
+  Euro,
+  Target
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { CityAutocomplete, type ItalianCity } from '@/components/CityAutocomplete';
 import analytics from '@/lib/analytics';
 
-// Simplified intervention types for landing page
-const QUICK_SERVICES = [
-  { id: 'perdita_acqua', label: 'Perdita d\'acqua', icon: Droplets },
-  { id: 'caldaia', label: 'Caldaia', icon: Flame },
-  { id: 'sturare_spurgo', label: 'Scarico intasato', icon: Wrench },
-  { id: 'altro', label: 'Altro intervento', icon: Wrench },
-] as const;
+// Benefits for plumbers
+const BENEFITS = [
+  { icon: Target, title: 'Clienti Qualificati', desc: 'Solo richieste reali, niente perdite di tempo' },
+  { icon: Euro, title: 'Zero Costi Fissi', desc: 'Paghi solo per i contatti che accetti' },
+  { icon: Clock, title: 'Risparmia Tempo', desc: 'Le richieste arrivano direttamente a te' },
+  { icon: TrendingUp, title: '+40% Fatturato', desc: 'Risultato medio dei nostri partner' },
+];
 
-const TRUST_SIGNALS = [
-  { icon: Clock, text: 'Risposta in 15 min', subtext: 'Media tempo di contatto' },
-  { icon: Shield, text: 'Professionisti verificati', subtext: '100% controllati' },
-  { icon: Star, text: '4.8/5 Rating', subtext: 'Basato su 500+ recensioni' },
+const STATS = [
+  { value: '500+', label: 'Idraulici Partner' },
+  { value: '10k+', label: 'Richieste al Mese' },
+  { value: '15 min', label: 'Tempo Medio Risposta' },
+  { value: '4.8/5', label: 'Soddisfazione Clienti' },
 ];
 
 const TESTIMONIALS = [
   {
     name: 'Marco R.',
     city: 'Milano',
-    text: 'Perdita urgente alle 22:00, mi hanno ricontattato in 10 minuti. Problema risolto!',
+    text: 'Da quando uso Idraulici Subito ho aumentato il mio fatturato del 40%. Clienti sempre qualificati.',
     rating: 5,
   },
   {
-    name: 'Laura B.',
-    city: 'Roma',
-    text: 'Finalmente un servizio affidabile. Idraulico professionale e prezzi onesti.',
+    name: 'Giuseppe L.',
+    city: 'Roma', 
+    text: 'Finalmente un servizio serio. Le richieste arrivano puntuali e i clienti sanno già cosa vogliono.',
     rating: 5,
   },
   {
-    name: 'Giuseppe M.',
+    name: 'Antonio M.',
     city: 'Napoli',
-    text: 'Caldaia rotta d\'inverno. Intervento rapido e risolutivo. Consigliatissimo!',
+    text: 'Ho iniziato con il piano base e ora sono premium. I lavori non mancano mai!',
     rating: 5,
   },
 ];
@@ -57,22 +60,23 @@ export default function LandingPage() {
   const [searchParams] = useSearchParams();
   const [city, setCity] = useState('');
   const [selectedCity, setSelectedCity] = useState<ItalianCity | null>(null);
-  const [selectedService, setSelectedService] = useState<string | null>(null);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
 
-  // Track source from URL params (utm_source, gclid, etc.)
-  const source = searchParams.get('utm_source') || searchParams.get('gclid') ? 'google_ads' : 'direct';
+  // Track source from URL params
+  const source = searchParams.get('utm_source') || (searchParams.get('gclid') ? 'google_ads' : 'direct');
 
   useEffect(() => {
     // SEO Meta tags for landing page
-    document.title = "Idraulico Urgente? Trova Professionisti in 15 Minuti | Idraulici Subito";
+    document.title = "Cerchi Nuovi Clienti? Diventa Partner Idraulici Subito | +40% Fatturato";
     
     // Track page view
-    analytics.pageView('/lp/idraulico', 'Landing Page - Google Ads');
+    analytics.pageView('/lp/idraulico', 'Landing Page Idraulici - Google Ads');
     
     // Update meta description
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
-      metaDesc.setAttribute('content', 'Cerchi un idraulico urgente? Trova professionisti verificati nella tua zona. Risposta garantita in 15 minuti. Preventivo gratuito e senza impegno.');
+      metaDesc.setAttribute('content', 'Sei un idraulico? Ricevi richieste qualificate ogni giorno. Nessun costo fisso, paghi solo per i contatti. Registrazione gratuita in 2 minuti.');
     }
   }, []);
 
@@ -81,33 +85,32 @@ export default function LandingPage() {
     setSelectedCity(cityData);
   };
 
-  const handleServiceClick = (serviceId: string) => {
-    setSelectedService(serviceId);
-    analytics.leadFormStart(serviceId, source);
-    
-    // Scroll to form
-    document.getElementById('request-form')?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToForm = () => {
+    analytics.ctaClick('hero_cta', 'hero');
+    document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleSubmit = () => {
-    if (!selectedService || !city.trim()) return;
-
-    analytics.ctaClick('landing_cta_submit', 'hero_form');
+  const handleQuickStart = () => {
+    analytics.plumberRegistrationStart();
+    analytics.ctaClick('quick_start', 'form');
     
-    navigate('/richiesta', {
+    // Navigate to full registration with pre-filled data
+    navigate('/per-idraulici', {
       state: {
-        interventionType: selectedService,
-        answers: [],
-        city: city.trim(),
-        cityData: selectedCity,
-        source: source,
-      },
+        prefill: {
+          name,
+          phone,
+          city,
+          source,
+        }
+      }
     });
   };
 
-  const handleMainCTA = () => {
-    analytics.ctaClick('landing_cta_main', 'hero');
-    document.getElementById('request-form')?.scrollIntoView({ behavior: 'smooth' });
+  const handleFullRegistration = () => {
+    analytics.plumberRegistrationStart();
+    analytics.ctaClick('full_registration', 'hero');
+    navigate('/per-idraulici');
   };
 
   return (
@@ -121,52 +124,57 @@ export default function LandingPage() {
             </div>
             <span className="font-bold text-lg text-foreground">Idraulici Subito</span>
           </div>
-          <a 
-            href="tel:+39XXXXXXXXX" 
-            className="flex items-center gap-2 text-sm font-medium text-primary hover:underline"
-            onClick={() => analytics.ctaClick('phone_header', 'header')}
-          >
-            <Phone className="h-4 w-4" />
-            <span className="hidden sm:inline">Chiama ora</span>
-          </a>
+          <Button variant="outline" size="sm" onClick={handleFullRegistration}>
+            Accedi
+          </Button>
         </div>
       </header>
 
-      {/* Hero Section - Above the fold */}
+      {/* Hero Section */}
       <section className="py-12 md:py-20 bg-gradient-to-b from-primary/10 via-primary/5 to-background">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             {/* Urgency Badge */}
-            <div className="inline-flex items-center gap-2 bg-destructive/10 text-destructive px-4 py-2 rounded-full text-sm font-medium mb-6 animate-pulse">
+            <div className="inline-flex items-center gap-2 bg-success/10 text-success px-4 py-2 rounded-full text-sm font-medium mb-6">
               <Zap className="h-4 w-4" />
-              Idraulici disponibili ora nella tua zona
+              Oltre 500 idraulici stanno già ricevendo nuovi clienti
             </div>
 
             <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
-              Trova un Idraulico<br />
-              <span className="text-primary">in 15 Minuti</span>
+              Ricevi <span className="text-primary">Nuovi Clienti</span><br />
+              Ogni Giorno
             </h1>
             
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Professionisti verificati, preventivo gratuito e senza impegno.
-              <strong className="text-foreground"> Oltre 500 idraulici</strong> pronti ad aiutarti.
+              Sei un idraulico professionista? Unisciti alla rete più grande d'Italia.
+              <strong className="text-foreground"> Nessun costo fisso</strong>, paghi solo per i contatti che accetti.
             </p>
 
-            <Button 
-              size="lg" 
-              className="text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all"
-              onClick={handleMainCTA}
-            >
-              Richiedi Preventivo Gratuito
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-10">
+              <Button 
+                size="lg" 
+                className="text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all"
+                onClick={scrollToForm}
+              >
+                Inizia Gratis Ora
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline"
+                className="text-lg px-8 py-6"
+                onClick={() => navigate('/auth')}
+              >
+                Hai già un account?
+              </Button>
+            </div>
 
-            {/* Trust signals */}
-            <div className="flex flex-wrap justify-center gap-6 mt-10">
-              {TRUST_SIGNALS.map((signal, index) => (
-                <div key={index} className="flex items-center gap-2 text-sm">
-                  <signal.icon className="h-5 w-5 text-primary" />
-                  <span className="font-medium text-foreground">{signal.text}</span>
+            {/* Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {STATS.map((stat, index) => (
+                <div key={index} className="text-center">
+                  <p className="text-2xl md:text-3xl font-bold text-primary">{stat.value}</p>
+                  <p className="text-sm text-muted-foreground">{stat.label}</p>
                 </div>
               ))}
             </div>
@@ -174,71 +182,99 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Quick Service Selection + Form */}
-      <section id="request-form" className="py-16 bg-secondary/30">
+      {/* Quick Registration Form */}
+      <section id="registration-form" className="py-16 bg-secondary/30">
         <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
-              Di cosa hai bisogno?
-            </h2>
-
-            {/* Service buttons */}
-            <div className="grid grid-cols-2 gap-4 mb-8">
-              {QUICK_SERVICES.map((service) => (
-                <button
-                  key={service.id}
-                  onClick={() => handleServiceClick(service.id)}
-                  className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all text-left ${
-                    selectedService === service.id
-                      ? 'border-primary bg-primary/10'
-                      : 'border-border bg-background hover:border-primary/50'
-                  }`}
-                >
-                  <div className={`p-2 rounded-lg ${
-                    selectedService === service.id ? 'bg-primary text-primary-foreground' : 'bg-muted'
-                  }`}>
-                    <service.icon className="h-5 w-5" />
-                  </div>
-                  <span className="font-medium text-foreground">{service.label}</span>
-                </button>
-              ))}
+          <div className="max-w-lg mx-auto">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">
+                Registrati in 2 Minuti
+              </h2>
+              <p className="text-muted-foreground">
+                Inizia subito a ricevere richieste nella tua zona
+              </p>
             </div>
 
-            {/* City input */}
             <div className="bg-background rounded-xl border border-border p-6 shadow-lg">
-              <label className="block text-sm font-medium text-foreground mb-2">
-                In quale città ti trovi?
-              </label>
-              <CityAutocomplete
-                value={city}
-                onChange={handleCityChange}
-                placeholder="Es. Milano, Roma, Napoli..."
-                className="mb-4"
-              />
-              
-              <Button 
-                className="w-full py-6 text-lg"
-                disabled={!selectedService || !city.trim()}
-                onClick={handleSubmit}
-              >
-                Trova Idraulico Ora
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    Nome e Cognome
+                  </label>
+                  <Input
+                    placeholder="Es. Mario Rossi"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
 
-              <p className="text-center text-sm text-muted-foreground mt-4">
-                <CheckCircle className="inline h-4 w-4 text-success mr-1" />
-                Gratuito e senza impegno • Risposta in 15 min
-              </p>
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    Telefono
+                  </label>
+                  <Input
+                    type="tel"
+                    placeholder="Es. 333 1234567"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    In quale città operi?
+                  </label>
+                  <CityAutocomplete
+                    value={city}
+                    onChange={handleCityChange}
+                    placeholder="Es. Milano, Roma, Napoli..."
+                  />
+                </div>
+                
+                <Button 
+                  className="w-full py-6 text-lg"
+                  onClick={handleQuickStart}
+                >
+                  Continua Registrazione
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+
+                <p className="text-center text-sm text-muted-foreground">
+                  <Shield className="inline h-4 w-4 mr-1" />
+                  Gratuito • Nessun impegno • Cancella quando vuoi
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Social Proof - Testimonials */}
+      {/* Benefits */}
       <section className="py-16">
         <div className="container mx-auto px-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">
+            Perché scegliere Idraulici Subito?
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+            {BENEFITS.map((benefit, index) => (
+              <div key={index} className="bg-card rounded-xl border border-border p-6 text-center hover:shadow-lg transition-shadow">
+                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <benefit.icon className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-2">{benefit.title}</h3>
+                <p className="text-sm text-muted-foreground">{benefit.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-16 bg-muted/50">
+        <div className="container mx-auto px-4">
           <h2 className="text-2xl font-bold text-center mb-10">
-            Cosa dicono i nostri clienti
+            Cosa dicono i nostri partner
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
@@ -249,18 +285,24 @@ export default function LandingPage() {
                     <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
-                <p className="text-foreground mb-4">"{testimonial.text}"</p>
-                <p className="text-sm text-muted-foreground">
-                  <strong>{testimonial.name}</strong> • {testimonial.city}
-                </p>
+                <p className="text-foreground mb-4 italic">"{testimonial.text}"</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                    <span className="font-semibold text-primary">{testimonial.name[0]}</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">{testimonial.name}</p>
+                    <p className="text-sm text-muted-foreground">{testimonial.city}</p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* How it works - Simplified */}
-      <section className="py-16 bg-secondary/30">
+      {/* How it works */}
+      <section className="py-16">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl font-bold text-center mb-10">Come funziona</h2>
           
@@ -269,27 +311,27 @@ export default function LandingPage() {
               <div className="bg-primary text-primary-foreground rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                 1
               </div>
-              <h3 className="font-semibold mb-2">Descrivi il problema</h3>
+              <h3 className="font-semibold mb-2">Registrati Gratis</h3>
               <p className="text-muted-foreground text-sm">
-                Seleziona il servizio e indica la tua città
+                Crea il tuo profilo in 2 minuti indicando la tua zona e i servizi offerti
               </p>
             </div>
             <div className="text-center">
               <div className="bg-primary text-primary-foreground rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                 2
               </div>
-              <h3 className="font-semibold mb-2">Ricevi contatto</h3>
+              <h3 className="font-semibold mb-2">Ricevi Richieste</h3>
               <p className="text-muted-foreground text-sm">
-                Un idraulico della zona ti contatta in 15 min
+                I clienti della tua zona inviano richieste e tu ricevi notifiche via email
               </p>
             </div>
             <div className="text-center">
               <div className="bg-primary text-primary-foreground rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                 3
               </div>
-              <h3 className="font-semibold mb-2">Problema risolto</h3>
+              <h3 className="font-semibold mb-2">Contatta e Lavora</h3>
               <p className="text-muted-foreground text-sm">
-                Concordi l'intervento e il professionista arriva
+                Accetta le richieste, contatta il cliente e concludi il lavoro
               </p>
             </div>
           </div>
@@ -300,19 +342,19 @@ export default function LandingPage() {
       <section className="py-16 bg-primary">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-4">
-            Hai un'emergenza idraulica?
+            Pronto a far crescere il tuo business?
           </h2>
           <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
-            Non aspettare che il problema peggiori. Richiedi ora un preventivo gratuito.
+            Unisciti a oltre 500 idraulici che ogni giorno ricevono nuovi clienti con Idraulici Subito.
           </p>
           <Button 
             size="lg" 
             variant="secondary"
             className="text-lg px-8 py-6"
-            onClick={handleMainCTA}
+            onClick={scrollToForm}
           >
             <Users className="mr-2 h-5 w-5" />
-            Trova Idraulico Ora
+            Inizia Gratis Ora
           </Button>
         </div>
       </section>

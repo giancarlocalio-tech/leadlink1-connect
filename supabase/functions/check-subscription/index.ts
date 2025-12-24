@@ -26,6 +26,13 @@ const PLAN_LABELS: Record<string, string> = {
   premium: "Premium",
 };
 
+const toIsoFromUnix = (unixSeconds: unknown): string | null => {
+  if (typeof unixSeconds === "number" && Number.isFinite(unixSeconds)) {
+    return new Date(unixSeconds * 1000).toISOString();
+  }
+  return null;
+};
+
 // Helper function to send welcome email
 async function sendWelcomeEmail(
   email: string, 
@@ -243,13 +250,31 @@ serve(async (req) => {
     if (hasActiveSub) {
       const subscription = subscriptions.data[0];
       stripeSubscriptionId = subscription.id;
-      subscriptionEnd = new Date(subscription.current_period_end * 1000).toISOString();
-      const subscriptionStart = new Date(subscription.current_period_start * 1000).toISOString();
-      logStep("Active subscription found", { subscriptionId: subscription.id, endDate: subscriptionEnd });
-      
-      const productId = subscription.items.data[0].price.product as string;
-      planType = PRODUCT_TO_PLAN[productId] || null;
+
+      const subscriptionEndIso =
+        toIsoFromUnix((subscription as any).current_period_end) ??
+        toIsoFromUnix((subscription as any).trial_end) ??
+        null;
+      const subscriptionStartIso =
+        toIsoFromUnix((subscription as any).current_period_start) ?? null;
+
+      subscriptionEnd = subscriptionEndIso;
+      const subscriptionStart = subscriptionStartIso;
+
+      logStep("Subscription found", {
+        subscriptionId: subscription.id,
+        status: (subscription as any).status,
+        current_period_start: (subscription as any).current_period_start,
+        current_period_end: (subscription as any).current_period_end,
+        trial_end: (subscription as any).trial_end,
+        computedStart: subscriptionStart,
+        computedEnd: subscriptionEnd,
+      });
+
+      const productId = subscription.items?.data?.[0]?.price?.product as string | undefined;
+      planType = productId ? PRODUCT_TO_PLAN[productId] || null : null;
       logStep("Determined plan type", { productId, planType });
+
 
       // Sync subscription data to plumber_subscriptions table
       if (planType) {

@@ -22,14 +22,33 @@ export function useSubscription() {
 
   useEffect(() => {
     if (profile) {
-      fetchSubscription();
-      fetchUnlocks();
+      const run = async () => {
+        // Ensure DB is synced from Stripe before reading plumber_subscriptions
+        try {
+          const { data } = await supabase.auth.getSession();
+          const accessToken = data.session?.access_token;
+          if (accessToken) {
+            await supabase.functions.invoke('check-subscription', {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            });
+          }
+        } catch (e) {
+          console.error('Error syncing subscription from Stripe:', e);
+        }
+
+        await Promise.all([fetchSubscription(), fetchUnlocks()]);
+      };
+
+      run();
     } else {
       setSubscription(null);
       setUnlocks([]);
       setLoading(false);
     }
   }, [profile]);
+
 
   const fetchPlans = async () => {
     const { data, error } = await supabase

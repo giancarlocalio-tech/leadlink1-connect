@@ -22,22 +22,32 @@ interface ServiceRequest {
 }
 
 const INTERVENTION_LABELS: Record<string, string> = {
-  riparazione_perdite: "Riparazione perdite",
-  installazione_sanitari: "Installazione sanitari",
-  manutenzione_caldaia: "Manutenzione caldaia",
-  sblocco_scarichi: "Sblocco scarichi",
-  installazione_rubinetteria: "Installazione rubinetteria",
-  riparazione_tubature: "Riparazione tubature",
-  installazione_scaldabagno: "Installazione scaldabagno",
-  manutenzione_impianto: "Manutenzione impianto",
-  emergenza_allagamento: "Emergenza allagamento",
+  perdita_acqua: "Perdita acqua",
+  rubinetto_rotto: "Rubinetto rotto",
+  scarico_intasato: "Scarico intasato",
+  caldaia: "Caldaia",
+  installazione_sostituzione: "Installazione/Sostituzione",
+  sturare_spurgo: "Sturare/Spurgo",
+  riparazione: "Riparazione",
+  impianto_idraulico: "Impianto idraulico",
+  box_doccia: "Box doccia",
+  impianto_riscaldamento: "Impianto riscaldamento",
+  termoidraulico: "Termoidraulico",
+  condizionatori: "Condizionatori",
+  ristrutturazione: "Ristrutturazione",
+  certificazione: "Certificazione",
+  termosifone: "Termosifone",
+  contatore: "Contatore",
+  addolcitore_acqua: "Addolcitore acqua",
+  depuratore_acqua: "Depuratore acqua",
+  sostituzione_rubinetto: "Sostituzione rubinetto",
   altro: "Altro",
 };
 
 const URGENCY_LABELS: Record<string, string> = {
-  urgent: "Urgente",
-  normal: "Normale",
-  flexible: "Flessibile",
+  subito: "Subito",
+  entro_24_ore: "Entro 24 ore",
+  prossimi_giorni: "Prossimi giorni",
 };
 
 const handler = async (req: Request): Promise<Response> => {
@@ -182,7 +192,7 @@ const handler = async (req: Request): Promise<Response> => {
 
       try {
         const emailResult = await resend.emails.send({
-          from: "IdraulicoVicino <noreply@resend.dev>",
+          from: "IdraulicoVicino <noreply@idraulicovicino.it>",
           to: [plumber.email],
           subject: `🔧 Nuova richiesta di intervento a ${serviceRequest.city}`,
           html: `
@@ -192,52 +202,52 @@ const handler = async (req: Request): Promise<Response> => {
               <meta charset="utf-8">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
             </head>
-            <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-              <div style="background: linear-gradient(135deg, #0066cc 0%, #004d99 100%); padding: 30px; border-radius: 12px 12px 0 0; text-align: center;">
-                <h1 style="color: white; margin: 0; font-size: 24px;">🔧 Nuova Richiesta di Intervento</h1>
+            <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
+              <div style="background: linear-gradient(135deg, #0066cc 0%, #004d99 100%); padding: 40px 30px; border-radius: 16px 16px 0 0; text-align: center;">
+                <h1 style="color: white; margin: 0; font-size: 28px;">🔧 Nuova Richiesta di Intervento</h1>
               </div>
               
-              <div style="background: #f8f9fa; padding: 30px; border-radius: 0 0 12px 12px; border: 1px solid #e9ecef; border-top: none;">
-                <p style="font-size: 16px; margin-top: 0;">Ciao <strong>${plumber.full_name || plumber.business_name}</strong>,</p>
+              <div style="background: white; padding: 40px 30px; border-radius: 0 0 16px 16px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <p style="font-size: 18px; margin-top: 0;">Ciao <strong>${plumber.full_name || plumber.business_name}</strong>,</p>
                 
                 <p style="font-size: 16px;">È arrivata una nuova richiesta di intervento nella tua zona!</p>
                 
-                <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #0066cc;">
-                  <h3 style="margin-top: 0; color: #0066cc;">Dettagli Richiesta</h3>
+                <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 24px; border-radius: 12px; margin: 24px 0; border-left: 4px solid #0066cc;">
+                  <h3 style="margin-top: 0; color: #0066cc; font-size: 18px;">📋 Dettagli Richiesta</h3>
                   <table style="width: 100%; border-collapse: collapse;">
                     <tr>
-                      <td style="padding: 8px 0; color: #666; width: 140px;"><strong>Tipo intervento:</strong></td>
-                      <td style="padding: 8px 0;">${interventionLabel}</td>
+                      <td style="padding: 10px 0; color: #666; width: 140px;"><strong>Tipo intervento:</strong></td>
+                      <td style="padding: 10px 0; font-size: 16px;">${interventionLabel}</td>
                     </tr>
                     <tr>
-                      <td style="padding: 8px 0; color: #666;"><strong>Città:</strong></td>
-                      <td style="padding: 8px 0;">${serviceRequest.city}</td>
+                      <td style="padding: 10px 0; color: #666;"><strong>Città:</strong></td>
+                      <td style="padding: 10px 0; font-size: 16px;">${serviceRequest.city}</td>
                     </tr>
                     <tr>
-                      <td style="padding: 8px 0; color: #666;"><strong>Urgenza:</strong></td>
-                      <td style="padding: 8px 0;">
-                        <span style="background: ${serviceRequest.urgency === 'urgent' ? '#dc3545' : serviceRequest.urgency === 'normal' ? '#ffc107' : '#28a745'}; color: ${serviceRequest.urgency === 'urgent' ? 'white' : serviceRequest.urgency === 'normal' ? '#333' : 'white'}; padding: 4px 12px; border-radius: 20px; font-size: 14px;">
+                      <td style="padding: 10px 0; color: #666;"><strong>Urgenza:</strong></td>
+                      <td style="padding: 10px 0;">
+                        <span style="background: ${serviceRequest.urgency === 'subito' ? '#dc3545' : serviceRequest.urgency === 'entro_24_ore' ? '#ffc107' : '#28a745'}; color: ${serviceRequest.urgency === 'subito' ? 'white' : serviceRequest.urgency === 'entro_24_ore' ? '#333' : 'white'}; padding: 6px 16px; border-radius: 20px; font-size: 14px; font-weight: 600;">
                           ${urgencyLabel}
                         </span>
                       </td>
                     </tr>
                     <tr>
-                      <td style="padding: 8px 0; color: #666;"><strong>Tipo immobile:</strong></td>
-                      <td style="padding: 8px 0;">${serviceRequest.property_type}</td>
+                      <td style="padding: 10px 0; color: #666;"><strong>Tipo immobile:</strong></td>
+                      <td style="padding: 10px 0; font-size: 16px;">${serviceRequest.property_type}</td>
                     </tr>
                   </table>
                   
                   ${serviceRequest.description ? `
                   <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #eee;">
                     <strong style="color: #666;">Descrizione:</strong>
-                    <p style="margin: 8px 0 0 0;">${serviceRequest.description}</p>
+                    <p style="margin: 8px 0 0 0; font-size: 15px;">${serviceRequest.description}</p>
                   </div>
                   ` : ''}
                 </div>
                 
-                <div style="text-align: center; margin-top: 24px;">
-                  <a href="https://qqgtvhtaoxrdnxarnvcw.lovableproject.com/dashboard" 
-                     style="display: inline-block; background: linear-gradient(135deg, #0066cc 0%, #004d99 100%); color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px;">
+                <div style="text-align: center; margin-top: 32px;">
+                  <a href="https://idraulicovicino.it/dashboard" 
+                     style="display: inline-block; background: linear-gradient(135deg, #0066cc 0%, #004d99 100%); color: white; padding: 16px 40px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);">
                     Visualizza nel Dashboard
                   </a>
                 </div>
@@ -247,9 +257,9 @@ const handler = async (req: Request): Promise<Response> => {
                 </p>
               </div>
               
-              <div style="text-align: center; padding: 20px; color: #999; font-size: 12px;">
-                <p>Questa email è stata inviata da IdraulicoVicino</p>
-                <p>© ${new Date().getFullYear()} IdraulicoVicino. Tutti i diritti riservati.</p>
+              <div style="text-align: center; padding: 24px; color: #999; font-size: 12px;">
+                <p style="margin: 0;">Questa email è stata inviata da IdraulicoVicino</p>
+                <p style="margin: 8px 0 0 0;">© ${new Date().getFullYear()} IdraulicoVicino. Tutti i diritti riservati.</p>
               </div>
             </body>
             </html>

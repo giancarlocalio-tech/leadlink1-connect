@@ -49,7 +49,7 @@ serve(async (req) => {
     
     const { data: plumberProfile, error: profileError } = await supabaseAdmin
       .from('plumber_profiles')
-      .select('id')
+      .select('id, full_name, business_name, phone')
       .eq('user_id', user.id)
       .single();
 
@@ -130,6 +130,32 @@ serve(async (req) => {
       .select('*')
       .eq('id', request_id)
       .single();
+
+    // Send confirmation email to client if email is provided
+    if (acceptedRequest?.client_email) {
+      try {
+        await fetch(`${supabaseUrl}/functions/v1/send-client-confirmation`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${supabaseServiceKey}`,
+          },
+          body: JSON.stringify({
+            client_email: acceptedRequest.client_email,
+            client_name: acceptedRequest.client_name,
+            plumber_name: plumberProfile.full_name,
+            plumber_phone: plumberProfile.phone,
+            plumber_business: plumberProfile.business_name,
+            intervention_type: acceptedRequest.intervention_type,
+            city: acceptedRequest.city,
+          }),
+        });
+        console.log(`[accept-request] Confirmation email sent to client ${acceptedRequest.client_email}`);
+      } catch (emailError) {
+        console.error('[accept-request] Error sending client confirmation email:', emailError);
+        // Don't fail the request if email fails
+      }
+    }
 
     return new Response(
       JSON.stringify({ 

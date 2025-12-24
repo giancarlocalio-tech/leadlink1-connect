@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import { Wrench, Mail, Lock, User, Phone, Building, MapPin, Users, Clock, Shield, Star, Zap } from 'lucide-react';
+import { Wrench, Mail, Lock, User, Phone, Building, Users, Clock, Shield, Star, Zap, X, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -8,6 +8,8 @@ import { Layout } from '@/components/Layout';
 import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import { toast } from 'sonner';
+import { CityAutocomplete, ItalianCity } from '@/components/CityAutocomplete';
+import { Badge } from '@/components/ui/badge';
 
 type AuthMode = 'login' | 'register' | 'forgot-password' | 'reset-password';
 
@@ -51,6 +53,9 @@ export default function AuthPage() {
     phone: '',
     mainCity: '',
   });
+  
+  // Service areas (cities) for registration
+  const [serviceAreas, setServiceAreas] = useState<string[]>([]);
 
   useEffect(() => {
     // Don't redirect if user is resetting password
@@ -176,6 +181,11 @@ export default function AuthPage() {
       return;
     }
 
+    if (serviceAreas.length === 0) {
+      toast.error('Aggiungi almeno una città di lavoro');
+      return;
+    }
+
     if (registerData.password !== registerData.confirmPassword) {
       toast.error('Le password non corrispondono');
       return;
@@ -198,7 +208,7 @@ export default function AuthPage() {
       description: '',
       intervention_types: [],
       availability: [],
-      service_areas: [registerData.mainCity],
+      service_areas: serviceAreas,
     });
 
     // Create the auth user
@@ -546,17 +556,55 @@ export default function AuthPage() {
 
                   <div>
                     <Label htmlFor="reg-city" className="mb-2 block">Città principale di lavoro</Label>
-                    <div className="relative">
-                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="reg-city"
-                        type="text"
-                        placeholder="Milano"
-                        value={registerData.mainCity}
-                        onChange={(e) => setRegisterData(prev => ({ ...prev, mainCity: e.target.value }))}
-                        className="pl-10"
-                      />
-                    </div>
+                    <CityAutocomplete
+                      value={registerData.mainCity}
+                      onChange={(city, displayValue) => {
+                        setRegisterData(prev => ({ ...prev, mainCity: displayValue }));
+                        if (city && !serviceAreas.includes(displayValue)) {
+                          setServiceAreas(prev => [...prev, displayValue]);
+                        }
+                      }}
+                      placeholder="Cerca la tua città principale..."
+                    />
+                  </div>
+
+                  <div>
+                    <Label className="mb-2 block">Altre città in cui lavori (opzionale)</Label>
+                    <CityAutocomplete
+                      value=""
+                      onChange={(city, displayValue) => {
+                        if (city && !serviceAreas.includes(displayValue)) {
+                          setServiceAreas(prev => [...prev, displayValue]);
+                        }
+                      }}
+                      placeholder="Aggiungi altre città..."
+                    />
+                    {serviceAreas.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {serviceAreas.map((area, index) => (
+                          <Badge 
+                            key={index} 
+                            variant={area === registerData.mainCity ? "default" : "secondary"}
+                            className="flex items-center gap-1 py-1 px-2"
+                          >
+                            <MapPin className="h-3 w-3" />
+                            {area}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setServiceAreas(prev => prev.filter((_, i) => i !== index));
+                                if (area === registerData.mainCity) {
+                                  setRegisterData(prev => ({ ...prev, mainCity: '' }));
+                                }
+                              }}
+                              className="ml-1 hover:text-destructive"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   <div>

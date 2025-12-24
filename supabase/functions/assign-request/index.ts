@@ -47,8 +47,10 @@ serve(async (req) => {
       );
     }
 
-    // Skip if already assigned or not new
-    if (request.status !== 'new' && request.status !== 'pending') {
+    console.log(`[assign-request] Request status: ${request.status}, city: ${request.city}, urgency: ${request.urgency}`);
+
+    // Skip if already assigned or accepted
+    if (request.status === 'assigned' || request.status === 'accepted') {
       console.log(`[assign-request] Request already processed, status: ${request.status}`);
       return new Response(
         JSON.stringify({ success: true, message: 'Request already processed' }),

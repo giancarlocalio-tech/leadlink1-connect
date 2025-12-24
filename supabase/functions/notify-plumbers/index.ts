@@ -119,6 +119,27 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Service request ready:", serviceRequest.city, serviceRequest.intervention_type);
 
+    // Call assign-request to automatically assign to the best available plumber
+    try {
+      const assignResponse = await fetch(
+        `${supabaseUrl}/functions/v1/assign-request`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${supabaseServiceKey}`,
+          },
+          body: JSON.stringify({ request_id: serviceRequest.id }),
+        }
+      );
+      
+      const assignResult = await assignResponse.json();
+      console.log("Auto-assignment result:", assignResult);
+    } catch (assignError) {
+      console.error("Error calling assign-request:", assignError);
+      // Continue with notifications even if assignment fails
+    }
+
     // Find plumbers who serve this city and handle this intervention type
     const { data: plumbers, error: plumbersError } = await supabase
       .from("plumber_profiles")

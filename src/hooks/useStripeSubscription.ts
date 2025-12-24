@@ -33,6 +33,17 @@ export function useStripeSubscription() {
       });
 
       if (error) {
+        const status = error?.context?.status;
+        const isAuthError =
+          error?.name === 'FunctionsHttpError' && (status === 401 || status === 403);
+
+        if (isAuthError) {
+          toast.info('Sessione scaduta: accedi di nuovo');
+          await supabase.auth.signOut();
+          setSubscription(null);
+          return;
+        }
+
         console.error('Error checking subscription:', error);
         setSubscription(null);
       } else {

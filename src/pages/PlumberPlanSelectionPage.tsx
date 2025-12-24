@@ -14,6 +14,8 @@ const PLANS = [
     type: 'basic' as StripePlanType,
     name: 'Basic',
     price: 29,
+    trialPrice: 0,
+    trialLabel: '30 giorni gratis',
     icon: Shield,
     gradient: 'from-slate-500 to-slate-600',
     features: [
@@ -22,12 +24,13 @@ const PLANS = [
       'Email di notifica',
       'Dashboard base',
     ],
-    trialDays: 30,
   },
   {
     type: 'medium' as StripePlanType,
     name: 'Medium',
     price: 59,
+    trialPrice: 9.99,
+    trialLabel: 'Primo mese',
     icon: Star,
     gradient: 'from-blue-500 to-blue-600',
     popular: true,
@@ -43,6 +46,8 @@ const PLANS = [
     type: 'premium' as StripePlanType,
     name: 'Premium',
     price: 99,
+    trialPrice: 19.99,
+    trialLabel: 'Primo mese',
     icon: Crown,
     gradient: 'from-amber-500 to-amber-600',
     features: [
@@ -165,17 +170,25 @@ export default function PlumberPlanSelectionPage() {
                     
                     {/* Name & Price */}
                     <h3 className="text-2xl font-bold text-foreground mb-2">{plan.name}</h3>
-                    <div className="flex items-baseline gap-1 mb-4">
-                      <span className="text-4xl font-bold text-foreground">€{plan.price}</span>
-                      <span className="text-muted-foreground">/mese</span>
+                    
+                    {/* Trial Price (big) */}
+                    <div className="flex items-baseline gap-1 mb-1">
+                      <span className="text-4xl font-bold text-foreground">
+                        €{plan.trialPrice === 0 ? '0' : plan.trialPrice.toFixed(2).replace('.', ',')}
+                      </span>
+                      <span className="text-muted-foreground">/{plan.type === 'basic' ? '' : 'primo mese'}</span>
                     </div>
                     
-                    {plan.trialDays && (
-                      <div className="inline-flex items-center gap-1 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 px-3 py-1 rounded-full text-sm font-medium mb-4">
-                        <Zap className="h-4 w-4" />
-                        {plan.trialDays} giorni gratis
-                      </div>
-                    )}
+                    {/* Regular Price (small) */}
+                    <p className="text-sm text-muted-foreground mb-2">
+                      {plan.type === 'basic' ? 'poi ' : 'poi '}€{plan.price}/mese
+                    </p>
+                    
+                    {/* Trial Badge */}
+                    <div className="inline-flex items-center gap-1 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 px-3 py-1 rounded-full text-sm font-medium mb-4">
+                      <Zap className="h-4 w-4" />
+                      {plan.trialLabel}
+                    </div>
                     
                     {/* Features */}
                     <ul className="space-y-3 mb-6">

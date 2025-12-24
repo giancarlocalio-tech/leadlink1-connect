@@ -1,10 +1,14 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Wrench, User, LogOut, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { useAdmin } from '@/hooks/useAdmin';
 
 export function Header() {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const isLoginPage = location.pathname === '/auth' && searchParams.get('mode') === 'login';
+  const isRegisterPage = location.pathname === '/auth' && searchParams.get('mode') !== 'login';
   const { user, signOut } = useAuth();
   const { isAdmin } = useAdmin();
 
@@ -47,17 +51,21 @@ export function Header() {
               </>
             ) : (
               <>
-                <Link to="/auth?mode=login">
-                  <Button variant="ghost" size="sm">
-                    Login
-                  </Button>
-                </Link>
-                <Link to="/auth">
-                  <Button size="sm" className="text-xs sm:text-sm px-2 sm:px-4">
-                    <span className="sm:hidden">Registrati</span>
-                    <span className="hidden sm:inline">Registrati come idraulico</span>
-                  </Button>
-                </Link>
+                {!isLoginPage && (
+                  <Link to="/auth?mode=login">
+                    <Button variant="ghost" size="sm">
+                      Login
+                    </Button>
+                  </Link>
+                )}
+                {!isRegisterPage && (
+                  <Link to="/auth">
+                    <Button size="sm" className="text-xs sm:text-sm px-2 sm:px-4">
+                      <span className="sm:hidden">Registrati</span>
+                      <span className="hidden sm:inline">Registrati come idraulico</span>
+                    </Button>
+                  </Link>
+                )}
               </>
             )}
           </nav>

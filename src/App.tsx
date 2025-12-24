@@ -14,6 +14,7 @@ import ProfilePage from "./pages/ProfilePage";
 import PrivacyPage from "./pages/PrivacyPage";
 import TermsPage from "./pages/TermsPage";
 import AdminPage from "./pages/AdminPage";
+import PlumberLandingPage from "./pages/PlumberLandingPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/termini" element={<TermsPage />} />
           <Route path="/admin" element={<AdminPage />} />
+          <Route path="/per-idraulici" element={<PlumberLandingPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

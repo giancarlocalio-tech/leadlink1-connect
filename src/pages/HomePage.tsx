@@ -509,7 +509,7 @@ export default function HomePage() {
             </div>
 
             <Button 
-              onClick={() => navigate('/auth?mode=signup')}
+              onClick={() => navigate('/per-idraulici')}
               size="lg"
               className="text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all"
             >

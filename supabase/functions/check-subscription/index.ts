@@ -113,11 +113,76 @@ serve(async (req) => {
       const subscription = subscriptions.data[0];
       stripeSubscriptionId = subscription.id;
       subscriptionEnd = new Date(subscription.current_period_end * 1000).toISOString();
+      const subscriptionStart = new Date(subscription.current_period_start * 1000).toISOString();
       logStep("Active subscription found", { subscriptionId: subscription.id, endDate: subscriptionEnd });
       
       const productId = subscription.items.data[0].price.product as string;
       planType = PRODUCT_TO_PLAN[productId] || null;
       logStep("Determined plan type", { productId, planType });
+
+      // Sync subscription data to plumber_subscriptions table
+      if (planType) {
+        // First get the plumber profile
+        const { data: plumberProfile, error: profileError } = await supabaseClient
+          .from('plumber_profiles')
+          .select('id')
+          .eq('user_id', user.id)
+          .single();
+
+        if (plumberProfile && !profileError) {
+          logStep("Found plumber profile", { plumberId: plumberProfile.id });
+
+          // Check if subscription record exists
+          const { data: existingSub, error: subError } = await supabaseClient
+            .from('plumber_subscriptions')
+            .select('id, plan_type, status')
+            .eq('plumber_id', plumberProfile.id)
+            .single();
+
+          if (existingSub) {
+            // Update existing subscription
+            const { error: updateError } = await supabaseClient
+              .from('plumber_subscriptions')
+              .update({
+                plan_type: planType,
+                status: 'active',
+                stripe_customer_id: customerId,
+                stripe_subscription_id: stripeSubscriptionId,
+                current_period_start: subscriptionStart,
+                current_period_end: subscriptionEnd,
+                updated_at: new Date().toISOString(),
+              })
+              .eq('id', existingSub.id);
+
+            if (updateError) {
+              logStep("Error updating subscription in DB", { error: updateError.message });
+            } else {
+              logStep("Updated subscription in DB", { plumberId: plumberProfile.id, planType });
+            }
+          } else {
+            // Create new subscription record
+            const { error: insertError } = await supabaseClient
+              .from('plumber_subscriptions')
+              .insert({
+                plumber_id: plumberProfile.id,
+                plan_type: planType,
+                status: 'active',
+                stripe_customer_id: customerId,
+                stripe_subscription_id: stripeSubscriptionId,
+                current_period_start: subscriptionStart,
+                current_period_end: subscriptionEnd,
+              });
+
+            if (insertError) {
+              logStep("Error inserting subscription in DB", { error: insertError.message });
+            } else {
+              logStep("Created new subscription in DB", { plumberId: plumberProfile.id, planType });
+            }
+          }
+        } else {
+          logStep("No plumber profile found for user", { userId: user.id });
+        }
+      }
     } else {
       logStep("No active subscription found");
     }

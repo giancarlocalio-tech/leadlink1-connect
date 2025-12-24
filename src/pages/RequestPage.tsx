@@ -10,6 +10,7 @@ import { Layout } from '@/components/Layout';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Progress } from '@/components/ui/progress';
+import analytics from '@/lib/analytics';
 import type { 
   InterventionType, 
   UrgencyType, 
@@ -136,7 +137,10 @@ export default function RequestPage() {
 
   const goNext = () => {
     if (currentStepIndex < STEPS.length - 1) {
-      setCurrentStepIndex(prev => prev + 1);
+      const nextStep = currentStepIndex + 1;
+      setCurrentStepIndex(nextStep);
+      // Track step progression
+      analytics.leadFormStep(nextStep + 1, STEPS[nextStep]);
     }
   };
 
@@ -166,6 +170,13 @@ export default function RequestPage() {
     }
 
     setIsSubmitting(true);
+    
+    // Track form submission
+    analytics.leadFormSubmit(
+      formData.interventionType,
+      formData.city,
+      formData.urgency
+    );
 
     const requestPayload = {
       intervention_type: formData.interventionType,
@@ -193,7 +204,12 @@ export default function RequestPage() {
     }
 
     setIsSubmitting(false);
-    navigate('/conferma');
+    navigate('/conferma', {
+      state: {
+        interventionType: formData.interventionType,
+        city: formData.city,
+      }
+    });
   };
 
   const getStepTitle = (): string => {

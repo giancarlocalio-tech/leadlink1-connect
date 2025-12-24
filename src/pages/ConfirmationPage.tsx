@@ -1,9 +1,28 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { CheckCircle, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/Layout';
+import analytics from '@/lib/analytics';
 
 export default function ConfirmationPage() {
+  const location = useLocation();
+  
+  useEffect(() => {
+    // Track successful conversion
+    const state = location.state as { 
+      interventionType?: string; 
+      city?: string;
+    } | null;
+    
+    analytics.leadFormSuccess(
+      state?.interventionType || 'unknown',
+      state?.city || 'unknown'
+    );
+    
+    // Track page view
+    analytics.pageView('/conferma', 'Richiesta Confermata');
+  }, [location.state]);
   return (
     <Layout>
       <div className="py-16 md:py-24">

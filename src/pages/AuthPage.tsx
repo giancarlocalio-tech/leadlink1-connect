@@ -238,29 +238,8 @@ export default function AuthPage() {
           return;
         }
 
-        // Create subscription with 30-day trial
+        // Send welcome email
         if (newProfile?.id) {
-          const trialEndsAt = new Date();
-          trialEndsAt.setDate(trialEndsAt.getDate() + 30);
-          
-          const { error: subError } = await supabase
-            .from('plumber_subscriptions')
-            .insert({
-              plumber_id: newProfile.id,
-              plan_type: plan_type,
-              status: 'active',
-              trial_ends_at: trialEndsAt.toISOString(),
-              current_period_start: new Date().toISOString(),
-              current_period_end: trialEndsAt.toISOString(),
-              monthly_contact_limit: plan_type === 'premium' ? null : plan_type === 'medium' ? 5 : 2,
-              monthly_contacts_used: 0,
-            });
-
-          if (subError) {
-            console.error('Subscription creation error:', subError);
-          }
-
-          // Send welcome email
           try {
             await supabase.functions.invoke('send-welcome-email', {
               body: {
@@ -279,8 +258,10 @@ export default function AuthPage() {
 
         setPendingProfileData(null);
         setIsSubmitting(false);
-        toast.success('Registrazione completata! Hai 30 giorni di prova gratuita.');
-        navigate('/dashboard');
+        
+        // Redirect to plan selection page for Stripe checkout
+        toast.success('Profilo creato! Ora scegli il piano di abbonamento.');
+        navigate('/registrazione/piano', { state: { justRegistered: true } });
       }
     };
 
@@ -902,36 +883,10 @@ export default function AuthPage() {
                   <Button 
                     type="button" 
                     className="w-full" 
-                    onClick={() => {
-                      // Validate form data before proceeding to plan selection
-                      if (!registerData.fullName || !registerData.businessName || !registerData.email || 
-                          !registerData.password || !registerData.phone || !registerData.mainCity) {
-                        toast.error('Compila tutti i campi obbligatori');
-                        return;
-                      }
-                      if (serviceAreas.length === 0) {
-                        toast.error('Aggiungi almeno una città di lavoro');
-                        return;
-                      }
-                      if (registerData.password !== registerData.confirmPassword) {
-                        toast.error('Le password non corrispondono');
-                        return;
-                      }
-                      if (registerData.password.length < 12) {
-                        toast.error('La password deve essere di almeno 12 caratteri');
-                        return;
-                      }
-                      const hasUpper = /[A-Z]/.test(registerData.password);
-                      const hasLower = /[a-z]/.test(registerData.password);
-                      const hasNumber = /[0-9]/.test(registerData.password);
-                      if (!(hasUpper && hasLower && hasNumber)) {
-                        toast.error('La password deve includere maiuscole, minuscole e numeri');
-                        return;
-                      }
-                      setMode('select-plan');
-                    }}
+                    onClick={handleRegister}
+                    disabled={isSubmitting}
                   >
-                    Continua - Scegli il piano
+                    {isSubmitting ? 'Registrazione in corso...' : 'Continua - Scegli il piano'}
                   </Button>
 
                   <p className="text-sm text-center text-muted-foreground mt-4">

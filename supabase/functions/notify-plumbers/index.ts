@@ -192,7 +192,7 @@ const handler = async (req: Request): Promise<Response> => {
 
       try {
         const emailResult = await resend.emails.send({
-          from: "IdraulicoVicino <onboarding@resend.dev>",
+          from: "IdrauliciSubito <noreply@idraulicisubito.com>",
           to: [plumber.email],
           subject: `🔧 Nuova richiesta di intervento a ${serviceRequest.city}`,
           html: `
@@ -246,7 +246,7 @@ const handler = async (req: Request): Promise<Response> => {
                 </div>
                 
                 <div style="text-align: center; margin-top: 32px;">
-                  <a href="https://idraulicovicino.it/dashboard" 
+                  <a href="https://idraulicisubito.com/dashboard" 
                      style="display: inline-block; background: linear-gradient(135deg, #0066cc 0%, #004d99 100%); color: white; padding: 16px 40px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);">
                     Visualizza nel Dashboard
                   </a>
@@ -258,8 +258,8 @@ const handler = async (req: Request): Promise<Response> => {
               </div>
               
               <div style="text-align: center; padding: 24px; color: #999; font-size: 12px;">
-                <p style="margin: 0;">Questa email è stata inviata da IdraulicoVicino</p>
-                <p style="margin: 8px 0 0 0;">© ${new Date().getFullYear()} IdraulicoVicino. Tutti i diritti riservati.</p>
+                <p style="margin: 0;">Questa email è stata inviata da IdrauliciSubito</p>
+                <p style="margin: 8px 0 0 0;">© ${new Date().getFullYear()} IdrauliciSubito. Tutti i diritti riservati.</p>
               </div>
             </body>
             </html>

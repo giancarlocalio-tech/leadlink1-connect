@@ -36,9 +36,9 @@ const handler = async (req: Request): Promise<Response> => {
     const planLabel = PLAN_LABELS[plan_type] || plan_type;
 
     const emailResponse = await resend.emails.send({
-      from: "IdraulicoVicino <onboarding@resend.dev>",
+      from: "IdrauliciSubito <noreply@idraulicisubito.com>",
       to: [email],
-      subject: "🎉 Benvenuto su IdraulicoVicino!",
+      subject: "🎉 Benvenuto su IdrauliciSubito!",
       html: `
         <!DOCTYPE html>
         <html>
@@ -48,7 +48,7 @@ const handler = async (req: Request): Promise<Response> => {
         </head>
         <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
           <div style="background: linear-gradient(135deg, #0066cc 0%, #004d99 100%); padding: 40px 30px; border-radius: 16px 16px 0 0; text-align: center;">
-            <h1 style="color: white; margin: 0; font-size: 28px;">🎉 Benvenuto su IdraulicoVicino!</h1>
+            <h1 style="color: white; margin: 0; font-size: 28px;">🎉 Benvenuto su IdrauliciSubito!</h1>
           </div>
           
           <div style="background: white; padding: 40px 30px; border-radius: 0 0 16px 16px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
@@ -109,7 +109,7 @@ const handler = async (req: Request): Promise<Response> => {
             </div>
             
             <div style="text-align: center; margin-top: 32px;">
-              <a href="https://idraulicovicino.it/dashboard" 
+              <a href="https://idraulicisubito.com/dashboard" 
                  style="display: inline-block; background: linear-gradient(135deg, #0066cc 0%, #004d99 100%); color: white; padding: 16px 40px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);">
                 Accedi al Dashboard
               </a>
@@ -123,8 +123,8 @@ const handler = async (req: Request): Promise<Response> => {
           </div>
           
           <div style="text-align: center; padding: 24px; color: #999; font-size: 12px;">
-            <p style="margin: 0;">Questa email è stata inviata da IdraulicoVicino</p>
-            <p style="margin: 8px 0 0 0;">© ${new Date().getFullYear()} IdraulicoVicino. Tutti i diritti riservati.</p>
+            <p style="margin: 0;">Questa email è stata inviata da IdrauliciSubito</p>
+            <p style="margin: 8px 0 0 0;">© ${new Date().getFullYear()} IdrauliciSubito. Tutti i diritti riservati.</p>
           </div>
         </body>
         </html>

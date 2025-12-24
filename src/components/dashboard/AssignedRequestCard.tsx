@@ -143,15 +143,16 @@ export function AssignedRequestCard({ request, onAccepted, onDeclined }: Assigne
     }
   };
 
-  const isExpired = timeRemaining !== null && timeRemaining <= 0;
+  const isAccepted = request.status === 'accepted';
+  const isExpired = !isAccepted && timeRemaining !== null && timeRemaining <= 0;
 
   return (
     <Card className={`overflow-hidden transition-shadow hover:shadow-md ${
       request.urgency === 'subito' ? 'ring-2 ring-destructive/50' : ''
-    }`}>
+    } ${isAccepted ? 'ring-2 ring-green-500/50' : ''}`}>
       <CardContent className="p-0">
-        {/* Timer Bar */}
-        {!isExpired && timeRemaining !== null && (
+        {/* Timer Bar - Only show for non-accepted requests */}
+        {!isAccepted && !isExpired && timeRemaining !== null && (
           <div className="p-3 bg-primary/5 border-b border-border">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2 text-sm font-medium">
@@ -171,6 +172,17 @@ export function AssignedRequestCard({ request, onAccepted, onDeclined }: Assigne
           </div>
         )}
 
+        {/* Accepted banner */}
+        {isAccepted && (
+          <div className="p-3 bg-green-500/10 border-b border-green-500/30">
+            <div className="flex items-center gap-2 text-sm text-green-700 dark:text-green-400 font-medium">
+              <CheckCircle className="h-4 w-4" />
+              <span>Richiesta accettata - contatta il cliente</span>
+            </div>
+          </div>
+        )}
+
+        {/* Expired banner - Only show for non-accepted expired requests */}
         {isExpired && (
           <div className="p-3 bg-muted border-b border-border">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">

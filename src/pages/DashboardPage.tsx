@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MapPin, AlertCircle, ArrowRight } from 'lucide-react';
+import { MapPin, AlertCircle, ArrowRight, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { StatsCards } from '@/components/dashboard/StatsCards';
 import { SubscriptionCard } from '@/components/dashboard/SubscriptionCard';
 import { RequestCard } from '@/components/dashboard/RequestCard';
+import { AssignedRequestCard } from '@/components/dashboard/AssignedRequestCard';
 import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import { useSubscription } from '@/hooks/useSubscription';
@@ -31,6 +32,8 @@ export default function DashboardPage() {
   } = useSubscription();
   
   const [requests, setRequests] = useState<ServiceRequest[]>([]);
+  const [assignedRequests, setAssignedRequests] = useState<ServiceRequest[]>([]);
+  const [acceptedRequests, setAcceptedRequests] = useState<ServiceRequest[]>([]);
   const [loadingRequests, setLoadingRequests] = useState(true);
 
   useEffect(() => {
@@ -42,6 +45,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (user && profile) {
       fetchRequests();
+      fetchAssignedRequests();
     }
   }, [user, profile]);
 
@@ -84,17 +88,65 @@ export default function DashboardPage() {
       accessibility: r.accessibility as AccessibilityType,
       client_name: r.client_name!,
       client_phone: r.client_phone!,
-      client_email: r.client_email,
+      client_email: r.client_email || undefined,
       privacy_accepted: r.privacy_accepted!,
-      status: r.status,
+      status: r.status || 'pending',
       is_exclusive: r.is_exclusive ?? false,
-      assigned_plumber_id: r.assigned_plumber_id,
-      assigned_at: r.assigned_at,
-      created_at: r.created_at,
-      updated_at: r.updated_at,
+      assigned_plumber_id: r.assigned_plumber_id || undefined,
+      assigned_at: r.assigned_at || undefined,
+      created_at: r.created_at!,
+      updated_at: r.updated_at!,
+      is_contact_unlocked: r.is_contact_unlocked ?? false,
     })));
     
     setLoadingRequests(false);
+  };
+
+  const fetchAssignedRequests = async () => {
+    if (!profile) return;
+    
+    // Fetch requests assigned to this plumber using raw query
+    const { data, error } = await supabase
+      .from('service_requests')
+      .select('*')
+      .eq('assigned_plumber_id', profile.id)
+      .in('status', ['assigned', 'accepted'])
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching assigned requests:', error);
+      return;
+    }
+    
+    const mappedRequests = (data || []).map((r: any) => ({
+      id: r.id,
+      intervention_type: r.intervention_type as InterventionType,
+      city: r.city,
+      description: r.description,
+      urgency: r.urgency as UrgencyType,
+      property_type: r.property_type as PropertyType,
+      accessibility: r.accessibility as AccessibilityType,
+      client_name: r.client_name,
+      client_phone: r.client_phone,
+      client_email: r.client_email || undefined,
+      privacy_accepted: r.privacy_accepted,
+      status: r.status || 'pending',
+      is_exclusive: r.is_exclusive ?? false,
+      assigned_plumber_id: r.assigned_plumber_id || undefined,
+      assigned_at: r.assigned_at || undefined,
+      created_at: r.created_at,
+      updated_at: r.updated_at,
+      current_assignee_id: r.current_assignee_id || undefined,
+      current_assignee_plan: r.current_assignee_plan || undefined,
+      assignment_started_at: r.assignment_started_at || undefined,
+      assignment_expires_at: r.assignment_expires_at || undefined,
+      assignment_round: r.assignment_round ?? 0,
+      accepted_at: r.accepted_at || undefined,
+      accepted_by_id: r.accepted_by_id || undefined,
+    }));
+    
+    setAssignedRequests(mappedRequests.filter((r: any) => r.status === 'assigned'));
+    setAcceptedRequests(mappedRequests.filter((r: any) => r.status === 'accepted'));
   };
 
   const handleUnlock = async (requestId: string) => {
@@ -143,6 +195,31 @@ export default function DashboardPage() {
   return (
     <DashboardLayout title={`Bentornato, ${profile.full_name}`}>
       <div className="space-y-6">
+        {/* Assigned Requests - Priority Section */}
+        {assignedRequests.length > 0 && (
+          <Card className="border-primary/50 bg-primary/5">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Zap className="h-5 w-5 text-primary" />
+                Richieste assegnate a te
+              </CardTitle>
+              <CardDescription>
+                Queste richieste sono in esclusiva per te. Accetta prima che scada il tempo!
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {assignedRequests.map((request) => (
+                <AssignedRequestCard
+                  key={request.id}
+                  request={request}
+                  onAccepted={() => fetchAssignedRequests()}
+                  onDeclined={() => fetchAssignedRequests()}
+                />
+              ))}
+            </CardContent>
+          </Card>
+        )}
+
         {/* Stats */}
         <StatsCards
           totalRequests={requests.length}

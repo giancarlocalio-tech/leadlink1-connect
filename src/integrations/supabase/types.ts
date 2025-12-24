@@ -14,6 +14,97 @@ export type Database = {
   }
   public: {
     Tables: {
+      assignment_config: {
+        Row: {
+          created_at: string
+          id: string
+          max_attempts: number | null
+          plan_type: string
+          timer_minutes: number
+          updated_at: string
+          urgency: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          max_attempts?: number | null
+          plan_type: string
+          timer_minutes: number
+          updated_at?: string
+          urgency: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          max_attempts?: number | null
+          plan_type?: string
+          timer_minutes?: number
+          updated_at?: string
+          urgency?: string
+        }
+        Relationships: []
+      }
+      assignment_logs: {
+        Row: {
+          assigned_at: string
+          created_at: string
+          expires_at: string
+          id: string
+          plumber_id: string
+          plumber_plan: string
+          request_id: string
+          responded: boolean | null
+          response_at: string | null
+          response_type: string | null
+        }
+        Insert: {
+          assigned_at?: string
+          created_at?: string
+          expires_at: string
+          id?: string
+          plumber_id: string
+          plumber_plan: string
+          request_id: string
+          responded?: boolean | null
+          response_at?: string | null
+          response_type?: string | null
+        }
+        Update: {
+          assigned_at?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          plumber_id?: string
+          plumber_plan?: string
+          request_id?: string
+          responded?: boolean | null
+          response_at?: string | null
+          response_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assignment_logs_plumber_id_fkey"
+            columns: ["plumber_id"]
+            isOneToOne: false
+            referencedRelation: "plumber_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignment_logs_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "service_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignment_logs_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "service_requests_plumber_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_logs: {
         Row: {
           contacted_at: string | null
@@ -207,11 +298,16 @@ export type Database = {
       }
       plumber_subscriptions: {
         Row: {
+          contacts_reset_at: string | null
           created_at: string
           current_period_end: string | null
           current_period_start: string | null
           exclusive_contacts_used: number
           id: string
+          is_available: boolean | null
+          last_assigned_at: string | null
+          monthly_contact_limit: number | null
+          monthly_contacts_used: number | null
           plan_type: Database["public"]["Enums"]["subscription_plan"]
           plumber_id: string
           status: Database["public"]["Enums"]["subscription_status"]
@@ -221,11 +317,16 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          contacts_reset_at?: string | null
           created_at?: string
           current_period_end?: string | null
           current_period_start?: string | null
           exclusive_contacts_used?: number
           id?: string
+          is_available?: boolean | null
+          last_assigned_at?: string | null
+          monthly_contact_limit?: number | null
+          monthly_contacts_used?: number | null
           plan_type: Database["public"]["Enums"]["subscription_plan"]
           plumber_id: string
           status?: Database["public"]["Enums"]["subscription_status"]
@@ -235,11 +336,16 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          contacts_reset_at?: string | null
           created_at?: string
           current_period_end?: string | null
           current_period_start?: string | null
           exclusive_contacts_used?: number
           id?: string
+          is_available?: boolean | null
+          last_assigned_at?: string | null
+          monthly_contact_limit?: number | null
+          monthly_contacts_used?: number | null
           plan_type?: Database["public"]["Enums"]["subscription_plan"]
           plumber_id?: string
           status?: Database["public"]["Enums"]["subscription_status"]
@@ -260,14 +366,20 @@ export type Database = {
       }
       service_requests: {
         Row: {
+          accepted_at: string | null
+          accepted_by_id: string | null
           accessibility: Database["public"]["Enums"]["accessibility_type"]
           assigned_at: string | null
           assigned_plumber_id: string | null
+          assignment_expires_at: string | null
+          assignment_round: number | null
+          assignment_started_at: string | null
           city: string
           client_email: string | null
           client_name: string
           client_phone: string
           created_at: string | null
+          current_assignee_plan: string | null
           description: string
           id: string
           intervention_type: Database["public"]["Enums"]["intervention_type"]
@@ -279,14 +391,20 @@ export type Database = {
           urgency: Database["public"]["Enums"]["urgency_type"]
         }
         Insert: {
+          accepted_at?: string | null
+          accepted_by_id?: string | null
           accessibility: Database["public"]["Enums"]["accessibility_type"]
           assigned_at?: string | null
           assigned_plumber_id?: string | null
+          assignment_expires_at?: string | null
+          assignment_round?: number | null
+          assignment_started_at?: string | null
           city: string
           client_email?: string | null
           client_name: string
           client_phone: string
           created_at?: string | null
+          current_assignee_plan?: string | null
           description: string
           id?: string
           intervention_type: Database["public"]["Enums"]["intervention_type"]
@@ -298,14 +416,20 @@ export type Database = {
           urgency: Database["public"]["Enums"]["urgency_type"]
         }
         Update: {
+          accepted_at?: string | null
+          accepted_by_id?: string | null
           accessibility?: Database["public"]["Enums"]["accessibility_type"]
           assigned_at?: string | null
           assigned_plumber_id?: string | null
+          assignment_expires_at?: string | null
+          assignment_round?: number | null
+          assignment_started_at?: string | null
           city?: string
           client_email?: string | null
           client_name?: string
           client_phone?: string
           created_at?: string | null
+          current_assignee_plan?: string | null
           description?: string
           id?: string
           intervention_type?: Database["public"]["Enums"]["intervention_type"]
@@ -317,6 +441,13 @@ export type Database = {
           urgency?: Database["public"]["Enums"]["urgency_type"]
         }
         Relationships: [
+          {
+            foreignKeyName: "service_requests_accepted_by_id_fkey"
+            columns: ["accepted_by_id"]
+            isOneToOne: false
+            referencedRelation: "plumber_profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "service_requests_assigned_plumber_id_fkey"
             columns: ["assigned_plumber_id"]
@@ -470,9 +601,30 @@ export type Database = {
       }
     }
     Functions: {
+      accept_request: {
+        Args: { p_plumber_id: string; p_request_id: string }
+        Returns: boolean
+      }
+      assign_request_to_plumber: {
+        Args: { p_plumber_id: string; p_request_id: string }
+        Returns: boolean
+      }
       get_current_plumber_plan: {
         Args: never
         Returns: Database["public"]["Enums"]["subscription_plan"]
+      }
+      get_next_eligible_plumber: {
+        Args: {
+          p_city: string
+          p_request_id: string
+          p_target_plan: string
+          p_urgency: string
+        }
+        Returns: string
+      }
+      handle_expired_assignment: {
+        Args: { p_request_id: string }
+        Returns: string
       }
       has_role: {
         Args: {
@@ -513,6 +665,13 @@ export type Database = {
         | "depuratore_acqua"
         | "sostituzione_rubinetto"
       property_type: "casa" | "appartamento" | "negozio"
+      request_status:
+        | "new"
+        | "assigned"
+        | "accepted"
+        | "expired"
+        | "completed"
+        | "canceled"
       subscription_plan: "basic" | "medium" | "premium"
       subscription_status: "active" | "cancelled" | "expired" | "pending"
       urgency_type: "subito" | "entro_24_ore" | "prossimi_giorni"
@@ -669,6 +828,14 @@ export const Constants = {
         "sostituzione_rubinetto",
       ],
       property_type: ["casa", "appartamento", "negozio"],
+      request_status: [
+        "new",
+        "assigned",
+        "accepted",
+        "expired",
+        "completed",
+        "canceled",
+      ],
       subscription_plan: ["basic", "medium", "premium"],
       subscription_status: ["active", "cancelled", "expired", "pending"],
       urgency_type: ["subito", "entro_24_ore", "prossimi_giorni"],

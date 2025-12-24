@@ -72,7 +72,7 @@ const handler = async (req: Request): Promise<Response> => {
     const interventionLabel = INTERVENTION_LABELS[intervention_type] || intervention_type;
 
     const emailResponse = await resend.emails.send({
-      from: "IdraulicoVicino <onboarding@resend.dev>",
+      from: "IdrauliciSubito <noreply@idraulicisubito.com>",
       to: [client_email],
       subject: "✅ Un idraulico ha accettato la tua richiesta!",
       html: `
@@ -137,14 +137,14 @@ const handler = async (req: Request): Promise<Response> => {
             
             <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #eee;">
               <p style="font-size: 14px; color: #666; margin: 0; text-align: center;">
-                Grazie per aver scelto IdraulicoVicino per trovare il tuo idraulico!
+                Grazie per aver scelto IdrauliciSubito per trovare il tuo idraulico!
               </p>
             </div>
           </div>
           
           <div style="text-align: center; padding: 24px; color: #999; font-size: 12px;">
-            <p style="margin: 0;">Questa email è stata inviata da IdraulicoVicino</p>
-            <p style="margin: 8px 0 0 0;">© ${new Date().getFullYear()} IdraulicoVicino. Tutti i diritti riservati.</p>
+            <p style="margin: 0;">Questa email è stata inviata da IdrauliciSubito</p>
+            <p style="margin: 8px 0 0 0;">© ${new Date().getFullYear()} IdrauliciSubito. Tutti i diritti riservati.</p>
           </div>
         </body>
         </html>

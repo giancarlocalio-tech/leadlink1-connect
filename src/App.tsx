@@ -17,6 +17,7 @@ import PrivacyPage from "./pages/PrivacyPage";
 import TermsPage from "./pages/TermsPage";
 import AdminPage from "./pages/AdminPage";
 import PlumberLandingPage from "./pages/PlumberLandingPage";
+import PlumberPlanSelectionPage from "./pages/PlumberPlanSelectionPage";
 import LandingPage from "./pages/LandingPage";
 import NotFound from "./pages/NotFound";
 
@@ -41,6 +42,7 @@ const App = () => (
           <Route path="/termini" element={<TermsPage />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/per-idraulici" element={<PlumberLandingPage />} />
+          <Route path="/registrazione/piano" element={<PlumberPlanSelectionPage />} />
           <Route path="/lp/idraulico" element={<LandingPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

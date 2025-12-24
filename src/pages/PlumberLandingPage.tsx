@@ -244,8 +244,8 @@ export default function PlumberLandingPage() {
         return;
       }
 
-      toast.success('Registrazione completata! Benvenuto su Idraulici Subito.');
-      navigate('/dashboard/abbonamento');
+      toast.success('Registrazione completata! Ora scegli il tuo piano.');
+      navigate('/registrazione/piano');
     } catch (error) {
       console.error('Registration error:', error);
       toast.error('Errore durante la registrazione');

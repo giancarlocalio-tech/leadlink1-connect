@@ -16,6 +16,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import type { ServiceRequest, UrgencyType } from '@/lib/types';
@@ -36,6 +46,7 @@ interface AssignedRequestCardProps {
 export function AssignedRequestCard({ request, onAccepted, onDeclined }: AssignedRequestCardProps) {
   const [accepting, setAccepting] = useState(false);
   const [declining, setDeclining] = useState(false);
+  const [showDeclineDialog, setShowDeclineDialog] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
   const [progressPercent, setProgressPercent] = useState(100);
 
@@ -130,15 +141,58 @@ export function AssignedRequestCard({ request, onAccepted, onDeclined }: Assigne
     }
   };
 
-  const handleDecline = async () => {
+  const handleDeclineClick = () => {
+    setShowDeclineDialog(true);
+  };
+
+  const handleDeclineConfirm = async () => {
+    setShowDeclineDialog(false);
     setDeclining(true);
     try {
-      // For now, declining just means letting the timer expire
-      // In the future, we could add an explicit decline action
-      toast.info('La richiesta verrà riassegnata ad un altro professionista.');
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error('Sessione scaduta, effettua nuovamente il login');
+        return;
+      }
+
+      // Get plumber profile
+      const { data: profile } = await supabase
+        .from('plumber_profiles')
+        .select('id')
+        .eq('user_id', session.user.id)
+        .maybeSingle();
+
+      if (!profile) {
+        toast.error('Profilo non trovato');
+        return;
+      }
+
+      // Update the assignment log to mark as declined
+      await supabase
+        .from('assignment_logs')
+        .update({
+          responded: true,
+          response_type: 'declined',
+          response_at: new Date().toISOString()
+        })
+        .eq('request_id', request.id)
+        .eq('plumber_id', profile.id)
+        .is('response_type', null);
+
+      // Call handle_expired_assignment to reassign
+      const { error: rpcError } = await supabase.rpc('handle_expired_assignment', {
+        p_request_id: request.id
+      });
+
+      if (rpcError) {
+        console.error('Error reassigning request:', rpcError);
+      }
+
+      toast.success('Richiesta rifiutata. Verrà riassegnata ad un altro professionista.');
       onDeclined();
     } catch (error) {
       console.error('Error declining request:', error);
+      toast.error('Errore nel rifiutare la richiesta');
     } finally {
       setDeclining(false);
     }
@@ -148,6 +202,23 @@ export function AssignedRequestCard({ request, onAccepted, onDeclined }: Assigne
   const isExpired = !isAccepted && timeRemaining !== null && timeRemaining <= 0;
 
   return (
+    <>
+      <AlertDialog open={showDeclineDialog} onOpenChange={setShowDeclineDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Conferma rifiuto richiesta</AlertDialogTitle>
+            <AlertDialogDescription>
+              Sei sicuro di voler rifiutare questa richiesta? La richiesta verrà riassegnata ad un altro professionista e non la vedrai più.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annulla</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeclineConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Conferma rifiuto
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     <Card className={`overflow-hidden transition-shadow hover:shadow-md ${
       request.urgency === 'subito' ? 'ring-2 ring-destructive/50' : ''
     } ${isAccepted ? 'ring-2 ring-green-500/50' : ''}`}>
@@ -288,7 +359,7 @@ export function AssignedRequestCard({ request, onAccepted, onDeclined }: Assigne
               <div className="flex gap-2">
                 <Button
                   variant="outline"
-                  onClick={handleDecline}
+                  onClick={handleDeclineClick}
                   disabled={declining || accepting}
                   size="sm"
                 >
@@ -318,5 +389,6 @@ export function AssignedRequestCard({ request, onAccepted, onDeclined }: Assigne
         </div>
       </CardContent>
     </Card>
+    </>
   );
 }

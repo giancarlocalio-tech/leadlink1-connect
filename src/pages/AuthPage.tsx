@@ -238,23 +238,6 @@ export default function AuthPage() {
           return;
         }
 
-        // Send welcome email
-        if (newProfile?.id) {
-          try {
-            await supabase.functions.invoke('send-welcome-email', {
-              body: {
-                email: profileData.email,
-                full_name: profileData.full_name,
-                business_name: profileData.business_name,
-                plan_type: plan_type,
-                app_origin: window.location.origin,
-              },
-            });
-          } catch (emailError) {
-            console.error('Welcome email error:', emailError);
-            // Don't block registration if email fails
-          }
-        }
 
         setPendingProfileData(null);
         setIsSubmitting(false);

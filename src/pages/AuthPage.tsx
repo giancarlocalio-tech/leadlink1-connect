@@ -298,6 +298,11 @@ export default function AuthPage() {
     setIsSubmitting(true);
 
     // Store the profile data to be created after auth state updates
+    // Ensure main_city is always included in service_areas
+    const finalServiceAreas = serviceAreas.includes(registerData.mainCity) 
+      ? serviceAreas 
+      : [registerData.mainCity, ...serviceAreas];
+
     setPendingProfileData({
       full_name: registerData.fullName,
       business_name: registerData.businessName,
@@ -307,7 +312,7 @@ export default function AuthPage() {
       description: '',
       intervention_types: [],
       availability: [],
-      service_areas: serviceAreas,
+      service_areas: finalServiceAreas,
       plan_type: selectedPlan,
     });
 

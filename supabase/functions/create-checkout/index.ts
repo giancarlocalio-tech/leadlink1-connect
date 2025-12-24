@@ -80,50 +80,27 @@ serve(async (req) => {
       };
       logStep("Adding 30-day free trial for Basic plan");
     } else if (planType === "medium") {
-      // Medium: First month at €9.99 instead of €59 (83% off)
-      // Create or get a coupon for Medium trial
-      let couponId: string;
+      // Medium: First month at €9.99 instead of €59
+      // Use coupon if it exists (must be created manually in Stripe dashboard)
       try {
-        // Try to retrieve existing coupon
-        const existingCoupon = await stripe.coupons.retrieve("MEDIUM_TRIAL_9_99");
-        couponId = existingCoupon.id;
-        logStep("Using existing Medium trial coupon", { couponId });
+        await stripe.coupons.retrieve("MEDIUM_TRIAL_9_99");
+        subscriptionData.discounts = [{ coupon: "MEDIUM_TRIAL_9_99" }];
+        logStep("Adding Medium trial discount (first month €9.99)");
       } catch {
-        // Create the coupon if it doesn't exist
-        const coupon = await stripe.coupons.create({
-          id: "MEDIUM_TRIAL_9_99",
-          amount_off: 4901, // €49.01 off (€59 - €9.99 = €49.01)
-          currency: "eur",
-          duration: "once",
-          name: "Medium - Primo mese a €9.99",
-        });
-        couponId = coupon.id;
-        logStep("Created Medium trial coupon", { couponId });
+        // Coupon doesn't exist, proceed without discount
+        logStep("Medium coupon not found, proceeding without discount");
       }
-      subscriptionData.discounts = [{ coupon: couponId }];
-      logStep("Adding Medium trial discount (first month €9.99)");
     } else if (planType === "premium") {
-      // Premium: First month at €19.99 instead of €99 (80% off)
-      let couponId: string;
+      // Premium: First month at €19.99 instead of €99
+      // Use coupon if it exists (must be created manually in Stripe dashboard)
       try {
-        // Try to retrieve existing coupon
-        const existingCoupon = await stripe.coupons.retrieve("PREMIUM_TRIAL_19_99");
-        couponId = existingCoupon.id;
-        logStep("Using existing Premium trial coupon", { couponId });
+        await stripe.coupons.retrieve("PREMIUM_TRIAL_19_99");
+        subscriptionData.discounts = [{ coupon: "PREMIUM_TRIAL_19_99" }];
+        logStep("Adding Premium trial discount (first month €19.99)");
       } catch {
-        // Create the coupon if it doesn't exist
-        const coupon = await stripe.coupons.create({
-          id: "PREMIUM_TRIAL_19_99",
-          amount_off: 7901, // €79.01 off (€99 - €19.99 = €79.01)
-          currency: "eur",
-          duration: "once",
-          name: "Premium - Primo mese a €19.99",
-        });
-        couponId = coupon.id;
-        logStep("Created Premium trial coupon", { couponId });
+        // Coupon doesn't exist, proceed without discount
+        logStep("Premium coupon not found, proceeding without discount");
       }
-      subscriptionData.discounts = [{ coupon: couponId }];
-      logStep("Adding Premium trial discount (first month €19.99)");
     }
 
     const session = await stripe.checkout.sessions.create(subscriptionData);

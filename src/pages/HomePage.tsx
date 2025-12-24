@@ -17,7 +17,12 @@ import {
   Pipette,
   X,
   Search,
-  CheckCircle
+  CheckCircle,
+  Clock,
+  MapPin,
+  Shield,
+  Star,
+  Phone
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -463,6 +468,94 @@ export default function HomePage() {
             <div>
               <p className="text-3xl font-bold text-primary">15min</p>
               <p className="text-sm text-muted-foreground">Tempo medio risposta</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Perché sceglierci Section */}
+      <section className="py-20 bg-gradient-to-br from-primary/10 via-primary/5 to-background">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl md:text-4xl font-bold text-foreground text-center mb-4">
+              Perché scegliere Idraulici Subito?
+            </h2>
+            <p className="text-lg text-muted-foreground text-center mb-12">
+              Trovare un idraulico affidabile non è mai stato così semplice
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex items-start gap-4 p-6 bg-card rounded-xl border border-border">
+                <div className="bg-success/10 rounded-full p-3 shrink-0">
+                  <CheckCircle className="h-6 w-6 text-success" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-2">Professionisti verificati</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Tutti gli idraulici sulla piattaforma sono professionisti qualificati e verificati
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4 p-6 bg-card rounded-xl border border-border">
+                <div className="bg-primary/10 rounded-full p-3 shrink-0">
+                  <Clock className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-2">Risposta rapida</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Ricevi contatti dagli idraulici della tua zona in pochi minuti
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4 p-6 bg-card rounded-xl border border-border">
+                <div className="bg-primary/10 rounded-full p-3 shrink-0">
+                  <MapPin className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-2">Idraulici vicino a te</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Contatta solo professionisti che operano nella tua zona
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4 p-6 bg-card rounded-xl border border-border">
+                <div className="bg-success/10 rounded-full p-3 shrink-0">
+                  <Shield className="h-6 w-6 text-success" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-2">Servizio gratuito</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Per i clienti il servizio è completamente gratuito, senza costi nascosti
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4 p-6 bg-card rounded-xl border border-border">
+                <div className="bg-primary/10 rounded-full p-3 shrink-0">
+                  <Star className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-2">Recensioni reali</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Leggi le opinioni di altri clienti prima di scegliere
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4 p-6 bg-card rounded-xl border border-border">
+                <div className="bg-success/10 rounded-full p-3 shrink-0">
+                  <Phone className="h-6 w-6 text-success" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-2">Contatto diretto</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Parla direttamente con l'idraulico senza intermediari
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

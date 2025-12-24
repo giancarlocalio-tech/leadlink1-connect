@@ -192,19 +192,23 @@
       }
     }
     </script>
-    <!-- Google Analytics 4 -->
+    <!-- Google tag (gtag.js) - Default denied until consent -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6KKBQ1JRH"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-X6KKBQ1JRH', {
-        send_page_view: true
+      
+      // Default: deny all until user consents
+      gtag('consent', 'default', {
+        'analytics_storage': 'denied',
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'wait_for_update': 500
       });
-    </script>
-    <!-- Google Ads -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17828815580"></script>
-    <script>
+      
+      gtag('js', new Date());
+      gtag('config', 'G-X6KKBQ1JRH');
       gtag('config', 'AW-17828815580');
     </script>
   </head>

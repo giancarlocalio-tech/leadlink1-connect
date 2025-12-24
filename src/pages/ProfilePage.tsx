@@ -91,12 +91,26 @@ export default function ProfilePage() {
     }));
   };
 
+  const toggleAllInterventions = (selectAll: boolean) => {
+    setFormData(prev => ({
+      ...prev,
+      interventionTypes: selectAll ? [...INTERVENTION_TYPES] : [],
+    }));
+  };
+
   const toggleAvailability = (type: AvailabilityType) => {
     setFormData(prev => ({
       ...prev,
       availability: prev.availability.includes(type)
         ? prev.availability.filter(t => t !== type)
         : [...prev.availability, type],
+    }));
+  };
+
+  const toggleAllAvailability = (selectAll: boolean) => {
+    setFormData(prev => ({
+      ...prev,
+      availability: selectAll ? [...AVAILABILITY_TYPES] : [],
     }));
   };
 
@@ -267,7 +281,17 @@ export default function ProfilePage() {
 
               {/* Intervention types */}
               <div className="space-y-4 pt-4 border-t border-border">
-                <h2 className="font-semibold text-foreground">Tipi di intervento</h2>
+                <div className="flex items-center justify-between">
+                  <h2 className="font-semibold text-foreground">Tipi di intervento</h2>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => toggleAllInterventions(formData.interventionTypes.length !== INTERVENTION_TYPES.length)}
+                  >
+                    {formData.interventionTypes.length === INTERVENTION_TYPES.length ? 'Deseleziona tutti' : 'Seleziona tutti'}
+                  </Button>
+                </div>
                 <div className="space-y-3">
                   {INTERVENTION_TYPES.map((type) => (
                     <div key={type} className="flex items-center gap-3">
@@ -286,7 +310,17 @@ export default function ProfilePage() {
 
               {/* Availability */}
               <div className="space-y-4 pt-4 border-t border-border">
-                <h2 className="font-semibold text-foreground">Disponibilità</h2>
+                <div className="flex items-center justify-between">
+                  <h2 className="font-semibold text-foreground">Disponibilità</h2>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => toggleAllAvailability(formData.availability.length !== AVAILABILITY_TYPES.length)}
+                  >
+                    {formData.availability.length === AVAILABILITY_TYPES.length ? 'Deseleziona tutti' : 'Seleziona tutti'}
+                  </Button>
+                </div>
                 <div className="space-y-3">
                   {AVAILABILITY_TYPES.map((type) => (
                     <div key={type} className="flex items-center gap-3">

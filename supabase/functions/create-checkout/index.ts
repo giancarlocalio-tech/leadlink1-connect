@@ -25,11 +25,11 @@ serve(async (req) => {
   try {
     logStep("Function started");
 
-    const { priceId } = await req.json();
+    const { priceId, planType } = await req.json();
     if (!priceId) {
       throw new Error("Price ID is required");
     }
-    logStep("Price ID received", { priceId });
+    logStep("Price ID received", { priceId, planType });
 
     const authHeader = req.headers.get("Authorization")!;
     const token = authHeader.replace("Bearer ", "");
@@ -54,7 +54,8 @@ serve(async (req) => {
 
     const origin = req.headers.get("origin") || "http://localhost:5173";
     
-    const session = await stripe.checkout.sessions.create({
+    // Add 30-day free trial for Basic plan
+    const subscriptionData: any = {
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
       line_items: [
@@ -69,7 +70,17 @@ serve(async (req) => {
       metadata: {
         user_id: user.id,
       },
-    });
+    };
+
+    // 30 days free trial only for Basic plan
+    if (planType === "basic") {
+      subscriptionData.subscription_data = {
+        trial_period_days: 30,
+      };
+      logStep("Adding 30-day free trial for Basic plan");
+    }
+
+    const session = await stripe.checkout.sessions.create(subscriptionData);
 
     logStep("Checkout session created", { sessionId: session.id, url: session.url });
 

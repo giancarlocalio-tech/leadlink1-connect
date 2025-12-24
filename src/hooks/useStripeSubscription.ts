@@ -79,7 +79,7 @@ export function useStripeSubscription() {
       const priceId = getStripePriceId(planType);
       
       const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { priceId },
+        body: { priceId, planType },
         headers: {
           Authorization: `Bearer ${session.access_token}`,
         },

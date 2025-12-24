@@ -468,7 +468,7 @@ export default function AuthPage() {
                   Scegli il piano più adatto a te
                 </h2>
                 <p className="text-muted-foreground">
-                  30 giorni di prova gratuita su tutti i piani. Nessun impegno.
+                  Prezzi promozionali per il primo mese. Nessun impegno.
                 </p>
               </div>
 

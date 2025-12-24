@@ -490,6 +490,13 @@ export default function AuthPage() {
                         </Badge>
                       </div>
                     )}
+                    {(plan.id === 'medium' || plan.id === 'premium') && (
+                      <div className="absolute -top-3 right-3">
+                        <Badge className="bg-orange-500 text-white animate-pulse">
+                          🔥 PROMO
+                        </Badge>
+                      </div>
+                    )}
                     <CardHeader className="text-center pb-2">
                       <CardTitle className="text-xl">{plan.name}</CardTitle>
                       <CardDescription>{plan.description}</CardDescription>

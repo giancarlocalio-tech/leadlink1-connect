@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.89.0";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -13,6 +14,7 @@ interface WelcomeEmailRequest {
   full_name: string;
   business_name: string;
   plan_type: string;
+  app_origin?: string;
 }
 
 const PLAN_LABELS: Record<string, string> = {
@@ -29,13 +31,53 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { email, full_name, business_name, plan_type }: WelcomeEmailRequest = await req.json();
+    const {
+      email,
+      full_name,
+      business_name,
+      plan_type,
+      app_origin,
+    }: WelcomeEmailRequest = await req.json();
 
     console.log(`Sending welcome email to ${email}`);
 
     const planLabel = PLAN_LABELS[plan_type] || plan_type;
 
-    // Plain text version - complete and professional
+    const appOrigin = (app_origin || "https://idraulicisubito.com").replace(/\/$/, "");
+
+    // One-click login link (magic link) so the plumber lands already logged-in on /dashboard
+    let loginUrl = `${appOrigin}/dashboard`;
+    try {
+      const supabaseAdmin = createClient(
+        Deno.env.get("SUPABASE_URL") ?? "",
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+        {
+          auth: {
+            persistSession: false,
+            autoRefreshToken: false,
+          },
+        }
+      );
+
+      const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
+        type: "magiclink",
+        email,
+      });
+
+      if (linkError) {
+        console.error("generateLink error:", linkError);
+      } else {
+        const tokenHash = (linkData as any)?.properties?.hashed_token as string | undefined;
+        if (tokenHash) {
+          loginUrl = `${appOrigin}/auth/confirm?token_hash=${encodeURIComponent(tokenHash)}&type=magiclink&next=${encodeURIComponent("/dashboard")}`;
+        } else {
+          console.error("generateLink missing hashed_token");
+        }
+      }
+    } catch (e) {
+      console.error("Error generating magic link:", e);
+    }
+
     const plainTextContent = `Benvenuto su IdrauliciSubito!
 
 Ciao ${full_name},
@@ -56,13 +98,13 @@ PROSSIMI PASSI
 2. Inizia a ricevere richieste
    Riceverai notifiche quando arrivano nuove richieste nella tua zona.
 
-Accedi alla tua dashboard: https://idraulicisubito.com/dashboard
+Accedi alla tua dashboard: ${loginUrl}
 
 Hai domande? Rispondi a questa email e saremo felici di aiutarti!
 
 ---
 IdrauliciSubito
-https://idraulicisubito.com`;
+${appOrigin}`;
 
     const emailResponse = await resend.emails.send({
       from: "IdrauliciSubito <benvenuto@idraulicisubito.com>",
@@ -170,7 +212,7 @@ Siamo entusiasti di averti con noi! La tua registrazione come idraulico professi
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:25px 0;">
 <tr>
 <td align="center">
-<a href="https://idraulicisubito.com/dashboard" style="display:inline-block;background-color:#16a34a;color:#ffffff;padding:14px 30px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Accedi alla Dashboard</a>
+<a href="${loginUrl}" style="display:inline-block;background-color:#16a34a;color:#ffffff;padding:14px 30px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Accedi alla Dashboard</a>
 </td>
 </tr>
 </table>

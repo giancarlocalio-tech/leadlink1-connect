@@ -344,7 +344,7 @@ export function AssignedRequestCard({ request, onAccepted, onDeclined }: Assigne
               La richiesta sta per essere riassegnata...
             </div>
           ) : (
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="flex items-center gap-2">
                 <div className="bg-muted rounded-full p-2">
                   <User className="h-4 w-4 text-muted-foreground" />
@@ -356,25 +356,24 @@ export function AssignedRequestCard({ request, onAccepted, onDeclined }: Assigne
                   </p>
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 w-full sm:w-auto">
                 <Button
                   variant="outline"
                   onClick={handleDeclineClick}
                   disabled={declining || accepting}
-                  size="sm"
+                  className="flex-1 sm:flex-none"
                 >
                   {declining ? (
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
                   ) : (
-                    <XCircle className="h-4 w-4 mr-1" />
+                    <XCircle className="h-4 w-4 mr-2" />
                   )}
                   Rifiuta
                 </Button>
                 <Button
                   onClick={handleAccept}
                   disabled={accepting || declining}
-                  size="sm"
-                  className="gap-2"
+                  className="flex-1 sm:flex-none gap-2"
                 >
                   {accepting ? (
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

@@ -460,6 +460,60 @@ export type Database = {
           },
         ]
       }
+      service_requests_public_meta: {
+        Row: {
+          accessibility: Database["public"]["Enums"]["accessibility_type"]
+          city: string
+          created_at: string
+          intervention_type: Database["public"]["Enums"]["intervention_type"]
+          is_exclusive: boolean
+          property_type: Database["public"]["Enums"]["property_type"]
+          request_id: string
+          status: string
+          updated_at: string
+          urgency: Database["public"]["Enums"]["urgency_type"]
+        }
+        Insert: {
+          accessibility: Database["public"]["Enums"]["accessibility_type"]
+          city: string
+          created_at?: string
+          intervention_type: Database["public"]["Enums"]["intervention_type"]
+          is_exclusive?: boolean
+          property_type: Database["public"]["Enums"]["property_type"]
+          request_id: string
+          status?: string
+          updated_at?: string
+          urgency: Database["public"]["Enums"]["urgency_type"]
+        }
+        Update: {
+          accessibility?: Database["public"]["Enums"]["accessibility_type"]
+          city?: string
+          created_at?: string
+          intervention_type?: Database["public"]["Enums"]["intervention_type"]
+          is_exclusive?: boolean
+          property_type?: Database["public"]["Enums"]["property_type"]
+          request_id?: string
+          status?: string
+          updated_at?: string
+          urgency?: Database["public"]["Enums"]["urgency_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_requests_public_meta_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: true
+            referencedRelation: "service_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_requests_public_meta_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: true
+            referencedRelation: "service_requests_plumber_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscription_plans: {
         Row: {
           contacts_are_exclusive: boolean

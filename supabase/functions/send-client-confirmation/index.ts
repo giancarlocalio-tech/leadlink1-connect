@@ -71,89 +71,130 @@ const handler = async (req: Request): Promise<Response> => {
 
     const interventionLabel = INTERVENTION_LABELS[intervention_type] || intervention_type;
 
+    // Email ottimizzata per deliverability:
+    // - Mittente più "umano" (conferma@ invece di noreply@)
+    // - HTML semplificato senza troppi stili
+    // - Meno emoji
+    // - Testo chiaro e professionale
     const emailResponse = await resend.emails.send({
-      from: "IdrauliciSubito <noreply@idraulicisubito.com>",
+      from: "IdrauliciSubito <conferma@idraulicisubito.com>",
       reply_to: "supporto@idraulicisubito.com",
       to: [client_email],
-      subject: "Un idraulico ha accettato la tua richiesta!",
-      text: `Ciao ${client_name},\n\nUn idraulico ha accettato la tua richiesta a ${city}.\n\nIdraulico: ${plumber_name} (${plumber_business})\nTelefono: ${plumber_phone}\nIntervento: ${interventionLabel}`, 
-      headers: {
-        "List-Unsubscribe": "<mailto:supporto@idraulicisubito.com?subject=unsubscribe>",
-      },
-      html: `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        </head>
-        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
-          <div style="background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%); padding: 40px 30px; border-radius: 16px 16px 0 0; text-align: center;">
-            <h1 style="color: white; margin: 0; font-size: 28px;">✅ Richiesta Accettata!</h1>
-          </div>
+      subject: `Conferma: un idraulico ha accettato la tua richiesta a ${city}`,
+      text: `Gentile ${client_name},
+
+Un idraulico professionista ha accettato la tua richiesta di intervento.
+
+DATI DELL'IDRAULICO:
+Nome: ${plumber_name}
+Attivita: ${plumber_business}
+Telefono: ${plumber_phone}
+
+DETTAGLI RICHIESTA:
+Tipo intervento: ${interventionLabel}
+Localita: ${city}
+
+L'idraulico ti contattera a breve per concordare i dettagli dell'intervento.
+Se hai urgenza, puoi chiamarlo direttamente al numero indicato.
+
+Cordiali saluti,
+Il team IdrauliciSubito
+
+---
+Questa email e stata inviata perche hai richiesto un intervento tramite IdrauliciSubito.
+Per assistenza: supporto@idraulicisubito.com`,
+      html: `<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conferma richiesta accettata</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; line-height: 1.5; color: #333333; background-color: #f5f5f5;">
+  <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f5f5f5;">
+    <tr>
+      <td style="padding: 20px;">
+        <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="margin: 0 auto; background-color: #ffffff; border-radius: 8px;">
           
-          <div style="background: white; padding: 40px 30px; border-radius: 0 0 16px 16px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <p style="font-size: 18px; margin-top: 0;">Ciao <strong>${client_name}</strong>,</p>
-            
-            <p style="font-size: 16px;">Ottime notizie! Un idraulico professionista ha accettato la tua richiesta di intervento.</p>
-            
-            <div style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); padding: 24px; border-radius: 12px; margin: 24px 0; border-left: 4px solid #28a745;">
-              <h3 style="margin-top: 0; color: #1e7e34; font-size: 18px;">👷 Il tuo idraulico</h3>
-              <table style="width: 100%; border-collapse: collapse;">
+          <!-- Header -->
+          <tr>
+            <td style="padding: 30px 30px 20px 30px; text-align: center; background-color: #2e7d32; border-radius: 8px 8px 0 0;">
+              <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: normal;">Richiesta Accettata</h1>
+            </td>
+          </tr>
+          
+          <!-- Content -->
+          <tr>
+            <td style="padding: 30px;">
+              <p style="margin: 0 0 20px 0;">Gentile <strong>${client_name}</strong>,</p>
+              
+              <p style="margin: 0 0 20px 0;">Un idraulico professionista ha accettato la tua richiesta di intervento a ${city}.</p>
+              
+              <!-- Plumber Info Box -->
+              <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: #e8f5e9; border-radius: 6px; margin-bottom: 20px;">
                 <tr>
-                  <td style="padding: 10px 0; color: #666; width: 120px;"><strong>Nome:</strong></td>
-                  <td style="padding: 10px 0; font-size: 16px;">${plumber_name}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 10px 0; color: #666;"><strong>Attività:</strong></td>
-                  <td style="padding: 10px 0; font-size: 16px;">${plumber_business}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 10px 0; color: #666;"><strong>Telefono:</strong></td>
-                  <td style="padding: 10px 0;">
-                    <a href="tel:${plumber_phone}" style="color: #0066cc; font-size: 18px; font-weight: 600; text-decoration: none;">
-                      📞 ${plumber_phone}
-                    </a>
+                  <td style="padding: 20px;">
+                    <p style="margin: 0 0 10px 0; font-weight: bold; color: #2e7d32;">Dati dell'idraulico</p>
+                    <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                        <td style="padding: 5px 0; color: #666666; width: 100px;">Nome:</td>
+                        <td style="padding: 5px 0;">${plumber_name}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 5px 0; color: #666666;">Attivita:</td>
+                        <td style="padding: 5px 0;">${plumber_business}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 5px 0; color: #666666;">Telefono:</td>
+                        <td style="padding: 5px 0;">
+                          <a href="tel:${plumber_phone}" style="color: #2e7d32; font-weight: bold; text-decoration: none;">${plumber_phone}</a>
+                        </td>
+                      </tr>
+                    </table>
                   </td>
                 </tr>
               </table>
-            </div>
-
-            <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin: 24px 0;">
-              <h3 style="margin-top: 0; color: #333; font-size: 16px;">📋 Dettagli richiesta</h3>
-              <p style="margin: 8px 0; color: #666;"><strong>Intervento:</strong> ${interventionLabel}</p>
-              <p style="margin: 8px 0 0 0; color: #666;"><strong>Località:</strong> ${city}</p>
-            </div>
-            
-            <div style="background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); padding: 20px; border-radius: 12px; margin: 24px 0;">
-              <h3 style="margin-top: 0; color: #856404; font-size: 16px;">💡 Cosa fare adesso?</h3>
-              <p style="margin: 8px 0 0 0; color: #856404; font-size: 14px;">
-                L'idraulico ti contatterà a breve per concordare i dettagli dell'intervento. 
-                Se hai urgenza, puoi chiamarlo direttamente al numero indicato sopra.
-              </p>
-            </div>
-            
-            <div style="text-align: center; margin-top: 32px;">
-              <a href="tel:${plumber_phone}" 
-                 style="display: inline-block; background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%); color: white; padding: 16px 40px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);">
-                📞 Chiama ${plumber_name}
-              </a>
-            </div>
-            
-            <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #eee;">
-              <p style="font-size: 14px; color: #666; margin: 0; text-align: center;">
-                Grazie per aver scelto IdrauliciSubito per trovare il tuo idraulico!
-              </p>
-            </div>
-          </div>
+              
+              <!-- Request Details -->
+              <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f5f5f5; border-radius: 6px; margin-bottom: 20px;">
+                <tr>
+                  <td style="padding: 20px;">
+                    <p style="margin: 0 0 10px 0; font-weight: bold;">Dettagli richiesta</p>
+                    <p style="margin: 5px 0; color: #666666;">Intervento: ${interventionLabel}</p>
+                    <p style="margin: 5px 0; color: #666666;">Localita: ${city}</p>
+                  </td>
+                </tr>
+              </table>
+              
+              <p style="margin: 0 0 20px 0;">L'idraulico ti contattera a breve per concordare i dettagli dell'intervento. Se hai urgenza, puoi chiamarlo direttamente al numero indicato.</p>
+              
+              <!-- CTA Button -->
+              <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td style="text-align: center; padding: 10px 0;">
+                    <a href="tel:${plumber_phone}" style="display: inline-block; background-color: #2e7d32; color: #ffffff; padding: 14px 30px; border-radius: 6px; text-decoration: none; font-weight: bold;">Chiama ${plumber_name}</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
           
-          <div style="text-align: center; padding: 24px; color: #999; font-size: 12px;">
-            <p style="margin: 0;">Questa email è stata inviata da IdrauliciSubito</p>
-            <p style="margin: 8px 0 0 0;">© ${new Date().getFullYear()} IdrauliciSubito. Tutti i diritti riservati.</p>
-          </div>
-        </body>
-        </html>
-      `,
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 20px 30px; text-align: center; border-top: 1px solid #eeeeee;">
+              <p style="margin: 0; color: #999999; font-size: 14px;">Grazie per aver scelto IdrauliciSubito</p>
+              <p style="margin: 10px 0 0 0; color: #999999; font-size: 12px;">
+                Per assistenza: <a href="mailto:supporto@idraulicisubito.com" style="color: #2e7d32;">supporto@idraulicisubito.com</a>
+              </p>
+            </td>
+          </tr>
+          
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`,
     });
 
     console.log("Client confirmation email sent successfully:", emailResponse);

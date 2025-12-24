@@ -40,6 +40,10 @@ const handler = async (req: Request): Promise<Response> => {
       reply_to: "supporto@idraulicisubito.com",
       to: [email],
       subject: "Benvenuto su IdrauliciSubito!",
+      text: `Ciao ${full_name},\n\nBenvenuto su IdrauliciSubito! La tua registrazione è completata.\n\nAccedi al dashboard: https://idraulicisubito.com/dashboard`,
+      headers: {
+        "List-Unsubscribe": "<mailto:supporto@idraulicisubito.com?subject=unsubscribe>",
+      },
       html: `
         <!DOCTYPE html>
         <html>

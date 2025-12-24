@@ -76,6 +76,10 @@ const handler = async (req: Request): Promise<Response> => {
       reply_to: "supporto@idraulicisubito.com",
       to: [client_email],
       subject: "Un idraulico ha accettato la tua richiesta!",
+      text: `Ciao ${client_name},\n\nUn idraulico ha accettato la tua richiesta a ${city}.\n\nIdraulico: ${plumber_name} (${plumber_business})\nTelefono: ${plumber_phone}\nIntervento: ${interventionLabel}`, 
+      headers: {
+        "List-Unsubscribe": "<mailto:supporto@idraulicisubito.com?subject=unsubscribe>",
+      },
       html: `
         <!DOCTYPE html>
         <html>

@@ -51,15 +51,12 @@ Prova gratuita: 30 giorni
 PROSSIMI PASSI
 --------------
 1. Completa il tuo profilo
-   Aggiungi una foto, la descrizione dei tuoi servizi e le zone che copri.
+   Aggiungi le citta che copri e i servizi che offri.
 
-2. Imposta la tua disponibilita
-   Indica quando sei disponibile per ricevere nuove richieste.
-
-3. Inizia a ricevere richieste
+2. Inizia a ricevere richieste
    Riceverai notifiche quando arrivano nuove richieste nella tua zona.
 
-Accedi al tuo dashboard: https://idraulicisubito.com/dashboard
+Accedi alla tua dashboard: https://idraulicisubito.com/dashboard
 
 Hai domande? Rispondi a questa email e saremo felici di aiutarti!
 
@@ -91,7 +88,7 @@ https://idraulicisubito.com`;
 
 <!-- Header -->
 <tr>
-<td style="background-color:#0066cc;padding:30px;text-align:center;border-radius:8px 8px 0 0;">
+<td style="background-color:#16a34a;padding:30px;text-align:center;border-radius:8px 8px 0 0;">
 <h1 style="margin:0;color:#ffffff;font-family:Arial,sans-serif;font-size:24px;font-weight:bold;">Benvenuto su IdrauliciSubito</h1>
 </td>
 </tr>
@@ -109,10 +106,10 @@ Siamo entusiasti di averti con noi! La tua registrazione come idraulico professi
 </p>
 
 <!-- Account Summary Box -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;background-color:#f8f9fa;border-left:4px solid #0066cc;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;background-color:#f0fdf4;border-left:4px solid #16a34a;">
 <tr>
 <td style="padding:20px;">
-<h3 style="margin:0 0 15px 0;font-size:16px;color:#0066cc;font-family:Arial,sans-serif;">Riepilogo Account</h3>
+<h3 style="margin:0 0 15px 0;font-size:16px;color:#16a34a;font-family:Arial,sans-serif;">Riepilogo Account</h3>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
 <td style="padding:5px 0;color:#666666;font-size:14px;width:120px;font-family:Arial,sans-serif;"><strong>Attivita:</strong></td>
@@ -121,12 +118,12 @@ Siamo entusiasti di averti con noi! La tua registrazione come idraulico professi
 <tr>
 <td style="padding:5px 0;color:#666666;font-size:14px;font-family:Arial,sans-serif;"><strong>Piano:</strong></td>
 <td style="padding:5px 0;font-size:14px;font-family:Arial,sans-serif;">
-<span style="background-color:#0066cc;color:#ffffff;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:bold;">${planLabel}</span>
+<span style="background-color:#16a34a;color:#ffffff;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:bold;">${planLabel}</span>
 </td>
 </tr>
 <tr>
 <td style="padding:5px 0;color:#666666;font-size:14px;font-family:Arial,sans-serif;"><strong>Prova gratuita:</strong></td>
-<td style="padding:5px 0;font-size:14px;color:#28a745;font-weight:bold;font-family:Arial,sans-serif;">30 giorni</td>
+<td style="padding:5px 0;font-size:14px;color:#16a34a;font-weight:bold;font-family:Arial,sans-serif;">30 giorni</td>
 </tr>
 </table>
 </td>
@@ -142,11 +139,11 @@ Siamo entusiasti di averti con noi! La tua registrazione come idraulico professi
 <table role="presentation" cellpadding="0" cellspacing="0">
 <tr>
 <td style="width:30px;vertical-align:top;">
-<span style="display:inline-block;width:24px;height:24px;background-color:#0066cc;color:#ffffff;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:bold;">1</span>
+<span style="display:inline-block;width:24px;height:24px;background-color:#16a34a;color:#ffffff;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:bold;">1</span>
 </td>
 <td style="padding-left:10px;">
 <strong style="color:#333333;font-size:14px;">Completa il tuo profilo</strong>
-<p style="margin:4px 0 0 0;color:#666666;font-size:13px;line-height:1.4;">Aggiungi una foto, la descrizione dei tuoi servizi e le zone che copri.</p>
+<p style="margin:4px 0 0 0;color:#666666;font-size:13px;line-height:1.4;">Aggiungi le citta che copri e i servizi che offri.</p>
 </td>
 </tr>
 </table>
@@ -157,22 +154,7 @@ Siamo entusiasti di averti con noi! La tua registrazione come idraulico professi
 <table role="presentation" cellpadding="0" cellspacing="0">
 <tr>
 <td style="width:30px;vertical-align:top;">
-<span style="display:inline-block;width:24px;height:24px;background-color:#0066cc;color:#ffffff;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:bold;">2</span>
-</td>
-<td style="padding-left:10px;">
-<strong style="color:#333333;font-size:14px;">Imposta la tua disponibilita</strong>
-<p style="margin:4px 0 0 0;color:#666666;font-size:13px;line-height:1.4;">Indica quando sei disponibile per ricevere nuove richieste.</p>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-<tr>
-<td style="padding:10px 0;font-family:Arial,sans-serif;">
-<table role="presentation" cellpadding="0" cellspacing="0">
-<tr>
-<td style="width:30px;vertical-align:top;">
-<span style="display:inline-block;width:24px;height:24px;background-color:#0066cc;color:#ffffff;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:bold;">3</span>
+<span style="display:inline-block;width:24px;height:24px;background-color:#16a34a;color:#ffffff;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:bold;">2</span>
 </td>
 <td style="padding-left:10px;">
 <strong style="color:#333333;font-size:14px;">Inizia a ricevere richieste</strong>
@@ -188,7 +170,7 @@ Siamo entusiasti di averti con noi! La tua registrazione come idraulico professi
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:25px 0;">
 <tr>
 <td align="center">
-<a href="https://idraulicisubito.com/dashboard" style="display:inline-block;background-color:#0066cc;color:#ffffff;padding:14px 30px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Accedi al Dashboard</a>
+<a href="https://idraulicisubito.com/dashboard" style="display:inline-block;background-color:#16a34a;color:#ffffff;padding:14px 30px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Accedi alla Dashboard</a>
 </td>
 </tr>
 </table>

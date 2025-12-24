@@ -99,7 +99,7 @@ https://idraulicisubito.com`;
 
 <!-- Header -->
 <tr>
-<td style="background-color:#0066cc;padding:25px;text-align:center;border-radius:8px 8px 0 0;">
+<td style="background-color:#16a34a;padding:25px;text-align:center;border-radius:8px 8px 0 0;">
 <h1 style="margin:0;color:#ffffff;font-family:Arial,sans-serif;font-size:22px;font-weight:bold;">Nuova richiesta assegnata a te!</h1>
 </td>
 </tr>
@@ -126,10 +126,10 @@ Hai ricevuto una nuova richiesta di intervento in esclusiva nella tua zona.
 </table>
 
 <!-- Request Details Box -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;background-color:#f8f9fa;border-left:4px solid #0066cc;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;background-color:#f0fdf4;border-left:4px solid #16a34a;">
 <tr>
 <td style="padding:20px;">
-<h3 style="margin:0 0 15px 0;font-size:16px;color:#0066cc;font-family:Arial,sans-serif;">Dettagli richiesta</h3>
+<h3 style="margin:0 0 15px 0;font-size:16px;color:#16a34a;font-family:Arial,sans-serif;">Dettagli richiesta</h3>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
 <td style="padding:8px 0;color:#666666;font-size:14px;width:130px;font-family:Arial,sans-serif;vertical-align:top;"><strong>Tipo intervento:</strong></td>

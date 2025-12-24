@@ -96,7 +96,7 @@ https://idraulicisubito.com`;
 
 <!-- Header -->
 <tr>
-<td style="background-color:#28a745;padding:25px;text-align:center;border-radius:8px 8px 0 0;">
+<td style="background-color:#16a34a;padding:25px;text-align:center;border-radius:8px 8px 0 0;">
 <h1 style="margin:0;color:#ffffff;font-family:Arial,sans-serif;font-size:22px;font-weight:bold;">Nuova opportunita nella tua zona!</h1>
 </td>
 </tr>
@@ -114,7 +114,7 @@ Un nuovo lavoro e disponibile nella tua zona. Un altro professionista non ha pot
 </p>
 
 <!-- Timer Warning -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;background-color:#d4edda;border:1px solid #28a745;border-radius:6px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;background-color:#dcfce7;border:1px solid #16a34a;border-radius:6px;">
 <tr>
 <td style="padding:15px;text-align:center;">
 <strong style="color:#155724;font-size:14px;font-family:Arial,sans-serif;">Hai ${timerMinutes} minuti per accettare questa opportunita</strong>
@@ -123,10 +123,10 @@ Un nuovo lavoro e disponibile nella tua zona. Un altro professionista non ha pot
 </table>
 
 <!-- Request Details Box -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;background-color:#f8f9fa;border-left:4px solid #28a745;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;background-color:#f0fdf4;border-left:4px solid #16a34a;">
 <tr>
 <td style="padding:20px;">
-<h3 style="margin:0 0 15px 0;font-size:16px;color:#28a745;font-family:Arial,sans-serif;">Dettagli richiesta</h3>
+<h3 style="margin:0 0 15px 0;font-size:16px;color:#16a34a;font-family:Arial,sans-serif;">Dettagli richiesta</h3>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
 <td style="padding:8px 0;color:#666666;font-size:14px;width:130px;font-family:Arial,sans-serif;vertical-align:top;"><strong>Tipo intervento:</strong></td>
@@ -155,7 +155,7 @@ Un nuovo lavoro e disponibile nella tua zona. Un altro professionista non ha pot
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:25px 0;">
 <tr>
 <td align="center">
-<a href="https://idraulicisubito.com/dashboard" style="display:inline-block;background-color:#28a745;color:#ffffff;padding:14px 30px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Accetta opportunita</a>
+<a href="https://idraulicisubito.com/dashboard" style="display:inline-block;background-color:#16a34a;color:#ffffff;padding:14px 30px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Accetta opportunita</a>
 </td>
 </tr>
 </table>

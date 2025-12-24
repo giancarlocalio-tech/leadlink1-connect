@@ -42,7 +42,35 @@ const URGENCY_LABELS: Record<string, string> = {
   prossimi_giorni: "Prossimi giorni",
 };
 
+async function generateMagicLink(supabase: any, email: string): Promise<string> {
+  const appOrigin = "https://idraulicisubito.com";
+  let loginUrl = `${appOrigin}/auth?mode=login`;
+  
+  try {
+    const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
+      type: "magiclink",
+      email,
+    });
+
+    if (linkError) {
+      console.error("[assign-request] generateLink error:", linkError);
+    } else {
+      const tokenHash = (linkData as any)?.properties?.hashed_token as string | undefined;
+      if (tokenHash) {
+        loginUrl = `${appOrigin}/auth/confirm?token_hash=${encodeURIComponent(tokenHash)}&type=magiclink&next=${encodeURIComponent("/dashboard")}`;
+      } else {
+        console.error("[assign-request] generateLink missing hashed_token");
+      }
+    }
+  } catch (e) {
+    console.error("[assign-request] Error generating magic link:", e);
+  }
+  
+  return loginUrl;
+}
+
 async function sendAssignmentEmail(
+  supabase: any,
   email: string, 
   fullName: string, 
   request: any,
@@ -50,6 +78,9 @@ async function sendAssignmentEmail(
 ): Promise<void> {
   const interventionLabel = INTERVENTION_LABELS[request.intervention_type] || request.intervention_type;
   const urgencyLabel = URGENCY_LABELS[request.urgency] || request.urgency;
+  
+  // Generate magic link for one-click login
+  const loginUrl = await generateMagicLink(supabase, email);
   
   const plainTextContent = `Nuova richiesta assegnata a te!
 
@@ -69,7 +100,7 @@ TEMPO PER ACCETTARE
 Hai ${timerMinutes} minuti per accettare questa richiesta prima che venga riassegnata.
 
 Accedi subito al tuo dashboard per accettare:
-https://idraulicisubito.com/dashboard
+${loginUrl}
 
 ---
 IdrauliciSubito
@@ -158,7 +189,7 @@ Hai ricevuto una nuova richiesta di intervento in esclusiva nella tua zona.
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:25px 0;">
 <tr>
 <td align="center">
-<a href="https://idraulicisubito.com/dashboard" style="display:inline-block;background-color:#28a745;color:#ffffff;padding:14px 30px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Accetta richiesta</a>
+<a href="${loginUrl}" style="display:inline-block;background-color:#16a34a;color:#ffffff;padding:14px 30px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Accetta richiesta</a>
 </td>
 </tr>
 </table>
@@ -316,7 +347,7 @@ serve(async (req) => {
 
     if (plumber) {
       try {
-        await sendAssignmentEmail(plumber.email, plumber.full_name, request, timerMinutes);
+        await sendAssignmentEmail(supabase, plumber.email, plumber.full_name, request, timerMinutes);
         console.log(`[assign-request] Notification email sent to: ${plumber.email}`);
       } catch (emailError) {
         console.error(`[assign-request] Failed to send email:`, emailError);

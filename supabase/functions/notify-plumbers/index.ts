@@ -214,7 +214,7 @@ const handler = async (req: Request): Promise<Response> => {
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
             </head>
             <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
-              <div style="background: linear-gradient(135deg, #0066cc 0%, #004d99 100%); padding: 40px 30px; border-radius: 16px 16px 0 0; text-align: center;">
+              <div style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); padding: 40px 30px; border-radius: 16px 16px 0 0; text-align: center;">
                 <h1 style="color: white; margin: 0; font-size: 28px;">🔧 Nuova Richiesta di Intervento</h1>
               </div>
               
@@ -223,8 +223,8 @@ const handler = async (req: Request): Promise<Response> => {
                 
                 <p style="font-size: 16px;">È arrivata una nuova richiesta di intervento nella tua zona!</p>
                 
-                <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 24px; border-radius: 12px; margin: 24px 0; border-left: 4px solid #0066cc;">
-                  <h3 style="margin-top: 0; color: #0066cc; font-size: 18px;">📋 Dettagli Richiesta</h3>
+                <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); padding: 24px; border-radius: 12px; margin: 24px 0; border-left: 4px solid #16a34a;">
+                  <h3 style="margin-top: 0; color: #16a34a; font-size: 18px;">📋 Dettagli Richiesta</h3>
                   <table style="width: 100%; border-collapse: collapse;">
                     <tr>
                       <td style="padding: 10px 0; color: #666; width: 140px;"><strong>Tipo intervento:</strong></td>
@@ -258,7 +258,7 @@ const handler = async (req: Request): Promise<Response> => {
                 
                 <div style="text-align: center; margin-top: 32px;">
                   <a href="https://idraulicisubito.com/dashboard" 
-                     style="display: inline-block; background: linear-gradient(135deg, #0066cc 0%, #004d99 100%); color: white; padding: 16px 40px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);">
+                     style="display: inline-block; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; padding: 16px 40px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);">
                     Visualizza nel Dashboard
                   </a>
                 </div>

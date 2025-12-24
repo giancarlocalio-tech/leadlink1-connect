@@ -35,105 +35,185 @@ const handler = async (req: Request): Promise<Response> => {
 
     const planLabel = PLAN_LABELS[plan_type] || plan_type;
 
+    // Plain text version - complete and professional
+    const plainTextContent = `Benvenuto su IdrauliciSubito!
+
+Ciao ${full_name},
+
+Siamo entusiasti di averti con noi! La tua registrazione come idraulico professionista e stata completata con successo.
+
+RIEPILOGO ACCOUNT
+-----------------
+Attivita: ${business_name}
+Piano: ${planLabel}
+Prova gratuita: 30 giorni
+
+PROSSIMI PASSI
+--------------
+1. Completa il tuo profilo
+   Aggiungi una foto, la descrizione dei tuoi servizi e le zone che copri.
+
+2. Imposta la tua disponibilita
+   Indica quando sei disponibile per ricevere nuove richieste.
+
+3. Inizia a ricevere richieste
+   Riceverai notifiche quando arrivano nuove richieste nella tua zona.
+
+Accedi al tuo dashboard: https://idraulicisubito.com/dashboard
+
+Hai domande? Rispondi a questa email e saremo felici di aiutarti!
+
+---
+IdrauliciSubito
+https://idraulicisubito.com`;
+
     const emailResponse = await resend.emails.send({
-      from: "IdrauliciSubito <noreply@idraulicisubito.com>",
+      from: "IdrauliciSubito <benvenuto@idraulicisubito.com>",
       reply_to: "supporto@idraulicisubito.com",
       to: [email],
-      subject: "Benvenuto su IdrauliciSubito!",
-      text: `Ciao ${full_name},\n\nBenvenuto su IdrauliciSubito! La tua registrazione è completata.\n\nAccedi al dashboard: https://idraulicisubito.com/dashboard`,
+      subject: "Benvenuto su IdrauliciSubito - La tua registrazione e completata",
+      text: plainTextContent,
       headers: {
         "List-Unsubscribe": "<mailto:supporto@idraulicisubito.com?subject=unsubscribe>",
       },
-      html: `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        </head>
-        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
-          <div style="background: linear-gradient(135deg, #0066cc 0%, #004d99 100%); padding: 40px 30px; border-radius: 16px 16px 0 0; text-align: center;">
-            <h1 style="color: white; margin: 0; font-size: 28px;">🎉 Benvenuto su IdrauliciSubito!</h1>
-          </div>
-          
-          <div style="background: white; padding: 40px 30px; border-radius: 0 0 16px 16px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <p style="font-size: 18px; margin-top: 0;">Ciao <strong>${full_name}</strong>,</p>
-            
-            <p style="font-size: 16px;">Siamo entusiasti di averti con noi! La tua registrazione come idraulico professionista è stata completata con successo.</p>
-            
-            <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 24px; border-radius: 12px; margin: 24px 0; border-left: 4px solid #0066cc;">
-              <h3 style="margin-top: 0; color: #0066cc; font-size: 18px;">📋 Riepilogo Account</h3>
-              <table style="width: 100%; border-collapse: collapse;">
-                <tr>
-                  <td style="padding: 10px 0; color: #666; width: 140px;"><strong>Attività:</strong></td>
-                  <td style="padding: 10px 0; font-size: 16px;">${business_name}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 10px 0; color: #666;"><strong>Piano:</strong></td>
-                  <td style="padding: 10px 0;">
-                    <span style="background: linear-gradient(135deg, #0066cc 0%, #004d99 100%); color: white; padding: 6px 16px; border-radius: 20px; font-size: 14px; font-weight: 600;">
-                      ${planLabel}
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding: 10px 0; color: #666;"><strong>Prova gratuita:</strong></td>
-                  <td style="padding: 10px 0; font-size: 16px;">
-                    <span style="color: #28a745; font-weight: 600;">30 giorni</span>
-                  </td>
-                </tr>
-              </table>
-            </div>
+      html: `<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Benvenuto su IdrauliciSubito</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f5f5f5;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5;">
+<tr>
+<td align="center" style="padding:20px;">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
 
-            <h3 style="color: #333; font-size: 18px; margin-top: 32px;">🚀 Prossimi passi</h3>
-            
-            <div style="margin: 16px 0;">
-              <div style="display: flex; align-items: flex-start; margin-bottom: 16px;">
-                <span style="background: #0066cc; color: white; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px; flex-shrink: 0;">1</span>
-                <div>
-                  <strong style="color: #333;">Completa il tuo profilo</strong>
-                  <p style="margin: 4px 0 0 0; color: #666; font-size: 14px;">Aggiungi una foto, la descrizione dei tuoi servizi e le zone che copri.</p>
-                </div>
-              </div>
-              
-              <div style="display: flex; align-items: flex-start; margin-bottom: 16px;">
-                <span style="background: #0066cc; color: white; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px; flex-shrink: 0;">2</span>
-                <div>
-                  <strong style="color: #333;">Imposta la tua disponibilità</strong>
-                  <p style="margin: 4px 0 0 0; color: #666; font-size: 14px;">Indica quando sei disponibile per ricevere nuove richieste.</p>
-                </div>
-              </div>
-              
-              <div style="display: flex; align-items: flex-start;">
-                <span style="background: #0066cc; color: white; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px; flex-shrink: 0;">3</span>
-                <div>
-                  <strong style="color: #333;">Inizia a ricevere richieste</strong>
-                  <p style="margin: 4px 0 0 0; color: #666; font-size: 14px;">Riceverai notifiche quando arrivano nuove richieste nella tua zona.</p>
-                </div>
-              </div>
-            </div>
-            
-            <div style="text-align: center; margin-top: 32px;">
-              <a href="https://idraulicisubito.com/dashboard" 
-                 style="display: inline-block; background: linear-gradient(135deg, #0066cc 0%, #004d99 100%); color: white; padding: 16px 40px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);">
-                Accedi al Dashboard
-              </a>
-            </div>
-            
-            <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #eee;">
-              <p style="font-size: 14px; color: #666; margin: 0;">
-                Hai domande? Rispondi a questa email e saremo felici di aiutarti!
-              </p>
-            </div>
-          </div>
-          
-          <div style="text-align: center; padding: 24px; color: #999; font-size: 12px;">
-            <p style="margin: 0;">Questa email è stata inviata da IdrauliciSubito</p>
-            <p style="margin: 8px 0 0 0;">© ${new Date().getFullYear()} IdrauliciSubito. Tutti i diritti riservati.</p>
-          </div>
-        </body>
-        </html>
-      `,
+<!-- Header -->
+<tr>
+<td style="background-color:#0066cc;padding:30px;text-align:center;border-radius:8px 8px 0 0;">
+<h1 style="margin:0;color:#ffffff;font-family:Arial,sans-serif;font-size:24px;font-weight:bold;">Benvenuto su IdrauliciSubito</h1>
+</td>
+</tr>
+
+<!-- Main Content -->
+<tr>
+<td style="background-color:#ffffff;padding:30px;font-family:Arial,sans-serif;">
+
+<p style="margin:0 0 20px 0;font-size:16px;line-height:1.5;color:#333333;">
+Ciao <strong>${full_name}</strong>,
+</p>
+
+<p style="margin:0 0 20px 0;font-size:16px;line-height:1.5;color:#333333;">
+Siamo entusiasti di averti con noi! La tua registrazione come idraulico professionista e stata completata con successo.
+</p>
+
+<!-- Account Summary Box -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;background-color:#f8f9fa;border-left:4px solid #0066cc;">
+<tr>
+<td style="padding:20px;">
+<h3 style="margin:0 0 15px 0;font-size:16px;color:#0066cc;font-family:Arial,sans-serif;">Riepilogo Account</h3>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+<tr>
+<td style="padding:5px 0;color:#666666;font-size:14px;width:120px;font-family:Arial,sans-serif;"><strong>Attivita:</strong></td>
+<td style="padding:5px 0;font-size:14px;color:#333333;font-family:Arial,sans-serif;">${business_name}</td>
+</tr>
+<tr>
+<td style="padding:5px 0;color:#666666;font-size:14px;font-family:Arial,sans-serif;"><strong>Piano:</strong></td>
+<td style="padding:5px 0;font-size:14px;font-family:Arial,sans-serif;">
+<span style="background-color:#0066cc;color:#ffffff;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:bold;">${planLabel}</span>
+</td>
+</tr>
+<tr>
+<td style="padding:5px 0;color:#666666;font-size:14px;font-family:Arial,sans-serif;"><strong>Prova gratuita:</strong></td>
+<td style="padding:5px 0;font-size:14px;color:#28a745;font-weight:bold;font-family:Arial,sans-serif;">30 giorni</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+
+<!-- Next Steps -->
+<h3 style="margin:25px 0 15px 0;font-size:16px;color:#333333;font-family:Arial,sans-serif;">Prossimi passi</h3>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+<tr>
+<td style="padding:10px 0;font-family:Arial,sans-serif;">
+<table role="presentation" cellpadding="0" cellspacing="0">
+<tr>
+<td style="width:30px;vertical-align:top;">
+<span style="display:inline-block;width:24px;height:24px;background-color:#0066cc;color:#ffffff;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:bold;">1</span>
+</td>
+<td style="padding-left:10px;">
+<strong style="color:#333333;font-size:14px;">Completa il tuo profilo</strong>
+<p style="margin:4px 0 0 0;color:#666666;font-size:13px;line-height:1.4;">Aggiungi una foto, la descrizione dei tuoi servizi e le zone che copri.</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td style="padding:10px 0;font-family:Arial,sans-serif;">
+<table role="presentation" cellpadding="0" cellspacing="0">
+<tr>
+<td style="width:30px;vertical-align:top;">
+<span style="display:inline-block;width:24px;height:24px;background-color:#0066cc;color:#ffffff;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:bold;">2</span>
+</td>
+<td style="padding-left:10px;">
+<strong style="color:#333333;font-size:14px;">Imposta la tua disponibilita</strong>
+<p style="margin:4px 0 0 0;color:#666666;font-size:13px;line-height:1.4;">Indica quando sei disponibile per ricevere nuove richieste.</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td style="padding:10px 0;font-family:Arial,sans-serif;">
+<table role="presentation" cellpadding="0" cellspacing="0">
+<tr>
+<td style="width:30px;vertical-align:top;">
+<span style="display:inline-block;width:24px;height:24px;background-color:#0066cc;color:#ffffff;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:bold;">3</span>
+</td>
+<td style="padding-left:10px;">
+<strong style="color:#333333;font-size:14px;">Inizia a ricevere richieste</strong>
+<p style="margin:4px 0 0 0;color:#666666;font-size:13px;line-height:1.4;">Riceverai notifiche quando arrivano nuove richieste nella tua zona.</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+
+<!-- CTA Button -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:25px 0;">
+<tr>
+<td align="center">
+<a href="https://idraulicisubito.com/dashboard" style="display:inline-block;background-color:#0066cc;color:#ffffff;padding:14px 30px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Accedi al Dashboard</a>
+</td>
+</tr>
+</table>
+
+<p style="margin:20px 0 0 0;padding-top:20px;border-top:1px solid #eeeeee;font-size:14px;color:#666666;font-family:Arial,sans-serif;">
+Hai domande? Rispondi a questa email e saremo felici di aiutarti!
+</p>
+
+</td>
+</tr>
+
+<!-- Footer -->
+<tr>
+<td style="padding:20px;text-align:center;font-family:Arial,sans-serif;">
+<p style="margin:0;font-size:12px;color:#999999;">Questa email e stata inviata da IdrauliciSubito</p>
+<p style="margin:8px 0 0 0;font-size:12px;color:#999999;">IdrauliciSubito - https://idraulicisubito.com</p>
+</td>
+</tr>
+
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>`,
     });
 
     console.log("Welcome email sent successfully:", emailResponse);

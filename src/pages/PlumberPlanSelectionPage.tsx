@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Check, Crown, Star, Zap, Shield, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/Layout';
@@ -58,24 +58,35 @@ const PLANS = [
 
 export default function PlumberPlanSelectionPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const justRegistered = location.state?.justRegistered === true;
   const { user, loading: authLoading } = useAuth();
   const { profile, loading: profileLoading } = usePlumberProfile();
   const { createCheckout, checkoutLoading } = useStripeSubscription();
   const [selectedPlan, setSelectedPlan] = useState<StripePlanType | null>(null);
 
-  // Redirect if not logged in or no profile
+  // Redirect if not logged in - skip profile check if just registered
   useEffect(() => {
-    if (!authLoading && !profileLoading) {
-      if (!user) {
-        navigate('/per-idraulici');
-        return;
-      }
-      if (!profile) {
-        navigate('/per-idraulici');
-        return;
-      }
+    // Wait for auth to finish loading
+    if (authLoading) return;
+    
+    // If no user, definitely redirect
+    if (!user) {
+      navigate('/per-idraulici');
+      return;
     }
-  }, [user, profile, authLoading, profileLoading, navigate]);
+    
+    // If just registered, skip profile check - profile was just created
+    if (justRegistered) return;
+    
+    // Wait for profile loading to complete
+    if (profileLoading) return;
+    
+    // Only redirect if profile is definitely missing after loading
+    if (!profile) {
+      navigate('/per-idraulici');
+    }
+  }, [user, profile, authLoading, profileLoading, navigate, justRegistered]);
 
   const handleSelectPlan = async (planType: StripePlanType) => {
     setSelectedPlan(planType);

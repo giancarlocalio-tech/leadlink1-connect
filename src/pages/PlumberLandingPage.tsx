@@ -245,7 +245,7 @@ export default function PlumberLandingPage() {
       }
 
       toast.success('Registrazione completata! Ora scegli il tuo piano.');
-      navigate('/registrazione/piano');
+      navigate('/registrazione/piano', { state: { justRegistered: true } });
     } catch (error) {
       console.error('Registration error:', error);
       toast.error('Errore durante la registrazione');

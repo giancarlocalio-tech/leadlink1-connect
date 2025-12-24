@@ -22,7 +22,7 @@ serve(async (req) => {
     // Find all expired assignments
     const { data: expiredRequests, error: fetchError } = await supabase
       .from('service_requests')
-      .select('id, current_assignee_id, urgency, city, assignment_expires_at')
+      .select('id, assigned_plumber_id, urgency, city, assignment_expires_at')
       .eq('status', 'assigned')
       .lt('assignment_expires_at', new Date().toISOString());
 
@@ -65,15 +65,15 @@ serve(async (req) => {
           if (result === 'reassigned') {
             const { data: updatedRequest } = await supabase
               .from('service_requests')
-              .select('current_assignee_id')
+              .select('assigned_plumber_id')
               .eq('id', request.id)
               .single();
 
-            if (updatedRequest?.current_assignee_id) {
+            if (updatedRequest?.assigned_plumber_id) {
               const { data: plumber } = await supabase
                 .from('plumber_profiles')
                 .select('email, full_name')
-                .eq('id', updatedRequest.current_assignee_id)
+                .eq('id', updatedRequest.assigned_plumber_id)
                 .single();
 
               if (plumber) {

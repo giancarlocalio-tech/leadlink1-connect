@@ -192,7 +192,7 @@ const handler = async (req: Request): Promise<Response> => {
 
       try {
         const emailResult = await resend.emails.send({
-          from: "IdraulicoVicino <noreply@idraulicovicino.it>",
+          from: "IdraulicoVicino <onboarding@resend.dev>",
           to: [plumber.email],
           subject: `🔧 Nuova richiesta di intervento a ${serviceRequest.city}`,
           html: `

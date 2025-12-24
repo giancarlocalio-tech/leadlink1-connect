@@ -452,6 +452,62 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* CTA Idraulici Section */}
+      <section className="py-20 bg-gradient-to-br from-primary/10 via-primary/5 to-background">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 bg-success/10 text-success px-4 py-2 rounded-full text-sm font-medium mb-6">
+              <CheckCircle className="h-4 w-4" />
+              <span>30 giorni di prova gratuita</span>
+            </div>
+            
+            <h2 className="text-2xl md:text-4xl font-bold text-foreground mb-4">
+              Sei un idraulico professionista?
+            </h2>
+            <p className="text-lg text-muted-foreground mb-8">
+              Unisciti alla nostra rete e ricevi richieste di intervento direttamente dai clienti della tua zona
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 max-w-2xl mx-auto text-left">
+              <div className="flex items-start gap-3 p-4 bg-card rounded-lg border border-border">
+                <CheckCircle className="h-5 w-5 text-success shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-medium text-foreground">Clienti verificati</p>
+                  <p className="text-sm text-muted-foreground">Richieste reali da clienti nella tua zona</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-4 bg-card rounded-lg border border-border">
+                <CheckCircle className="h-5 w-5 text-success shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-medium text-foreground">Nessun costo iniziale</p>
+                  <p className="text-sm text-muted-foreground">Prova gratis per 30 giorni, nessun vincolo</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-4 bg-card rounded-lg border border-border">
+                <CheckCircle className="h-5 w-5 text-success shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-medium text-foreground">Gestione semplice</p>
+                  <p className="text-sm text-muted-foreground">Dashboard intuitiva per gestire i lavori</p>
+                </div>
+              </div>
+            </div>
+
+            <Button 
+              onClick={() => navigate('/auth?mode=signup')}
+              size="lg"
+              className="text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all"
+            >
+              Registrati gratis
+              <ArrowRight className="h-5 w-5 ml-2" />
+            </Button>
+            
+            <p className="text-sm text-muted-foreground mt-4">
+              Già registrato? <button onClick={() => navigate('/auth')} className="text-primary hover:underline font-medium">Accedi</button>
+            </p>
+          </div>
+        </div>
+      </section>
     </Layout>
   );
 }

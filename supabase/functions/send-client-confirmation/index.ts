@@ -73,8 +73,9 @@ const handler = async (req: Request): Promise<Response> => {
 
     const emailResponse = await resend.emails.send({
       from: "IdrauliciSubito <noreply@idraulicisubito.com>",
+      reply_to: "supporto@idraulicisubito.com",
       to: [client_email],
-      subject: "✅ Un idraulico ha accettato la tua richiesta!",
+      subject: "Un idraulico ha accettato la tua richiesta!",
       html: `
         <!DOCTYPE html>
         <html>

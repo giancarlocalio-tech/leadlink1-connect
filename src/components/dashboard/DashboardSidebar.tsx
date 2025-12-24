@@ -28,7 +28,7 @@ const menuItems = [
   { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
   { title: 'Richieste', url: '/dashboard/richieste', icon: FileText },
   { title: 'Abbonamento', url: '/dashboard/abbonamento', icon: CreditCard },
-  { title: 'Profilo', url: '/profilo', icon: User },
+  { title: 'Profilo', url: '/dashboard/profilo', icon: User },
 ];
 
 export function DashboardSidebar() {

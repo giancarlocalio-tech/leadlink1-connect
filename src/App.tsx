@@ -38,6 +38,7 @@ const App = () => (
           <Route path="/dashboard/richieste" element={<RequestsPage />} />
           <Route path="/dashboard/abbonamento" element={<SubscriptionPage />} />
           <Route path="/dashboard/pagamento-completato" element={<PaymentSuccessPage />} />
+          <Route path="/dashboard/profilo" element={<ProfilePage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/termini" element={<TermsPage />} />
           <Route path="/admin" element={<AdminPage />} />

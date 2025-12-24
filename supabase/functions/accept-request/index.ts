@@ -74,11 +74,12 @@ serve(async (req) => {
     // Verify this plumber is the current assignee
     const { data: request, error: requestError } = await supabaseAdmin
       .from('service_requests')
-      .select('current_assignee_id, status')
+      .select('assigned_plumber_id, status')
       .eq('id', request_id)
       .single();
 
     if (requestError || !request) {
+      console.error('[accept-request] Request fetch error:', requestError);
       return new Response(
         JSON.stringify({ error: 'Request not found' }),
         { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -92,7 +93,7 @@ serve(async (req) => {
       );
     }
 
-    if (request.current_assignee_id !== plumberProfile.id) {
+    if (request.assigned_plumber_id !== plumberProfile.id) {
       return new Response(
         JSON.stringify({ error: 'You are not the current assignee for this request' }),
         { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

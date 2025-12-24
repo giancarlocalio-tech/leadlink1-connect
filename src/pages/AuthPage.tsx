@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import { Wrench, Mail, Lock, User, Phone, Building, Users, Clock, Shield, Star, Zap, X, MapPin } from 'lucide-react';
+import { Wrench, Mail, Lock, User, Phone, Building, Users, Clock, Shield, Star, Zap, X, MapPin, Check, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,8 +10,63 @@ import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import { toast } from 'sonner';
 import { CityAutocomplete, ItalianCity } from '@/components/CityAutocomplete';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { supabase } from '@/integrations/supabase/client';
 
-type AuthMode = 'login' | 'register' | 'register-form' | 'forgot-password' | 'reset-password';
+type AuthMode = 'login' | 'register' | 'select-plan' | 'register-form' | 'forgot-password' | 'reset-password';
+type PlanType = 'basic' | 'medium' | 'premium';
+
+interface PlanInfo {
+  id: PlanType;
+  name: string;
+  price: number;
+  description: string;
+  features: string[];
+  recommended?: boolean;
+}
+
+const PLANS: PlanInfo[] = [
+  {
+    id: 'basic',
+    name: 'Basic',
+    price: 29.99,
+    description: 'Per iniziare a ricevere clienti',
+    features: [
+      '2 contatti al mese',
+      'Solo richieste non urgenti',
+      'Notifiche email',
+      'Profilo professionale'
+    ]
+  },
+  {
+    id: 'medium',
+    name: 'Medium',
+    price: 79.99,
+    description: 'Per professionisti in crescita',
+    features: [
+      '5 contatti esclusivi al mese',
+      'Tutte le urgenze',
+      'Priorità sulle richieste',
+      'Notifiche istantanee',
+      'Badge "Verificato"'
+    ],
+    recommended: true
+  },
+  {
+    id: 'premium',
+    name: 'Premium',
+    price: 149.99,
+    description: 'Per i migliori professionisti',
+    features: [
+      'Contatti illimitati',
+      'Massima priorità',
+      'Esclusività totale',
+      'Supporto dedicato',
+      'Statistiche avanzate',
+      'Badge "Top Pro"'
+    ]
+  }
+];
 
 export default function AuthPage() {
   const navigate = useNavigate();
@@ -54,6 +109,9 @@ export default function AuthPage() {
     mainCity: '',
   });
   
+  // Selected plan for registration
+  const [selectedPlan, setSelectedPlan] = useState<PlanType>('medium');
+
   // Service areas (cities) for registration
   const [serviceAreas, setServiceAreas] = useState<string[]>([]);
 
@@ -148,24 +206,50 @@ export default function AuthPage() {
     intervention_types: [];
     availability: [];
     service_areas: string[];
+    plan_type: PlanType;
   } | null>(null);
 
-  // Effect to create profile when user becomes authenticated and we have pending data
   useEffect(() => {
     const createPendingProfile = async () => {
       if (user && pendingProfileData && !profile) {
-        const { error: profileError } = await createProfile(pendingProfileData);
+        const { plan_type, ...profileData } = pendingProfileData;
+        const { error: profileError, data: newProfile } = await createProfile(profileData);
         
-        setPendingProfileData(null);
-        setIsSubmitting(false);
-
         if (profileError) {
           console.error('Profile creation error:', profileError);
           toast.error('Errore durante la creazione del profilo');
-        } else {
-          toast.success('Registrazione completata!');
-          navigate('/dashboard');
+          setPendingProfileData(null);
+          setIsSubmitting(false);
+          return;
         }
+
+        // Create subscription with 30-day trial
+        if (newProfile?.id) {
+          const trialEndsAt = new Date();
+          trialEndsAt.setDate(trialEndsAt.getDate() + 30);
+          
+          const { error: subError } = await supabase
+            .from('plumber_subscriptions')
+            .insert({
+              plumber_id: newProfile.id,
+              plan_type: plan_type,
+              status: 'active',
+              trial_ends_at: trialEndsAt.toISOString(),
+              current_period_start: new Date().toISOString(),
+              current_period_end: trialEndsAt.toISOString(),
+              monthly_contact_limit: plan_type === 'premium' ? null : plan_type === 'medium' ? 5 : 2,
+              monthly_contacts_used: 0,
+            });
+
+          if (subError) {
+            console.error('Subscription creation error:', subError);
+          }
+        }
+
+        setPendingProfileData(null);
+        setIsSubmitting(false);
+        toast.success('Registrazione completata! Hai 30 giorni di prova gratuita.');
+        navigate('/dashboard');
       }
     };
 
@@ -209,6 +293,7 @@ export default function AuthPage() {
       intervention_types: [],
       availability: [],
       service_areas: serviceAreas,
+      plan_type: selectedPlan,
     });
 
     // Create the auth user
@@ -325,7 +410,7 @@ export default function AuthPage() {
               <div className="text-center mb-10">
                 <Button 
                   size="lg" 
-                  onClick={() => setMode('register-form')}
+                  onClick={() => setMode('select-plan')}
                   className="text-lg px-8 py-6"
                 >
                   Inizia la registrazione
@@ -340,15 +425,111 @@ export default function AuthPage() {
             </div>
           )}
 
+          {/* Plan Selection Step */}
+          {mode === 'select-plan' && (
+            <div className="max-w-5xl mx-auto">
+              <div className="text-center mb-8">
+                <Button 
+                  variant="ghost" 
+                  onClick={() => setMode('register')}
+                  className="mb-4"
+                >
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Indietro
+                </Button>
+                <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+                  Scegli il piano più adatto a te
+                </h2>
+                <p className="text-muted-foreground">
+                  30 giorni di prova gratuita su tutti i piani. Nessun impegno.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                {PLANS.map((plan) => (
+                  <Card 
+                    key={plan.id}
+                    className={`relative cursor-pointer transition-all hover:shadow-lg ${
+                      selectedPlan === plan.id 
+                        ? 'ring-2 ring-primary border-primary' 
+                        : 'border-border hover:border-primary/50'
+                    } ${plan.recommended ? 'md:-mt-4 md:mb-4' : ''}`}
+                    onClick={() => setSelectedPlan(plan.id)}
+                  >
+                    {plan.recommended && (
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                        <Badge className="bg-primary text-primary-foreground">
+                          Consigliato
+                        </Badge>
+                      </div>
+                    )}
+                    <CardHeader className="text-center pb-2">
+                      <CardTitle className="text-xl">{plan.name}</CardTitle>
+                      <CardDescription>{plan.description}</CardDescription>
+                      <div className="mt-4">
+                        <span className="text-3xl font-bold text-foreground">€{plan.price}</span>
+                        <span className="text-muted-foreground">/mese</span>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-3">
+                        {plan.features.map((feature, index) => (
+                          <li key={index} className="flex items-start gap-2 text-sm">
+                            <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                            <span>{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <Button 
+                        className="w-full mt-6" 
+                        variant={selectedPlan === plan.id ? 'default' : 'outline'}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedPlan(plan.id);
+                          setMode('register-form');
+                        }}
+                      >
+                        {selectedPlan === plan.id ? 'Selezionato' : 'Seleziona'}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              <div className="text-center">
+                <Button 
+                  size="lg" 
+                  onClick={() => setMode('register-form')}
+                  className="px-8"
+                >
+                  Continua con {PLANS.find(p => p.id === selectedPlan)?.name}
+                </Button>
+                <p className="text-xs text-muted-foreground mt-4">
+                  Potrai cambiare piano in qualsiasi momento
+                </p>
+              </div>
+            </div>
+          )}
+
           {(mode === 'login' || mode === 'register-form' || mode === 'forgot-password' || mode === 'reset-password') && (
           <div className="max-w-md mx-auto">
+            {mode === 'register-form' && (
+              <Button 
+                variant="ghost" 
+                onClick={() => setMode('select-plan')}
+                className="mb-4"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Cambia piano
+              </Button>
+            )}
             <div className="text-center mb-8">
               <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <Wrench className="h-8 w-8 text-primary" />
               </div>
               <h2 className="text-2xl font-bold text-foreground">
                 {mode === 'login' && 'Accedi come Idraulico'}
-                {mode === 'register-form' && 'Crea il tuo account'}
+                {mode === 'register-form' && `Registrati - Piano ${PLANS.find(p => p.id === selectedPlan)?.name}`}
                 {mode === 'forgot-password' && 'Recupera password'}
                 {mode === 'reset-password' && 'Nuova password'}
               </h2>

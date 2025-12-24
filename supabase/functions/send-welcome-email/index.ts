@@ -37,8 +37,9 @@ const handler = async (req: Request): Promise<Response> => {
 
     const emailResponse = await resend.emails.send({
       from: "IdrauliciSubito <noreply@idraulicisubito.com>",
+      reply_to: "supporto@idraulicisubito.com",
       to: [email],
-      subject: "🎉 Benvenuto su IdrauliciSubito!",
+      subject: "Benvenuto su IdrauliciSubito!",
       html: `
         <!DOCTYPE html>
         <html>

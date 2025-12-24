@@ -38,9 +38,9 @@ const URGENCY_LABELS: Record<string, string> = {
   prossimi_giorni: "Prossimi giorni",
 };
 
-async function generateMagicLink(supabase: any, email: string): Promise<string> {
-  const appOrigin = "https://idraulicisubito.com";
-  let loginUrl = `${appOrigin}/auth?mode=login`;
+async function generateMagicLink(supabase: any, email: string, appOrigin?: string): Promise<string> {
+  const origin = appOrigin || "https://idraulicisubito.com";
+  let loginUrl = `${origin}/auth?mode=login`;
   
   try {
     const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
@@ -53,7 +53,7 @@ async function generateMagicLink(supabase: any, email: string): Promise<string> 
     } else {
       const tokenHash = (linkData as any)?.properties?.hashed_token as string | undefined;
       if (tokenHash) {
-        loginUrl = `${appOrigin}/auth/confirm?token_hash=${encodeURIComponent(tokenHash)}&type=magiclink&next=${encodeURIComponent("/dashboard")}`;
+        loginUrl = `${origin}/auth/confirm?token_hash=${encodeURIComponent(tokenHash)}&type=magiclink&next=${encodeURIComponent("/dashboard")}`;
       }
     }
   } catch (e) {
@@ -74,7 +74,8 @@ async function sendReassignmentEmail(
   const urgencyLabel = URGENCY_LABELS[request.urgency] || request.urgency;
   
   // Generate magic link for one-click login
-  const loginUrl = await generateMagicLink(supabase, email);
+  const appOrigin = "https://4cb044a8-da35-4069-9d51-2fe8de4fed9d.lovableproject.com";
+  const loginUrl = await generateMagicLink(supabase, email, appOrigin);
   
   const plainTextContent = `Nuova opportunita di lavoro nella tua zona!
 

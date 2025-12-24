@@ -53,7 +53,7 @@ export function usePlumberProfile() {
       .single();
 
     if (error) {
-      return { error };
+      return { error, data: null };
     }
 
     if (data) {
@@ -64,7 +64,7 @@ export function usePlumberProfile() {
         service_areas: (data.service_areas as string[]) || [],
       });
     }
-    return { error: null };
+    return { error: null, data };
   };
 
   const updateProfile = async (profileData: Partial<PlumberProfile>) => {

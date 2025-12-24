@@ -25,6 +25,7 @@ import {
   PROPERTY_LABELS, 
   ACCESSIBILITY_LABELS 
 } from '@/lib/types';
+import { WizardAnswersSection } from './WizardAnswersSection';
 
 interface AssignedRequestCardProps {
   request: ServiceRequest;
@@ -233,6 +234,9 @@ export function AssignedRequestCard({ request, onAccepted, onDeclined }: Assigne
             </span>
           </div>
         </div>
+
+        {/* Wizard Answers */}
+        <WizardAnswersSection answers={request.wizard_answers} />
 
         {/* Action buttons */}
         <div className="p-4 border-t border-border">

@@ -61,9 +61,13 @@ export default function RequestPage() {
   const currentStep = STEPS[currentStepIndex];
   const progress = ((currentStepIndex + 1) / STEPS.length) * 100;
 
+  // Store wizard answers from previous page
+  const [wizardAnswers, setWizardAnswers] = useState<Array<{ questionId: string; questionTitle: string; answer: string }>>([]);
+
   useEffect(() => {
     interface WizardAnswer {
       questionId: string;
+      questionTitle?: string;
       answer: string;
     }
     
@@ -79,8 +83,16 @@ export default function RequestPage() {
         ...prev,
         interventionType: state.interventionType!,
         city: state.city!,
-        description: '', // Empty - user will describe their problem freely
+        description: '',
       }));
+      // Store wizard answers with question titles
+      if (state.answers && state.answers.length > 0) {
+        setWizardAnswers(state.answers.map(a => ({
+          questionId: a.questionId,
+          questionTitle: a.questionTitle || a.questionId,
+          answer: a.answer
+        })));
+      }
     } else {
       navigate('/');
     }
@@ -157,6 +169,7 @@ export default function RequestPage() {
       client_phone: formData.clientPhone.trim(),
       client_email: formData.clientEmail?.trim() || null,
       privacy_accepted: formData.privacyAccepted,
+      wizard_answers: wizardAnswers.length > 0 ? wizardAnswers : null,
     };
 
     const { data, error } = await supabase.functions.invoke('notify-plumbers', {

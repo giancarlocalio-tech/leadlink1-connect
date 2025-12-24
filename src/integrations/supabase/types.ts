@@ -389,6 +389,7 @@ export type Database = {
           status: string | null
           updated_at: string | null
           urgency: Database["public"]["Enums"]["urgency_type"]
+          wizard_answers: Json | null
         }
         Insert: {
           accepted_at?: string | null
@@ -414,6 +415,7 @@ export type Database = {
           status?: string | null
           updated_at?: string | null
           urgency: Database["public"]["Enums"]["urgency_type"]
+          wizard_answers?: Json | null
         }
         Update: {
           accepted_at?: string | null
@@ -439,6 +441,7 @@ export type Database = {
           status?: string | null
           updated_at?: string | null
           urgency?: Database["public"]["Enums"]["urgency_type"]
+          wizard_answers?: Json | null
         }
         Relationships: [
           {

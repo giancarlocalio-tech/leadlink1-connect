@@ -143,6 +143,7 @@ export default function DashboardPage() {
       assignment_round: r.assignment_round ?? 0,
       accepted_at: r.accepted_at || undefined,
       accepted_by_id: r.accepted_by_id || undefined,
+      wizard_answers: r.wizard_answers || undefined,
     }));
     
     setAssignedRequests(mappedRequests.filter((r: any) => r.status === 'assigned'));

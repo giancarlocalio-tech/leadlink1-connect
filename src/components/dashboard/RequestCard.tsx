@@ -21,6 +21,7 @@ import {
   PROPERTY_LABELS, 
   ACCESSIBILITY_LABELS 
 } from '@/lib/types';
+import { WizardAnswersSection } from './WizardAnswersSection';
 
 interface RequestCardProps {
   request: ServiceRequest;
@@ -116,6 +117,9 @@ export function RequestCard({ request, isUnlocked, canUnlock, onUnlock }: Reques
             </span>
           </div>
         </div>
+
+        {/* Wizard Answers */}
+        <WizardAnswersSection answers={request.wizard_answers} />
 
         {/* Contact section */}
         <div className="p-4 border-t border-border">

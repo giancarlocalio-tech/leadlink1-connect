@@ -46,6 +46,15 @@ export type SubscriptionPlan = 'basic' | 'medium' | 'premium';
 export type SubscriptionStatus = 'active' | 'cancelled' | 'expired' | 'pending' | 'trial';
 export type RequestStatus = 'new' | 'pending' | 'assigned' | 'accepted' | 'expired' | 'completed' | 'canceled';
 
+export interface WizardAnswer {
+  questionId: string;
+  questionTitle: string;
+  answer: string;
+}
+
+// Type for wizard_answers that could come from database as JSON or as typed array
+export type WizardAnswersData = WizardAnswer[] | null | undefined;
+
 export interface ServiceRequest {
   id: string;
   intervention_type: InterventionType;
@@ -74,6 +83,8 @@ export interface ServiceRequest {
   accepted_by_id?: string;
   // For plumber view
   is_contact_unlocked?: boolean;
+  // Wizard answers - can be JSON from DB or typed array
+  wizard_answers?: WizardAnswer[] | unknown;
 }
 
 export interface PlumberProfile {

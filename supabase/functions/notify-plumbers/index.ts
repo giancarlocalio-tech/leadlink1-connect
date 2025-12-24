@@ -74,6 +74,11 @@ const handler = async (req: Request): Promise<Response> => {
         client_phone: z.string().trim().min(3).max(30),
         client_email: z.string().trim().email().nullable().optional(),
         privacy_accepted: z.literal(true),
+        wizard_answers: z.array(z.object({
+          questionId: z.string(),
+          questionTitle: z.string(),
+          answer: z.string(),
+        })).nullable().optional(),
       })
       .strict();
 
@@ -113,6 +118,7 @@ const handler = async (req: Request): Promise<Response> => {
         .insert({
           ...parsed,
           client_email: parsed.client_email ?? null,
+          wizard_answers: parsed.wizard_answers ?? null,
         })
         .select("*")
         .single();

@@ -73,8 +73,9 @@ const INTERVENTION_ICONS: Partial<Record<InterventionType, React.ReactNode>> = {
   altro: <HelpCircle className="h-5 w-5" />,
 };
 
-interface WizardAnswer {
+interface WizardAnswerLocal {
   questionId: string;
+  questionTitle: string;
   answer: string;
 }
 
@@ -82,7 +83,7 @@ export default function HomePage() {
   const navigate = useNavigate();
   const [step, setStep] = useState<'intervention' | 'questions' | 'city'>('intervention');
   const [selectedType, setSelectedType] = useState<InterventionType | null>(null);
-  const [answers, setAnswers] = useState<WizardAnswer[]>([]);
+  const [answers, setAnswers] = useState<WizardAnswerLocal[]>([]);
   const [currentQuestionId, setCurrentQuestionId] = useState<string | null>(null);
   const [city, setCity] = useState('');
   const [selectedCity, setSelectedCity] = useState<ItalianCity | null>(null);
@@ -121,7 +122,12 @@ export default function HomePage() {
     if (flow) {
       // Special case for sostituzione_rubinetto - preselect Rubinetto
       if (type === 'sostituzione_rubinetto') {
-        setAnswers([{ questionId: 'cosa_sostituire', answer: 'Rubinetto' }]);
+        const startQuestion = flow.questions['cosa_sostituire'];
+        setAnswers([{ 
+          questionId: 'cosa_sostituire', 
+          questionTitle: startQuestion?.title || 'Cosa vorresti sostituire?',
+          answer: 'Rubinetto' 
+        }]);
         setCurrentQuestionId('rubinetto_tipo');
         setStep('questions');
       } else {
@@ -137,7 +143,11 @@ export default function HomePage() {
     const question = getCurrentQuestion();
     if (!question) return;
 
-    const newAnswers = [...answers, { questionId: question.id, answer }];
+    const newAnswers = [...answers, { 
+      questionId: question.id, 
+      questionTitle: question.title,
+      answer 
+    }];
     setAnswers(newAnswers);
 
     const nextId = getNextQuestionId(question, answer);

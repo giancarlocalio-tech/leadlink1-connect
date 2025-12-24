@@ -244,6 +244,21 @@ export default function AuthPage() {
           if (subError) {
             console.error('Subscription creation error:', subError);
           }
+
+          // Send welcome email
+          try {
+            await supabase.functions.invoke('send-welcome-email', {
+              body: {
+                email: profileData.email,
+                full_name: profileData.full_name,
+                business_name: profileData.business_name,
+                plan_type: plan_type,
+              },
+            });
+          } catch (emailError) {
+            console.error('Welcome email error:', emailError);
+            // Don't block registration if email fails
+          }
         }
 
         setPendingProfileData(null);

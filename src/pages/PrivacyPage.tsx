@@ -1,6 +1,11 @@
+import { useEffect } from 'react';
 import { Layout } from '@/components/Layout';
 
 export default function PrivacyPage() {
+  useEffect(() => {
+    document.title = "Privacy Policy | Idraulici Subito";
+  }, []);
+
   return (
     <Layout>
       <div className="py-8 md:py-12">

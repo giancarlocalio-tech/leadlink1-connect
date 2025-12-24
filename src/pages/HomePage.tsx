@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Droplets, 
@@ -89,6 +89,11 @@ export default function HomePage() {
   const [selectedCity, setSelectedCity] = useState<ItalianCity | null>(null);
   const [searchFilter, setSearchFilter] = useState('');
   const [showModal, setShowModal] = useState(false);
+
+  // SEO Meta tags
+  useEffect(() => {
+    document.title = "Idraulici Subito - Trova Idraulici Professionisti nella Tua Zona | Preventivi Gratuiti";
+  }, []);
 
   const filteredTypes = ALL_INTERVENTION_TYPES.filter(type =>
     INTERVENTION_LABELS[type].toLowerCase().includes(searchFilter.toLowerCase())

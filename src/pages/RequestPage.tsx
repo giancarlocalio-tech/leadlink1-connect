@@ -44,6 +44,15 @@ export default function RequestPage() {
   const navigate = useNavigate();
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // SEO Meta tags
+  useEffect(() => {
+    document.title = "Richiedi Preventivo Idraulico Gratuito | Idraulici Subito";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Compila il modulo per ricevere preventivi gratuiti da idraulici professionisti nella tua zona. Risposta rapida garantita.');
+    }
+  }, []);
   
   const [formData, setFormData] = useState<RequestFormData>({
     interventionType: '',

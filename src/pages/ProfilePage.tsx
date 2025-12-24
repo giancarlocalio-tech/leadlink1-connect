@@ -140,6 +140,11 @@ export default function ProfilePage() {
 
     setIsSaving(true);
 
+    // Ensure main_city is always included in service_areas
+    const finalServiceAreas = formData.serviceAreas.includes(formData.mainCity)
+      ? formData.serviceAreas
+      : [formData.mainCity, ...formData.serviceAreas];
+
     const { error } = await updateProfile({
       full_name: formData.fullName,
       business_name: formData.businessName,
@@ -148,7 +153,7 @@ export default function ProfilePage() {
       description: formData.description,
       intervention_types: formData.interventionTypes,
       availability: formData.availability,
-      service_areas: formData.serviceAreas.length > 0 ? formData.serviceAreas : [formData.mainCity],
+      service_areas: finalServiceAreas,
     });
 
     setIsSaving(false);

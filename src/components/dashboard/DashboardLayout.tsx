@@ -22,17 +22,17 @@ export function DashboardLayout({ children, title, breadcrumbs }: DashboardLayou
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
         <DashboardSidebar />
-        <SidebarInset className="flex-1">
-          <header className="flex h-14 shrink-0 items-center gap-2 border-b border-border px-4">
+        <SidebarInset className="flex-1 flex flex-col min-w-0">
+          <header className="flex h-14 shrink-0 items-center gap-2 border-b border-border px-3 md:px-4 sticky top-0 bg-background z-10">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
+            <Breadcrumb className="overflow-hidden">
+              <BreadcrumbList className="flex-nowrap overflow-hidden">
+                <BreadcrumbItem className="hidden sm:block">
                   <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
                 </BreadcrumbItem>
                 {breadcrumbs?.map((item, index) => (
-                  <BreadcrumbItem key={index}>
+                  <BreadcrumbItem key={index} className="hidden sm:flex">
                     <BreadcrumbSeparator />
                     {item.href ? (
                       <BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
@@ -44,9 +44,9 @@ export function DashboardLayout({ children, title, breadcrumbs }: DashboardLayou
               </BreadcrumbList>
             </Breadcrumb>
           </header>
-          <main className="flex-1 p-4 md:p-6">
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold text-foreground">{title}</h1>
+          <main className="flex-1 p-3 md:p-6 overflow-x-hidden">
+            <div className="mb-4 md:mb-6">
+              <h1 className="text-xl md:text-2xl font-bold text-foreground truncate">{title}</h1>
             </div>
             {children}
           </main>

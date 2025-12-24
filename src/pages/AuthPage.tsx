@@ -164,8 +164,17 @@ export default function AuthPage() {
       return;
     }
 
-    if (newPassword.length < 6) {
-      toast.error('La password deve essere di almeno 6 caratteri');
+    if (newPassword.length < 12) {
+      toast.error('La password deve essere di almeno 12 caratteri');
+      return;
+    }
+
+    const hasUpper = /[A-Z]/.test(newPassword);
+    const hasLower = /[a-z]/.test(newPassword);
+    const hasNumber = /[0-9]/.test(newPassword);
+
+    if (!(hasUpper && hasLower && hasNumber)) {
+      toast.error('La password deve includere maiuscole, minuscole e numeri');
       return;
     }
 
@@ -297,10 +306,19 @@ export default function AuthPage() {
       return;
     }
 
-    if (registerData.password.length < 6) {
-      toast.error('La password deve essere di almeno 6 caratteri');
-      return;
-    }
+     if (registerData.password.length < 12) {
+       toast.error('La password deve essere di almeno 12 caratteri');
+       return;
+     }
+
+     const hasUpper = /[A-Z]/.test(registerData.password);
+     const hasLower = /[a-z]/.test(registerData.password);
+     const hasNumber = /[0-9]/.test(registerData.password);
+
+     if (!(hasUpper && hasLower && hasNumber)) {
+       toast.error('La password deve includere maiuscole, minuscole e numeri');
+       return;
+     }
 
     setIsSubmitting(true);
 

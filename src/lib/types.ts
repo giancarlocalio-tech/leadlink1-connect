@@ -43,7 +43,8 @@ export type AvailabilityType =
   | 'emergenze';
 
 export type SubscriptionPlan = 'basic' | 'medium' | 'premium';
-export type SubscriptionStatus = 'active' | 'cancelled' | 'expired' | 'pending';
+export type SubscriptionStatus = 'active' | 'cancelled' | 'expired' | 'pending' | 'trial';
+export type RequestStatus = 'new' | 'pending' | 'assigned' | 'accepted' | 'expired' | 'completed' | 'canceled';
 
 export interface ServiceRequest {
   id: string;
@@ -57,12 +58,22 @@ export interface ServiceRequest {
   client_phone: string;
   client_email?: string;
   privacy_accepted: boolean;
-  status: string;
+  status: string; // Keep as string for compatibility with DB
   created_at: string;
   updated_at: string;
   assigned_plumber_id?: string;
   is_exclusive: boolean;
   assigned_at?: string;
+  // New assignment fields (optional for backwards compatibility)
+  current_assignee_id?: string;
+  current_assignee_plan?: string;
+  assignment_started_at?: string;
+  assignment_expires_at?: string;
+  assignment_round?: number;
+  accepted_at?: string;
+  accepted_by_id?: string;
+  // For plumber view
+  is_contact_unlocked?: boolean;
 }
 
 export interface PlumberProfile {
@@ -107,8 +118,28 @@ export interface PlumberSubscription {
   exclusive_contacts_used: number;
   stripe_customer_id?: string;
   stripe_subscription_id?: string;
+  trial_ends_at?: string;
+  // New fields for assignment system
+  monthly_contact_limit?: number;
+  monthly_contacts_used: number;
+  contacts_reset_at?: string;
+  is_available: boolean;
+  last_assigned_at?: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface AssignmentLog {
+  id: string;
+  request_id: string;
+  plumber_id: string;
+  plumber_plan: SubscriptionPlan;
+  assigned_at: string;
+  expires_at: string;
+  responded: boolean;
+  response_type?: 'accepted' | 'declined' | 'timeout';
+  response_at?: string;
+  created_at: string;
 }
 
 export interface ContactUnlock {

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckCircle, ArrowRight, Crown, Star, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -9,7 +9,8 @@ import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 
 export default function PaymentSuccessPage() {
   const navigate = useNavigate();
-  const { user, loading: authLoading } = useAuth();
+  const { user, session, loading: authLoading } = useAuth();
+  const [retryCount, setRetryCount] = useState(0);
   const { 
     currentPlan, 
     subscriptionEnd, 
@@ -18,12 +19,25 @@ export default function PaymentSuccessPage() {
     loading: subLoading 
   } = useStripeSubscription();
 
-  // Refresh subscription status on mount
+  // Refresh subscription status on mount and when session becomes available
   useEffect(() => {
-    checkSubscription();
-  }, []);
+    if (session?.access_token) {
+      checkSubscription();
+    }
+  }, [session?.access_token, checkSubscription]);
 
-  // Redirect if not authenticated
+  // Retry checking subscription a few times if not subscribed yet (payment processing delay)
+  useEffect(() => {
+    if (!subLoading && session?.access_token && !isSubscribed && retryCount < 3) {
+      const timer = setTimeout(() => {
+        setRetryCount(prev => prev + 1);
+        checkSubscription();
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [subLoading, session?.access_token, isSubscribed, retryCount, checkSubscription]);
+
+  // Redirect if not authenticated after loading
   useEffect(() => {
     if (!authLoading && !user) {
       navigate('/auth');

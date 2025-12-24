@@ -78,10 +78,10 @@ export function useStripeSubscription() {
     return () => clearInterval(interval);
   }, [user, checkSubscription]);
 
-  const createCheckout = async (planType: StripePlanType) => {
+  const createCheckout = async (planType: StripePlanType): Promise<string | null> => {
     if (!session?.access_token) {
       toast.error('Devi effettuare il login per abbonarti');
-      return;
+      return null;
     }
 
     setCheckoutLoading(true);
@@ -99,15 +99,17 @@ export function useStripeSubscription() {
       if (error) {
         console.error('Error creating checkout:', error);
         toast.error('Errore nella creazione del checkout');
-        return;
+        return null;
       }
 
       if (data?.url) {
-        window.open(data.url, '_blank');
+        return data.url;
       }
+      return null;
     } catch (err) {
       console.error('Error invoking create-checkout:', err);
       toast.error('Errore nella creazione del checkout');
+      return null;
     } finally {
       setCheckoutLoading(false);
     }

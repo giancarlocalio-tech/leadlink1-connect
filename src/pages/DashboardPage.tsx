@@ -195,6 +195,31 @@ export default function DashboardPage() {
   return (
     <DashboardLayout title={`Bentornato, ${profile.full_name}`}>
       <div className="space-y-6">
+        {/* Assigned Requests - Priority Section (FIRST - requires immediate action) */}
+        {assignedRequests.length > 0 && (
+          <Card className="border-primary/50 bg-primary/5">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Zap className="h-5 w-5 text-primary" />
+                Richieste assegnate a te
+              </CardTitle>
+              <CardDescription>
+                Queste richieste sono in esclusiva per te. Accetta prima che scada il tempo!
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {assignedRequests.map((request) => (
+                <AssignedRequestCard
+                  key={request.id}
+                  request={request}
+                  onAccepted={() => fetchAssignedRequests()}
+                  onDeclined={() => fetchAssignedRequests()}
+                />
+              ))}
+            </CardContent>
+          </Card>
+        )}
+
         {/* Accepted Requests - Show client contact details */}
         {acceptedRequests.length > 0 && (
           <Card className="border-green-500/50 bg-green-500/5">
@@ -209,31 +234,6 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               {acceptedRequests.map((request) => (
-                <AssignedRequestCard
-                  key={request.id}
-                  request={request}
-                  onAccepted={() => fetchAssignedRequests()}
-                  onDeclined={() => fetchAssignedRequests()}
-                />
-              ))}
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Assigned Requests - Priority Section */}
-        {assignedRequests.length > 0 && (
-          <Card className="border-primary/50 bg-primary/5">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Zap className="h-5 w-5 text-primary" />
-                Richieste assegnate a te
-              </CardTitle>
-              <CardDescription>
-                Queste richieste sono in esclusiva per te. Accetta prima che scada il tempo!
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {assignedRequests.map((request) => (
                 <AssignedRequestCard
                   key={request.id}
                   request={request}

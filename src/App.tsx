@@ -10,6 +10,7 @@ import AuthConfirmPage from "./pages/AuthConfirmPage";
 import DashboardPage from "./pages/DashboardPage";
 import RequestsPage from "./pages/RequestsPage";
 import SubscriptionPage from "./pages/SubscriptionPage";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 import ProfilePage from "./pages/ProfilePage";
 import PrivacyPage from "./pages/PrivacyPage";
 import TermsPage from "./pages/TermsPage";
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/dashboard/richieste" element={<RequestsPage />} />
           <Route path="/dashboard/abbonamento" element={<SubscriptionPage />} />
+          <Route path="/dashboard/pagamento-completato" element={<PaymentSuccessPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/termini" element={<TermsPage />} />
           <Route path="/admin" element={<AdminPage />} />

@@ -488,8 +488,11 @@ export default function AuthPage() {
                       <CardTitle className="text-xl">{plan.name}</CardTitle>
                       <CardDescription>{plan.description}</CardDescription>
                       <div className="mt-4">
-                        <span className="text-3xl font-bold text-foreground">€{plan.price}</span>
+                        <span className="text-4xl font-bold text-primary">€0</span>
                         <span className="text-muted-foreground">/mese</span>
+                        <div className="text-sm text-muted-foreground mt-1">
+                          poi €{plan.price}/mese
+                        </div>
                       </div>
                     </CardHeader>
                     <CardContent>

@@ -204,16 +204,19 @@ export function AssignedRequestCard({ request, onAccepted, onDeclined }: Assigne
   return (
     <>
       <AlertDialog open={showDeclineDialog} onOpenChange={setShowDeclineDialog}>
-        <AlertDialogContent>
+        <AlertDialogContent className="max-w-[90vw] sm:max-w-lg mx-auto">
           <AlertDialogHeader>
-            <AlertDialogTitle>Conferma rifiuto richiesta</AlertDialogTitle>
-            <AlertDialogDescription>
-              Sei sicuro di voler rifiutare questa richiesta? La richiesta verrà riassegnata ad un altro professionista e non la vedrai più.
+            <AlertDialogTitle className="text-lg">Conferma rifiuto</AlertDialogTitle>
+            <AlertDialogDescription className="text-sm">
+              Sei sicuro di voler rifiutare? La richiesta verrà riassegnata e non la vedrai più.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Annulla</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeclineConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+          <AlertDialogFooter className="flex-col sm:flex-row gap-2">
+            <AlertDialogCancel className="w-full sm:w-auto">Annulla</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleDeclineConfirm} 
+              className="w-full sm:w-auto bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
               Conferma rifiuto
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -225,13 +228,13 @@ export function AssignedRequestCard({ request, onAccepted, onDeclined }: Assigne
       <CardContent className="p-0">
         {/* Timer Bar - Only show for non-accepted requests */}
         {!isAccepted && !isExpired && timeRemaining !== null && (
-          <div className="p-3 bg-primary/5 border-b border-border">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2 text-sm font-medium">
-                <Timer className="h-4 w-4 text-primary" />
-                <span>Tempo rimanente per accettare</span>
+          <div className="p-2 sm:p-3 bg-primary/5 border-b border-border">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0 mb-2">
+              <div className="flex items-center gap-2 text-xs sm:text-sm font-medium">
+                <Timer className="h-4 w-4 text-primary shrink-0" />
+                <span>Tempo rimanente</span>
               </div>
-              <span className={`font-mono font-bold ${
+              <span className={`font-mono font-bold text-sm sm:text-base ${
                 progressPercent < 20 ? 'text-destructive' : 'text-primary'
               }`}>
                 {formatTimeRemaining(timeRemaining)}
@@ -265,19 +268,19 @@ export function AssignedRequestCard({ request, onAccepted, onDeclined }: Assigne
         )}
 
         {/* Header */}
-        <div className="p-4 border-b border-border">
-          <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
-            <div className="flex flex-wrap gap-2">
-              <Badge variant="default">
+        <div className="p-3 sm:p-4 border-b border-border">
+          <div className="flex flex-col gap-2 mb-3">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2">
+              <Badge variant="default" className="text-xs">
                 {INTERVENTION_LABELS[request.intervention_type]}
               </Badge>
-              <Badge variant={getUrgencyVariant(request.urgency)}>
+              <Badge variant={getUrgencyVariant(request.urgency)} className="text-xs">
                 {request.urgency === 'subito' && <AlertTriangle className="h-3 w-3 mr-1" />}
                 {URGENCY_LABELS[request.urgency]}
               </Badge>
-              <Badge variant="outline" className="border-primary text-primary">
+              <Badge variant="outline" className="border-primary text-primary text-xs">
                 <Zap className="h-3 w-3 mr-1" />
-                Esclusiva per te
+                Esclusiva
               </Badge>
             </div>
             <span className="text-xs text-muted-foreground flex items-center gap-1">
@@ -286,18 +289,18 @@ export function AssignedRequestCard({ request, onAccepted, onDeclined }: Assigne
             </span>
           </div>
 
-          <p className="text-foreground leading-relaxed">{request.description}</p>
+          <p className="text-sm sm:text-base text-foreground leading-relaxed">{request.description}</p>
         </div>
 
         {/* Details */}
-        <div className="p-4 bg-muted/30">
-          <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground">
+        <div className="p-3 sm:p-4 bg-muted/30">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-x-4 sm:gap-y-2 text-xs sm:text-sm text-muted-foreground">
             <span className="flex items-center gap-1">
-              <MapPin className="h-3.5 w-3.5" />
+              <MapPin className="h-3.5 w-3.5 shrink-0" />
               {request.city}
             </span>
             <span className="flex items-center gap-1">
-              <Home className="h-3.5 w-3.5" />
+              <Home className="h-3.5 w-3.5 shrink-0" />
               {PROPERTY_LABELS[request.property_type]}
             </span>
             <span>
@@ -310,7 +313,7 @@ export function AssignedRequestCard({ request, onAccepted, onDeclined }: Assigne
         <WizardAnswersSection answers={request.wizard_answers} />
 
         {/* Action buttons */}
-        <div className="p-4 border-t border-border">
+        <div className="p-3 sm:p-4 border-t border-border">
           {request.status === 'accepted' ? (
             // Show contact details if already accepted
             <div className="space-y-3">

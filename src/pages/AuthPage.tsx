@@ -287,9 +287,10 @@ export default function AuthPage() {
     createPendingProfile();
   }, [user, pendingProfileData, profile, createProfile, navigate]);
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleRegister = async (e?: React.FormEvent | React.MouseEvent) => {
+    if (e) e.preventDefault();
     
+    // Validation already done in register-form step, but double check
     if (!registerData.fullName || !registerData.businessName || !registerData.email || 
         !registerData.password || !registerData.phone || !registerData.mainCity) {
       toast.error('Compila tutti i campi obbligatori');
@@ -455,7 +456,7 @@ export default function AuthPage() {
               <div className="text-center mb-10">
                 <Button 
                   size="lg" 
-                  onClick={() => setMode('select-plan')}
+                  onClick={() => setMode('register-form')}
                   className="text-lg px-8 py-6"
                 >
                   Inizia la registrazione
@@ -470,17 +471,17 @@ export default function AuthPage() {
             </div>
           )}
 
-          {/* Plan Selection Step */}
+          {/* Plan Selection Step - Now shown AFTER form data */}
           {mode === 'select-plan' && (
             <div className="max-w-5xl mx-auto">
               <div className="text-center mb-8">
                 <Button 
                   variant="ghost" 
-                  onClick={() => setMode('register')}
+                  onClick={() => setMode('register-form')}
                   className="mb-4"
                 >
                   <ArrowLeft className="h-4 w-4 mr-2" />
-                  Indietro
+                  Modifica dati
                 </Button>
                 <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
                   Scegli il piano più adatto a te
@@ -548,7 +549,6 @@ export default function AuthPage() {
                         onClick={(e) => {
                           e.stopPropagation();
                           setSelectedPlan(plan.id);
-                          setMode('register-form');
                         }}
                       >
                         {selectedPlan === plan.id ? 'Selezionato' : 'Seleziona'}
@@ -561,10 +561,11 @@ export default function AuthPage() {
               <div className="text-center">
                 <Button 
                   size="lg" 
-                  onClick={() => setMode('register-form')}
+                  onClick={handleRegister}
+                  disabled={isSubmitting}
                   className="px-8"
                 >
-                  Continua con {PLANS.find(p => p.id === selectedPlan)?.name}
+                  {isSubmitting ? 'Registrazione...' : `Completa registrazione con ${PLANS.find(p => p.id === selectedPlan)?.name}`}
                 </Button>
                 <p className="text-xs text-muted-foreground mt-4">
                   Potrai cambiare piano in qualsiasi momento
@@ -578,11 +579,11 @@ export default function AuthPage() {
             {mode === 'register-form' && (
               <Button 
                 variant="ghost" 
-                onClick={() => setMode('select-plan')}
+                onClick={() => setMode('register')}
                 className="mb-4"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Cambia piano
+                Indietro
               </Button>
             )}
             <div className="text-center mb-8">
@@ -591,13 +592,13 @@ export default function AuthPage() {
               </div>
               <h2 className="text-2xl font-bold text-foreground">
                 {mode === 'login' && 'Accedi come Idraulico'}
-                {mode === 'register-form' && `Registrati - Piano ${PLANS.find(p => p.id === selectedPlan)?.name}`}
+                {mode === 'register-form' && 'Inserisci i tuoi dati'}
                 {mode === 'forgot-password' && 'Recupera password'}
                 {mode === 'reset-password' && 'Nuova password'}
               </h2>
               <p className="text-muted-foreground mt-2">
                 {mode === 'login' && 'Accedi per visualizzare le richieste nella tua zona'}
-                {mode === 'register-form' && 'Completa la registrazione per iniziare la prova gratuita di 30 giorni'}
+                {mode === 'register-form' && 'Dopo potrai scegliere il piano più adatto a te'}
                 {mode === 'forgot-password' && 'Ti invieremo un link per reimpostare la password'}
                 {mode === 'reset-password' && 'Inserisci la tua nuova password'}
               </p>
@@ -754,7 +755,7 @@ export default function AuthPage() {
               )}
 
               {mode === 'register-form' && (
-                <form onSubmit={handleRegister} className="space-y-4">
+                <div className="space-y-4">
                   <div>
                     <Label htmlFor="reg-name" className="mb-2 block">Nome e Cognome</Label>
                     <div className="relative">
@@ -875,7 +876,7 @@ export default function AuthPage() {
                       <Input
                         id="reg-password"
                         type="password"
-                        placeholder="Minimo 6 caratteri"
+                        placeholder="Minimo 12 caratteri"
                         value={registerData.password}
                         onChange={(e) => setRegisterData(prev => ({ ...prev, password: e.target.value }))}
                         className="pl-10"
@@ -898,8 +899,39 @@ export default function AuthPage() {
                     </div>
                   </div>
 
-                  <Button type="submit" className="w-full" disabled={isSubmitting}>
-                    {isSubmitting ? 'Registrazione...' : 'Registrati'}
+                  <Button 
+                    type="button" 
+                    className="w-full" 
+                    onClick={() => {
+                      // Validate form data before proceeding to plan selection
+                      if (!registerData.fullName || !registerData.businessName || !registerData.email || 
+                          !registerData.password || !registerData.phone || !registerData.mainCity) {
+                        toast.error('Compila tutti i campi obbligatori');
+                        return;
+                      }
+                      if (serviceAreas.length === 0) {
+                        toast.error('Aggiungi almeno una città di lavoro');
+                        return;
+                      }
+                      if (registerData.password !== registerData.confirmPassword) {
+                        toast.error('Le password non corrispondono');
+                        return;
+                      }
+                      if (registerData.password.length < 12) {
+                        toast.error('La password deve essere di almeno 12 caratteri');
+                        return;
+                      }
+                      const hasUpper = /[A-Z]/.test(registerData.password);
+                      const hasLower = /[a-z]/.test(registerData.password);
+                      const hasNumber = /[0-9]/.test(registerData.password);
+                      if (!(hasUpper && hasLower && hasNumber)) {
+                        toast.error('La password deve includere maiuscole, minuscole e numeri');
+                        return;
+                      }
+                      setMode('select-plan');
+                    }}
+                  >
+                    Continua - Scegli il piano
                   </Button>
 
                   <p className="text-sm text-center text-muted-foreground mt-4">
@@ -908,7 +940,7 @@ export default function AuthPage() {
                       Accedi qui
                     </Link>
                   </p>
-                </form>
+                </div>
               )}
             </div>
           </div>

@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://idraulico-facile.lovable.app/sitemap.xml

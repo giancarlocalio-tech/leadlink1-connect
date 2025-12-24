@@ -38,6 +38,31 @@ const URGENCY_LABELS: Record<string, string> = {
   prossimi_giorni: "Prossimi giorni",
 };
 
+async function generateMagicLink(supabase: any, email: string): Promise<string> {
+  const appOrigin = "https://idraulicisubito.com";
+  let loginUrl = `${appOrigin}/auth?mode=login`;
+  
+  try {
+    const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
+      type: "magiclink",
+      email,
+    });
+
+    if (linkError) {
+      console.error("[check-expired] generateLink error:", linkError);
+    } else {
+      const tokenHash = (linkData as any)?.properties?.hashed_token as string | undefined;
+      if (tokenHash) {
+        loginUrl = `${appOrigin}/auth/confirm?token_hash=${encodeURIComponent(tokenHash)}&type=magiclink&next=${encodeURIComponent("/dashboard")}`;
+      }
+    }
+  } catch (e) {
+    console.error("[check-expired] Error generating magic link:", e);
+  }
+  
+  return loginUrl;
+}
+
 async function sendReassignmentEmail(
   email: string, 
   fullName: string, 
@@ -47,6 +72,9 @@ async function sendReassignmentEmail(
 ): Promise<void> {
   const interventionLabel = INTERVENTION_LABELS[request.intervention_type] || request.intervention_type;
   const urgencyLabel = URGENCY_LABELS[request.urgency] || request.urgency;
+  
+  // Generate magic link for one-click login
+  const loginUrl = await generateMagicLink(supabase, email);
   
   const plainTextContent = `Nuova opportunita di lavoro nella tua zona!
 
@@ -66,7 +94,7 @@ TEMPO PER ACCETTARE
 Hai ${timerMinutes} minuti per accettare questa richiesta.
 
 Accedi subito al tuo dashboard:
-https://idraulicisubito.com/dashboard
+${loginUrl}
 
 ---
 IdrauliciSubito
@@ -155,7 +183,7 @@ Un nuovo lavoro e disponibile nella tua zona. Un altro professionista non ha pot
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:25px 0;">
 <tr>
 <td align="center">
-<a href="https://idraulicisubito.com/dashboard" style="display:inline-block;background-color:#16a34a;color:#ffffff;padding:14px 30px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Accetta opportunita</a>
+<a href="${loginUrl}" style="display:inline-block;background-color:#16a34a;color:#ffffff;padding:14px 30px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Accetta opportunita</a>
 </td>
 </tr>
 </table>

@@ -1,30 +1,46 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Check, Crown, Star, Zap, AlertCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Check, Crown, Star, Zap, AlertCircle, ExternalLink, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
-import { useSubscription } from '@/hooks/useSubscription';
-import { supabase } from '@/integrations/supabase/client';
+import { useStripeSubscription } from '@/hooks/useStripeSubscription';
+import { STRIPE_PLANS, StripePlanType } from '@/lib/stripeConfig';
 import { toast } from 'sonner';
-import type { SubscriptionPlan } from '@/lib/types';
 
 export default function SubscriptionPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user, loading: authLoading } = useAuth();
   const { profile, loading: profileLoading } = usePlumberProfile();
   const { 
-    subscription, 
-    plans,
+    subscription,
     loading: subLoading,
-    refreshSubscription
-  } = useSubscription();
-  
-  const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlan | null>(null);
-  const [activating, setActivating] = useState(false);
+    checkoutLoading,
+    currentPlan,
+    subscriptionEnd,
+    isSubscribed,
+    createCheckout,
+    openCustomerPortal,
+    checkSubscription,
+  } = useStripeSubscription();
+
+  // Handle checkout redirect
+  useEffect(() => {
+    const checkoutStatus = searchParams.get('checkout');
+    if (checkoutStatus === 'success') {
+      toast.success('Pagamento completato! Il tuo abbonamento è ora attivo.');
+      checkSubscription();
+      // Clean up URL
+      navigate('/abbonamento', { replace: true });
+    } else if (checkoutStatus === 'cancelled') {
+      toast.info('Pagamento annullato');
+      navigate('/abbonamento', { replace: true });
+    }
+  }, [searchParams, navigate, checkSubscription]);
 
   const getPlanIcon = (planType: string) => {
     switch (planType) {
@@ -60,7 +76,7 @@ export default function SubscriptionPage() {
         ];
       case 'medium':
         return [
-          'Fino a 5 contatti esclusivi/mese',
+          'Fino a 10 contatti esclusivi/mese',
           'Accesso immediato a tutte le richieste',
           'Nessun altro idraulico li vede',
           'Notifiche in tempo reale',
@@ -76,38 +92,21 @@ export default function SubscriptionPage() {
     }
   };
 
-  const handleSelectPlan = async (planType: SubscriptionPlan) => {
+  const handleSelectPlan = async (planType: StripePlanType) => {
     if (!profile) {
-      toast.error('Profilo non trovato');
+      toast.error('Devi prima completare il tuo profilo');
       return;
     }
+    
+    await createCheckout(planType);
+  };
 
-    setSelectedPlan(planType);
-    setActivating(true);
-
-    // For now, create a pending subscription (Stripe integration will come later)
-    const { error } = await supabase
-      .from('plumber_subscriptions')
-      .upsert({
-        plumber_id: profile.id,
-        plan_type: planType,
-        status: 'active', // For demo purposes, in production this would be 'pending' until Stripe confirms
-        current_period_start: new Date().toISOString(),
-        current_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-        exclusive_contacts_used: 0,
-      }, {
-        onConflict: 'plumber_id'
-      });
-
-    setActivating(false);
-
-    if (error) {
-      console.error('Error creating subscription:', error);
-      toast.error('Errore nell\'attivazione dell\'abbonamento');
-    } else {
-      toast.success('Abbonamento attivato con successo!');
-      refreshSubscription();
-    }
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('it-IT', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
   };
 
   if (authLoading || profileLoading || subLoading) {
@@ -120,21 +119,67 @@ export default function SubscriptionPage() {
     );
   }
 
+  const plans = Object.entries(STRIPE_PLANS).map(([type, plan]) => ({
+    type: type as StripePlanType,
+    ...plan,
+  }));
+
   return (
     <DashboardLayout title="Abbonamento" breadcrumbs={[{ label: 'Abbonamento' }]}>
       <div className="space-y-8">
         {/* Current subscription info */}
-        {subscription && (
+        {isSubscribed && currentPlan && (
           <Card className="border-primary/50 bg-primary/5">
             <CardContent className="pt-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-r ${getPlanGradient(currentPlan)} flex items-center justify-center text-white`}>
+                    {getPlanIcon(currentPlan)}
+                  </div>
+                  <div>
+                    <p className="font-medium">
+                      Piano attuale: <span className="text-primary">{currentPlan.toUpperCase()}</span>
+                    </p>
+                    {subscriptionEnd && (
+                      <p className="text-sm text-muted-foreground">
+                        Si rinnova il {formatDate(subscriptionEnd)}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => checkSubscription()}
+                  >
+                    <RefreshCw className="h-4 w-4 mr-2" />
+                    Aggiorna stato
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => openCustomerPortal()}
+                  >
+                    <ExternalLink className="h-4 w-4 mr-2" />
+                    Gestisci abbonamento
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Not subscribed info */}
+        {!isSubscribed && (
+          <Card className="border-warning/50 bg-warning/5">
+            <CardContent className="pt-6">
               <div className="flex items-center gap-3">
-                <AlertCircle className="h-5 w-5 text-primary" />
+                <AlertCircle className="h-5 w-5 text-warning" />
                 <div>
-                  <p className="font-medium">
-                    Il tuo piano attuale: <span className="text-primary">{subscription.plan_type.toUpperCase()}</span>
-                  </p>
+                  <p className="font-medium">Nessun abbonamento attivo</p>
                   <p className="text-sm text-muted-foreground">
-                    {subscription.status === 'active' ? 'Abbonamento attivo' : `Stato: ${subscription.status}`}
+                    Scegli un piano per iniziare a ricevere richieste di lavoro
                   </p>
                 </div>
               </div>
@@ -145,12 +190,12 @@ export default function SubscriptionPage() {
         {/* Plans grid */}
         <div className="grid gap-6 md:grid-cols-3">
           {plans.map((plan) => {
-            const isCurrentPlan = subscription?.plan_type === plan.plan_type;
-            const isPopular = plan.plan_type === 'medium';
+            const isCurrentPlan = currentPlan === plan.type;
+            const isPopular = plan.type === 'medium';
             
             return (
               <Card 
-                key={plan.id} 
+                key={plan.type} 
                 className={`relative transition-all ${
                   isCurrentPlan 
                     ? 'ring-2 ring-primary border-primary' 
@@ -165,12 +210,24 @@ export default function SubscriptionPage() {
                   </Badge>
                 )}
                 
+                {isCurrentPlan && (
+                  <Badge 
+                    className="absolute -top-3 right-4 bg-primary"
+                  >
+                    Il tuo piano
+                  </Badge>
+                )}
+                
                 <CardHeader className="text-center pb-2">
-                  <div className={`mx-auto w-14 h-14 rounded-2xl bg-gradient-to-r ${getPlanGradient(plan.plan_type)} flex items-center justify-center text-white mb-4`}>
-                    {getPlanIcon(plan.plan_type)}
+                  <div className={`mx-auto w-14 h-14 rounded-2xl bg-gradient-to-r ${getPlanGradient(plan.type)} flex items-center justify-center text-white mb-4`}>
+                    {getPlanIcon(plan.type)}
                   </div>
                   <CardTitle className="text-xl">{plan.name}</CardTitle>
-                  <CardDescription>{plan.description}</CardDescription>
+                  <CardDescription>
+                    {plan.type === 'basic' && 'Perfetto per iniziare'}
+                    {plan.type === 'medium' && 'Per professionisti attivi'}
+                    {plan.type === 'premium' && 'Massima visibilità'}
+                  </CardDescription>
                 </CardHeader>
                 
                 <CardContent className="text-center">
@@ -180,7 +237,7 @@ export default function SubscriptionPage() {
                   </div>
                   
                   <ul className="space-y-3 text-left">
-                    {getPlanFeatures(plan.plan_type).map((feature, index) => (
+                    {getPlanFeatures(plan.type).map((feature, index) => (
                       <li key={index} className="flex items-start gap-2 text-sm">
                         <Check className="h-4 w-4 text-success mt-0.5 shrink-0" />
                         <span>{feature}</span>
@@ -192,18 +249,18 @@ export default function SubscriptionPage() {
                 <CardFooter>
                   <Button
                     className={`w-full ${
-                      plan.plan_type === 'premium' 
+                      plan.type === 'premium' 
                         ? 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600' 
                         : ''
                     }`}
                     variant={isCurrentPlan ? 'outline' : 'default'}
-                    disabled={isCurrentPlan || activating}
-                    onClick={() => handleSelectPlan(plan.plan_type)}
+                    disabled={isCurrentPlan || checkoutLoading}
+                    onClick={() => handleSelectPlan(plan.type)}
                   >
-                    {activating && selectedPlan === plan.plan_type ? (
+                    {checkoutLoading ? (
                       <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent mr-2" />
                     ) : null}
-                    {isCurrentPlan ? 'Piano attuale' : 'Seleziona piano'}
+                    {isCurrentPlan ? 'Piano attuale' : 'Abbonati ora'}
                   </Button>
                 </CardFooter>
               </Card>
@@ -215,9 +272,9 @@ export default function SubscriptionPage() {
         <Card className="bg-muted/50">
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground">
-              <strong>Nota:</strong> I pagamenti con Stripe saranno disponibili a breve. 
-              Per ora puoi testare le funzionalità selezionando un piano. 
-              Il conteggio dei contatti esclusivi si resetta ogni mese.
+              <strong>Pagamenti sicuri con Stripe:</strong> I tuoi dati di pagamento sono protetti 
+              e gestiti da Stripe, leader mondiale nei pagamenti online. Puoi annullare 
+              o modificare il tuo abbonamento in qualsiasi momento.
             </p>
           </CardContent>
         </Card>

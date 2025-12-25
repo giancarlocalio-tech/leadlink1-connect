@@ -21,6 +21,7 @@ import PlumberLandingPage from "./pages/PlumberLandingPage";
 import PlumberPlanSelectionPage from "./pages/PlumberPlanSelectionPage";
 import LandingPage from "./pages/LandingPage";
 import LandingLavoriZonaPage from "./pages/LandingLavoriZonaPage";
+import LandingComeFunzionaPage from "./pages/LandingComeFunzionaPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -49,6 +50,7 @@ const App = () => (
           <Route path="/registrazione/piano" element={<PlumberPlanSelectionPage />} />
           <Route path="/lp/idraulico" element={<LandingPage />} />
           <Route path="/lp/lavori-zona" element={<LandingLavoriZonaPage />} />
+          <Route path="/lp/come-funziona" element={<LandingComeFunzionaPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <CookieConsent />

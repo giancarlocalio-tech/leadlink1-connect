@@ -65,6 +65,7 @@ export default function ProfilePage() {
   const [newAreaValue, setNewAreaValue] = useState('');
   const [isManagingSubscription, setIsManagingSubscription] = useState(false);
   const [isUpgrading, setIsUpgrading] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -216,6 +217,38 @@ export default function ProfilePage() {
       }
     } finally {
       setIsUpgrading(false);
+    }
+  };
+
+  const handleCancelSubscription = async () => {
+    if (!confirm('Sei sicuro di voler annullare il tuo abbonamento? Manterrai l\'accesso fino alla fine del periodo di fatturazione.')) {
+      return;
+    }
+
+    setIsCancelling(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('cancel-subscription', {
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
+
+      if (error) {
+        toast.error('Errore durante la cancellazione dell\'abbonamento');
+        return;
+      }
+
+      if (data?.success) {
+        const cancelDate = data.cancel_at ? new Date(data.cancel_at).toLocaleDateString('it-IT') : '';
+        toast.success(`Abbonamento cancellato. Avrai accesso fino al ${cancelDate}`);
+        // Refresh page to update subscription status
+        window.location.reload();
+      }
+    } catch (err) {
+      console.error('Error cancelling subscription:', err);
+      toast.error('Errore durante la cancellazione dell\'abbonamento');
+    } finally {
+      setIsCancelling(false);
     }
   };
 
@@ -486,20 +519,22 @@ export default function ProfilePage() {
                       </Button>
                       <Button
                         variant="destructive"
-                        onClick={handleOpenCustomerPortal}
-                        disabled={isManagingSubscription}
+                        onClick={handleCancelSubscription}
+                        disabled={isCancelling || subscription.status === 'cancelled'}
                         className="gap-2"
                       >
-                        {isManagingSubscription ? (
+                        {isCancelling ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
                         ) : (
                           <XCircle className="h-4 w-4" />
                         )}
-                        Annulla Abbonamento
+                        {subscription.status === 'cancelled' ? 'Abbonamento Cancellato' : 'Annulla Abbonamento'}
                       </Button>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Verrai reindirizzato al portale Stripe per gestire il tuo abbonamento.
+                      {subscription.status === 'cancelled' 
+                        ? 'Il tuo abbonamento è stato cancellato. Avrai accesso fino alla fine del periodo di fatturazione.'
+                        : 'Gestisci il tuo metodo di pagamento tramite il portale Stripe.'}
                     </p>
                   </div>
                 ) : (

@@ -80,12 +80,15 @@ export default function LandingLavoriZonaPage() {
     service_areas: string[];
   } | null>(null);
 
-  // Redirect if already logged in with profile
+  // Flag per tracciare se stiamo registrando un nuovo utente
+  const [isRegistering, setIsRegistering] = useState(false);
+
+  // Redirect solo se non stiamo registrando e l'utente ha già un profilo
   useEffect(() => {
-    if (user && profile && !authLoading && !profileLoading) {
+    if (user && profile && !authLoading && !profileLoading && !isRegistering && !pendingProfileData) {
       navigate('/dashboard');
     }
-  }, [user, profile, authLoading, profileLoading, navigate]);
+  }, [user, profile, authLoading, profileLoading, navigate, isRegistering, pendingProfileData]);
 
   // Create profile after successful signup
   useEffect(() => {
@@ -98,6 +101,7 @@ export default function LandingLavoriZonaPage() {
         if (profile) {
           setPendingProfileData(null);
           setIsSubmitting(false);
+          setIsRegistering(false);
           toast.success('Profilo esistente! Scegli il piano di abbonamento.');
           navigate('/registrazione/piano', { state: { justRegistered: true } });
           return;
@@ -112,6 +116,7 @@ export default function LandingLavoriZonaPage() {
           if (profileError.code === '23505') {
             setPendingProfileData(null);
             setIsSubmitting(false);
+            setIsRegistering(false);
             toast.success('Profilo esistente! Scegli il piano di abbonamento.');
             navigate('/registrazione/piano', { state: { justRegistered: true } });
             return;
@@ -120,11 +125,13 @@ export default function LandingLavoriZonaPage() {
           toast.error('Errore durante la creazione del profilo');
           setPendingProfileData(null);
           setIsSubmitting(false);
+          setIsRegistering(false);
           return;
         }
 
         setPendingProfileData(null);
         setIsSubmitting(false);
+        setIsRegistering(false);
         
         toast.success('Profilo creato! Ora scegli il piano di abbonamento.');
         navigate('/registrazione/piano', { state: { justRegistered: true } });
@@ -254,6 +261,7 @@ export default function LandingLavoriZonaPage() {
     if (!validateStep('services')) return;
 
     setIsSubmitting(true);
+    setIsRegistering(true);
     trackEvent('plumber_registration_start', { source: 'lp_lavori_zona' });
 
     // Ensure main_city is in service_areas
@@ -278,6 +286,7 @@ export default function LandingLavoriZonaPage() {
     
     if (signUpError) {
       setIsSubmitting(false);
+      setIsRegistering(false);
       setPendingProfileData(null);
       if (signUpError.message.includes('already registered')) {
         toast.error('Questa email è già registrata. Accedi invece.');

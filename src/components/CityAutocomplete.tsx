@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, forwardRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { MapPin, Loader2 } from 'lucide-react';
@@ -21,13 +21,13 @@ interface CityAutocompleteProps {
   autoFocus?: boolean;
 }
 
-export function CityAutocomplete({
+export const CityAutocomplete = forwardRef<HTMLDivElement, CityAutocompleteProps>(({
   value,
   onChange,
   placeholder = "Cerca città o CAP...",
   className = "",
   autoFocus = false,
-}: CityAutocompleteProps) {
+}, ref) => {
   const [inputValue, setInputValue] = useState(value);
   const [suggestions, setSuggestions] = useState<ItalianCity[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -217,4 +217,6 @@ export function CityAutocomplete({
       )}
     </div>
   );
-}
+});
+
+CityAutocomplete.displayName = 'CityAutocomplete';

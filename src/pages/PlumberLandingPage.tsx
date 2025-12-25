@@ -21,7 +21,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Layout } from '@/components/Layout';
 import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
-import { supabase } from '@/integrations/supabase/client';
+
 import { toast } from 'sonner';
 import type { InterventionType, AvailabilityType } from '@/lib/types';
 import { INTERVENTION_LABELS, AVAILABILITY_LABELS } from '@/lib/types';
@@ -107,6 +107,7 @@ export default function PlumberLandingPage() {
   
   const [step, setStep] = useState<'info' | 'account' | 'services'>('info');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
   
   const [formData, setFormData] = useState({
     fullName: '',
@@ -120,6 +121,19 @@ export default function PlumberLandingPage() {
     privacyAccepted: false,
   });
 
+  // Store pending profile data for creation after auth
+  const [pendingProfileData, setPendingProfileData] = useState<{
+    full_name: string;
+    business_name: string;
+    email: string;
+    phone: string;
+    main_city: string;
+    description: string | null;
+    intervention_types: InterventionType[];
+    availability: AvailabilityType[];
+    service_areas: string[];
+  } | null>(null);
+
   // SEO meta tags
   useEffect(() => {
     document.title = 'Diventa Partner Idraulici Subito | Trova Nuovi Clienti';
@@ -129,12 +143,62 @@ export default function PlumberLandingPage() {
     }
   }, []);
 
-  // Redirect if already logged in with profile
+  // Redirect solo se non stiamo registrando e l'utente ha già un profilo
   useEffect(() => {
-    if (!authLoading && !profileLoading && user && profile) {
+    if (user && profile && !authLoading && !profileLoading && !isRegistering && !pendingProfileData) {
       navigate('/dashboard');
     }
-  }, [user, profile, authLoading, profileLoading, navigate]);
+  }, [user, profile, authLoading, profileLoading, navigate, isRegistering, pendingProfileData]);
+
+  // Create profile after successful signup
+  useEffect(() => {
+    const createPendingProfile = async () => {
+      if (profileLoading) return;
+      
+      if (user && pendingProfileData) {
+        // If profile already exists, skip creation and go to plan selection
+        if (profile) {
+          setPendingProfileData(null);
+          setIsSubmitting(false);
+          setIsRegistering(false);
+          toast.success('Profilo esistente! Scegli il piano di abbonamento.');
+          navigate('/registrazione/piano', { state: { justRegistered: true } });
+          return;
+        }
+
+        const { error: profileError } = await createProfile(pendingProfileData);
+        
+        if (profileError) {
+          console.error('Profile creation error:', profileError);
+          
+          // Handle duplicate key error - profile already exists
+          if ((profileError as any).code === '23505') {
+            setPendingProfileData(null);
+            setIsSubmitting(false);
+            setIsRegistering(false);
+            toast.success('Profilo esistente! Scegli il piano di abbonamento.');
+            navigate('/registrazione/piano', { state: { justRegistered: true } });
+            return;
+          }
+          
+          toast.error('Errore durante la creazione del profilo');
+          setPendingProfileData(null);
+          setIsSubmitting(false);
+          setIsRegistering(false);
+          return;
+        }
+
+        setPendingProfileData(null);
+        setIsSubmitting(false);
+        setIsRegistering(false);
+        
+        toast.success('Profilo creato! Ora scegli il piano di abbonamento.');
+        navigate('/registrazione/piano', { state: { justRegistered: true } });
+      }
+    };
+
+    createPendingProfile();
+  }, [user, pendingProfileData, profile, profileLoading, createProfile, navigate]);
 
   const toggleInterventionType = (type: InterventionType) => {
     setFormData(prev => ({
@@ -175,8 +239,15 @@ export default function PlumberLandingPage() {
         toast.error('Inserisci email e password');
         return;
       }
-      if (formData.password.length < 6) {
-        toast.error('La password deve avere almeno 6 caratteri');
+      if (formData.password.length < 12) {
+        toast.error('La password deve essere di almeno 12 caratteri');
+        return;
+      }
+      const hasUpper = /[A-Z]/.test(formData.password);
+      const hasLower = /[a-z]/.test(formData.password);
+      const hasNumber = /[0-9]/.test(formData.password);
+      if (!(hasUpper && hasLower && hasNumber)) {
+        toast.error('La password deve includere maiuscole, minuscole e numeri');
         return;
       }
       setStep('services');
@@ -200,58 +271,36 @@ export default function PlumberLandingPage() {
     }
 
     setIsSubmitting(true);
+    setIsRegistering(true);
 
-    try {
-      // 1. Create auth account
-      const { error: signUpError } = await signUp(formData.email, formData.password);
-      
-      if (signUpError) {
-        if (signUpError.message.includes('already registered')) {
-          toast.error('Email già registrata. Prova ad accedere.');
-        } else {
-          toast.error(signUpError.message);
-        }
-        setIsSubmitting(false);
-        return;
-      }
+    // Store profile data for creation after auth
+    setPendingProfileData({
+      full_name: formData.fullName,
+      business_name: formData.businessName,
+      email: formData.email,
+      phone: formData.phone,
+      main_city: formData.mainCity,
+      description: null,
+      intervention_types: formData.interventionTypes,
+      availability: formData.availability,
+      service_areas: [formData.mainCity],
+    });
 
-      // Wait for session to be established
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session?.user) {
-        // User needs to confirm email
-        toast.success('Account creato! Controlla la tua email per confermare la registrazione.');
-        setIsSubmitting(false);
-        return;
-      }
-
-      // 2. Create plumber profile
-      const { error: profileError } = await createProfile({
-        full_name: formData.fullName,
-        business_name: formData.businessName,
-        phone: formData.phone,
-        email: formData.email,
-        main_city: formData.mainCity,
-        intervention_types: formData.interventionTypes,
-        availability: formData.availability,
-        service_areas: [formData.mainCity],
-        description: null,
-      });
-
-      if (profileError) {
-        toast.error('Errore durante la creazione del profilo');
-        setIsSubmitting(false);
-        return;
-      }
-
-      toast.success('Registrazione completata! Ora scegli il tuo piano.');
-      navigate('/registrazione/piano', { state: { justRegistered: true } });
-    } catch (error) {
-      console.error('Registration error:', error);
-      toast.error('Errore durante la registrazione');
-    } finally {
+    const { error: signUpError } = await signUp(formData.email, formData.password);
+    
+    if (signUpError) {
       setIsSubmitting(false);
+      setIsRegistering(false);
+      setPendingProfileData(null);
+      if (signUpError.message.includes('already registered')) {
+        toast.error('Email già registrata. Prova ad accedere.');
+        navigate('/login');
+      } else {
+        toast.error(signUpError.message);
+      }
+      return;
     }
+    // Profile creation handled by useEffect
   };
 
   const scrollToForm = () => {

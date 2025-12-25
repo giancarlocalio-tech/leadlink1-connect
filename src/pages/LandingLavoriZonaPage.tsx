@@ -90,11 +90,33 @@ export default function LandingLavoriZonaPage() {
   // Create profile after successful signup
   useEffect(() => {
     const createPendingProfile = async () => {
-      if (user && pendingProfileData && !profile) {
+      // Wait for profile loading to complete before deciding
+      if (profileLoading) return;
+      
+      if (user && pendingProfileData) {
+        // If profile already exists, skip creation and go to plan selection
+        if (profile) {
+          setPendingProfileData(null);
+          setIsSubmitting(false);
+          toast.success('Profilo esistente! Scegli il piano di abbonamento.');
+          navigate('/registrazione/piano', { state: { justRegistered: true } });
+          return;
+        }
+
         const { error: profileError } = await createProfile(pendingProfileData);
         
         if (profileError) {
           console.error('Profile creation error:', profileError);
+          
+          // Handle duplicate key error - profile already exists
+          if (profileError.code === '23505') {
+            setPendingProfileData(null);
+            setIsSubmitting(false);
+            toast.success('Profilo esistente! Scegli il piano di abbonamento.');
+            navigate('/registrazione/piano', { state: { justRegistered: true } });
+            return;
+          }
+          
           toast.error('Errore durante la creazione del profilo');
           setPendingProfileData(null);
           setIsSubmitting(false);
@@ -110,7 +132,7 @@ export default function LandingLavoriZonaPage() {
     };
 
     createPendingProfile();
-  }, [user, pendingProfileData, profile, createProfile, navigate]);
+  }, [user, pendingProfileData, profile, profileLoading, createProfile, navigate]);
 
   const handleCityChange = (city: ItalianCity | null, displayValue: string) => {
     setFormData(prev => ({ ...prev, mainCity: displayValue }));

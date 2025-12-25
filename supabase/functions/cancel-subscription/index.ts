@@ -100,8 +100,8 @@ serve(async (req) => {
       })
       .eq('plumber_id', plumberProfile.id);
 
-    // Send notification to owner
-    if (resendApiKey && ownerEmail) {
+    // Send confirmation email to the plumber
+    if (resendApiKey) {
       const resend = new Resend(resendApiKey);
       const planDisplayName = getPlanDisplayName(subscription.plan_type);
       const cancelDate = new Date(canceledSubscription.current_period_end * 1000).toLocaleDateString('it-IT', {
@@ -110,7 +110,8 @@ serve(async (req) => {
         year: 'numeric'
       });
 
-      const emailHtml = `
+      // Email to plumber
+      const plumberEmailHtml = `
         <!DOCTYPE html>
         <html>
           <head>
@@ -118,49 +119,49 @@ serve(async (req) => {
             <style>
               body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; line-height: 1.6; color: #333; }
               .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .header { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
+              .header { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
               .content { background: #f8fafc; padding: 30px; border-radius: 0 0 10px 10px; }
-              .info-box { background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #ef4444; }
+              .info-box { background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #3b82f6; }
               .label { font-weight: 600; color: #64748b; font-size: 12px; text-transform: uppercase; margin-bottom: 5px; }
               .value { font-size: 16px; color: #1e293b; }
-              .plan-badge { display: inline-block; background: #64748b; color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; }
-              .date-badge { display: inline-block; background: #f97316; color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; }
+              .highlight { background: #fef3c7; border-left-color: #f59e0b; }
               .footer { text-align: center; padding: 20px; color: #64748b; font-size: 12px; }
+              .button { display: inline-block; background: #3b82f6; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-top: 15px; }
             </style>
           </head>
           <body>
             <div class="container">
               <div class="header">
-                <h1 style="margin: 0; font-size: 24px;">❌ Abbonamento Cancellato</h1>
-                <p style="margin: 10px 0 0 0; opacity: 0.9;">Un idraulico ha cancellato il suo abbonamento</p>
+                <h1 style="margin: 0; font-size: 24px;">Abbonamento Cancellato</h1>
+                <p style="margin: 10px 0 0 0; opacity: 0.9;">Conferma della cancellazione del tuo abbonamento</p>
               </div>
               <div class="content">
+                <p>Ciao ${plumberProfile.full_name},</p>
+                <p>Ti confermiamo che il tuo abbonamento è stato cancellato con successo.</p>
+                
                 <div class="info-box">
-                  <div class="label">Nome Idraulico</div>
-                  <div class="value">${plumberProfile.full_name}</div>
+                  <div class="label">Piano cancellato</div>
+                  <div class="value">${planDisplayName}</div>
                 </div>
-                ${plumberProfile.business_name ? `
-                <div class="info-box">
-                  <div class="label">Nome Attività</div>
-                  <div class="value">${plumberProfile.business_name}</div>
+                
+                <div class="info-box highlight">
+                  <div class="label">⚠️ Importante</div>
+                  <div class="value">Avrai ancora accesso a tutte le funzionalità fino al <strong>${cancelDate}</strong></div>
                 </div>
-                ` : ''}
-                <div class="info-box">
-                  <div class="label">Email</div>
-                  <div class="value"><a href="mailto:${plumberProfile.email}" style="color: #3b82f6;">${plumberProfile.email}</a></div>
-                </div>
-                <div class="info-box">
-                  <div class="label">Piano Cancellato</div>
-                  <div class="value"><span class="plan-badge">${planDisplayName}</span></div>
-                </div>
-                <div class="info-box">
-                  <div class="label">Accesso Attivo Fino Al</div>
-                  <div class="value"><span class="date-badge">${cancelDate}</span></div>
-                </div>
+                
+                <p>Dopo questa data, non riceverai più nuove richieste di lavoro.</p>
+                
+                <p>Se cambi idea, puoi riattivare il tuo abbonamento in qualsiasi momento dalla tua area personale.</p>
+                
+                <p style="text-align: center;">
+                  <a href="https://idraulicisubito.com/abbonamento" class="button">Riattiva Abbonamento</a>
+                </p>
+                
+                <p>Grazie per aver utilizzato IdrauliciSubito!</p>
               </div>
               <div class="footer">
-                <p>L'idraulico manterrà l'accesso fino alla fine del periodo di fatturazione.</p>
-                <p>Questa email è stata inviata automaticamente da IdrauliciSubito.com</p>
+                <p>Hai domande? Contattaci a <a href="mailto:supporto@idraulicisubito.com" style="color: #3b82f6;">supporto@idraulicisubito.com</a></p>
+                <p>IdrauliciSubito.com</p>
               </div>
             </div>
           </body>
@@ -169,11 +170,79 @@ serve(async (req) => {
 
       await resend.emails.send({
         from: "IdrauliciSubito <noreply@idraulicisubito.com>",
-        to: [ownerEmail],
-        subject: `❌ Abbonamento cancellato: ${plumberProfile.full_name} - ${planDisplayName}`,
-        html: emailHtml,
+        to: [plumberProfile.email],
+        subject: `Conferma cancellazione abbonamento - IdrauliciSubito`,
+        html: plumberEmailHtml,
       });
-      logStep("Owner notification sent");
+      logStep("Plumber confirmation email sent", { email: plumberProfile.email });
+
+      // Also notify owner if email is configured
+      if (ownerEmail) {
+        const ownerEmailHtml = `
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <meta charset="utf-8">
+              <style>
+                body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; line-height: 1.6; color: #333; }
+                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                .header { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
+                .content { background: #f8fafc; padding: 30px; border-radius: 0 0 10px 10px; }
+                .info-box { background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #ef4444; }
+                .label { font-weight: 600; color: #64748b; font-size: 12px; text-transform: uppercase; margin-bottom: 5px; }
+                .value { font-size: 16px; color: #1e293b; }
+                .plan-badge { display: inline-block; background: #64748b; color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; }
+                .date-badge { display: inline-block; background: #f97316; color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; }
+                .footer { text-align: center; padding: 20px; color: #64748b; font-size: 12px; }
+              </style>
+            </head>
+            <body>
+              <div class="container">
+                <div class="header">
+                  <h1 style="margin: 0; font-size: 24px;">❌ Abbonamento Cancellato</h1>
+                  <p style="margin: 10px 0 0 0; opacity: 0.9;">Un idraulico ha cancellato il suo abbonamento</p>
+                </div>
+                <div class="content">
+                  <div class="info-box">
+                    <div class="label">Nome Idraulico</div>
+                    <div class="value">${plumberProfile.full_name}</div>
+                  </div>
+                  ${plumberProfile.business_name ? `
+                  <div class="info-box">
+                    <div class="label">Nome Attività</div>
+                    <div class="value">${plumberProfile.business_name}</div>
+                  </div>
+                  ` : ''}
+                  <div class="info-box">
+                    <div class="label">Email</div>
+                    <div class="value"><a href="mailto:${plumberProfile.email}" style="color: #3b82f6;">${plumberProfile.email}</a></div>
+                  </div>
+                  <div class="info-box">
+                    <div class="label">Piano Cancellato</div>
+                    <div class="value"><span class="plan-badge">${planDisplayName}</span></div>
+                  </div>
+                  <div class="info-box">
+                    <div class="label">Accesso Attivo Fino Al</div>
+                    <div class="value"><span class="date-badge">${cancelDate}</span></div>
+                  </div>
+                </div>
+                <div class="footer">
+                  <p>L'idraulico manterrà l'accesso fino alla fine del periodo di fatturazione.</p>
+                  <p>Questa email è stata inviata automaticamente da IdrauliciSubito.com</p>
+                </div>
+              </div>
+            </body>
+          </html>
+        `;
+
+        await resend.emails.send({
+          from: "IdrauliciSubito <noreply@idraulicisubito.com>",
+          to: [ownerEmail],
+          subject: `❌ Abbonamento cancellato: ${plumberProfile.full_name} - ${planDisplayName}`,
+          html: ownerEmailHtml,
+        });
+        logStep("Owner notification sent");
+      }
     }
 
     return new Response(

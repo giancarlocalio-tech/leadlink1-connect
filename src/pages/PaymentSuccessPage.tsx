@@ -42,10 +42,10 @@ export default function PaymentSuccessPage() {
     }
   }, [subLoading, session?.access_token, isSubscribed, retryCount, checkSubscription]);
 
-  // Send welcome email once subscription is confirmed
+  // Send welcome email and notify owner once subscription is confirmed
   useEffect(() => {
-    const sendWelcomeEmail = async () => {
-      if (isSubscribed && profile && !emailSentRef.current) {
+    const sendEmails = async () => {
+      if (isSubscribed && profile && currentPlan && !emailSentRef.current) {
         emailSentRef.current = true;
         
         const planLabels = {
@@ -55,6 +55,7 @@ export default function PaymentSuccessPage() {
         };
         
         try {
+          // Send welcome email to plumber
           await supabase.functions.invoke('send-welcome-email', {
             body: {
               email: profile.email,
@@ -64,15 +65,27 @@ export default function PaymentSuccessPage() {
             },
           });
           console.log('Welcome email sent from PaymentSuccessPage');
+
+          // Notify owner about new subscription
+          await supabase.functions.invoke('notify-owner-subscription', {
+            body: {
+              plumber_name: profile.full_name,
+              plumber_email: profile.email,
+              plan_type: currentPlan,
+              business_name: profile.business_name,
+            },
+          });
+          console.log('Owner notification sent');
+          
           setEmailSent(true);
         } catch (emailError) {
-          console.error('Error sending welcome email:', emailError);
+          console.error('Error sending emails:', emailError);
           // Don't block the page if email fails
         }
       }
     };
     
-    sendWelcomeEmail();
+    sendEmails();
   }, [isSubscribed, profile, currentPlan]);
 
   // Redirect if not authenticated after loading

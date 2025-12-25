@@ -731,9 +731,13 @@ export default function AuthPage() {
 
                   <p className="text-sm text-center text-muted-foreground mt-4">
                     Non hai un account?{' '}
-                    <Link to="/auth" className="text-primary hover:underline font-medium">
+                    <button 
+                      type="button"
+                      onClick={() => setMode('register')}
+                      className="text-primary hover:underline font-medium"
+                    >
                       Registrati qui
-                    </Link>
+                    </button>
                   </p>
                 </form>
               )}

@@ -447,7 +447,7 @@ export default function AuthPage() {
                 </Button>
                 <p className="text-sm text-muted-foreground mt-4">
                   Hai già un account?{' '}
-                  <Link to="/auth?mode=login" className="text-primary hover:underline font-medium">
+                  <Link to="/login" className="text-primary hover:underline font-medium">
                     Accedi qui
                   </Link>
                 </p>

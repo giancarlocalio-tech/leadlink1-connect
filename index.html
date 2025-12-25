@@ -192,6 +192,73 @@
       }
     }
     </script>
+
+    <!-- Structured Data - SiteNavigationElement for Sitelinks -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "SiteNavigationElement",
+          "name": "Richiedi Preventivo",
+          "description": "Richiedi un preventivo gratuito per qualsiasi intervento idraulico",
+          "url": "https://idraulicisubito.com/richiesta"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "name": "Per Idraulici",
+          "description": "Sei un idraulico? Registrati e ricevi nuovi clienti nella tua zona",
+          "url": "https://idraulicisubito.com/per-idraulici"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "name": "Accedi",
+          "description": "Accedi al tuo account idraulico per gestire le richieste",
+          "url": "https://idraulicisubito.com/auth"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "name": "Privacy Policy",
+          "description": "Informativa sulla privacy e trattamento dati personali",
+          "url": "https://idraulicisubito.com/privacy"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "name": "Termini di Servizio",
+          "description": "Termini e condizioni di utilizzo del servizio",
+          "url": "https://idraulicisubito.com/termini"
+        }
+      ]
+    }
+    </script>
+
+    <!-- Structured Data - BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://idraulicisubito.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Richiedi Preventivo",
+          "item": "https://idraulicisubito.com/richiesta"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Per Idraulici",
+          "item": "https://idraulicisubito.com/per-idraulici"
+        }
+      ]
+    }
+    </script>
     <!-- Google tag (gtag.js) - Default denied until consent -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6KKBQ1JRH"></script>
     <script>

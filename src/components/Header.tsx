@@ -6,9 +6,8 @@ import { useAdmin } from '@/hooks/useAdmin';
 
 export function Header() {
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const isLoginPage = location.pathname === '/auth' && searchParams.get('mode') === 'login';
-  const isRegisterPage = location.pathname === '/auth' && searchParams.get('mode') !== 'login';
+  const isLoginPage = location.pathname === '/login';
+  const isRegisterPage = location.pathname === '/auth';
   const { user, signOut } = useAuth();
   const { isAdmin } = useAdmin();
 
@@ -52,7 +51,7 @@ export function Header() {
             ) : (
               <>
                 {!isLoginPage && (
-                  <Link to="/auth?mode=login">
+                  <Link to="/login">
                     <Button variant="ghost" size="sm">
                       Login
                     </Button>

@@ -8,6 +8,7 @@ import RequestPage from "./pages/RequestPage";
 import ConfirmationPage from "./pages/ConfirmationPage";
 import AuthPage from "./pages/AuthPage";
 import AuthConfirmPage from "./pages/AuthConfirmPage";
+import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import RequestsPage from "./pages/RequestsPage";
 import SubscriptionPage from "./pages/SubscriptionPage";
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/richiesta" element={<RequestPage />} />
           <Route path="/conferma" element={<ConfirmationPage />} />
           <Route path="/auth" element={<AuthPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/auth/confirm" element={<AuthConfirmPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/dashboard/richieste" element={<RequestsPage />} />

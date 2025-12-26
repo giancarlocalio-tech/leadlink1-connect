@@ -8,6 +8,7 @@ import { useStripeSubscription } from '@/hooks/useStripeSubscription';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { supabase } from '@/integrations/supabase/client';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
+import analytics, { getStoredGclid } from '@/lib/analytics';
 
 export default function PaymentSuccessPage() {
   const navigate = useNavigate();
@@ -42,11 +43,33 @@ export default function PaymentSuccessPage() {
     }
   }, [subLoading, session?.access_token, isSubscribed, retryCount, checkSubscription]);
 
-  // Send welcome email and notify owner once subscription is confirmed
+  // Send welcome email, notify owner, and track Ads conversion once subscription is confirmed
   useEffect(() => {
-    const sendEmails = async () => {
+    const sendEmailsAndTrackConversion = async () => {
       if (isSubscribed && profile && currentPlan && !emailSentRef.current) {
         emailSentRef.current = true;
+        
+        // Track Google Ads conversion for plumber payment
+        const gclid = getStoredGclid();
+        if (typeof window !== 'undefined' && window.gtag) {
+          const conversionData: Record<string, unknown> = {
+            send_to: 'AW-17828815580/plumber_payment_conversion',
+            value: currentPlan === 'premium' ? 99 : currentPlan === 'medium' ? 59 : 29,
+            currency: 'EUR',
+            plan_type: currentPlan,
+          };
+          
+          if (gclid) {
+            conversionData.gclid = gclid;
+            console.log('[Analytics] Plumber payment conversion tracked with GCLID:', gclid);
+          }
+          
+          window.gtag('event', 'conversion', conversionData);
+          console.log('[Analytics] Plumber payment conversion tracked:', currentPlan);
+        }
+        
+        // Track page view
+        analytics.pageView('/dashboard/pagamento-completato', 'Pagamento Completato');
         
         const planLabels = {
           basic: 'Base',
@@ -85,7 +108,7 @@ export default function PaymentSuccessPage() {
       }
     };
     
-    sendEmails();
+    sendEmailsAndTrackConversion();
   }, [isSubscribed, profile, currentPlan]);
 
   // Redirect if not authenticated after loading

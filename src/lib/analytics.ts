@@ -8,6 +8,11 @@ declare global {
   }
 }
 
+// GCLID Storage key
+const GCLID_STORAGE_KEY = 'gclid';
+const GCLID_TIMESTAMP_KEY = 'gclid_timestamp';
+const GCLID_EXPIRY_DAYS = 90; // Google Ads attribution window
+
 // Event types for type safety
 export type AnalyticsEvent = 
   | 'page_view'
@@ -23,6 +28,47 @@ export type AnalyticsEvent =
 
 interface EventParams {
   [key: string]: string | number | boolean | undefined;
+}
+
+// Capture and store GCLID from URL parameters
+export function captureGclid(): string | null {
+  if (typeof window === 'undefined') return null;
+  
+  const urlParams = new URLSearchParams(window.location.search);
+  const gclid = urlParams.get('gclid');
+  
+  if (gclid) {
+    // Store GCLID with timestamp
+    localStorage.setItem(GCLID_STORAGE_KEY, gclid);
+    localStorage.setItem(GCLID_TIMESTAMP_KEY, Date.now().toString());
+    console.log('[Analytics] GCLID captured:', gclid);
+    return gclid;
+  }
+  
+  return getStoredGclid();
+}
+
+// Get stored GCLID if not expired
+export function getStoredGclid(): string | null {
+  if (typeof window === 'undefined') return null;
+  
+  const gclid = localStorage.getItem(GCLID_STORAGE_KEY);
+  const timestamp = localStorage.getItem(GCLID_TIMESTAMP_KEY);
+  
+  if (!gclid || !timestamp) return null;
+  
+  // Check if GCLID has expired
+  const storedTime = parseInt(timestamp, 10);
+  const expiryTime = GCLID_EXPIRY_DAYS * 24 * 60 * 60 * 1000;
+  
+  if (Date.now() - storedTime > expiryTime) {
+    // GCLID expired, remove it
+    localStorage.removeItem(GCLID_STORAGE_KEY);
+    localStorage.removeItem(GCLID_TIMESTAMP_KEY);
+    return null;
+  }
+  
+  return gclid;
 }
 
 // Initialize GA4 (called from index.html)
@@ -45,11 +91,17 @@ export function initGA(measurementId: string): void {
   window.gtag('config', measurementId, {
     send_page_view: false, // We'll handle page views manually for SPA
   });
+  
+  // Capture GCLID on initialization
+  captureGclid();
 }
 
 // Track page views (for SPA navigation)
 export function trackPageView(pagePath: string, pageTitle?: string): void {
   if (typeof window === 'undefined' || !window.gtag) return;
+  
+  // Capture GCLID on every page view (in case user lands on a different page)
+  captureGclid();
   
   window.gtag('event', 'page_view', {
     page_path: pagePath,
@@ -67,7 +119,7 @@ export function trackEvent(
   window.gtag('event', eventName, params);
 }
 
-// Track conversions (for Google Ads)
+// Track conversions (for Google Ads) with GCLID
 export function trackConversion(
   conversionLabel: string,
   value?: number,
@@ -75,11 +127,45 @@ export function trackConversion(
 ): void {
   if (typeof window === 'undefined' || !window.gtag) return;
   
-  window.gtag('event', 'conversion', {
+  const gclid = getStoredGclid();
+  
+  const conversionData: Record<string, unknown> = {
     send_to: conversionLabel,
     value: value,
     currency: currency,
-  });
+  };
+  
+  // Include GCLID if available for explicit attribution
+  if (gclid) {
+    conversionData.gclid = gclid;
+    console.log('[Analytics] Conversion tracked with GCLID:', gclid);
+  }
+  
+  window.gtag('event', 'conversion', conversionData);
+}
+
+// Track Google Ads conversion for lead form success
+export function trackAdsConversion(
+  interventionType: string,
+  city: string
+): void {
+  if (typeof window === 'undefined' || !window.gtag) return;
+  
+  const gclid = getStoredGclid();
+  
+  // Track conversion to Google Ads (AW-17828815580)
+  const conversionData: Record<string, unknown> = {
+    send_to: 'AW-17828815580/lead_form_conversion',
+    intervention_type: interventionType,
+    city: city,
+  };
+  
+  if (gclid) {
+    conversionData.gclid = gclid;
+    console.log('[Analytics] Ads conversion tracked with GCLID:', gclid);
+  }
+  
+  window.gtag('event', 'conversion', conversionData);
 }
 
 // Specific tracking functions for key events
@@ -115,8 +201,8 @@ export const analytics = {
       intervention_type: interventionType,
       city: city,
     });
-    // Also track as Google Ads conversion if configured
-    // trackConversion('AW-XXXXXXXXX/XXXXXXXXX');
+    // Track Google Ads conversion with GCLID
+    trackAdsConversion(interventionType, city);
   },
 
   // Track plumber registration
@@ -142,6 +228,12 @@ export const analytics = {
   pageView: (path: string, title?: string) => {
     trackPageView(path, title);
   },
+  
+  // Get current GCLID (for debugging)
+  getGclid: () => getStoredGclid(),
+  
+  // Capture GCLID from URL (call on app init)
+  captureGclid: () => captureGclid(),
 };
 
 export default analytics;

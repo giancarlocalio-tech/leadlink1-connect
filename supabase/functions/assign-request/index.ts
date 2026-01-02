@@ -273,16 +273,8 @@ serve(async (req) => {
     const city = request.city;
 
     // Determine starting plan based on urgency
-    // SUBITO: Premium only first, then Medium (skip Basic)
-    // ENTRO_24_ORE: Premium -> Medium -> Basic
-    // PROSSIMI_GIORNI: Premium -> Medium -> Basic
-    let planPriority: string[] = [];
-    
-    if (urgency === 'subito') {
-      planPriority = ['premium', 'medium']; // Basic excluded for SUBITO
-    } else {
-      planPriority = ['premium', 'medium', 'basic'];
-    }
+    // All urgency types now include Basic (Premium -> Medium -> Basic)
+    const planPriority = ['premium', 'medium', 'basic'];
 
     console.log(`[assign-request] Urgency: ${urgency}, City: ${city}, Plan priority: ${planPriority.join(' -> ')}`);
 

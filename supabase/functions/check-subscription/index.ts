@@ -26,6 +26,13 @@ const PLAN_LABELS: Record<string, string> = {
   premium: "Premium",
 };
 
+// Monthly contact limits per plan
+const PLAN_CONTACT_LIMITS: Record<string, number | null> = {
+  basic: 3,
+  medium: 10,
+  premium: null, // Unlimited
+};
+
 const toIsoFromUnix = (unixSeconds: unknown): string | null => {
   if (typeof unixSeconds === "number" && Number.isFinite(unixSeconds)) {
     return new Date(unixSeconds * 1000).toISOString();
@@ -308,6 +315,7 @@ serve(async (req) => {
                 stripe_subscription_id: stripeSubscriptionId,
                 current_period_start: subscriptionStart,
                 current_period_end: subscriptionEnd,
+                monthly_contact_limit: PLAN_CONTACT_LIMITS[planType] ?? null,
                 updated_at: new Date().toISOString(),
               })
               .eq('id', existingSub.id);
@@ -343,6 +351,7 @@ serve(async (req) => {
                 stripe_subscription_id: stripeSubscriptionId,
                 current_period_start: subscriptionStart,
                 current_period_end: subscriptionEnd,
+                monthly_contact_limit: PLAN_CONTACT_LIMITS[planType] ?? null,
               });
 
             if (insertError) {

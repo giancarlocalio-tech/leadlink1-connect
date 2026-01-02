@@ -859,9 +859,36 @@ export default function AuthPage() {
 
                   {/* Intervention Types */}
                   <div className="pt-4 border-t border-border">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Briefcase className="h-4 w-4 text-primary" />
-                      <Label className="font-semibold">Tipi di intervento *</Label>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <Briefcase className="h-4 w-4 text-primary" />
+                        <Label className="font-semibold">Tipi di intervento *</Label>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="text-xs h-7 px-2"
+                          onClick={() => {
+                            const allTypes = Object.keys(INTERVENTION_LABELS) as InterventionType[];
+                            setRegisterData(prev => ({ ...prev, interventionTypes: allTypes }));
+                          }}
+                        >
+                          Seleziona tutto
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="text-xs h-7 px-2"
+                          onClick={() => {
+                            setRegisterData(prev => ({ ...prev, interventionTypes: [] }));
+                          }}
+                        >
+                          Deseleziona tutto
+                        </Button>
+                      </div>
                     </div>
                     <p className="text-xs text-muted-foreground mb-3">
                       Seleziona i servizi che offri
@@ -896,9 +923,36 @@ export default function AuthPage() {
 
                   {/* Availability */}
                   <div className="pt-4 border-t border-border">
-                    <div className="flex items-center gap-2 mb-3">
-                      <CalendarDays className="h-4 w-4 text-primary" />
-                      <Label className="font-semibold">Disponibilità *</Label>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <CalendarDays className="h-4 w-4 text-primary" />
+                        <Label className="font-semibold">Disponibilità *</Label>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="text-xs h-7 px-2"
+                          onClick={() => {
+                            const allAvailability = Object.keys(AVAILABILITY_LABELS) as AvailabilityType[];
+                            setRegisterData(prev => ({ ...prev, availability: allAvailability }));
+                          }}
+                        >
+                          Seleziona tutto
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="text-xs h-7 px-2"
+                          onClick={() => {
+                            setRegisterData(prev => ({ ...prev, availability: [] }));
+                          }}
+                        >
+                          Deseleziona tutto
+                        </Button>
+                      </div>
                     </div>
                     <p className="text-xs text-muted-foreground mb-3">
                       Quando sei disponibile per lavorare?

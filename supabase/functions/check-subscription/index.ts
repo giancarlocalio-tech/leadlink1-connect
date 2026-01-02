@@ -298,13 +298,26 @@ serve(async (req) => {
           // Check if subscription record exists
           const { data: existingSub, error: subError } = await supabaseClient
             .from('plumber_subscriptions')
-            .select('id, plan_type, status, stripe_subscription_id')
+            .select('id, plan_type, status, stripe_subscription_id, current_period_start, monthly_contacts_used')
             .eq('plumber_id', plumberProfile.id)
             .single();
 
           const isFirstStripeSync = !existingSub?.stripe_subscription_id;
 
           if (existingSub) {
+            // Check if new billing period has started - reset contacts if so
+            const existingPeriodStart = existingSub.current_period_start;
+            const isNewPeriod = existingPeriodStart && subscriptionStart && 
+              new Date(existingPeriodStart).getTime() !== new Date(subscriptionStart).getTime();
+            
+            if (isNewPeriod) {
+              logStep("New billing period detected - resetting monthly contacts", {
+                oldPeriodStart: existingPeriodStart,
+                newPeriodStart: subscriptionStart,
+                previousContactsUsed: existingSub.monthly_contacts_used,
+              });
+            }
+
             // Update existing subscription
             const { error: updateError } = await supabaseClient
               .from('plumber_subscriptions')
@@ -316,6 +329,9 @@ serve(async (req) => {
                 current_period_start: subscriptionStart,
                 current_period_end: subscriptionEnd,
                 monthly_contact_limit: PLAN_CONTACT_LIMITS[planType] ?? null,
+                // Reset contacts to 0 if new billing period, otherwise keep current value
+                monthly_contacts_used: isNewPeriod ? 0 : existingSub.monthly_contacts_used,
+                contacts_reset_at: isNewPeriod ? new Date().toISOString() : undefined,
                 updated_at: new Date().toISOString(),
               })
               .eq('id', existingSub.id);

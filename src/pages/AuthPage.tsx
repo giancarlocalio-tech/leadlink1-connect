@@ -40,8 +40,8 @@ const PLANS: PlanInfo[] = [
     trialLabel: '30 giorni gratis',
     description: 'Per iniziare a ricevere clienti',
     features: [
-      '2 contatti al mese',
-      'Solo richieste non urgenti',
+      'Fino a 3 contatti al mese',
+      'Richieste in tempo reale',
       'Notifiche email',
       'Profilo professionale'
     ]

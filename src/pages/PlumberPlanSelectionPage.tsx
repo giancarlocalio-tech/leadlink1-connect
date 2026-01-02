@@ -20,7 +20,8 @@ const PLANS = [
     gradient: 'from-slate-500 to-slate-600',
     features: [
       'Contatti condivisi',
-      'Richieste dopo 1 ora',
+      'Fino a 3 contatti/mese',
+      'Richieste in tempo reale',
       'Email di notifica',
       'Dashboard base',
     ],

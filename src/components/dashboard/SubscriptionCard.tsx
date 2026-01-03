@@ -42,18 +42,20 @@ export function SubscriptionCard({
     }
   };
 
-  if (!subscription || !currentPlan) {
+  // Don't show subscription card for trial users (they see TrialPaywall instead)
+  // Only show for users with actual paid subscriptions
+  if (!subscription || !currentPlan || subscription.is_trial) {
     return (
       <Card className="border-dashed">
         <CardHeader>
           <CardTitle className="text-lg">Nessun abbonamento attivo</CardTitle>
           <CardDescription>
-            Attiva un abbonamento per iniziare a ricevere contatti
+            Completa la prova gratuita per scegliere un piano
           </CardDescription>
         </CardHeader>
         <CardFooter>
           <Button onClick={onUpgrade} className="w-full">
-            Scegli un piano
+            Vedi piani disponibili
           </Button>
         </CardFooter>
       </Card>

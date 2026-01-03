@@ -246,6 +246,22 @@ export default function AuthPage() {
           return;
         }
 
+        // Send welcome email
+        try {
+          await supabase.functions.invoke('send-welcome-email', {
+            body: {
+              email: profileData.email,
+              full_name: profileData.full_name,
+              business_name: profileData.business_name,
+              plan_type: 'basic',
+              app_origin: window.location.origin,
+            },
+          });
+          console.log('Welcome email sent successfully');
+        } catch (emailError) {
+          console.error('Error sending welcome email:', emailError);
+          // Don't block registration if email fails
+        }
 
         setPendingProfileData(null);
         setIsSubmitting(false);

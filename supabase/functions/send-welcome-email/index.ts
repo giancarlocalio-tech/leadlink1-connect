@@ -87,16 +87,25 @@ Siamo entusiasti di averti con noi! La tua registrazione come idraulico professi
 RIEPILOGO ACCOUNT
 -----------------
 Attivita: ${business_name}
-Piano: ${planLabel}
-Prova gratuita: 30 giorni
+Piano: Prova gratuita
+Richieste gratuite: 3
+
+COME FUNZIONA
+-------------
+Quando un cliente nella tua zona richiede un intervento idraulico, riceverai una notifica via email con tutti i dettagli della richiesta.
+
+Potrai visualizzare le informazioni del cliente e contattarlo direttamente per offrire il tuo servizio.
 
 PROSSIMI PASSI
 --------------
 1. Completa il tuo profilo
-   Aggiungi le citta che copri e i servizi che offri.
+   Aggiungi le citta che copri e i servizi che offri per ricevere richieste pertinenti.
 
-2. Inizia a ricevere richieste
-   Riceverai notifiche quando arrivano nuove richieste nella tua zona.
+2. Controlla la tua email
+   Riceverai notifiche via email ogni volta che arriva una nuova richiesta nella tua zona.
+
+3. Rispondi velocemente
+   I clienti apprezzano risposte rapide. Sarai tu a decidere quali richieste accettare.
 
 Accedi alla tua dashboard: ${loginUrl}
 
@@ -154,20 +163,35 @@ Siamo entusiasti di averti con noi! La tua registrazione come idraulico professi
 <h3 style="margin:0 0 15px 0;font-size:16px;color:#16a34a;font-family:Arial,sans-serif;">Riepilogo Account</h3>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
-<td style="padding:5px 0;color:#666666;font-size:14px;width:120px;font-family:Arial,sans-serif;"><strong>Attivita:</strong></td>
+<td style="padding:5px 0;color:#666666;font-size:14px;width:140px;font-family:Arial,sans-serif;"><strong>Attivita:</strong></td>
 <td style="padding:5px 0;font-size:14px;color:#333333;font-family:Arial,sans-serif;">${business_name}</td>
 </tr>
 <tr>
 <td style="padding:5px 0;color:#666666;font-size:14px;font-family:Arial,sans-serif;"><strong>Piano:</strong></td>
 <td style="padding:5px 0;font-size:14px;font-family:Arial,sans-serif;">
-<span style="background-color:#16a34a;color:#ffffff;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:bold;">${planLabel}</span>
+<span style="background-color:#16a34a;color:#ffffff;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:bold;">Prova gratuita</span>
 </td>
 </tr>
 <tr>
-<td style="padding:5px 0;color:#666666;font-size:14px;font-family:Arial,sans-serif;"><strong>Prova gratuita:</strong></td>
-<td style="padding:5px 0;font-size:14px;color:#16a34a;font-weight:bold;font-family:Arial,sans-serif;">30 giorni</td>
+<td style="padding:5px 0;color:#666666;font-size:14px;font-family:Arial,sans-serif;"><strong>Richieste gratuite:</strong></td>
+<td style="padding:5px 0;font-size:14px;color:#16a34a;font-weight:bold;font-family:Arial,sans-serif;">3 richieste</td>
 </tr>
 </table>
+</td>
+</tr>
+</table>
+
+<!-- How it works -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;background-color:#eff6ff;border-left:4px solid #3b82f6;">
+<tr>
+<td style="padding:20px;">
+<h3 style="margin:0 0 15px 0;font-size:16px;color:#3b82f6;font-family:Arial,sans-serif;">📧 Come riceverai le richieste</h3>
+<p style="margin:0;font-size:14px;line-height:1.6;color:#333333;font-family:Arial,sans-serif;">
+Quando un cliente nella tua zona richiede un intervento idraulico, <strong>riceverai una notifica via email</strong> con tutti i dettagli della richiesta.
+</p>
+<p style="margin:10px 0 0 0;font-size:14px;line-height:1.6;color:#333333;font-family:Arial,sans-serif;">
+Potrai visualizzare le informazioni del cliente e contattarlo direttamente per offrire il tuo servizio.
+</p>
 </td>
 </tr>
 </table>
@@ -185,7 +209,7 @@ Siamo entusiasti di averti con noi! La tua registrazione come idraulico professi
 </td>
 <td style="padding-left:10px;">
 <strong style="color:#333333;font-size:14px;">Completa il tuo profilo</strong>
-<p style="margin:4px 0 0 0;color:#666666;font-size:13px;line-height:1.4;">Aggiungi le citta che copri e i servizi che offri.</p>
+<p style="margin:4px 0 0 0;color:#666666;font-size:13px;line-height:1.4;">Aggiungi le citta che copri e i servizi che offri per ricevere richieste pertinenti.</p>
 </td>
 </tr>
 </table>
@@ -199,8 +223,23 @@ Siamo entusiasti di averti con noi! La tua registrazione come idraulico professi
 <span style="display:inline-block;width:24px;height:24px;background-color:#16a34a;color:#ffffff;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:bold;">2</span>
 </td>
 <td style="padding-left:10px;">
-<strong style="color:#333333;font-size:14px;">Inizia a ricevere richieste</strong>
-<p style="margin:4px 0 0 0;color:#666666;font-size:13px;line-height:1.4;">Riceverai notifiche quando arrivano nuove richieste nella tua zona.</p>
+<strong style="color:#333333;font-size:14px;">Controlla la tua email</strong>
+<p style="margin:4px 0 0 0;color:#666666;font-size:13px;line-height:1.4;">Riceverai notifiche via email ogni volta che arriva una nuova richiesta nella tua zona.</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td style="padding:10px 0;font-family:Arial,sans-serif;">
+<table role="presentation" cellpadding="0" cellspacing="0">
+<tr>
+<td style="width:30px;vertical-align:top;">
+<span style="display:inline-block;width:24px;height:24px;background-color:#16a34a;color:#ffffff;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:bold;">3</span>
+</td>
+<td style="padding-left:10px;">
+<strong style="color:#333333;font-size:14px;">Rispondi velocemente</strong>
+<p style="margin:4px 0 0 0;color:#666666;font-size:13px;line-height:1.4;">I clienti apprezzano risposte rapide. Sarai tu a decidere quali richieste accettare.</p>
 </td>
 </tr>
 </table>

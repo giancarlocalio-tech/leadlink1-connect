@@ -86,7 +86,7 @@ export default function SubscriptionPage() {
         return [
           'Fino a 3 contatti al mese',
           'Accesso ai contatti dopo 1 ora',
-          'Solo se non sbloccati da piani superiori',
+          'Notifiche via email',
           'Profilo base',
         ];
     }
@@ -98,7 +98,15 @@ export default function SubscriptionPage() {
       return;
     }
     
-    await createCheckout(planType);
+    try {
+      const url = await createCheckout(planType);
+      if (url) {
+        window.location.href = url;
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      toast.error('Errore durante il checkout. Riprova.');
+    }
   };
 
   const formatDate = (dateString: string) => {

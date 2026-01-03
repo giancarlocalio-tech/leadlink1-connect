@@ -685,6 +685,20 @@ export type Database = {
         }
         Returns: string
       }
+      get_trial_available_requests: {
+        Args: { p_plumber_id: string }
+        Returns: {
+          accessibility: Database["public"]["Enums"]["accessibility_type"]
+          city: string
+          created_at: string
+          description: string
+          id: string
+          intervention_type: Database["public"]["Enums"]["intervention_type"]
+          is_exclusive: boolean
+          property_type: Database["public"]["Enums"]["property_type"]
+          urgency: Database["public"]["Enums"]["urgency_type"]
+        }[]
+      }
       handle_expired_assignment: {
         Args: { p_request_id: string }
         Returns: string
@@ -700,6 +714,16 @@ export type Database = {
       is_request_visible_for_basic: {
         Args: { request_created_at: string; request_id: string }
         Returns: boolean
+      }
+      trial_claim_request: {
+        Args: { p_plumber_id: string; p_request_id: string }
+        Returns: {
+          client_email: string
+          client_name: string
+          client_phone: string
+          message: string
+          success: boolean
+        }[]
       }
     }
     Enums: {

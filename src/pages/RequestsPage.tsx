@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MapPin, Filter, Search } from 'lucide-react';
+import { MapPin, Filter, Search, Zap } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { RequestCard } from '@/components/dashboard/RequestCard';
+import { TrialRequestCard } from '@/components/dashboard/TrialRequestCard';
 import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import { useSubscription } from '@/hooks/useSubscription';
+import { useTrialRequests } from '@/hooks/useTrialRequests';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { ServiceRequest, InterventionType, UrgencyType, PropertyType, AccessibilityType } from '@/lib/types';
@@ -22,8 +26,18 @@ export default function RequestsPage() {
     isRequestUnlocked,
     canUnlockContact,
     unlockContact,
-    getCurrentPlan
+    getCurrentPlan,
+    subscription
   } = useSubscription();
+  
+  const {
+    requests: trialRequests,
+    loading: trialLoading,
+    claiming,
+    isTrial,
+    freeRequestsRemaining,
+    claimRequest
+  } = useTrialRequests();
   
   const [requests, setRequests] = useState<ServiceRequest[]>([]);
   const [loadingRequests, setLoadingRequests] = useState(true);
@@ -38,10 +52,12 @@ export default function RequestsPage() {
   }, [user, authLoading, navigate]);
 
   useEffect(() => {
-    if (user && profile) {
+    if (user && profile && !isTrial) {
       fetchRequests();
+    } else if (isTrial) {
+      setLoadingRequests(false);
     }
-  }, [user, profile]);
+  }, [user, profile, isTrial]);
 
   const fetchRequests = async () => {
     setLoadingRequests(true);
@@ -85,8 +101,20 @@ export default function RequestsPage() {
     return await unlockContact(requestId, isExclusive);
   };
 
-  // Filter requests
+  // Filter requests (for non-trial users)
   const filteredRequests = requests.filter(request => {
+    const matchesSearch = searchQuery === '' || 
+      request.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      request.city.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesUrgency = urgencyFilter === 'all' || request.urgency === urgencyFilter;
+    const matchesType = typeFilter === 'all' || request.intervention_type === typeFilter;
+    
+    return matchesSearch && matchesUrgency && matchesType;
+  });
+
+  // Filter trial requests
+  const filteredTrialRequests = trialRequests.filter(request => {
     const matchesSearch = searchQuery === '' || 
       request.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       request.city.toLowerCase().includes(searchQuery.toLowerCase());
@@ -107,9 +135,34 @@ export default function RequestsPage() {
     );
   }
 
+  const isLoading = isTrial ? trialLoading : loadingRequests;
+  const displayRequests = isTrial ? filteredTrialRequests : filteredRequests;
+
   return (
     <DashboardLayout title="Richieste" breadcrumbs={[{ label: 'Richieste' }]}>
       <div className="space-y-6">
+        {/* Trial info banner */}
+        {isTrial && (
+          <Card className="border-primary/30 bg-primary/5">
+            <CardContent className="py-4">
+              <div className="flex items-center justify-between flex-wrap gap-4">
+                <div className="flex items-center gap-3">
+                  <Zap className="h-5 w-5 text-primary" />
+                  <div>
+                    <p className="font-medium">Modalità Trial</p>
+                    <p className="text-sm text-muted-foreground">
+                      Vedi tutte le richieste nella tua zona. Chi accetta prima ottiene i dati del cliente!
+                    </p>
+                  </div>
+                </div>
+                <Badge variant="secondary" className="text-lg px-4 py-1">
+                  {freeRequestsRemaining} richieste rimaste
+                </Badge>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="relative flex-1">
@@ -149,33 +202,50 @@ export default function RequestsPage() {
 
         {/* Results count */}
         <p className="text-sm text-muted-foreground">
-          {filteredRequests.length} richieste trovate
+          {displayRequests.length} richieste trovate
         </p>
 
         {/* Requests list */}
-        {loadingRequests ? (
+        {isLoading ? (
           <div className="py-16 text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
           </div>
-        ) : filteredRequests.length === 0 ? (
+        ) : displayRequests.length === 0 ? (
           <div className="py-16 text-center">
             <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="font-semibold mb-2">Nessuna richiesta trovata</h3>
             <p className="text-muted-foreground text-sm">
-              Prova a modificare i filtri o aggiungi altre zone di servizio nel tuo profilo.
+              {isTrial 
+                ? 'Non ci sono richieste disponibili nella tua zona al momento. Controlla più tardi!'
+                : 'Prova a modificare i filtri o aggiungi altre zone di servizio nel tuo profilo.'
+              }
             </p>
           </div>
         ) : (
           <div className="space-y-4">
-            {filteredRequests.map((request) => (
-              <RequestCard
-                key={request.id}
-                request={request}
-                isUnlocked={(request as any).is_contact_unlocked || isRequestUnlocked(request.id)}
-                canUnlock={canUnlockContact()}
-                onUnlock={handleUnlock}
-              />
-            ))}
+            {isTrial ? (
+              // Show trial request cards
+              filteredTrialRequests.map((request) => (
+                <TrialRequestCard
+                  key={request.id}
+                  request={request}
+                  onClaim={claimRequest}
+                  claiming={claiming === request.id}
+                  freeRequestsRemaining={freeRequestsRemaining}
+                />
+              ))
+            ) : (
+              // Show regular request cards for paid users
+              filteredRequests.map((request) => (
+                <RequestCard
+                  key={request.id}
+                  request={request}
+                  isUnlocked={(request as any).is_contact_unlocked || isRequestUnlocked(request.id)}
+                  canUnlock={canUnlockContact()}
+                  onUnlock={handleUnlock}
+                />
+              ))
+            )}
           </div>
         )}
       </div>

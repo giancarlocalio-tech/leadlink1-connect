@@ -8,6 +8,7 @@ import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import { useStripeSubscription } from '@/hooks/useStripeSubscription';
+import { useSubscription } from '@/hooks/useSubscription';
 import { STRIPE_PLANS, StripePlanType } from '@/lib/stripeConfig';
 import { toast } from 'sonner';
 
@@ -16,6 +17,7 @@ export default function SubscriptionPage() {
   const [searchParams] = useSearchParams();
   const { user, loading: authLoading } = useAuth();
   const { profile, loading: profileLoading } = usePlumberProfile();
+  const { subscription: dbSubscription } = useSubscription();
   const { 
     subscription,
     loading: subLoading,
@@ -27,6 +29,9 @@ export default function SubscriptionPage() {
     openCustomerPortal,
     checkSubscription,
   } = useStripeSubscription();
+
+  // Check if user is in trial mode (not a real paid subscriber)
+  const isTrial = dbSubscription?.is_trial === true;
 
   // Handle checkout redirect
   useEffect(() => {
@@ -135,8 +140,8 @@ export default function SubscriptionPage() {
   return (
     <DashboardLayout title="Abbonamento" breadcrumbs={[{ label: 'Abbonamento' }]}>
       <div className="space-y-8">
-        {/* Current subscription info */}
-        {isSubscribed && currentPlan && (
+        {/* Current subscription info - only show for actual paid subscribers, not trial users */}
+        {isSubscribed && currentPlan && !isTrial && (
           <Card className="border-primary/50 bg-primary/5">
             <CardContent className="pt-6">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -178,8 +183,8 @@ export default function SubscriptionPage() {
           </Card>
         )}
 
-        {/* Not subscribed info */}
-        {!isSubscribed && (
+        {/* Not subscribed info or trial users */}
+        {(!isSubscribed || isTrial) && (
           <Card className="border-primary/30 bg-primary/5">
             <CardContent className="pt-6">
               <div className="flex items-center gap-3">
@@ -187,7 +192,10 @@ export default function SubscriptionPage() {
                 <div>
                   <p className="font-medium">Scegli il piano più adatto a te</p>
                   <p className="text-sm text-muted-foreground">
-                    Hai completato le tue 3 richieste gratuite. Abbonati per continuare a ricevere clienti.
+                    {isTrial 
+                      ? `Hai ancora ${dbSubscription?.free_requests_remaining ?? 0} richieste gratuite. Abbonati per ricevere più clienti.`
+                      : 'Hai completato le tue 3 richieste gratuite. Abbonati per continuare a ricevere clienti.'
+                    }
                   </p>
                 </div>
               </div>
@@ -198,7 +206,8 @@ export default function SubscriptionPage() {
         {/* Plans grid */}
         <div className="grid gap-6 md:grid-cols-3">
           {plans.map((plan) => {
-            const isCurrentPlan = currentPlan === plan.type;
+            // Only mark as current plan if NOT in trial and plan matches
+            const isCurrentPlan = !isTrial && currentPlan === plan.type;
             const isPopular = plan.type === 'medium';
             
             return (

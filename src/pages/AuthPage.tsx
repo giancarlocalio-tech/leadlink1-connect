@@ -36,8 +36,8 @@ const PLANS: PlanInfo[] = [
     id: 'basic',
     name: 'Basic',
     price: 29.99,
-    trialPrice: 0,
-    trialLabel: '30 giorni gratis',
+    trialPrice: null,
+    trialLabel: null,
     description: 'Per iniziare a ricevere clienti',
     features: [
       'Fino a 3 contatti al mese',
@@ -363,7 +363,7 @@ export default function AuthPage() {
               <div className="text-center mb-10">
                 <div className="inline-flex items-center gap-2 bg-primary/20 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
                   <Zap className="h-4 w-4" />
-                  30 giorni di prova gratuita
+                  3 richieste gratuite
                 </div>
                 <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
                   Sei un idraulico? Prova gratuitamente!

@@ -102,8 +102,8 @@ export default function LandingLavoriZonaPage() {
           setPendingProfileData(null);
           setIsSubmitting(false);
           setIsRegistering(false);
-          toast.success('Profilo esistente! Scegli il piano di abbonamento.');
-          navigate('/registrazione/piano', { state: { justRegistered: true } });
+          toast.success('Bentornato!');
+          navigate('/dashboard');
           return;
         }
 
@@ -117,8 +117,8 @@ export default function LandingLavoriZonaPage() {
             setPendingProfileData(null);
             setIsSubmitting(false);
             setIsRegistering(false);
-            toast.success('Profilo esistente! Scegli il piano di abbonamento.');
-            navigate('/registrazione/piano', { state: { justRegistered: true } });
+            toast.success('Bentornato!');
+            navigate('/dashboard');
             return;
           }
           
@@ -133,8 +133,8 @@ export default function LandingLavoriZonaPage() {
         setIsSubmitting(false);
         setIsRegistering(false);
         
-        toast.success('Profilo creato! Ora scegli il piano di abbonamento.');
-        navigate('/registrazione/piano', { state: { justRegistered: true } });
+        toast.success('Registrazione completata! Hai 3 richieste gratuite per iniziare.');
+        navigate('/dashboard');
       }
     };
 

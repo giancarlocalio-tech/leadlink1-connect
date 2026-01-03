@@ -14,8 +14,8 @@ const PLANS = [
     type: 'basic' as StripePlanType,
     name: 'Basic',
     price: 29,
-    trialPrice: 0,
-    trialLabel: '30 giorni gratis',
+    trialPrice: null,
+    trialLabel: null,
     icon: Shield,
     gradient: 'from-slate-500 to-slate-600',
     features: [

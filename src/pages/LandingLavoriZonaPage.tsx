@@ -33,7 +33,7 @@ const BENEFITS = [
   {
     icon: Shield,
     title: 'Zero rischi',
-    description: '30 giorni di prova gratuita, nessun vincolo'
+    description: '3 richieste gratuite per iniziare, nessun vincolo'
   }
 ];
 
@@ -373,7 +373,7 @@ export default function LandingLavoriZonaPage() {
               <div className="text-center mb-6">
                 <div className="inline-flex items-center gap-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-3 py-1 rounded-full text-sm font-medium mb-3">
                   <Zap className="h-4 w-4" />
-                  30 giorni gratis
+                  3 richieste gratis
                 </div>
                 <h2 className="text-2xl font-bold text-foreground">Registrati in 3 passi</h2>
                 <p className="text-muted-foreground mt-1">
@@ -681,8 +681,8 @@ export default function LandingLavoriZonaPage() {
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             {[
               { step: '1', title: 'Registrati gratis', desc: 'Crea il tuo profilo in 3 passi' },
-              { step: '2', title: 'Scegli il piano', desc: '30 giorni di prova gratuita' },
-              { step: '3', title: 'Ricevi lavori', desc: 'Clienti nella tua zona ti contattano' }
+              { step: '2', title: 'Ricevi 3 richieste', desc: 'Prova il servizio gratuitamente' },
+              { step: '3', title: 'Scegli il piano', desc: 'Abbonati per continuare a ricevere clienti' }
             ].map((item, index) => (
               <div key={index} className="text-center">
                 <div className="bg-primary text-primary-foreground w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
@@ -711,7 +711,7 @@ export default function LandingLavoriZonaPage() {
             className="text-lg px-8"
             onClick={() => document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            Inizia la prova gratuita
+            Inizia gratis
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         </div>

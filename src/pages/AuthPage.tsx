@@ -250,9 +250,9 @@ export default function AuthPage() {
         setPendingProfileData(null);
         setIsSubmitting(false);
         
-        // Redirect to plan selection page for Stripe checkout
-        toast.success('Profilo creato! Ora scegli il piano di abbonamento.');
-        navigate('/registrazione/piano', { state: { justRegistered: true } });
+        // Redirect to dashboard - new trial-by-value model
+        toast.success('Registrazione completata! Hai 3 richieste gratuite per iniziare.');
+        navigate('/dashboard');
       }
     };
 
@@ -1017,7 +1017,7 @@ export default function AuthPage() {
                     onClick={handleRegister}
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? 'Registrazione in corso...' : 'Continua - Scegli il piano'}
+                    {isSubmitting ? 'Registrazione in corso...' : 'Completa registrazione'}
                   </Button>
 
                   <p className="text-sm text-center text-muted-foreground mt-4">

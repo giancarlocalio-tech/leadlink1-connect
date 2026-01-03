@@ -192,9 +192,9 @@ export default function SubscriptionPage() {
                 <div>
                   <p className="font-medium">Scegli il piano più adatto a te</p>
                   <p className="text-sm text-muted-foreground">
-                    {isTrial 
-                      ? `Hai ancora ${dbSubscription?.free_requests_remaining ?? 0} richieste gratuite. Abbonati per ricevere più clienti.`
-                      : 'Hai completato le tue 3 richieste gratuite. Abbonati per continuare a ricevere clienti.'
+                    {isTrial && dbSubscription?.free_requests_remaining !== undefined && dbSubscription.free_requests_remaining > 0
+                      ? `Hai ancora ${dbSubscription.free_requests_remaining} richieste gratuite. Abbonati per ricevere più clienti.`
+                      : 'Abbonati per iniziare a ricevere clienti nella tua zona.'
                     }
                   </p>
                 </div>

@@ -136,6 +136,9 @@ export interface PlumberSubscription {
   contacts_reset_at?: string;
   is_available: boolean;
   last_assigned_at?: string;
+  // Trial by value fields
+  free_requests_remaining?: number;
+  is_trial?: boolean;
   created_at: string;
   updated_at: string;
 }

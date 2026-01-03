@@ -84,6 +84,8 @@ export function useSubscription() {
         ...data,
         plan_type: data.plan_type as SubscriptionPlan,
         status: data.status as SubscriptionStatus,
+        free_requests_remaining: data.free_requests_remaining ?? 3,
+        is_trial: data.is_trial ?? true,
       });
     }
     setLoading(false);
@@ -113,7 +115,13 @@ export function useSubscription() {
       return { allowed: false, reason: 'Nessun abbonamento attivo' };
     }
 
-    if (subscription.status !== 'active') {
+    // Check if user is in trial mode with no remaining requests
+    if (subscription.is_trial && (subscription.free_requests_remaining ?? 0) <= 0) {
+      return { allowed: false, reason: 'Hai esaurito le 3 richieste gratuite. Scegli un piano per continuare.' };
+    }
+
+    // For non-trial users, check subscription status
+    if (!subscription.is_trial && subscription.status !== 'active') {
       return { allowed: false, reason: 'Abbonamento non attivo' };
     }
 
@@ -214,6 +222,17 @@ export function useSubscription() {
     };
   };
 
+  // Check if user is in trial and has exhausted free requests
+  const isTrialExhausted = (): boolean => {
+    if (!subscription) return false;
+    return subscription.is_trial === true && (subscription.free_requests_remaining ?? 0) <= 0;
+  };
+
+  const getFreeRequestsRemaining = (): number => {
+    if (!subscription || !subscription.is_trial) return 0;
+    return subscription.free_requests_remaining ?? 0;
+  };
+
   return {
     subscription,
     plans,
@@ -225,6 +244,8 @@ export function useSubscription() {
     getCurrentPlan,
     getMonthlyUnlocksRemaining,
     getBasicContactsRemaining,
+    isTrialExhausted,
+    getFreeRequestsRemaining,
     refreshSubscription: fetchSubscription,
     refreshUnlocks: fetchUnlocks,
   };

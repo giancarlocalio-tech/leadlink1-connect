@@ -303,8 +303,10 @@ export type Database = {
           current_period_end: string | null
           current_period_start: string | null
           exclusive_contacts_used: number
+          free_requests_remaining: number | null
           id: string
           is_available: boolean | null
+          is_trial: boolean | null
           last_assigned_at: string | null
           monthly_contact_limit: number | null
           monthly_contacts_used: number | null
@@ -322,8 +324,10 @@ export type Database = {
           current_period_end?: string | null
           current_period_start?: string | null
           exclusive_contacts_used?: number
+          free_requests_remaining?: number | null
           id?: string
           is_available?: boolean | null
+          is_trial?: boolean | null
           last_assigned_at?: string | null
           monthly_contact_limit?: number | null
           monthly_contacts_used?: number | null
@@ -341,8 +345,10 @@ export type Database = {
           current_period_end?: string | null
           current_period_start?: string | null
           exclusive_contacts_used?: number
+          free_requests_remaining?: number | null
           id?: string
           is_available?: boolean | null
+          is_trial?: boolean | null
           last_assigned_at?: string | null
           monthly_contact_limit?: number | null
           monthly_contacts_used?: number | null

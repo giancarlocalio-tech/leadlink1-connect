@@ -8,6 +8,7 @@ import { StatsCards } from '@/components/dashboard/StatsCards';
 import { SubscriptionCard } from '@/components/dashboard/SubscriptionCard';
 import { RequestCard } from '@/components/dashboard/RequestCard';
 import { AssignedRequestCard } from '@/components/dashboard/AssignedRequestCard';
+import { TrialPaywall } from '@/components/dashboard/TrialPaywall';
 import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import { useSubscription } from '@/hooks/useSubscription';
@@ -28,6 +29,8 @@ export default function DashboardPage() {
     getCurrentPlan,
     getMonthlyUnlocksRemaining,
     getBasicContactsRemaining,
+    isTrialExhausted,
+    getFreeRequestsRemaining,
     unlocks
   } = useSubscription();
   
@@ -193,11 +196,26 @@ export default function DashboardPage() {
     );
   }
 
+  // Check if user is in trial mode
+  const trialExhausted = isTrialExhausted();
+  const freeRequestsRemaining = getFreeRequestsRemaining();
+  const isInTrialMode = subscription?.is_trial === true;
+
   return (
     <DashboardLayout title={`Bentornato, ${profile.full_name}`}>
       <div className="space-y-6">
+        {/* Trial Paywall - Show when trial requests are exhausted */}
+        {trialExhausted && (
+          <TrialPaywall freeRequestsRemaining={0} />
+        )}
+
+        {/* Trial Progress Banner - Show when user still has free requests */}
+        {isInTrialMode && !trialExhausted && (
+          <TrialPaywall freeRequestsRemaining={freeRequestsRemaining} />
+        )}
+
         {/* Assigned Requests - Priority Section (FIRST - requires immediate action) */}
-        {assignedRequests.length > 0 && (
+        {!trialExhausted && assignedRequests.length > 0 && (
           <Card className="border-primary/50 bg-primary/5">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">

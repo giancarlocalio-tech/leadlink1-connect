@@ -156,13 +156,13 @@ export default function PlumberLandingPage() {
       if (profileLoading) return;
       
       if (user && pendingProfileData) {
-        // If profile already exists, skip creation and go to plan selection
+        // If profile already exists, go to dashboard
         if (profile) {
           setPendingProfileData(null);
           setIsSubmitting(false);
           setIsRegistering(false);
-          toast.success('Profilo esistente! Scegli il piano di abbonamento.');
-          navigate('/registrazione/piano', { state: { justRegistered: true } });
+          toast.success('Bentornato!');
+          navigate('/dashboard');
           return;
         }
 
@@ -176,8 +176,8 @@ export default function PlumberLandingPage() {
             setPendingProfileData(null);
             setIsSubmitting(false);
             setIsRegistering(false);
-            toast.success('Profilo esistente! Scegli il piano di abbonamento.');
-            navigate('/registrazione/piano', { state: { justRegistered: true } });
+            toast.success('Bentornato!');
+            navigate('/dashboard');
             return;
           }
           
@@ -192,8 +192,8 @@ export default function PlumberLandingPage() {
         setIsSubmitting(false);
         setIsRegistering(false);
         
-        toast.success('Profilo creato! Ora scegli il piano di abbonamento.');
-        navigate('/registrazione/piano', { state: { justRegistered: true } });
+        toast.success('Registrazione completata! Hai 3 richieste gratuite per iniziare.');
+        navigate('/dashboard');
       }
     };
 

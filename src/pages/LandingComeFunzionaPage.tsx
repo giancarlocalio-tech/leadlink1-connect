@@ -44,7 +44,7 @@ const STEPS = [
 const FAQ = [
   {
     question: 'Quanto costa iscriversi?',
-    answer: 'La registrazione è gratuita e hai 30 giorni di prova senza impegno. Poi scegli il piano più adatto a te.'
+    answer: 'La registrazione è completamente gratuita. Ricevi 3 richieste gratuite per testare il servizio, poi scegli il piano più adatto a te.'
   },
   {
     question: 'Come ricevo le richieste?',
@@ -115,8 +115,8 @@ export default function LandingComeFunzionaPage() {
           setPendingProfileData(null);
           setIsSubmitting(false);
           setIsRegistering(false);
-          toast.success('Profilo esistente! Scegli il piano di abbonamento.');
-          navigate('/registrazione/piano', { state: { justRegistered: true } });
+          toast.success('Bentornato!');
+          navigate('/dashboard');
           return;
         }
 
@@ -129,8 +129,8 @@ export default function LandingComeFunzionaPage() {
             setPendingProfileData(null);
             setIsSubmitting(false);
             setIsRegistering(false);
-            toast.success('Profilo esistente! Scegli il piano di abbonamento.');
-            navigate('/registrazione/piano', { state: { justRegistered: true } });
+            toast.success('Bentornato!');
+            navigate('/dashboard');
             return;
           }
           
@@ -145,8 +145,8 @@ export default function LandingComeFunzionaPage() {
         setIsSubmitting(false);
         setIsRegistering(false);
         
-        toast.success('Profilo creato! Ora scegli il piano di abbonamento.');
-        navigate('/registrazione/piano', { state: { justRegistered: true } });
+        toast.success('Registrazione completata! Hai 3 richieste gratuite per iniziare.');
+        navigate('/dashboard');
       }
     };
 
@@ -404,7 +404,7 @@ export default function LandingComeFunzionaPage() {
               <div className="text-center mb-6">
                 <div className="inline-flex items-center gap-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-3 py-1 rounded-full text-sm font-medium mb-3">
                   <Zap className="h-4 w-4" />
-                  30 giorni gratis
+                  3 richieste gratis
                 </div>
                 <h2 className="text-2xl font-bold text-foreground">Registrati ora</h2>
                 <p className="text-muted-foreground mt-1">

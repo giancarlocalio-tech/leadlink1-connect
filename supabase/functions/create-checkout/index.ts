@@ -73,13 +73,8 @@ serve(async (req) => {
     };
 
     // Plan-specific trial/discount configuration
-    if (planType === "basic") {
-      // Basic: 30 days completely free trial
-      subscriptionData.subscription_data = {
-        trial_period_days: 30,
-      };
-      logStep("Adding 30-day free trial for Basic plan");
-    } else if (planType === "medium") {
+    // Basic plan: NO trial - immediate payment (trial is now handled via free_requests_remaining)
+    if (planType === "medium") {
       // Medium: First month at €9.99 instead of €59
       // Use coupon if it exists (must be created manually in Stripe dashboard)
       try {

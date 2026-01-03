@@ -180,14 +180,14 @@ export default function SubscriptionPage() {
 
         {/* Not subscribed info */}
         {!isSubscribed && (
-          <Card className="border-warning/50 bg-warning/5">
+          <Card className="border-primary/30 bg-primary/5">
             <CardContent className="pt-6">
               <div className="flex items-center gap-3">
-                <AlertCircle className="h-5 w-5 text-warning" />
+                <Zap className="h-5 w-5 text-primary" />
                 <div>
-                  <p className="font-medium">Nessun abbonamento attivo</p>
+                  <p className="font-medium">Scegli il piano più adatto a te</p>
                   <p className="text-sm text-muted-foreground">
-                    Scegli un piano per iniziare a ricevere richieste di lavoro
+                    Hai completato le tue 3 richieste gratuite. Abbonati per continuare a ricevere clienti.
                   </p>
                 </div>
               </div>

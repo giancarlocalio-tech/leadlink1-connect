@@ -234,8 +234,8 @@ const handler = async (req: Request): Promise<Response> => {
           from: "IdrauliciSubito <noreply@idraulicisubito.com>",
           reply_to: "supporto@idraulicisubito.com",
           to: [plumber.email],
-          subject: `Nuova richiesta di intervento a ${serviceRequest.city}`,
-          text: `Ciao ${plumber.full_name || plumber.business_name},\n\nNuova richiesta a ${serviceRequest.city}.\nIntervento: ${interventionLabel}\nUrgenza: ${urgencyLabel}\n\nDashboard: https://idraulicisubito.com/dashboard`,
+          subject: `🔧 Nuova richiesta: ${interventionLabel} a ${serviceRequest.city}`,
+          text: `Ciao ${plumber.full_name || plumber.business_name},\n\nNuova richiesta a ${serviceRequest.city}.\nIntervento: ${interventionLabel}\nUrgenza: ${urgencyLabel}\n\nAccetta subito: https://idraulicisubito.com/dashboard/richieste?id=${serviceRequest.id}\n\nChi accetta per primo ottiene i dati del cliente!`,
           headers: {
             "List-Unsubscribe": "<mailto:supporto@idraulicisubito.com?subject=unsubscribe>",
           },
@@ -290,14 +290,14 @@ const handler = async (req: Request): Promise<Response> => {
                 </div>
                 
                 <div style="text-align: center; margin-top: 32px;">
-                  <a href="https://idraulicisubito.com/dashboard" 
+                  <a href="https://idraulicisubito.com/dashboard/richieste?id=${serviceRequest.id}" 
                      style="display: inline-block; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; padding: 16px 40px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);">
-                    Visualizza nel Dashboard
+                    🚀 Accetta Richiesta
                   </a>
                 </div>
                 
                 <p style="font-size: 14px; color: #666; margin-top: 24px; text-align: center;">
-                  Accedi al tuo account per visualizzare i dettagli completi e contattare il cliente.
+                  Chi accetta per primo ottiene i dati del cliente in esclusiva!
                 </p>
               </div>
               

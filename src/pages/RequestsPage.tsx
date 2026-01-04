@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { MapPin, Filter, Search, Zap } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -20,6 +20,8 @@ import { INTERVENTION_LABELS, URGENCY_LABELS } from '@/lib/types';
 
 export default function RequestsPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const highlightedRequestId = searchParams.get('id');
   const { user, loading: authLoading } = useAuth();
   const { profile, loading: profileLoading } = usePlumberProfile();
   const { 
@@ -44,6 +46,7 @@ export default function RequestsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [urgencyFilter, setUrgencyFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
+  const highlightedRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -58,6 +61,15 @@ export default function RequestsPage() {
       setLoadingRequests(false);
     }
   }, [user, profile, isTrial]);
+
+  // Scroll to highlighted request when loaded
+  useEffect(() => {
+    if (highlightedRequestId && highlightedRef.current && !trialLoading && !loadingRequests) {
+      setTimeout(() => {
+        highlightedRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300);
+    }
+  }, [highlightedRequestId, trialLoading, loadingRequests]);
 
   const fetchRequests = async () => {
     setLoadingRequests(true);
@@ -226,24 +238,34 @@ export default function RequestsPage() {
             {isTrial ? (
               // Show trial request cards
               filteredTrialRequests.map((request) => (
-                <TrialRequestCard
+                <div 
                   key={request.id}
-                  request={request}
-                  onClaim={claimRequest}
-                  claiming={claiming === request.id}
-                  freeRequestsRemaining={freeRequestsRemaining}
-                />
+                  ref={request.id === highlightedRequestId ? highlightedRef : undefined}
+                  className={request.id === highlightedRequestId ? 'ring-2 ring-primary ring-offset-2 rounded-lg animate-pulse' : ''}
+                >
+                  <TrialRequestCard
+                    request={request}
+                    onClaim={claimRequest}
+                    claiming={claiming === request.id}
+                    freeRequestsRemaining={freeRequestsRemaining}
+                  />
+                </div>
               ))
             ) : (
               // Show regular request cards for paid users
               filteredRequests.map((request) => (
-                <RequestCard
+                <div 
                   key={request.id}
-                  request={request}
-                  isUnlocked={(request as any).is_contact_unlocked || isRequestUnlocked(request.id)}
-                  canUnlock={canUnlockContact()}
-                  onUnlock={handleUnlock}
-                />
+                  ref={request.id === highlightedRequestId ? highlightedRef : undefined}
+                  className={request.id === highlightedRequestId ? 'ring-2 ring-primary ring-offset-2 rounded-lg animate-pulse' : ''}
+                >
+                  <RequestCard
+                    request={request}
+                    isUnlocked={(request as any).is_contact_unlocked || isRequestUnlocked(request.id)}
+                    canUnlock={canUnlockContact()}
+                    onUnlock={handleUnlock}
+                  />
+                </div>
               ))
             )}
           </div>

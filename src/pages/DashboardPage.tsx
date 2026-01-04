@@ -9,9 +9,11 @@ import { SubscriptionCard } from '@/components/dashboard/SubscriptionCard';
 import { RequestCard } from '@/components/dashboard/RequestCard';
 import { AssignedRequestCard } from '@/components/dashboard/AssignedRequestCard';
 import { TrialPaywall } from '@/components/dashboard/TrialPaywall';
+import { TrialRequestCard } from '@/components/dashboard/TrialRequestCard';
 import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import { useSubscription } from '@/hooks/useSubscription';
+import { useTrialRequests } from '@/hooks/useTrialRequests';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { ServiceRequest, InterventionType, UrgencyType, PropertyType, AccessibilityType } from '@/lib/types';
@@ -33,6 +35,14 @@ export default function DashboardPage() {
     getFreeRequestsRemaining,
     unlocks
   } = useSubscription();
+
+  const {
+    requests: trialRequests,
+    loading: loadingTrialRequests,
+    claiming: claimingTrialRequestId,
+    freeRequestsRemaining: trialFreeRequestsRemaining,
+    claimRequest: claimTrialRequest,
+  } = useTrialRequests();
   
   const [requests, setRequests] = useState<ServiceRequest[]>([]);
   const [assignedRequests, setAssignedRequests] = useState<ServiceRequest[]>([]);
@@ -159,6 +169,8 @@ export default function DashboardPage() {
     return await unlockContact(requestId, isExclusive);
   };
 
+  const isInTrialMode = subscription?.is_trial === true;
+
   // Calculate stats
   const thisMonthUnlocks = unlocks.filter(u => {
     const unlockDate = new Date(u.unlocked_at);
@@ -167,7 +179,10 @@ export default function DashboardPage() {
            unlockDate.getFullYear() === now.getFullYear();
   }).length;
 
-  const pendingRequests = requests.filter(r => !isRequestUnlocked(r.id)).length;
+  const totalRequestsCount = isInTrialMode ? trialRequests.length : requests.length;
+  const pendingRequests = isInTrialMode
+    ? trialRequests.length
+    : requests.filter(r => !isRequestUnlocked(r.id)).length;
 
   if (authLoading || profileLoading) {
     return (
@@ -199,7 +214,6 @@ export default function DashboardPage() {
   // Check if user is in trial mode
   const trialExhausted = isTrialExhausted();
   const freeRequestsRemaining = getFreeRequestsRemaining();
-  const isInTrialMode = subscription?.is_trial === true;
 
   return (
     <DashboardLayout title={`Bentornato, ${profile.full_name}`}>
@@ -266,7 +280,7 @@ export default function DashboardPage() {
 
         {/* Stats */}
         <StatsCards
-          totalRequests={requests.length}
+          totalRequests={totalRequestsCount}
           unlockedContacts={unlocks.length}
           pendingRequests={pendingRequests}
           thisMonthUnlocks={thisMonthUnlocks}
@@ -300,11 +314,11 @@ export default function DashboardPage() {
                 </Button>
               </CardHeader>
               <CardContent className="space-y-4">
-                {loadingRequests ? (
+                {(isInTrialMode ? loadingTrialRequests : loadingRequests) ? (
                   <div className="py-8 text-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
                   </div>
-                ) : requests.length === 0 ? (
+                ) : (isInTrialMode ? trialRequests.length === 0 : requests.length === 0) ? (
                   <div className="py-8 text-center">
                     <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <h3 className="font-semibold mb-2">Nessuna richiesta</h3>
@@ -312,6 +326,16 @@ export default function DashboardPage() {
                       Non ci sono richieste nelle tue zone di servizio.
                     </p>
                   </div>
+                ) : isInTrialMode ? (
+                  trialRequests.slice(0, 3).map((request) => (
+                    <TrialRequestCard
+                      key={request.id}
+                      request={request}
+                      onClaim={claimTrialRequest}
+                      claiming={claimingTrialRequestId === request.id}
+                      freeRequestsRemaining={trialFreeRequestsRemaining}
+                    />
+                  ))
                 ) : (
                   requests.slice(0, 3).map((request) => (
                     <RequestCard

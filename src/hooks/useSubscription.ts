@@ -80,13 +80,20 @@ export function useSubscription() {
     if (error) {
       console.error('Error fetching subscription:', error);
     } else if (data) {
+      console.log('Subscription data fetched:', {
+        free_requests_remaining: data.free_requests_remaining,
+        is_trial: data.is_trial
+      });
       setSubscription({
         ...data,
         plan_type: data.plan_type as SubscriptionPlan,
         status: data.status as SubscriptionStatus,
-        free_requests_remaining: data.free_requests_remaining ?? 3,
+        free_requests_remaining: data.free_requests_remaining ?? 0,
         is_trial: data.is_trial ?? true,
       });
+    } else {
+      // No subscription found - reset state
+      setSubscription(null);
     }
     setLoading(false);
   };

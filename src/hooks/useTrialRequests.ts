@@ -25,11 +25,19 @@ export interface ClaimResult {
   client_email?: string;
 }
 
+export interface AcceptedTrialRequest extends TrialRequest {
+  client_name: string;
+  client_phone: string;
+  client_email?: string;
+  accepted_at: string;
+}
+
 export function useTrialRequests() {
   const { profile } = usePlumberProfile();
   // Use shared context instead of creating a new instance
   const { subscription, refreshSubscription, refreshUnlocks } = useSubscriptionContext();
   const [requests, setRequests] = useState<TrialRequest[]>([]);
+  const [acceptedRequests, setAcceptedRequests] = useState<AcceptedTrialRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState<string | null>(null);
 
@@ -107,8 +115,22 @@ export function useTrialRequests() {
 
       if (result?.success) {
         toast.success(result.message);
-        // Remove the claimed request from the list
+        
+        // Move the request from available to accepted (with client data)
+        if (requestData) {
+          const acceptedRequest: AcceptedTrialRequest = {
+            ...requestData,
+            client_name: result.client_name || '',
+            client_phone: result.client_phone || '',
+            client_email: result.client_email,
+            accepted_at: new Date().toISOString()
+          };
+          setAcceptedRequests(prev => [acceptedRequest, ...prev]);
+        }
+        
+        // Remove the claimed request from the available list
         setRequests(prev => prev.filter(r => r.id !== requestId));
+        
         // Refresh subscription to update remaining requests count (shared context)
         await refreshSubscription();
         await refreshUnlocks();
@@ -157,6 +179,7 @@ export function useTrialRequests() {
 
   return {
     requests,
+    acceptedRequests,
     loading,
     claiming,
     isTrial,

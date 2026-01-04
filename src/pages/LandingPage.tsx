@@ -87,7 +87,7 @@ export default function LandingPage() {
 
   const scrollToForm = () => {
     analytics.ctaClick('hero_cta', 'hero');
-    document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const handleQuickStart = () => {

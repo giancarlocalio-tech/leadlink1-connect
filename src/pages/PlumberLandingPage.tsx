@@ -304,7 +304,7 @@ export default function PlumberLandingPage() {
   };
 
   const scrollToForm = () => {
-    document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   return (

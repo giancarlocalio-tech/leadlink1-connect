@@ -51,7 +51,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      navigate('/auth');
+      navigate('/auth?mode=login');
     }
   }, [user, authLoading, navigate]);
 

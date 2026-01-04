@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { usePlumberProfile } from './usePlumberProfile';
 import { useSubscriptionContext } from '@/contexts/SubscriptionContext';
 import { toast } from 'sonner';
-import type { InterventionType, UrgencyType, PropertyType, AccessibilityType } from '@/lib/types';
+import type { PlumberProfile, InterventionType, UrgencyType, PropertyType, AccessibilityType } from '@/lib/types';
 
 export interface TrialRequest {
   id: string;
@@ -32,8 +32,9 @@ export interface AcceptedTrialRequest extends TrialRequest {
   accepted_at: string;
 }
 
-export function useTrialRequests() {
-  const { profile } = usePlumberProfile();
+export function useTrialRequests(profileOverride?: PlumberProfile | null) {
+  const { profile: internalProfile } = usePlumberProfile();
+  const profile = profileOverride ?? internalProfile;
   // Use shared context instead of creating a new instance
   const { subscription, refreshSubscription, refreshUnlocks } = useSubscriptionContext();
   const [requests, setRequests] = useState<TrialRequest[]>([]);
@@ -72,7 +73,6 @@ export function useTrialRequests() {
 
   const fetchAcceptedRequests = useCallback(async () => {
     if (!profile || !isTrial) {
-      setAcceptedRequests([]);
       return;
     }
 

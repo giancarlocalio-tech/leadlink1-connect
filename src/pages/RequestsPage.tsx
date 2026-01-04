@@ -51,7 +51,7 @@ function RequestsContent() {
     isTrial,
     freeRequestsRemaining,
     claimRequest,
-  } = useTrialRequests();
+  } = useTrialRequests(profile);
   
   const [requests, setRequests] = useState<ServiceRequest[]>([]);
   const [loadingRequests, setLoadingRequests] = useState(true);

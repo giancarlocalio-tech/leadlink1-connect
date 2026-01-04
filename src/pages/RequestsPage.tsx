@@ -1,15 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { MapPin, Filter, Search, Zap } from 'lucide-react';
+import { MapPin, Filter, Search, CheckCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { RequestCard } from '@/components/dashboard/RequestCard';
 import { TrialPaywall } from '@/components/dashboard/TrialPaywall';
 import { TrialRequestCard } from '@/components/dashboard/TrialRequestCard';
+import { AcceptedTrialRequestCard } from '@/components/dashboard/AcceptedTrialRequestCard';
 import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import { SubscriptionProvider, useSubscriptionContext } from '@/contexts/SubscriptionContext';
@@ -44,11 +45,12 @@ function RequestsContent() {
   
   const {
     requests: trialRequests,
+    acceptedRequests: trialAcceptedRequests,
     loading: trialLoading,
     claiming,
     isTrial,
     freeRequestsRemaining,
-    claimRequest
+    claimRequest,
   } = useTrialRequests();
   
   const [requests, setRequests] = useState<ServiceRequest[]>([]);
@@ -159,19 +161,30 @@ function RequestsContent() {
 
   const isLoading = isTrial ? trialLoading : loadingRequests;
   const displayRequests = isTrial ? filteredTrialRequests : filteredRequests;
-
-  const isTrialExhausted = isTrial && freeRequestsRemaining <= 0;
-
   return (
     <DashboardLayout title="Richieste" breadcrumbs={[{ label: 'Richieste' }]}>
       <div className="space-y-6">
-        {/* Trial Paywall - Show when trial requests are exhausted */}
-        {isTrialExhausted && (
-          <TrialPaywall freeRequestsRemaining={0} />
+        {/* Trial Accepted Requests - Show client contact details */}
+        {isTrial && trialAcceptedRequests.length > 0 && (
+          <Card className="border-success/50 bg-success/5">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-success" />
+                Richieste accettate
+              </CardTitle>
+              <CardDescription>
+                Qui trovi i dati dei clienti che hai sbloccato
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {trialAcceptedRequests.map((request) => (
+                <AcceptedTrialRequestCard key={request.id} request={request} />
+              ))}
+            </CardContent>
+          </Card>
         )}
 
-        {/* Trial info banner - Show when user still has free requests */}
-        {isTrial && !isTrialExhausted && (
+        {isTrial && (
           <TrialPaywall freeRequestsRemaining={freeRequestsRemaining} />
         )}
 

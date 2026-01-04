@@ -10,6 +10,7 @@ import { RequestCard } from '@/components/dashboard/RequestCard';
 import { AssignedRequestCard } from '@/components/dashboard/AssignedRequestCard';
 import { TrialPaywall } from '@/components/dashboard/TrialPaywall';
 import { TrialRequestCard } from '@/components/dashboard/TrialRequestCard';
+import { AcceptedTrialRequestCard } from '@/components/dashboard/AcceptedTrialRequestCard';
 import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import { SubscriptionProvider, useSubscriptionContext } from '@/contexts/SubscriptionContext';
@@ -47,6 +48,7 @@ function DashboardContent() {
 
   const {
     requests: trialRequests,
+    acceptedRequests: trialAcceptedRequests,
     loading: loadingTrialRequests,
     claiming: claimingTrialRequestId,
     freeRequestsRemaining: trialFreeRequestsRemaining,
@@ -263,8 +265,8 @@ function DashboardContent() {
           </Card>
         )}
 
-        {/* Accepted Requests - Show client contact details */}
-        {acceptedRequests.length > 0 && (
+        {/* Accepted Requests - Show client contact details (for regular subscribers) */}
+        {!isInTrialMode && acceptedRequests.length > 0 && (
           <Card className="border-green-500/50 bg-green-500/5">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-green-700 dark:text-green-400">
@@ -282,6 +284,29 @@ function DashboardContent() {
                   request={request}
                   onAccepted={() => fetchAssignedRequests()}
                   onDeclined={() => fetchAssignedRequests()}
+                />
+              ))}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Trial Accepted Requests - Show client contact details (for trial users) */}
+        {isInTrialMode && trialAcceptedRequests.length > 0 && (
+          <Card className="border-green-500/50 bg-green-500/5">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-green-700 dark:text-green-400">
+                <CheckCircle className="h-5 w-5" />
+                Richieste accettate
+              </CardTitle>
+              <CardDescription>
+                Contatta questi clienti per fissare un appuntamento
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {trialAcceptedRequests.map((request) => (
+                <AcceptedTrialRequestCard
+                  key={request.id}
+                  request={request}
                 />
               ))}
             </CardContent>

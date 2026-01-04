@@ -11,14 +11,23 @@ import { RequestCard } from '@/components/dashboard/RequestCard';
 import { TrialRequestCard } from '@/components/dashboard/TrialRequestCard';
 import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
-import { useSubscription } from '@/hooks/useSubscription';
+import { SubscriptionProvider, useSubscriptionContext } from '@/contexts/SubscriptionContext';
 import { useTrialRequests } from '@/hooks/useTrialRequests';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { ServiceRequest, InterventionType, UrgencyType, PropertyType, AccessibilityType } from '@/lib/types';
 import { INTERVENTION_LABELS, URGENCY_LABELS } from '@/lib/types';
 
+// Wrapper component to provide subscription context
 export default function RequestsPage() {
+  return (
+    <SubscriptionProvider>
+      <RequestsContent />
+    </SubscriptionProvider>
+  );
+}
+
+function RequestsContent() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const highlightedRequestId = searchParams.get('id');
@@ -30,7 +39,7 @@ export default function RequestsPage() {
     unlockContact,
     getCurrentPlan,
     subscription
-  } = useSubscription();
+  } = useSubscriptionContext();
   
   const {
     requests: trialRequests,

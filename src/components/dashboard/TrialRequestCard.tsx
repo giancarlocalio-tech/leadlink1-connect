@@ -26,13 +26,15 @@ interface TrialRequestCardProps {
   onClaim: (requestId: string) => Promise<ClaimResult>;
   claiming: boolean;
   freeRequestsRemaining: number;
+  onAccepted?: () => void;
 }
 
 export function TrialRequestCard({ 
   request, 
   onClaim, 
   claiming, 
-  freeRequestsRemaining 
+  freeRequestsRemaining,
+  onAccepted
 }: TrialRequestCardProps) {
   const [claimResult, setClaimResult] = useState<ClaimResult | null>(null);
 
@@ -60,6 +62,7 @@ export function TrialRequestCard({
     const result = await onClaim(request.id);
     if (result.success) {
       setClaimResult(result);
+      onAccepted?.();
     }
   };
 

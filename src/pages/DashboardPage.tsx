@@ -118,11 +118,12 @@ export default function DashboardPage() {
   const fetchAssignedRequests = async () => {
     if (!profile) return;
     
-    // Fetch requests assigned to this plumber using raw query
+    // Fetch requests assigned to or accepted by this plumber
+    // Trial users accept via accepted_by_id, regular flow uses assigned_plumber_id
     const { data, error } = await supabase
       .from('service_requests')
       .select('*')
-      .eq('assigned_plumber_id', profile.id)
+      .or(`assigned_plumber_id.eq.${profile.id},accepted_by_id.eq.${profile.id}`)
       .in('status', ['assigned', 'accepted'])
       .order('created_at', { ascending: false });
 
@@ -335,6 +336,7 @@ export default function DashboardPage() {
                         onClaim={claimTrialRequest}
                         claiming={claimingTrialRequestId === request.id}
                         freeRequestsRemaining={trialFreeRequestsRemaining}
+                        onAccepted={() => fetchAssignedRequests()}
                       />
                     ))
                   )}

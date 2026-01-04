@@ -87,6 +87,9 @@ export function useTrialRequests() {
       return { success: false, message: 'Hai esaurito le richieste gratuite. Scegli un piano per continuare.' };
     }
 
+    // Get the request data before claiming (we need city and intervention_type for the email)
+    const requestData = requests.find(r => r.id === requestId);
+
     setClaiming(requestId);
 
     try {
@@ -109,6 +112,28 @@ export function useTrialRequests() {
         // Refresh subscription to update remaining requests count (shared context)
         await refreshSubscription();
         await refreshUnlocks();
+
+        // Send confirmation email to the client
+        if (result.client_email && requestData) {
+          try {
+            await supabase.functions.invoke('send-client-confirmation', {
+              body: {
+                client_email: result.client_email,
+                client_name: result.client_name,
+                plumber_name: profile.full_name,
+                plumber_phone: profile.phone,
+                plumber_business: profile.business_name,
+                intervention_type: requestData.intervention_type,
+                city: requestData.city
+              }
+            });
+            console.log('Client confirmation email sent');
+          } catch (emailError) {
+            console.error('Error sending client confirmation email:', emailError);
+            // Don't fail the whole operation if email fails
+          }
+        }
+
         return {
           success: true,
           message: result.message,

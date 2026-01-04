@@ -12,13 +12,22 @@ import { TrialPaywall } from '@/components/dashboard/TrialPaywall';
 import { TrialRequestCard } from '@/components/dashboard/TrialRequestCard';
 import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
-import { useSubscription } from '@/hooks/useSubscription';
+import { SubscriptionProvider, useSubscriptionContext } from '@/contexts/SubscriptionContext';
 import { useTrialRequests } from '@/hooks/useTrialRequests';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { ServiceRequest, InterventionType, UrgencyType, PropertyType, AccessibilityType } from '@/lib/types';
 
+// Wrapper component to provide subscription context
 export default function DashboardPage() {
+  return (
+    <SubscriptionProvider>
+      <DashboardContent />
+    </SubscriptionProvider>
+  );
+}
+
+function DashboardContent() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const { profile, loading: profileLoading } = usePlumberProfile();
@@ -34,7 +43,7 @@ export default function DashboardPage() {
     isTrialExhausted,
     getFreeRequestsRemaining,
     unlocks
-  } = useSubscription();
+  } = useSubscriptionContext();
 
   const {
     requests: trialRequests,

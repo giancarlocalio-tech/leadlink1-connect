@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { usePlumberProfile } from './usePlumberProfile';
-import { useSubscription } from './useSubscription';
+import { useSubscriptionContext } from '@/contexts/SubscriptionContext';
 import { toast } from 'sonner';
 import type { InterventionType, UrgencyType, PropertyType, AccessibilityType } from '@/lib/types';
 
@@ -27,7 +27,8 @@ export interface ClaimResult {
 
 export function useTrialRequests() {
   const { profile } = usePlumberProfile();
-  const { subscription, refreshSubscription } = useSubscription();
+  // Use shared context instead of creating a new instance
+  const { subscription, refreshSubscription, refreshUnlocks } = useSubscriptionContext();
   const [requests, setRequests] = useState<TrialRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState<string | null>(null);
@@ -105,8 +106,9 @@ export function useTrialRequests() {
         toast.success(result.message);
         // Remove the claimed request from the list
         setRequests(prev => prev.filter(r => r.id !== requestId));
-        // Refresh subscription to update remaining requests count
+        // Refresh subscription to update remaining requests count (shared context)
         await refreshSubscription();
+        await refreshUnlocks();
         return {
           success: true,
           message: result.message,

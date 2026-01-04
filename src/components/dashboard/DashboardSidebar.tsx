@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   FileText, 
@@ -35,6 +35,7 @@ export function DashboardSidebar() {
   const { state } = useSidebar();
   const collapsed = state === 'collapsed';
   const location = useLocation();
+  const navigate = useNavigate();
   const { signOut } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
@@ -90,7 +91,11 @@ export function DashboardSidebar() {
         <Button 
           variant="ghost" 
           className="w-full justify-start gap-3 text-muted-foreground hover:text-foreground"
-          onClick={signOut}
+          onClick={async () => {
+            const { error } = await signOut();
+            navigate('/');
+            if (error) window.location.reload();
+          }}
         >
           <LogOut className="h-4 w-4 shrink-0" />
           {!collapsed && <span>Esci</span>}

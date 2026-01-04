@@ -42,16 +42,35 @@ export function SubscriptionCard({
     }
   };
 
-  // Don't show subscription card for trial users (they see TrialPaywall instead)
-  // Only show for users with actual paid subscriptions
-  if (!subscription || !currentPlan || subscription.is_trial) {
+  // Trial users: show a dedicated trial card (even if plan_type is "basic" in DB)
+  if (subscription?.is_trial) {
+    const remaining = subscription.free_requests_remaining ?? 0;
+
+    return (
+      <Card className="border-primary/30 bg-gradient-to-r from-primary/5 to-primary/10">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg">Prova gratuita attiva</CardTitle>
+          <CardDescription>
+            Hai ancora <span className="font-semibold text-primary">{remaining}</span>{' '}
+            {remaining === 1 ? 'richiesta gratuita' : 'richieste gratuite'}
+          </CardDescription>
+        </CardHeader>
+        <CardFooter>
+          <Button onClick={onUpgrade} className="w-full" variant="outline">
+            Vedi piani disponibili
+          </Button>
+        </CardFooter>
+      </Card>
+    );
+  }
+
+  // No paid subscription / missing plan info
+  if (!subscription || !currentPlan) {
     return (
       <Card className="border-dashed">
         <CardHeader>
           <CardTitle className="text-lg">Nessun abbonamento attivo</CardTitle>
-          <CardDescription>
-            Completa la prova gratuita per scegliere un piano
-          </CardDescription>
+          <CardDescription>Seleziona un piano per iniziare</CardDescription>
         </CardHeader>
         <CardFooter>
           <Button onClick={onUpgrade} className="w-full">

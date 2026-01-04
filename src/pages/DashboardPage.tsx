@@ -41,8 +41,6 @@ function DashboardContent() {
     getCurrentPlan,
     getMonthlyUnlocksRemaining,
     getBasicContactsRemaining,
-    isTrialExhausted,
-    getFreeRequestsRemaining,
     unlocks
   } = useSubscriptionContext();
 
@@ -223,9 +221,10 @@ function DashboardContent() {
     );
   }
 
-  // Check if user is in trial mode
-  const trialExhausted = isTrialExhausted();
-  const freeRequestsRemaining = getFreeRequestsRemaining();
+  // Check if user is in trial mode - use values from context (which gets refreshed after claim)
+  // Use trialFreeRequestsRemaining from useTrialRequests as it's always in sync after claim
+  const trialExhausted = isInTrialMode && trialFreeRequestsRemaining <= 0;
+  const freeRequestsRemaining = trialFreeRequestsRemaining;
 
   return (
     <DashboardLayout title={`Bentornato, ${profile.full_name}`}>

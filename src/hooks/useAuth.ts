@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
@@ -49,8 +50,33 @@ export function useAuth() {
   };
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    return { error };
+    // Try normal sign out first
+    const { error } = await supabase.auth.signOut({ scope: 'global' });
+
+    // Even if the API call fails, we want to ensure the user is logged out locally
+    if (error) {
+      console.error('[auth] signOut error:', error);
+      toast.error('Logout non riuscito, riprova.');
+
+      // Best-effort local cleanup
+      try {
+        for (const key of Object.keys(localStorage)) {
+          if (key.includes('auth-token') || key.includes('code-verifier')) {
+            localStorage.removeItem(key);
+          }
+        }
+      } catch {
+        // ignore
+      }
+
+      setSession(null);
+      setUser(null);
+      return { error };
+    }
+
+    setSession(null);
+    setUser(null);
+    return { error: null };
   };
 
   const resetPassword = async (email: string) => {

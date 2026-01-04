@@ -13,8 +13,13 @@ export function Header() {
   const { isAdmin } = useAdmin();
 
   const handleSignOut = async () => {
-    await signOut();
+    const { error } = await signOut();
+
+    // Always route away from protected pages
     navigate('/');
+
+    // If we had an error (or UI is stuck), hard reload ensures fresh auth state
+    if (error) window.location.reload();
   };
 
   return (

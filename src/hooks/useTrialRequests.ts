@@ -77,40 +77,44 @@ export function useTrialRequests() {
     }
 
     try {
+      // IMPORTANT: use the plumber view, which is already scoped to the current plumber
+      // and only reveals contact details when they are unlocked.
       const { data, error } = await supabase
-        .from('service_requests')
+        .from('service_requests_plumber_view')
         .select(
-          'id, intervention_type, urgency, property_type, accessibility, city, description, created_at, is_exclusive, client_name, client_phone, client_email, accepted_at'
+          'id, intervention_type, urgency, property_type, accessibility, city, description, created_at, is_exclusive, client_name, client_phone, client_email, status, is_contact_unlocked'
         )
-        .eq('accepted_by_id', profile.id)
+        .eq('is_contact_unlocked', true)
         .eq('status', 'accepted')
-        .order('accepted_at', { ascending: false });
+        .order('created_at', { ascending: false });
 
       if (error) {
         console.error('Error fetching accepted trial requests:', error);
         return;
       }
 
-      const mapped = (data || []).map((r) => {
-        const createdAt = r.created_at ?? new Date().toISOString();
-        const acceptedAt = r.accepted_at ?? createdAt;
+      const mapped = (data || [])
+        .filter((r) => r.id)
+        .map((r) => {
+          const createdAt = r.created_at ?? new Date().toISOString();
 
-        return {
-          id: r.id,
-          intervention_type: r.intervention_type as InterventionType,
-          urgency: r.urgency as UrgencyType,
-          property_type: r.property_type as PropertyType,
-          accessibility: r.accessibility as AccessibilityType,
-          city: r.city,
-          description: r.description,
-          created_at: createdAt,
-          is_exclusive: r.is_exclusive ?? true,
-          client_name: r.client_name,
-          client_phone: r.client_phone,
-          client_email: r.client_email ?? undefined,
-          accepted_at: acceptedAt,
-        } satisfies AcceptedTrialRequest;
-      });
+          return {
+            id: r.id!,
+            intervention_type: r.intervention_type as InterventionType,
+            urgency: r.urgency as UrgencyType,
+            property_type: r.property_type as PropertyType,
+            accessibility: r.accessibility as AccessibilityType,
+            city: r.city ?? '',
+            description: r.description ?? '',
+            created_at: createdAt,
+            is_exclusive: r.is_exclusive ?? true,
+            client_name: r.client_name ?? '',
+            client_phone: r.client_phone ?? '',
+            client_email: r.client_email ?? undefined,
+            // service_requests_plumber_view doesn't expose accepted_at, so we fall back to created_at.
+            accepted_at: createdAt,
+          } satisfies AcceptedTrialRequest;
+        });
 
       setAcceptedRequests(mapped);
     } catch (err) {

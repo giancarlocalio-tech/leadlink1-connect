@@ -182,6 +182,11 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     console.log("Found plumbers with matching intervention type:", plumbersWithSubs?.length || 0);
+    
+    // Debug: log the raw data structure
+    if (plumbersWithSubs && plumbersWithSubs.length > 0) {
+      console.log("First plumber raw data:", JSON.stringify(plumbersWithSubs[0], null, 2));
+    }
 
     // Filter plumbers who:
     // 1. Serve the request city
@@ -211,11 +216,21 @@ const handler = async (req: Request): Promise<Response> => {
 
       if (!cityMatches) return false;
 
-      // Check subscription status - plumber_subscriptions is an array, get first item
-      const subs = plumber.plumber_subscriptions as any[];
-      const sub = subs && subs.length > 0 ? subs[0] : null;
+      // Check subscription status - plumber_subscriptions can be array or object
+      const subsData = plumber.plumber_subscriptions;
+      let sub: any = null;
+      
+      if (Array.isArray(subsData)) {
+        sub = subsData.length > 0 ? subsData[0] : null;
+      } else if (subsData && typeof subsData === 'object') {
+        // Sometimes Supabase returns a single object instead of array for 1:1 relations
+        sub = subsData;
+      }
+      
+      console.log(`Plumber ${plumber.email}: subscription data type=${typeof subsData}, isArray=${Array.isArray(subsData)}, raw=${JSON.stringify(subsData)}`);
+      
       if (!sub) {
-        console.log(`Plumber ${plumber.email}: no subscription found`);
+        console.log(`Plumber ${plumber.email}: no subscription found after parsing`);
         return false;
       }
 

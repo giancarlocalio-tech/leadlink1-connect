@@ -1,6 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.89.0";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -45,38 +44,9 @@ const handler = async (req: Request): Promise<Response> => {
 
     const appOrigin = (app_origin || "https://idraulicisubito.com").replace(/\/$/, "");
 
-    // One-click login link (magic link) so the plumber lands already logged-in on /dashboard
-    let loginUrl = `${appOrigin}/dashboard`;
-    try {
-      const supabaseAdmin = createClient(
-        Deno.env.get("SUPABASE_URL") ?? "",
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-        {
-          auth: {
-            persistSession: false,
-            autoRefreshToken: false,
-          },
-        }
-      );
-
-      const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
-        type: "magiclink",
-        email,
-      });
-
-      if (linkError) {
-        console.error("generateLink error:", linkError);
-      } else {
-        const tokenHash = (linkData as any)?.properties?.hashed_token as string | undefined;
-        if (tokenHash) {
-          loginUrl = `${appOrigin}/auth/confirm?token_hash=${encodeURIComponent(tokenHash)}&type=magiclink&next=${encodeURIComponent("/dashboard")}`;
-        } else {
-          console.error("generateLink missing hashed_token");
-        }
-      }
-    } catch (e) {
-      console.error("Error generating magic link:", e);
-    }
+    // Direct link to dashboard - the user just registered so they're already authenticated
+    // No need for magic link which expires quickly
+    const loginUrl = `${appOrigin}/dashboard`;
 
     const plainTextContent = `Benvenuto su IdrauliciSubito!
 

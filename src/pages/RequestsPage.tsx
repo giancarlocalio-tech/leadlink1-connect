@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { RequestCard } from '@/components/dashboard/RequestCard';
+import { TrialPaywall } from '@/components/dashboard/TrialPaywall';
 import { TrialRequestCard } from '@/components/dashboard/TrialRequestCard';
 import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
@@ -159,29 +160,19 @@ function RequestsContent() {
   const isLoading = isTrial ? trialLoading : loadingRequests;
   const displayRequests = isTrial ? filteredTrialRequests : filteredRequests;
 
+  const isTrialExhausted = isTrial && freeRequestsRemaining <= 0;
+
   return (
     <DashboardLayout title="Richieste" breadcrumbs={[{ label: 'Richieste' }]}>
       <div className="space-y-6">
-        {/* Trial info banner */}
-        {isTrial && (
-          <Card className="border-primary/30 bg-primary/5">
-            <CardContent className="py-4">
-              <div className="flex items-center justify-between flex-wrap gap-4">
-                <div className="flex items-center gap-3">
-                  <Zap className="h-5 w-5 text-primary" />
-                  <div>
-                    <p className="font-medium">Modalità Trial</p>
-                    <p className="text-sm text-muted-foreground">
-                      Vedi tutte le richieste nella tua zona. Chi accetta prima ottiene i dati del cliente!
-                    </p>
-                  </div>
-                </div>
-                <Badge variant="secondary" className="text-lg px-4 py-1">
-                  {freeRequestsRemaining} richieste rimaste
-                </Badge>
-              </div>
-            </CardContent>
-          </Card>
+        {/* Trial Paywall - Show when trial requests are exhausted */}
+        {isTrialExhausted && (
+          <TrialPaywall freeRequestsRemaining={0} />
+        )}
+
+        {/* Trial info banner - Show when user still has free requests */}
+        {isTrial && !isTrialExhausted && (
+          <TrialPaywall freeRequestsRemaining={freeRequestsRemaining} />
         )}
 
         {/* Filters */}

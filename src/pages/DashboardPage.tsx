@@ -51,7 +51,7 @@ function DashboardContent() {
     claiming: claimingTrialRequestId,
     freeRequestsRemaining: trialFreeRequestsRemaining,
     claimRequest: claimTrialRequest,
-  } = useTrialRequests();
+  } = useTrialRequests(profile);
   
   const [requests, setRequests] = useState<ServiceRequest[]>([]);
   const [assignedRequests, setAssignedRequests] = useState<ServiceRequest[]>([]);

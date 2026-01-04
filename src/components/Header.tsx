@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Wrench, User, LogOut, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
@@ -6,6 +6,7 @@ import { useAdmin } from '@/hooks/useAdmin';
 
 export function Header() {
   const location = useLocation();
+  const navigate = useNavigate();
   const isLoginPage = location.pathname === '/login';
   const isRegisterPage = location.pathname === '/auth';
   const { user, signOut } = useAuth();
@@ -13,6 +14,7 @@ export function Header() {
 
   const handleSignOut = async () => {
     await signOut();
+    navigate('/');
   };
 
   return (

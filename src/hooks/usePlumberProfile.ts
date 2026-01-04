@@ -83,6 +83,26 @@ export function usePlumberProfile() {
         availability: (data.availability as AvailabilityType[]) || [],
         service_areas: (data.service_areas as string[]) || [],
       });
+
+      // Send welcome email immediately after profile creation
+      // Fire and forget - don't block the registration flow
+      supabase.functions.invoke('send-welcome-email', {
+        body: {
+          email: profileData.email,
+          full_name: profileData.full_name,
+          business_name: profileData.business_name,
+          plan_type: 'basic',
+          app_origin: window.location.origin,
+        },
+      }).then(({ data: emailData, error: emailError }) => {
+        if (emailError) {
+          console.error('Error sending welcome email:', emailError);
+        } else {
+          console.log('Welcome email sent successfully:', emailData);
+        }
+      }).catch((err) => {
+        console.error('Error sending welcome email:', err);
+      });
     }
     return { error: null, data };
   };

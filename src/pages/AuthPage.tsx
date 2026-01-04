@@ -246,24 +246,7 @@ export default function AuthPage() {
           return;
         }
 
-        // Send welcome email - fire and forget, don't block registration
-        supabase.functions.invoke('send-welcome-email', {
-          body: {
-            email: profileData.email,
-            full_name: profileData.full_name,
-            business_name: profileData.business_name,
-            plan_type: 'basic',
-            app_origin: window.location.origin,
-          },
-        }).then(({ data, error }) => {
-          if (error) {
-            console.error('Error sending welcome email:', error);
-          } else {
-            console.log('Welcome email sent successfully:', data);
-          }
-        }).catch((emailError) => {
-          console.error('Error sending welcome email:', emailError);
-        });
+        // Welcome email is now sent automatically inside createProfile
 
         setPendingProfileData(null);
         setIsSubmitting(false);

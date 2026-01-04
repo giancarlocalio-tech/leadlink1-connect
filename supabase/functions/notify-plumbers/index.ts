@@ -135,6 +135,109 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Service request ready:", serviceRequest.city, serviceRequest.intervention_type);
 
+    // Send notification to owner/admin
+    const ownerEmail = Deno.env.get("OWNER_NOTIFICATION_EMAIL");
+    if (ownerEmail) {
+      const interventionLabel = INTERVENTION_LABELS[serviceRequest.intervention_type] || serviceRequest.intervention_type;
+      const urgencyLabel = URGENCY_LABELS[serviceRequest.urgency] || serviceRequest.urgency;
+      
+      try {
+        await resend.emails.send({
+          from: "IdrauliciSubito <noreply@idraulicisubito.com>",
+          to: [ownerEmail],
+          subject: `🆕 Nuova richiesta: ${interventionLabel} a ${serviceRequest.city}`,
+          html: `
+            <!DOCTYPE html>
+            <html lang="it">
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            </head>
+            <body style="margin:0;padding:0;background-color:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5;">
+                <tr>
+                  <td align="center" style="padding:20px;">
+                    <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+                      
+                      <!-- Header -->
+                      <tr>
+                        <td style="background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);padding:30px;text-align:center;border-radius:12px 12px 0 0;">
+                          <h1 style="margin:0;color:#ffffff;font-size:24px;font-weight:bold;">🆕 Nuova Richiesta Ricevuta!</h1>
+                        </td>
+                      </tr>
+                      
+                      <!-- Content -->
+                      <tr>
+                        <td style="background-color:#ffffff;padding:30px;">
+                          <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:#333333;">
+                            È arrivata una nuova richiesta di intervento su IdrauliciSubito.
+                          </p>
+                          
+                          <!-- Request Summary -->
+                          <div style="background-color:#eff6ff;border-left:4px solid #2563eb;padding:20px;margin:20px 0;border-radius:0 8px 8px 0;">
+                            <h3 style="margin:0 0 15px 0;color:#2563eb;font-size:16px;">📋 Dettagli richiesta</h3>
+                            <p style="margin:0 0 8px 0;font-size:14px;color:#333;">
+                              <strong>Tipo intervento:</strong> ${interventionLabel}
+                            </p>
+                            <p style="margin:0 0 8px 0;font-size:14px;color:#333;">
+                              <strong>Città:</strong> ${serviceRequest.city}
+                            </p>
+                            <p style="margin:0 0 8px 0;font-size:14px;color:#333;">
+                              <strong>Urgenza:</strong> ${urgencyLabel}
+                            </p>
+                            <p style="margin:0 0 8px 0;font-size:14px;color:#333;">
+                              <strong>Descrizione:</strong> ${serviceRequest.description}
+                            </p>
+                          </div>
+                          
+                          <!-- Client Info -->
+                          <div style="background-color:#fefce8;border-left:4px solid #eab308;padding:20px;margin:20px 0;border-radius:0 8px 8px 0;">
+                            <h3 style="margin:0 0 15px 0;color:#ca8a04;font-size:16px;">👤 Dati cliente</h3>
+                            <p style="margin:0 0 8px 0;font-size:14px;color:#333;">
+                              <strong>Nome:</strong> ${serviceRequest.client_name}
+                            </p>
+                            <p style="margin:0 0 8px 0;font-size:14px;color:#333;">
+                              <strong>Telefono:</strong> ${serviceRequest.client_phone}
+                            </p>
+                            ${serviceRequest.client_email ? `<p style="margin:0;font-size:14px;color:#333;">
+                              <strong>Email:</strong> ${serviceRequest.client_email}
+                            </p>` : ''}
+                          </div>
+                          
+                          <p style="margin:20px 0 0 0;text-align:center;">
+                            <a href="https://idraulicisubito.com/admin" style="display:inline-block;background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:8px;font-weight:bold;font-size:16px;">
+                              Vai al Pannello Admin
+                            </a>
+                          </p>
+                        </td>
+                      </tr>
+                      
+                      <!-- Footer -->
+                      <tr>
+                        <td style="background-color:#f9fafb;padding:20px;text-align:center;border-radius:0 0 12px 12px;border-top:1px solid #e5e7eb;">
+                          <p style="margin:0;font-size:12px;color:#9ca3af;">
+                            ID Richiesta: ${serviceRequest.id}
+                          </p>
+                        </td>
+                      </tr>
+                      
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </body>
+            </html>
+          `,
+        });
+        console.log("Owner notification email sent to:", ownerEmail);
+      } catch (emailError) {
+        console.error("Error sending owner notification email:", emailError);
+        // Don't fail the request if email fails
+      }
+    } else {
+      console.log("OWNER_NOTIFICATION_EMAIL not configured, skipping owner notification");
+    }
+
     // Send confirmation email to the client (if they provided an email)
     if (serviceRequest.client_email) {
       const interventionLabel = INTERVENTION_LABELS[serviceRequest.intervention_type] || serviceRequest.intervention_type;

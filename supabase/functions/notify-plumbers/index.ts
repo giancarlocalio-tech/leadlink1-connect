@@ -135,6 +135,101 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Service request ready:", serviceRequest.city, serviceRequest.intervention_type);
 
+    // Send confirmation email to the client (if they provided an email)
+    if (serviceRequest.client_email) {
+      const interventionLabel = INTERVENTION_LABELS[serviceRequest.intervention_type] || serviceRequest.intervention_type;
+      
+      try {
+        await resend.emails.send({
+          from: "IdrauliciSubito <noreply@idraulicisubito.com>",
+          reply_to: "supporto@idraulicisubito.com",
+          to: [serviceRequest.client_email],
+          subject: `✅ Richiesta ricevuta: ${interventionLabel}`,
+          html: `
+            <!DOCTYPE html>
+            <html lang="it">
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            </head>
+            <body style="margin:0;padding:0;background-color:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5;">
+                <tr>
+                  <td align="center" style="padding:20px;">
+                    <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+                      
+                      <!-- Header -->
+                      <tr>
+                        <td style="background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);padding:30px;text-align:center;border-radius:12px 12px 0 0;">
+                          <h1 style="margin:0;color:#ffffff;font-size:24px;font-weight:bold;">✅ Richiesta Ricevuta!</h1>
+                        </td>
+                      </tr>
+                      
+                      <!-- Content -->
+                      <tr>
+                        <td style="background-color:#ffffff;padding:30px;">
+                          <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:#333333;">
+                            Ciao <strong>${serviceRequest.client_name}</strong>,
+                          </p>
+                          
+                          <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:#333333;">
+                            Abbiamo ricevuto la tua richiesta di intervento e stiamo cercando l'idraulico più adatto nella tua zona.
+                          </p>
+                          
+                          <!-- Request Summary -->
+                          <div style="background-color:#f0fdf4;border-left:4px solid #16a34a;padding:20px;margin:20px 0;border-radius:0 8px 8px 0;">
+                            <h3 style="margin:0 0 15px 0;color:#16a34a;font-size:16px;">📋 Riepilogo richiesta</h3>
+                            <p style="margin:0 0 8px 0;font-size:14px;color:#333;">
+                              <strong>Tipo intervento:</strong> ${interventionLabel}
+                            </p>
+                            <p style="margin:0 0 8px 0;font-size:14px;color:#333;">
+                              <strong>Città:</strong> ${serviceRequest.city}
+                            </p>
+                            <p style="margin:0;font-size:14px;color:#333;">
+                              <strong>Descrizione:</strong> ${serviceRequest.description}
+                            </p>
+                          </div>
+                          
+                          <p style="margin:20px 0;font-size:16px;line-height:1.6;color:#333333;">
+                            <strong>Cosa succede ora?</strong>
+                          </p>
+                          
+                          <ul style="margin:0 0 20px 0;padding-left:20px;color:#333333;font-size:14px;line-height:1.8;">
+                            <li>Stiamo contattando gli idraulici disponibili nella tua zona</li>
+                            <li>Riceverai un'email con i dati dell'idraulico non appena ne troveremo uno</li>
+                            <li>L'idraulico ti contatterà direttamente per fissare l'appuntamento</li>
+                          </ul>
+                          
+                          <p style="margin:0;font-size:14px;color:#666666;line-height:1.6;">
+                            Se hai domande, rispondi a questa email o contattaci a <a href="mailto:supporto@idraulicisubito.com" style="color:#16a34a;">supporto@idraulicisubito.com</a>
+                          </p>
+                        </td>
+                      </tr>
+                      
+                      <!-- Footer -->
+                      <tr>
+                        <td style="background-color:#f9fafb;padding:20px;text-align:center;border-radius:0 0 12px 12px;border-top:1px solid #e5e7eb;">
+                          <p style="margin:0;font-size:12px;color:#9ca3af;">
+                            © ${new Date().getFullYear()} IdrauliciSubito. Tutti i diritti riservati.
+                          </p>
+                        </td>
+                      </tr>
+                      
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </body>
+            </html>
+          `,
+        });
+        console.log("Client confirmation email sent to:", serviceRequest.client_email);
+      } catch (emailError) {
+        console.error("Error sending client confirmation email:", emailError);
+        // Don't fail the request if email fails
+      }
+    }
+
     // Call assign-request to automatically assign to the best available plumber
     try {
       const assignResponse = await fetch(

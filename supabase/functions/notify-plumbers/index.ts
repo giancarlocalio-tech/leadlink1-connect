@@ -157,9 +157,23 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Find plumbers who serve this city and handle this intervention type
-    const { data: plumbers, error: plumbersError } = await supabase
+    // Join with subscriptions to filter by active/trial status
+    const { data: plumbersWithSubs, error: plumbersError } = await supabase
       .from("plumber_profiles")
-      .select("id, email, full_name, business_name, service_areas, intervention_types")
+      .select(`
+        id, 
+        email, 
+        full_name, 
+        business_name, 
+        service_areas, 
+        intervention_types,
+        plumber_subscriptions (
+          status,
+          is_trial,
+          free_requests_remaining,
+          is_available
+        )
+      `)
       .contains("intervention_types", [serviceRequest.intervention_type]);
 
     if (plumbersError) {
@@ -167,18 +181,37 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error(`Failed to fetch plumbers: ${plumbersError.message}`);
     }
 
-    console.log("Found plumbers with matching intervention type:", plumbers?.length || 0);
+    console.log("Found plumbers with matching intervention type:", plumbersWithSubs?.length || 0);
 
-    // Filter plumbers who serve the request city
-    const matchingPlumbers = (plumbers || []).filter((plumber) => {
-      // Check if the city is in their service areas or if main_city matches
+    // Filter plumbers who:
+    // 1. Serve the request city
+    // 2. Have an active subscription OR are in trial with remaining requests
+    // 3. Are available
+    const matchingPlumbers = (plumbersWithSubs || []).filter((plumber) => {
+      // Check if the city is in their service areas
       const serviceAreas = plumber.service_areas || [];
       const cityLower = serviceRequest.city.toLowerCase();
       
-      return serviceAreas.some((area: string) => 
+      const cityMatches = serviceAreas.some((area: string) => 
         area.toLowerCase().includes(cityLower) || 
         cityLower.includes(area.toLowerCase())
       );
+
+      if (!cityMatches) return false;
+
+      // Check subscription status - plumber_subscriptions is an array, get first item
+      const subs = plumber.plumber_subscriptions as any[];
+      const sub = subs && subs.length > 0 ? subs[0] : null;
+      if (!sub) return false;
+
+      // Must be available
+      if (sub.is_available === false) return false;
+
+      // Active subscription OR trial with remaining requests
+      const hasActiveSubscription = sub.status === 'active' && !sub.is_trial;
+      const hasTrialRequestsLeft = sub.is_trial === true && (sub.free_requests_remaining ?? 0) > 0;
+
+      return hasActiveSubscription || hasTrialRequestsLeft;
     });
 
     console.log("Matching plumbers for city:", matchingPlumbers.length);

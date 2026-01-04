@@ -300,15 +300,12 @@ serve(async (req) => {
     }
 
     if (!assignedPlumber) {
-      console.log('[assign-request] No eligible plumbers found, marking as expired');
+      // Don't mark as expired - trial users can still claim this request
+      // Trial users see all 'new' requests and can claim them (first come, first served)
+      console.log('[assign-request] No eligible subscribers found, keeping request as new for trial users');
       
-      await supabase
-        .from('service_requests')
-        .update({ status: 'expired' })
-        .eq('id', request_id);
-
       return new Response(
-        JSON.stringify({ success: false, message: 'No eligible plumbers found' }),
+        JSON.stringify({ success: true, message: 'No subscribers found, available for trial users' }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }

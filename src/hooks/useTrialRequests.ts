@@ -53,7 +53,7 @@ export function useTrialRequests() {
 
     try {
       const { data, error } = await supabase.rpc('get_trial_available_requests', {
-        p_plumber_id: profile.id
+        p_plumber_id: profile.id,
       });
 
       if (error) {
@@ -70,21 +70,71 @@ export function useTrialRequests() {
     }
   }, [profile, isTrial]);
 
+  const fetchAcceptedRequests = useCallback(async () => {
+    if (!profile || !isTrial) {
+      setAcceptedRequests([]);
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('service_requests')
+        .select(
+          'id, intervention_type, urgency, property_type, accessibility, city, description, created_at, is_exclusive, client_name, client_phone, client_email, accepted_at'
+        )
+        .eq('accepted_by_id', profile.id)
+        .eq('status', 'accepted')
+        .order('accepted_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching accepted trial requests:', error);
+        return;
+      }
+
+      const mapped = (data || []).map((r) => {
+        const createdAt = r.created_at ?? new Date().toISOString();
+        const acceptedAt = r.accepted_at ?? createdAt;
+
+        return {
+          id: r.id,
+          intervention_type: r.intervention_type as InterventionType,
+          urgency: r.urgency as UrgencyType,
+          property_type: r.property_type as PropertyType,
+          accessibility: r.accessibility as AccessibilityType,
+          city: r.city,
+          description: r.description,
+          created_at: createdAt,
+          is_exclusive: r.is_exclusive ?? true,
+          client_name: r.client_name,
+          client_phone: r.client_phone,
+          client_email: r.client_email ?? undefined,
+          accepted_at: acceptedAt,
+        } satisfies AcceptedTrialRequest;
+      });
+
+      setAcceptedRequests(mapped);
+    } catch (err) {
+      console.error('Error in fetchAcceptedRequests:', err);
+    }
+  }, [profile, isTrial]);
+
   // Fetch requests on mount and when profile changes
   useEffect(() => {
     fetchAvailableRequests();
-  }, [fetchAvailableRequests]);
+    fetchAcceptedRequests();
+  }, [fetchAvailableRequests, fetchAcceptedRequests]);
 
-  // Refresh every 30 seconds to catch new requests
+  // Refresh every 30 seconds to catch new requests / accepted requests
   useEffect(() => {
     if (!isTrial || !profile) return;
 
     const interval = setInterval(() => {
       fetchAvailableRequests();
+      fetchAcceptedRequests();
     }, 30000);
 
     return () => clearInterval(interval);
-  }, [isTrial, profile, fetchAvailableRequests]);
+  }, [isTrial, profile, fetchAvailableRequests, fetchAcceptedRequests]);
 
   const claimRequest = async (requestId: string): Promise<ClaimResult> => {
     if (!profile) {
@@ -130,10 +180,13 @@ export function useTrialRequests() {
         
         // Remove the claimed request from the available list
         setRequests(prev => prev.filter(r => r.id !== requestId));
-        
+
         // Refresh subscription to update remaining requests count (shared context)
         await refreshSubscription();
         await refreshUnlocks();
+
+        // Always sync accepted requests from DB (so they're visible on dashboard/other pages)
+        await fetchAcceptedRequests();
 
         // Send confirmation email to the client
         if (result.client_email && requestData) {
@@ -185,6 +238,6 @@ export function useTrialRequests() {
     isTrial,
     freeRequestsRemaining,
     claimRequest,
-    refreshRequests: fetchAvailableRequests
+    refreshRequests: fetchAvailableRequests,
   };
 }

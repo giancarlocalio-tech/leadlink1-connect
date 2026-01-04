@@ -190,26 +190,47 @@ const handler = async (req: Request): Promise<Response> => {
     const matchingPlumbers = (plumbersWithSubs || []).filter((plumber) => {
       // Check if the city is in their service areas
       const serviceAreas = plumber.service_areas || [];
-      const cityLower = serviceRequest.city.toLowerCase();
+      const requestCity = serviceRequest.city.toLowerCase().trim();
       
-      const cityMatches = serviceAreas.some((area: string) => 
-        area.toLowerCase().includes(cityLower) || 
-        cityLower.includes(area.toLowerCase())
-      );
+      // Extract just the city name without province code for more flexible matching
+      // e.g. "Siena (SI)" -> "siena"
+      const requestCityName = requestCity.replace(/\s*\([^)]*\)\s*$/, '').trim();
+      
+      const cityMatches = serviceAreas.some((area: string) => {
+        const areaLower = (area || '').toLowerCase().trim();
+        const areaCityName = areaLower.replace(/\s*\([^)]*\)\s*$/, '').trim();
+        
+        // Match if: exact match, area contains city, or city contains area
+        return areaLower === requestCity || 
+               areaCityName === requestCityName ||
+               areaLower.includes(requestCityName) || 
+               requestCity.includes(areaCityName);
+      });
+
+      console.log(`Plumber ${plumber.email}: service_areas=${JSON.stringify(serviceAreas)}, requestCity=${requestCity}, cityMatches=${cityMatches}`);
 
       if (!cityMatches) return false;
 
       // Check subscription status - plumber_subscriptions is an array, get first item
       const subs = plumber.plumber_subscriptions as any[];
       const sub = subs && subs.length > 0 ? subs[0] : null;
-      if (!sub) return false;
+      if (!sub) {
+        console.log(`Plumber ${plumber.email}: no subscription found`);
+        return false;
+      }
 
       // Must be available
-      if (sub.is_available === false) return false;
+      if (sub.is_available === false) {
+        console.log(`Plumber ${plumber.email}: not available`);
+        return false;
+      }
 
       // Active subscription OR trial with remaining requests
+      // Note: trial users have status 'pending' but should still receive notifications
       const hasActiveSubscription = sub.status === 'active' && !sub.is_trial;
       const hasTrialRequestsLeft = sub.is_trial === true && (sub.free_requests_remaining ?? 0) > 0;
+
+      console.log(`Plumber ${plumber.email}: status=${sub.status}, is_trial=${sub.is_trial}, free_remaining=${sub.free_requests_remaining}, hasActive=${hasActiveSubscription}, hasTrial=${hasTrialRequestsLeft}`);
 
       return hasActiveSubscription || hasTrialRequestsLeft;
     });

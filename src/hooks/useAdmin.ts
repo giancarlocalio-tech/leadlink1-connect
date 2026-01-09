@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -6,11 +6,14 @@ export function useAdmin(user: User | null) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // When auth resolves (user changes null -> object), we must flip loading to true
+  // *before* other effects (e.g. route guards) run, otherwise they may redirect.
+  useLayoutEffect(() => {
+    if (user) setLoading(true);
+  }, [user?.id]);
+
   useEffect(() => {
     if (user) {
-      // Important: when user switches from null -> user, we must mark as loading
-      // otherwise consumers may treat `loading=false` + `isAdmin=false` as final.
-      setLoading(true);
       checkAdminStatus(user.id);
     } else {
       setIsAdmin(false);

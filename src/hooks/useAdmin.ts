@@ -1,32 +1,26 @@
 import { useState, useEffect } from 'react';
+import { User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from './useAuth';
 
-export function useAdmin() {
-  const { user } = useAuth();
+export function useAdmin(user: User | null) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user) {
-      checkAdminStatus();
+      checkAdminStatus(user.id);
     } else {
       setIsAdmin(false);
       setLoading(false);
     }
-  }, [user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
 
-  const checkAdminStatus = async () => {
-    if (!user) {
-      setIsAdmin(false);
-      setLoading(false);
-      return;
-    }
-
+  const checkAdminStatus = async (userId: string) => {
     const { data, error } = await supabase
       .from('user_roles')
       .select('id')
-      .eq('user_id', user.id)
+      .eq('user_id', userId)
       .eq('role', 'admin')
       .limit(1);
 
@@ -40,5 +34,6 @@ export function useAdmin() {
     setLoading(false);
   };
 
-  return { isAdmin, loading, refreshStatus: checkAdminStatus };
+  return { isAdmin, loading, refreshStatus: () => user && checkAdminStatus(user.id) };
 }
+

@@ -52,7 +52,7 @@ import {
 export default function AdminPage() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
-  const { isAdmin, loading: adminLoading } = useAdmin();
+  const { isAdmin, loading: adminLoading } = useAdmin(user);
   
   const [plumbers, setPlumbers] = useState<PlumberProfile[]>([]);
   type ExtendedRequest = ServiceRequest & { 

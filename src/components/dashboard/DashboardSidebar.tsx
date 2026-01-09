@@ -5,7 +5,8 @@ import {
   CreditCard, 
   User, 
   Settings,
-  LogOut
+  LogOut,
+  Shield
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import {
@@ -23,6 +24,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
+import { useAdmin } from '@/hooks/useAdmin';
 
 const menuItems = [
   { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
@@ -36,7 +38,8 @@ export function DashboardSidebar() {
   const collapsed = state === 'collapsed';
   const location = useLocation();
   const navigate = useNavigate();
-  const { signOut } = useAuth();
+  const { user, signOut } = useAuth();
+  const { isAdmin } = useAdmin(user);
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -85,6 +88,33 @@ export function DashboardSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {isAdmin && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Amministrazione</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton 
+                    asChild 
+                    isActive={isActive('/admin')}
+                    tooltip={collapsed ? 'Admin' : undefined}
+                  >
+                    <NavLink 
+                      to="/admin" 
+                      end 
+                      className="flex items-center gap-3"
+                      activeClassName="bg-accent text-accent-foreground"
+                    >
+                      <Shield className="h-4 w-4 shrink-0" />
+                      {!collapsed && <span>Admin</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
 
       <SidebarFooter className="p-4">

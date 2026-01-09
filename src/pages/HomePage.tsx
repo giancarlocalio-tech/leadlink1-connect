@@ -287,7 +287,7 @@ export default function HomePage() {
             
             <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 animate-fade-in leading-tight">
               Problema idraulico?<br />
-              <span className="text-primary">Risolto in 24 ore</span>
+              <span className="text-primary">Risolto <span className="underline decoration-4 underline-offset-4">Subito</span></span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-2">
               Ricevi assistenza da idraulici verificati nella tua città.

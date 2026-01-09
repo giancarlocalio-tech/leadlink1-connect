@@ -67,7 +67,8 @@ export function Header() {
                 {!isRegisterPage && (
                   <Link to="/auth">
                     <Button size="sm" className="text-xs sm:text-sm px-2 sm:px-4">
-                      <span className="sm:hidden">Registrati</span>
+                      <Wrench className="h-3 w-3 mr-1 sm:hidden" />
+                      <span className="sm:hidden">Sei idraulico?</span>
                       <span className="hidden sm:inline">Registrati come idraulico</span>
                     </Button>
                   </Link>

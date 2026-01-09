@@ -273,11 +273,10 @@ export default function HomePage() {
           <img 
             src={heroBg} 
             alt="" 
-            className="w-full h-full object-cover object-center md:object-right"
+            className="w-full h-full object-cover object-right-top md:object-right"
           />
-          {/* Overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/95 to-background/60 md:to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+          {/* Overlay for text readability - lighter to show more image */}
+          <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/70 to-transparent" />
         </div>
         
         <div className="container mx-auto px-4 relative z-10">

@@ -287,19 +287,18 @@ export default function HomePage() {
           
           {/* Search-style CTA */}
           <div className="max-w-2xl mx-auto">
-            <div className="flex flex-col sm:flex-row gap-3 bg-white rounded-xl sm:rounded-full p-2 shadow-2xl">
+            <button 
+              onClick={openWizard}
+              className="w-full flex flex-col sm:flex-row gap-3 bg-white rounded-xl sm:rounded-full p-2 shadow-2xl cursor-pointer hover:shadow-[0_25px_60px_-12px_rgba(0,0,0,0.35)] transition-shadow"
+            >
               <div className="flex-1 flex items-center gap-3 px-4 py-3 sm:py-0">
                 <Search className="h-5 w-5 text-muted-foreground shrink-0" />
                 <span className="text-muted-foreground text-left">Di cosa hai bisogno?</span>
               </div>
-              <Button 
-                onClick={openWizard}
-                className="text-base md:text-lg py-6 px-8 rounded-lg sm:rounded-full font-semibold"
-                size="lg"
-              >
+              <div className="bg-primary text-primary-foreground text-base md:text-lg py-3 px-8 rounded-lg sm:rounded-full font-semibold hover:bg-primary/90 transition-colors">
                 Cerca
-              </Button>
-            </div>
+              </div>
+            </button>
           </div>
           
           {/* Trust indicators */}

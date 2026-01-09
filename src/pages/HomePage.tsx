@@ -302,18 +302,18 @@ export default function HomePage() {
           </div>
           
           {/* Trust indicators */}
-          <div className="flex items-center justify-center gap-6 md:gap-8 mt-8 text-sm text-white/90">
-            <div className="flex items-center gap-2">
-              <Shield className="h-4 w-4" />
-              <span>100% Gratuito</span>
+          <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 mt-8">
+            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+              <Shield className="h-4 w-4 text-white" />
+              <span className="text-white text-sm font-medium">100% Gratuito</span>
             </div>
-            <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4" />
-              <span>Risposte in 15 min</span>
+            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+              <Clock className="h-4 w-4 text-white" />
+              <span className="text-white text-sm font-medium">Risposte in 15 min</span>
             </div>
-            <div className="flex items-center gap-2">
-              <Star className="h-4 w-4 fill-white" />
-              <span>4.8/5</span>
+            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+              <Star className="h-4 w-4 text-white fill-white" />
+              <span className="text-white text-sm font-medium">4.8/5</span>
             </div>
           </div>
         </div>

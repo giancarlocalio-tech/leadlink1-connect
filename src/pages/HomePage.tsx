@@ -267,53 +267,52 @@ export default function HomePage() {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="py-20 md:py-32 relative overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center">
+      <section className="py-12 md:py-20 relative overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center">
         {/* Background Image */}
         <div className="absolute inset-0">
           <img 
             src={heroBg} 
             alt="" 
-            className="w-full h-full object-cover object-right-top md:object-right"
+            className="w-full h-full object-cover object-right-top md:object-center"
           />
-          {/* Overlay for text readability - minimal to show image */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/40 to-transparent" />
         </div>
         
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-xl text-center md:text-left">
+          {/* Text box with background */}
+          <div className="max-w-xl bg-background/95 backdrop-blur-sm rounded-2xl p-6 md:p-10 shadow-2xl">
             {/* Urgency badge */}
-            <div className="inline-flex items-center gap-2 bg-success/90 text-success-foreground px-4 py-2 rounded-full text-sm font-medium mb-6 animate-fade-in shadow-lg">
+            <div className="inline-flex items-center gap-2 bg-success text-white px-4 py-2 rounded-full text-sm font-medium mb-6 animate-fade-in shadow-lg">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
               </span>
-              <span className="text-white">12 idraulici disponibili ora nella tua zona</span>
+              <span>12 idraulici disponibili ora nella tua zona</span>
             </div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 animate-fade-in leading-tight">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 animate-fade-in leading-tight">
               Problema idraulico?<br />
               <span className="text-primary">Risolto Subito</span>
             </h1>
-            <p className="text-lg md:text-xl text-foreground/80 mb-2">
+            <p className="text-base md:text-lg text-muted-foreground mb-1">
               Ricevi assistenza da idraulici verificati nella tua città.
             </p>
-            <p className="text-base text-foreground/60 mb-8">
+            <p className="text-sm text-muted-foreground/80 mb-6">
               Gratis e senza impegno • Rispondono in media in 15 minuti
             </p>
 
             {/* Main CTA */}
             <Button 
               onClick={openWizard}
-              className="w-full md:w-auto text-lg md:text-xl py-8 px-10 shadow-2xl hover:shadow-primary/25 hover:scale-[1.02] transition-all duration-300 gap-3 bg-primary hover:bg-primary/90 rounded-xl font-semibold group"
+              className="w-full text-lg md:text-xl py-7 px-8 shadow-xl hover:shadow-primary/25 hover:scale-[1.02] transition-all duration-300 gap-3 bg-primary hover:bg-primary/90 rounded-xl font-semibold group"
               size="lg"
             >
-              <Wrench className="h-6 w-6 shrink-0 group-hover:rotate-12 transition-transform" />
+              <Wrench className="h-5 w-5 shrink-0 group-hover:rotate-12 transition-transform" />
               <span>Richiedi Preventivo Gratuito</span>
               <ArrowRight className="h-5 w-5 shrink-0 group-hover:translate-x-1 transition-transform" />
             </Button>
             
             {/* Trust indicators */}
-            <div className="flex items-center justify-center md:justify-start gap-4 md:gap-6 mt-6 text-sm text-foreground/70">
+            <div className="flex items-center justify-center gap-4 md:gap-6 mt-5 text-sm text-muted-foreground">
               <div className="flex items-center gap-1.5">
                 <Shield className="h-4 w-4 text-primary" />
                 <span>100% Gratuito</span>
@@ -329,7 +328,7 @@ export default function HomePage() {
             </div>
             
             {/* Social proof */}
-            <p className="text-center md:text-left text-xs text-foreground/50 mt-4">
+            <p className="text-center text-xs text-muted-foreground/70 mt-3">
               Già <span className="font-semibold text-foreground">2.847 richieste</span> gestite questo mese
             </p>
           </div>

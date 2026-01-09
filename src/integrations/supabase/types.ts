@@ -676,25 +676,15 @@ export type Database = {
         Args: never
         Returns: Database["public"]["Enums"]["subscription_plan"]
       }
-      get_next_eligible_plumber:
-        | {
-            Args: {
-              p_city: string
-              p_request_id: string
-              p_target_plan: string
-              p_urgency: string
-            }
-            Returns: string
-          }
-        | {
-            Args: {
-              p_city: string
-              p_request_id: string
-              p_target_plan: string
-              p_urgency: string
-            }
-            Returns: string
-          }
+      get_next_eligible_plumber: {
+        Args: {
+          p_city: string
+          p_request_id: string
+          p_target_plan: string
+          p_urgency: string
+        }
+        Returns: string
+      }
       get_trial_available_requests: {
         Args: { p_plumber_id: string }
         Returns: {

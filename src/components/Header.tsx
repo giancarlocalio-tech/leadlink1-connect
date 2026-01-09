@@ -10,7 +10,7 @@ export function Header() {
   const isLoginPage = location.pathname === '/login';
   const isRegisterPage = location.pathname === '/auth';
   const { user, signOut } = useAuth();
-  const { isAdmin } = useAdmin();
+  const { isAdmin } = useAdmin(user);
 
   const handleSignOut = async () => {
     const { error } = await signOut();

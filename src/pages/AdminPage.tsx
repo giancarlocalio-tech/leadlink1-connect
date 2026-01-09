@@ -13,11 +13,18 @@ import {
   MapPin,
   Clock,
   Phone,
-  Mail
+  Mail,
+  CreditCard,
+  MailOpen,
+  Send,
+  Timer,
+  TrendingUp
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,6 +35,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Layout } from '@/components/Layout';
 import { useAuth } from '@/hooks/useAuth';
 import { useAdmin } from '@/hooks/useAdmin';
@@ -49,12 +62,53 @@ import {
   ACCESSIBILITY_LABELS 
 } from '@/lib/types';
 
+// Extended plumber type with subscription info
+interface PlumberWithSubscription extends PlumberProfile {
+  subscription?: {
+    plan_type: string;
+    status: string;
+    is_trial: boolean;
+    free_requests_remaining: number | null;
+    monthly_contacts_used: number | null;
+    monthly_contact_limit: number | null;
+    current_period_end: string | null;
+  } | null;
+}
+
+// Assignment log type
+interface AssignmentLog {
+  id: string;
+  request_id: string;
+  responded: boolean;
+  response_type: string | null;
+  response_at: string | null;
+  assigned_at: string;
+  expires_at: string;
+  request?: {
+    city: string;
+    intervention_type: InterventionType;
+    description: string;
+  };
+}
+
+// Email log type
+interface EmailLog {
+  id: string;
+  email_type: string;
+  subject: string;
+  status: string;
+  created_at: string;
+  delivered_at: string | null;
+  opened_at: string | null;
+  request_id: string | null;
+}
+
 export default function AdminPage() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const { isAdmin, loading: adminLoading } = useAdmin(user);
   
-  const [plumbers, setPlumbers] = useState<PlumberProfile[]>([]);
+  const [plumbers, setPlumbers] = useState<PlumberWithSubscription[]>([]);
   type ExtendedRequest = ServiceRequest & { 
     accepted_by_name?: string; 
     accepted_by_email?: string; 
@@ -70,6 +124,12 @@ export default function AdminPage() {
   
   const [deleteDialog, setDeleteDialog] = useState<{ type: 'plumber' | 'request'; id: string } | null>(null);
   const [selectedRequest, setSelectedRequest] = useState<ExtendedRequest | null>(null);
+  
+  // Plumber detail dialog state
+  const [selectedPlumber, setSelectedPlumber] = useState<PlumberWithSubscription | null>(null);
+  const [plumberAssignments, setPlumberAssignments] = useState<AssignmentLog[]>([]);
+  const [plumberEmails, setPlumberEmails] = useState<EmailLog[]>([]);
+  const [loadingPlumberDetails, setLoadingPlumberDetails] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -97,9 +157,21 @@ export default function AdminPage() {
   };
 
   const fetchPlumbers = async () => {
+    // Fetch plumbers with their subscription info
     const { data, error } = await supabase
       .from('plumber_profiles')
-      .select('*')
+      .select(`
+        *,
+        subscription:plumber_subscriptions(
+          plan_type,
+          status,
+          is_trial,
+          free_requests_remaining,
+          monthly_contacts_used,
+          monthly_contact_limit,
+          current_period_end
+        )
+      `)
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -110,7 +182,65 @@ export default function AdminPage() {
         intervention_types: (p.intervention_types as InterventionType[]) || [],
         availability: (p.availability as AvailabilityType[]) || [],
         service_areas: (p.service_areas as string[]) || [],
+        subscription: Array.isArray(p.subscription) ? p.subscription[0] : p.subscription,
       })));
+    }
+  };
+
+  const fetchPlumberDetails = async (plumber: PlumberWithSubscription) => {
+    setSelectedPlumber(plumber);
+    setLoadingPlumberDetails(true);
+    
+    try {
+      // Fetch assignment logs for this plumber
+      const { data: assignmentsData, error: assignmentsError } = await supabase
+        .from('assignment_logs')
+        .select(`
+          id,
+          request_id,
+          responded,
+          response_type,
+          response_at,
+          assigned_at,
+          expires_at
+        `)
+        .eq('plumber_id', plumber.id)
+        .order('assigned_at', { ascending: false })
+        .limit(20);
+      
+      if (assignmentsError) {
+        console.error('Error fetching assignments:', assignmentsError);
+      } else {
+        // Fetch request details for each assignment
+        const requestIds = (assignmentsData || []).map(a => a.request_id);
+        const { data: requestsData } = await supabase
+          .from('service_requests')
+          .select('id, city, intervention_type, description')
+          .in('id', requestIds);
+        
+        const requestsMap = new Map((requestsData || []).map(r => [r.id, r]));
+        
+        setPlumberAssignments((assignmentsData || []).map(a => ({
+          ...a,
+          request: requestsMap.get(a.request_id) as any,
+        })));
+      }
+      
+      // Fetch email logs for this plumber
+      const { data: emailsData, error: emailsError } = await supabase
+        .from('email_logs')
+        .select('*')
+        .eq('plumber_id', plumber.id)
+        .order('created_at', { ascending: false })
+        .limit(20);
+      
+      if (emailsError) {
+        console.error('Error fetching emails:', emailsError);
+      } else {
+        setPlumberEmails(emailsData || []);
+      }
+    } finally {
+      setLoadingPlumberDetails(false);
     }
   };
 
@@ -208,6 +338,59 @@ export default function AdminPage() {
     }
   };
 
+  const getPlanBadge = (plumber: PlumberWithSubscription) => {
+    const sub = plumber.subscription;
+    if (!sub) return <Badge variant="outline">Nessun piano</Badge>;
+    
+    if (sub.is_trial) {
+      return (
+        <Badge variant="secondary" className="bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400">
+          <Timer className="h-3 w-3 mr-1" />
+          Trial ({sub.free_requests_remaining ?? 0} richieste)
+        </Badge>
+      );
+    }
+    
+    const planColors: Record<string, string> = {
+      premium: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400',
+      medium: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
+      basic: 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400',
+    };
+    
+    return (
+      <Badge variant="secondary" className={planColors[sub.plan_type] || planColors.basic}>
+        <CreditCard className="h-3 w-3 mr-1" />
+        {sub.plan_type.charAt(0).toUpperCase() + sub.plan_type.slice(1)}
+      </Badge>
+    );
+  };
+
+  const getResponseBadge = (responseType: string | null) => {
+    switch (responseType) {
+      case 'accepted':
+        return <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"><CheckCircle className="h-3 w-3 mr-1" />Accettata</Badge>;
+      case 'rejected':
+        return <Badge className="bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"><XCircle className="h-3 w-3 mr-1" />Rifiutata</Badge>;
+      case 'timeout':
+        return <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400"><Clock className="h-3 w-3 mr-1" />Scaduta</Badge>;
+      default:
+        return <Badge variant="outline"><Clock className="h-3 w-3 mr-1" />In attesa</Badge>;
+    }
+  };
+
+  const getEmailStatusBadge = (email: EmailLog) => {
+    if (email.opened_at) {
+      return <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"><MailOpen className="h-3 w-3 mr-1" />Aperta</Badge>;
+    }
+    if (email.delivered_at) {
+      return <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"><CheckCircle className="h-3 w-3 mr-1" />Consegnata</Badge>;
+    }
+    if (email.status === 'sent') {
+      return <Badge variant="outline"><Send className="h-3 w-3 mr-1" />Inviata</Badge>;
+    }
+    return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />Errore</Badge>;
+  };
+
   if (authLoading || adminLoading) {
     return (
       <Layout>
@@ -302,11 +485,12 @@ export default function AdminPage() {
                   {filteredPlumbers.map((plumber) => (
                     <div
                       key={plumber.id}
-                      className="bg-card rounded-lg border border-border p-4"
+                      className="bg-card rounded-lg border border-border p-4 hover:border-primary/50 transition-colors cursor-pointer"
+                      onClick={() => fetchPlumberDetails(plumber)}
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
+                          <div className="flex items-center gap-2 mb-1 flex-wrap">
                             <h3 className="font-semibold text-foreground truncate">
                               {plumber.business_name}
                             </h3>
@@ -315,6 +499,7 @@ export default function AdminPage() {
                             ) : (
                               <XCircle className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                             )}
+                            {getPlanBadge(plumber)}
                           </div>
                           <p className="text-sm text-muted-foreground mb-2">{plumber.full_name}</p>
                           <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
@@ -335,14 +520,29 @@ export default function AdminPage() {
                             Registrato: {formatDate(plumber.created_at)}
                           </p>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                          onClick={() => setDeleteDialog({ type: 'plumber', id: plumber.id })}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              fetchPlumberDetails(plumber);
+                            }}
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setDeleteDialog({ type: 'plumber', id: plumber.id });
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -562,6 +762,193 @@ export default function AdminPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Plumber detail dialog */}
+      <Dialog open={!!selectedPlumber} onOpenChange={() => setSelectedPlumber(null)}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Users className="h-5 w-5" />
+              {selectedPlumber?.business_name}
+            </DialogTitle>
+          </DialogHeader>
+          
+          {selectedPlumber && (
+            <div className="space-y-6">
+              {/* Basic Info */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Nome completo</p>
+                  <p className="text-foreground">{selectedPlumber.full_name}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Città principale</p>
+                  <p className="text-foreground">{selectedPlumber.main_city}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Telefono</p>
+                  <p className="text-foreground">{selectedPlumber.phone}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Email</p>
+                  <p className="text-foreground">{selectedPlumber.email}</p>
+                </div>
+              </div>
+
+              {/* Subscription Status */}
+              <div className="bg-muted/50 rounded-lg p-4">
+                <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <CreditCard className="h-4 w-4" />
+                  Piano e Abbonamento
+                </h4>
+                {selectedPlumber.subscription ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-muted-foreground">Piano:</span>
+                      {getPlanBadge(selectedPlumber)}
+                    </div>
+                    
+                    {selectedPlumber.subscription.is_trial ? (
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-muted-foreground">Richieste gratuite rimanenti:</span>
+                          <span className="font-bold text-lg text-foreground">
+                            {selectedPlumber.subscription.free_requests_remaining ?? 0} / 3
+                          </span>
+                        </div>
+                        <Progress 
+                          value={((selectedPlumber.subscription.free_requests_remaining ?? 0) / 3) * 100} 
+                          className="h-2"
+                        />
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-muted-foreground">Contatti usati questo mese:</span>
+                          <span className="font-bold text-foreground">
+                            {selectedPlumber.subscription.monthly_contacts_used ?? 0}
+                            {selectedPlumber.subscription.monthly_contact_limit && (
+                              <span className="text-muted-foreground font-normal">
+                                {' '}/ {selectedPlumber.subscription.monthly_contact_limit}
+                              </span>
+                            )}
+                          </span>
+                        </div>
+                        {selectedPlumber.subscription.monthly_contact_limit && (
+                          <Progress 
+                            value={((selectedPlumber.subscription.monthly_contacts_used ?? 0) / selectedPlumber.subscription.monthly_contact_limit) * 100} 
+                            className="h-2"
+                          />
+                        )}
+                        {selectedPlumber.subscription.current_period_end && (
+                          <p className="text-xs text-muted-foreground">
+                            Rinnovo: {formatDate(selectedPlumber.subscription.current_period_end)}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                    
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-muted-foreground">Status:</span>
+                      <Badge variant={selectedPlumber.subscription.status === 'active' ? 'default' : 'secondary'}>
+                        {selectedPlumber.subscription.status}
+                      </Badge>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground text-sm">Nessun abbonamento trovato</p>
+                )}
+              </div>
+
+              {/* Assignment History */}
+              <div className="bg-muted/50 rounded-lg p-4">
+                <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4" />
+                  Storico Richieste ({plumberAssignments.length})
+                </h4>
+                {loadingPlumberDetails ? (
+                  <div className="flex justify-center py-4">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                  </div>
+                ) : plumberAssignments.length === 0 ? (
+                  <p className="text-muted-foreground text-sm">Nessuna richiesta ricevuta</p>
+                ) : (
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {plumberAssignments.map((assignment) => (
+                      <div key={assignment.id} className="flex items-center justify-between bg-background rounded p-2 text-sm">
+                        <div className="flex-1 min-w-0">
+                          <p className="truncate text-foreground">
+                            {assignment.request?.city} - {assignment.request?.intervention_type ? INTERVENTION_LABELS[assignment.request.intervention_type] : 'N/A'}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {formatDate(assignment.assigned_at)}
+                          </p>
+                        </div>
+                        <div>
+                          {getResponseBadge(assignment.response_type)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Email History */}
+              <div className="bg-muted/50 rounded-lg p-4">
+                <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <Mail className="h-4 w-4" />
+                  Email Inviate ({plumberEmails.length})
+                </h4>
+                {loadingPlumberDetails ? (
+                  <div className="flex justify-center py-4">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                  </div>
+                ) : plumberEmails.length === 0 ? (
+                  <p className="text-muted-foreground text-sm">Nessuna email inviata</p>
+                ) : (
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {plumberEmails.map((email) => (
+                      <div key={email.id} className="flex items-center justify-between bg-background rounded p-2 text-sm">
+                        <div className="flex-1 min-w-0">
+                          <p className="truncate text-foreground">{email.subject}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {email.email_type} • {formatDate(email.created_at)}
+                          </p>
+                        </div>
+                        <div>
+                          {getEmailStatusBadge(email)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Summary Stats */}
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3">
+                  <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                    {plumberAssignments.filter(a => a.response_type === 'accepted').length}
+                  </p>
+                  <p className="text-xs text-muted-foreground">Accettate</p>
+                </div>
+                <div className="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-3">
+                  <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
+                    {plumberAssignments.filter(a => a.response_type === 'timeout').length}
+                  </p>
+                  <p className="text-xs text-muted-foreground">Scadute</p>
+                </div>
+                <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
+                  <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                    {plumberEmails.filter(e => e.opened_at).length}/{plumberEmails.length}
+                  </p>
+                  <p className="text-xs text-muted-foreground">Email aperte</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 }

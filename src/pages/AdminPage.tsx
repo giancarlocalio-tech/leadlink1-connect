@@ -55,13 +55,21 @@ export default function AdminPage() {
   const { isAdmin, loading: adminLoading } = useAdmin();
   
   const [plumbers, setPlumbers] = useState<PlumberProfile[]>([]);
-  const [requests, setRequests] = useState<ServiceRequest[]>([]);
+  type ExtendedRequest = ServiceRequest & { 
+    accepted_by_name?: string; 
+    accepted_by_email?: string; 
+    accepted_by_phone?: string; 
+    assigned_to_name?: string;
+  };
+  
+  const [requests, setRequests] = useState<ExtendedRequest[]>([]);
   const [loadingData, setLoadingData] = useState(true);
   const [searchPlumber, setSearchPlumber] = useState('');
   const [searchRequest, setSearchRequest] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
   
   const [deleteDialog, setDeleteDialog] = useState<{ type: 'plumber' | 'request'; id: string } | null>(null);
-  const [selectedRequest, setSelectedRequest] = useState<ServiceRequest | null>(null);
+  const [selectedRequest, setSelectedRequest] = useState<ExtendedRequest | null>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -107,9 +115,14 @@ export default function AdminPage() {
   };
 
   const fetchRequests = async () => {
+    // Fetch requests with accepted_by and assigned plumber info
     const { data, error } = await supabase
       .from('service_requests')
-      .select('*')
+      .select(`
+        *,
+        accepted_by:accepted_by_id(full_name, email, phone),
+        assigned_to:assigned_plumber_id(full_name, email, phone)
+      `)
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -121,6 +134,10 @@ export default function AdminPage() {
         urgency: r.urgency as UrgencyType,
         property_type: r.property_type as PropertyType,
         accessibility: r.accessibility as AccessibilityType,
+        accepted_by_name: (r.accepted_by as any)?.full_name,
+        accepted_by_email: (r.accepted_by as any)?.email,
+        accepted_by_phone: (r.accepted_by as any)?.phone,
+        assigned_to_name: (r.assigned_to as any)?.full_name,
       })));
     }
   };
@@ -166,11 +183,30 @@ export default function AdminPage() {
     p.main_city.toLowerCase().includes(searchPlumber.toLowerCase())
   );
 
-  const filteredRequests = requests.filter(r => 
-    r.client_name.toLowerCase().includes(searchRequest.toLowerCase()) ||
-    r.city.toLowerCase().includes(searchRequest.toLowerCase()) ||
-    r.description.toLowerCase().includes(searchRequest.toLowerCase())
-  );
+  const filteredRequests = requests.filter(r => {
+    const matchesSearch = r.client_name.toLowerCase().includes(searchRequest.toLowerCase()) ||
+      r.city.toLowerCase().includes(searchRequest.toLowerCase()) ||
+      r.description.toLowerCase().includes(searchRequest.toLowerCase()) ||
+      (r.accepted_by_name?.toLowerCase().includes(searchRequest.toLowerCase()));
+    
+    const matchesStatus = statusFilter === 'all' || r.status === statusFilter;
+    
+    return matchesSearch && matchesStatus;
+  });
+
+  const getStatusBadge = (status: string | null) => {
+    switch (status) {
+      case 'accepted':
+        return <span className="inline-flex items-center gap-1 bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 text-xs font-medium px-2 py-1 rounded"><CheckCircle className="h-3 w-3" />Accettata</span>;
+      case 'assigned':
+        return <span className="inline-flex items-center gap-1 bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 text-xs font-medium px-2 py-1 rounded"><Clock className="h-3 w-3" />Assegnata</span>;
+      case 'expired':
+        return <span className="inline-flex items-center gap-1 bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 text-xs font-medium px-2 py-1 rounded"><XCircle className="h-3 w-3" />Scaduta</span>;
+      case 'new':
+      default:
+        return <span className="inline-flex items-center gap-1 bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 text-xs font-medium px-2 py-1 rounded"><AlertCircle className="h-3 w-3" />Nuova</span>;
+    }
+  };
 
   if (authLoading || adminLoading) {
     return (
@@ -316,14 +352,27 @@ export default function AdminPage() {
 
             {/* Requests Tab */}
             <TabsContent value="requests" className="space-y-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Cerca per nome, città o descrizione..."
-                  value={searchRequest}
-                  onChange={(e) => setSearchRequest(e.target.value)}
-                  className="pl-10"
-                />
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Cerca per nome, città, idraulico..."
+                    value={searchRequest}
+                    onChange={(e) => setSearchRequest(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring"
+                >
+                  <option value="all">Tutti gli stati</option>
+                  <option value="new">Nuove</option>
+                  <option value="assigned">Assegnate</option>
+                  <option value="accepted">Accettate</option>
+                  <option value="expired">Scadute</option>
+                </select>
               </div>
 
               {loadingData ? (
@@ -345,6 +394,7 @@ export default function AdminPage() {
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1 min-w-0">
                           <div className="flex flex-wrap items-center gap-2 mb-2">
+                            {getStatusBadge(request.status)}
                             <span className="inline-block bg-primary/10 text-primary text-xs font-medium px-2 py-1 rounded">
                               {INTERVENTION_LABELS[request.intervention_type]}
                             </span>
@@ -353,7 +403,7 @@ export default function AdminPage() {
                             </span>
                           </div>
                           <p className="text-foreground text-sm mb-2 line-clamp-2">{request.description}</p>
-                          <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
+                          <div className="flex flex-wrap gap-3 text-sm text-muted-foreground mb-2">
                             <span className="flex items-center gap-1">
                               <MapPin className="h-3 w-3" />
                               {request.city}
@@ -364,6 +414,33 @@ export default function AdminPage() {
                               {formatDate(request.created_at)}
                             </span>
                           </div>
+                          {/* Plumber info */}
+                          {request.status === 'accepted' && request.accepted_by_name && (
+                            <div className="mt-2 pt-2 border-t border-border">
+                              <p className="text-xs text-muted-foreground mb-1">Accettata da:</p>
+                              <p className="text-sm font-medium text-green-600 dark:text-green-400 flex items-center gap-1">
+                                <CheckCircle className="h-3 w-3" />
+                                {request.accepted_by_name}
+                              </p>
+                              {request.accepted_by_phone && (
+                                <p className="text-xs text-muted-foreground">{request.accepted_by_phone}</p>
+                              )}
+                            </div>
+                          )}
+                          {request.status === 'assigned' && request.assigned_to_name && (
+                            <div className="mt-2 pt-2 border-t border-border">
+                              <p className="text-xs text-muted-foreground mb-1">Assegnata a:</p>
+                              <p className="text-sm font-medium text-yellow-600 dark:text-yellow-400 flex items-center gap-1">
+                                <Clock className="h-3 w-3" />
+                                {request.assigned_to_name}
+                              </p>
+                              {request.assignment_expires_at && (
+                                <p className="text-xs text-muted-foreground">
+                                  Scade: {formatDate(request.assignment_expires_at)}
+                                </p>
+                              )}
+                            </div>
+                          )}
                         </div>
                         <div className="flex gap-2">
                           <Button
@@ -453,6 +530,31 @@ export default function AdminPage() {
                   <p className="text-foreground">{selectedRequest.client_email}</p>
                 )}
               </div>
+              {/* Plumber info in dialog */}
+              {selectedRequest.accepted_by_name && (
+                <div className="pt-4 border-t border-border">
+                  <p className="text-sm font-medium text-muted-foreground mb-2">Idraulico che ha accettato</p>
+                  <p className="text-foreground font-medium text-green-600 dark:text-green-400">{selectedRequest.accepted_by_name}</p>
+                  {selectedRequest.accepted_by_phone && (
+                    <p className="text-foreground">{selectedRequest.accepted_by_phone}</p>
+                  )}
+                  {selectedRequest.accepted_by_email && (
+                    <p className="text-foreground">{selectedRequest.accepted_by_email}</p>
+                  )}
+                  {selectedRequest.accepted_at && (
+                    <p className="text-xs text-muted-foreground mt-1">Accettata il: {formatDate(selectedRequest.accepted_at)}</p>
+                  )}
+                </div>
+              )}
+              {selectedRequest.status === 'assigned' && selectedRequest.assigned_to_name && (
+                <div className="pt-4 border-t border-border">
+                  <p className="text-sm font-medium text-muted-foreground mb-2">Attualmente assegnata a</p>
+                  <p className="text-foreground font-medium text-yellow-600 dark:text-yellow-400">{selectedRequest.assigned_to_name}</p>
+                  {selectedRequest.assignment_expires_at && (
+                    <p className="text-xs text-muted-foreground mt-1">Scadenza: {formatDate(selectedRequest.assignment_expires_at)}</p>
+                  )}
+                </div>
+              )}
             </div>
           )}
           <AlertDialogFooter>

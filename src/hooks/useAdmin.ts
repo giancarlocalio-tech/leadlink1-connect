@@ -8,6 +8,9 @@ export function useAdmin(user: User | null) {
 
   useEffect(() => {
     if (user) {
+      // Important: when user switches from null -> user, we must mark as loading
+      // otherwise consumers may treat `loading=false` + `isAdmin=false` as final.
+      setLoading(true);
       checkAdminStatus(user.id);
     } else {
       setIsAdmin(false);
@@ -34,6 +37,14 @@ export function useAdmin(user: User | null) {
     setLoading(false);
   };
 
-  return { isAdmin, loading, refreshStatus: () => user && checkAdminStatus(user.id) };
+  return {
+    isAdmin,
+    loading,
+    refreshStatus: () => {
+      if (!user) return;
+      setLoading(true);
+      return checkAdminStatus(user.id);
+    },
+  };
 }
 

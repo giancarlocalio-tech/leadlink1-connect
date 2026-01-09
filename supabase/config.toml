@@ -35,3 +35,6 @@ verify_jwt = false
 
 [functions.create-test-request]
 verify_jwt = false
+
+[functions.notify-owner]
+verify_jwt = false

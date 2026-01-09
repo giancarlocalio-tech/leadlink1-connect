@@ -157,6 +157,30 @@ serve(async (req) => {
       }
     }
 
+    // NOTIFY OWNER that request was accepted
+    try {
+      const ownerNotifyResponse = await fetch(`${supabaseUrl}/functions/v1/notify-owner`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${supabaseServiceKey}`,
+        },
+        body: JSON.stringify({
+          notification_type: 'request_accepted',
+          request_id: request_id,
+          plumber_id: plumberProfile.id
+        }),
+      });
+      
+      if (ownerNotifyResponse.ok) {
+        console.log(`[accept-request] Owner notified of acceptance`);
+      } else {
+        console.error(`[accept-request] Failed to notify owner: ${ownerNotifyResponse.status}`);
+      }
+    } catch (ownerError) {
+      console.error('[accept-request] Error notifying owner:', ownerError);
+    }
+
     return new Response(
       JSON.stringify({ 
         success: true, 

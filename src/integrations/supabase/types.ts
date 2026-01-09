@@ -194,6 +194,79 @@ export type Database = {
           },
         ]
       }
+      email_logs: {
+        Row: {
+          created_at: string
+          delivered_at: string | null
+          email_type: string
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          opened_at: string | null
+          plumber_id: string | null
+          recipient_email: string
+          recipient_name: string | null
+          request_id: string | null
+          resend_email_id: string | null
+          status: string
+          subject: string
+        }
+        Insert: {
+          created_at?: string
+          delivered_at?: string | null
+          email_type: string
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          opened_at?: string | null
+          plumber_id?: string | null
+          recipient_email: string
+          recipient_name?: string | null
+          request_id?: string | null
+          resend_email_id?: string | null
+          status?: string
+          subject: string
+        }
+        Update: {
+          created_at?: string
+          delivered_at?: string | null
+          email_type?: string
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          opened_at?: string | null
+          plumber_id?: string | null
+          recipient_email?: string
+          recipient_name?: string | null
+          request_id?: string | null
+          resend_email_id?: string | null
+          status?: string
+          subject?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_logs_plumber_id_fkey"
+            columns: ["plumber_id"]
+            isOneToOne: false
+            referencedRelation: "plumber_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_logs_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "service_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_logs_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "service_requests_plumber_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       italian_cities: {
         Row: {
           cap: string[]

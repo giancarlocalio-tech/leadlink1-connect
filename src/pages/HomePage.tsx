@@ -34,7 +34,7 @@ import { INTERVENTION_LABELS } from '@/lib/types';
 import { CATEGORY_FLOWS, getNextQuestionId, type WizardQuestion } from '@/lib/wizardConfig';
 import { CityAutocomplete, type ItalianCity } from '@/components/CityAutocomplete';
 import analytics from '@/lib/analytics';
-
+import heroBg from '@/assets/hero-bg.avif';
 
 // All intervention types for the first selection
 const ALL_INTERVENTION_TYPES: InterventionType[] = [
@@ -267,41 +267,45 @@ export default function HomePage() {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="py-20 md:py-32 bg-gradient-to-b from-primary/10 via-primary/5 to-background relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-1/2 -right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-          <div className="absolute -bottom-1/2 -left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+      <section className="py-20 md:py-32 relative overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img 
+            src={heroBg} 
+            alt="" 
+            className="w-full h-full object-cover object-center md:object-right"
+          />
+          {/* Overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/95 to-background/60 md:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
         </div>
         
-        <div className="container mx-auto px-4 relative">
-          <div className="max-w-3xl mx-auto text-center mb-8">
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-xl text-center md:text-left">
             {/* Urgency badge */}
-            <div className="inline-flex items-center gap-2 bg-success/20 text-success-foreground border border-success/30 px-4 py-2 rounded-full text-sm font-medium mb-6 animate-fade-in">
+            <div className="inline-flex items-center gap-2 bg-success/90 text-success-foreground px-4 py-2 rounded-full text-sm font-medium mb-6 animate-fade-in shadow-lg">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
               </span>
-              <span className="text-success">12 idraulici disponibili ora nella tua zona</span>
+              <span className="text-white">12 idraulici disponibili ora nella tua zona</span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 animate-fade-in leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 animate-fade-in leading-tight">
               Problema idraulico?<br />
               <span className="text-primary">Risolto Subito</span>
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-2">
+            <p className="text-lg md:text-xl text-foreground/80 mb-2">
               Ricevi assistenza da idraulici verificati nella tua città.
             </p>
-            <p className="text-base text-muted-foreground/80 mb-8">
+            <p className="text-base text-foreground/60 mb-8">
               Gratis e senza impegno • Rispondono in media in 15 minuti
             </p>
-          </div>
 
-          <div className="max-w-md mx-auto">
             {/* Main CTA */}
             <Button 
               onClick={openWizard}
-              className="w-full text-lg md:text-xl py-8 px-8 shadow-2xl hover:shadow-primary/25 hover:scale-[1.02] transition-all duration-300 gap-3 bg-primary hover:bg-primary/90 rounded-xl font-semibold group"
+              className="w-full md:w-auto text-lg md:text-xl py-8 px-10 shadow-2xl hover:shadow-primary/25 hover:scale-[1.02] transition-all duration-300 gap-3 bg-primary hover:bg-primary/90 rounded-xl font-semibold group"
               size="lg"
             >
               <Wrench className="h-6 w-6 shrink-0 group-hover:rotate-12 transition-transform" />
@@ -310,7 +314,7 @@ export default function HomePage() {
             </Button>
             
             {/* Trust indicators */}
-            <div className="flex items-center justify-center gap-6 mt-6 text-sm text-muted-foreground">
+            <div className="flex items-center justify-center md:justify-start gap-4 md:gap-6 mt-6 text-sm text-foreground/70">
               <div className="flex items-center gap-1.5">
                 <Shield className="h-4 w-4 text-primary" />
                 <span>100% Gratuito</span>
@@ -326,7 +330,7 @@ export default function HomePage() {
             </div>
             
             {/* Social proof */}
-            <p className="text-center text-xs text-muted-foreground/70 mt-4">
+            <p className="text-center md:text-left text-xs text-foreground/50 mt-4">
               Già <span className="font-semibold text-foreground">2.847 richieste</span> gestite questo mese
             </p>
           </div>

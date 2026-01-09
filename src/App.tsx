@@ -2,6 +2,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import { CookieConsent } from "@/components/CookieConsent";
 import HomePage from "./pages/HomePage";
 import RequestPage from "./pages/RequestPage";
@@ -22,41 +23,48 @@ import PlumberPlanSelectionPage from "./pages/PlumberPlanSelectionPage";
 import LandingPage from "./pages/LandingPage";
 import LandingLavoriZonaPage from "./pages/LandingLavoriZonaPage";
 import LandingComeFunzionaPage from "./pages/LandingComeFunzionaPage";
+import CityLandingPage from "./pages/CityLandingPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/richiesta" element={<RequestPage />} />
-          <Route path="/conferma" element={<ConfirmationPage />} />
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/auth/confirm" element={<AuthConfirmPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/dashboard/richieste" element={<RequestsPage />} />
-          <Route path="/dashboard/abbonamento" element={<SubscriptionPage />} />
-          <Route path="/dashboard/pagamento-completato" element={<PaymentSuccessPage />} />
-          <Route path="/dashboard/profilo" element={<ProfilePage />} />
-          <Route path="/privacy" element={<PrivacyPage />} />
-          <Route path="/termini" element={<TermsPage />} />
-          <Route path="/admin" element={<AdminPage />} />
-          <Route path="/per-idraulici" element={<PlumberLandingPage />} />
-          <Route path="/registrazione/piano" element={<PlumberPlanSelectionPage />} />
-          <Route path="/lp/idraulico" element={<LandingPage />} />
-          <Route path="/lp/lavori-zona" element={<LandingLavoriZonaPage />} />
-          <Route path="/lp/come-funziona" element={<LandingComeFunzionaPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <CookieConsent />
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <HelmetProvider>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/richiesta" element={<RequestPage />} />
+            <Route path="/conferma" element={<ConfirmationPage />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/auth/confirm" element={<AuthConfirmPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/dashboard/richieste" element={<RequestsPage />} />
+            <Route path="/dashboard/abbonamento" element={<SubscriptionPage />} />
+            <Route path="/dashboard/pagamento-completato" element={<PaymentSuccessPage />} />
+            <Route path="/dashboard/profilo" element={<ProfilePage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/termini" element={<TermsPage />} />
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/per-idraulici" element={<PlumberLandingPage />} />
+            <Route path="/registrazione/piano" element={<PlumberPlanSelectionPage />} />
+            <Route path="/lp/idraulico" element={<LandingPage />} />
+            <Route path="/lp/lavori-zona" element={<LandingLavoriZonaPage />} />
+            <Route path="/lp/come-funziona" element={<LandingComeFunzionaPage />} />
+            {/* City-specific SEO landing pages */}
+            <Route path="/idraulico-brescia" element={<CityLandingPage />} />
+            <Route path="/idraulico-milano" element={<CityLandingPage />} />
+            <Route path="/:city" element={<CityLandingPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <CookieConsent />
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </HelmetProvider>
 );
 
 export default App;

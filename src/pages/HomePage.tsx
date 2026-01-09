@@ -462,36 +462,59 @@ export default function HomePage() {
       )}
 
       {/* How it works Section */}
-      <section className="py-16 bg-secondary/30">
+      <section className="py-20 bg-muted/50">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold text-center mb-12">Come funziona</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center">
-              <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-primary">1</span>
+          <div className="text-center mb-14">
+            <span className="text-primary font-semibold text-sm uppercase tracking-wide">Semplice e veloce</span>
+            <h2 className="text-3xl md:text-4xl font-bold mt-2">Come funziona</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-10 max-w-5xl mx-auto">
+            {/* Step 1 */}
+            <div className="relative bg-card rounded-2xl p-8 shadow-lg border border-border hover:shadow-xl transition-shadow">
+              <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-primary rounded-full w-10 h-10 flex items-center justify-center shadow-md">
+                <span className="text-lg font-bold text-primary-foreground">1</span>
               </div>
-              <h3 className="font-semibold mb-2">Scegli il servizio</h3>
-              <p className="text-muted-foreground text-sm">
-                Seleziona il tipo di intervento di cui hai bisogno
-              </p>
+              <div className="mt-4 text-center">
+                <div className="bg-primary/10 rounded-xl w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                  <Search className="h-7 w-7 text-primary" />
+                </div>
+                <h3 className="font-bold text-lg mb-2">Scegli il servizio</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  Seleziona il tipo di intervento di cui hai bisogno dal nostro wizard guidato
+                </p>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-primary">2</span>
+            
+            {/* Step 2 */}
+            <div className="relative bg-card rounded-2xl p-8 shadow-lg border border-border hover:shadow-xl transition-shadow">
+              <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-primary rounded-full w-10 h-10 flex items-center justify-center shadow-md">
+                <span className="text-lg font-bold text-primary-foreground">2</span>
               </div>
-              <h3 className="font-semibold mb-2">Descrivi il problema</h3>
-              <p className="text-muted-foreground text-sm">
-                Rispondi a poche domande guidate per dettagliare la richiesta
-              </p>
+              <div className="mt-4 text-center">
+                <div className="bg-primary/10 rounded-xl w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle className="h-7 w-7 text-primary" />
+                </div>
+                <h3 className="font-bold text-lg mb-2">Descrivi il problema</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  Rispondi a poche domande per dettagliare al meglio la tua richiesta
+                </p>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-primary">3</span>
+            
+            {/* Step 3 */}
+            <div className="relative bg-card rounded-2xl p-8 shadow-lg border border-border hover:shadow-xl transition-shadow">
+              <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-primary rounded-full w-10 h-10 flex items-center justify-center shadow-md">
+                <span className="text-lg font-bold text-primary-foreground">3</span>
               </div>
-              <h3 className="font-semibold mb-2">Vieni contattato</h3>
-              <p className="text-muted-foreground text-sm">
-                Gli idraulici della zona ti contatteranno direttamente
-              </p>
+              <div className="mt-4 text-center">
+                <div className="bg-primary/10 rounded-xl w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                  <Phone className="h-7 w-7 text-primary" />
+                </div>
+                <h3 className="font-bold text-lg mb-2">Vieni contattato</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  Gli idraulici della tua zona ti contatteranno direttamente
+                </p>
+              </div>
             </div>
           </div>
         </div>

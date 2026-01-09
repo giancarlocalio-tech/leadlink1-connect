@@ -273,7 +273,7 @@ export default function HomePage() {
           <img 
             src={heroBg} 
             alt="" 
-            className="w-full h-full object-cover object-[30%_center] md:object-center"
+            className="w-full h-full object-cover object-[25%_center] md:object-center"
           />
           {/* Dark overlay for text readability */}
           <div className="absolute inset-0 bg-black/30" />

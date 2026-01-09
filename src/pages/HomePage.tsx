@@ -266,71 +266,56 @@ export default function HomePage() {
 
   return (
     <Layout>
-      {/* Hero Section */}
-      <section className="py-12 md:py-20 relative overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center">
+      {/* Hero Section - ProntoPro style */}
+      <section className="relative overflow-hidden min-h-[500px] md:min-h-[550px] flex items-center justify-center">
         {/* Background Image */}
         <div className="absolute inset-0">
           <img 
             src={heroBg} 
             alt="" 
-            className="w-full h-full object-cover object-right-top md:object-center"
+            className="w-full h-full object-cover object-center"
           />
+          {/* Dark overlay for text readability */}
+          <div className="absolute inset-0 bg-black/30" />
         </div>
         
-        <div className="container mx-auto px-4 relative z-10">
-          {/* Text box with background */}
-          <div className="max-w-xl bg-background/95 backdrop-blur-sm rounded-2xl p-6 md:p-10 shadow-2xl">
-            {/* Urgency badge */}
-            <div className="inline-flex items-center gap-2 bg-success text-white px-4 py-2 rounded-full text-sm font-medium mb-6 animate-fade-in shadow-lg">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-              </span>
-              <span>12 idraulici disponibili ora nella tua zona</span>
+        <div className="container mx-auto px-4 relative z-10 text-center py-16 md:py-24">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-8 animate-fade-in leading-tight drop-shadow-lg">
+            Trova subito il tuo idraulico<br />
+            per qualsiasi intervento.
+          </h1>
+          
+          {/* Search-style CTA */}
+          <div className="max-w-2xl mx-auto">
+            <div className="flex flex-col sm:flex-row gap-3 bg-white rounded-xl sm:rounded-full p-2 shadow-2xl">
+              <div className="flex-1 flex items-center gap-3 px-4 py-3 sm:py-0">
+                <Search className="h-5 w-5 text-muted-foreground shrink-0" />
+                <span className="text-muted-foreground text-left">Di cosa hai bisogno?</span>
+              </div>
+              <Button 
+                onClick={openWizard}
+                className="text-base md:text-lg py-6 px-8 rounded-lg sm:rounded-full font-semibold"
+                size="lg"
+              >
+                Cerca
+              </Button>
             </div>
-            
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 animate-fade-in leading-tight">
-              Problema idraulico?<br />
-              <span className="text-primary">Risolto Subito</span>
-            </h1>
-            <p className="text-base md:text-lg text-muted-foreground mb-1">
-              Ricevi assistenza da idraulici verificati nella tua città.
-            </p>
-            <p className="text-sm text-muted-foreground/80 mb-6">
-              Gratis e senza impegno • Rispondono in media in 15 minuti
-            </p>
-
-            {/* Main CTA */}
-            <Button 
-              onClick={openWizard}
-              className="w-full text-lg md:text-xl py-7 px-8 shadow-xl hover:shadow-primary/25 hover:scale-[1.02] transition-all duration-300 gap-3 bg-primary hover:bg-primary/90 rounded-xl font-semibold group"
-              size="lg"
-            >
-              <Wrench className="h-5 w-5 shrink-0 group-hover:rotate-12 transition-transform" />
-              <span>Richiedi Preventivo Gratuito</span>
-              <ArrowRight className="h-5 w-5 shrink-0 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            
-            {/* Trust indicators */}
-            <div className="flex items-center justify-center gap-4 md:gap-6 mt-5 text-sm text-muted-foreground">
-              <div className="flex items-center gap-1.5">
-                <Shield className="h-4 w-4 text-primary" />
-                <span>100% Gratuito</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Clock className="h-4 w-4 text-primary" />
-                <span>2 minuti</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Star className="h-4 w-4 text-primary fill-primary" />
-                <span>4.8/5</span>
-              </div>
+          </div>
+          
+          {/* Trust indicators */}
+          <div className="flex items-center justify-center gap-6 md:gap-8 mt-8 text-sm text-white/90">
+            <div className="flex items-center gap-2">
+              <Shield className="h-4 w-4" />
+              <span>100% Gratuito</span>
             </div>
-            
-            {/* Social proof */}
-            <p className="text-center text-xs text-muted-foreground/70 mt-3">
-              Già <span className="font-semibold text-foreground">2.847 richieste</span> gestite questo mese
-            </p>
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4" />
+              <span>Risposte in 15 min</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Star className="h-4 w-4 fill-white" />
+              <span>4.8/5</span>
+            </div>
           </div>
         </div>
       </section>

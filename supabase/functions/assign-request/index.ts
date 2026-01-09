@@ -71,18 +71,87 @@ async function generateMagicLink(supabase: any, email: string, appOrigin?: strin
   return loginUrl;
 }
 
+async function logEmail(
+  supabase: any,
+  emailType: string,
+  recipientEmail: string,
+  recipientName: string,
+  subject: string,
+  resendEmailId: string | null,
+  requestId: string | null,
+  plumberId: string | null,
+  status: string,
+  errorMessage?: string,
+  metadata?: Record<string, unknown>
+): Promise<void> {
+  try {
+    await supabase
+      .from('email_logs')
+      .insert({
+        email_type: emailType,
+        recipient_email: recipientEmail,
+        recipient_name: recipientName,
+        subject: subject,
+        resend_email_id: resendEmailId,
+        request_id: requestId,
+        plumber_id: plumberId,
+        status: status,
+        error_message: errorMessage,
+        metadata: metadata || {}
+      });
+    console.log(`[assign-request] Email logged: ${emailType} to ${recipientEmail}`);
+  } catch (err) {
+    console.error(`[assign-request] Failed to log email:`, err);
+  }
+}
+
+async function notifyOwner(
+  supabaseUrl: string,
+  supabaseServiceKey: string,
+  notificationType: string,
+  requestId?: string,
+  plumberId?: string
+): Promise<void> {
+  try {
+    const response = await fetch(`${supabaseUrl}/functions/v1/notify-owner`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${supabaseServiceKey}`,
+      },
+      body: JSON.stringify({
+        notification_type: notificationType,
+        request_id: requestId,
+        plumber_id: plumberId
+      })
+    });
+    
+    if (!response.ok) {
+      console.error(`[assign-request] Failed to notify owner: ${response.status}`);
+    } else {
+      console.log(`[assign-request] Owner notified: ${notificationType}`);
+    }
+  } catch (err) {
+    console.error(`[assign-request] Error notifying owner:`, err);
+  }
+}
+
 async function sendAssignmentEmail(
   supabase: any,
+  supabaseUrl: string,
+  supabaseServiceKey: string,
   email: string, 
   fullName: string, 
   request: any,
-  timerMinutes: number
-): Promise<void> {
+  timerMinutes: number,
+  plumberId: string
+): Promise<{ success: boolean; emailId?: string; error?: string }> {
   const interventionLabel = INTERVENTION_LABELS[request.intervention_type] || request.intervention_type;
   const urgencyLabel = URGENCY_LABELS[request.urgency] || request.urgency;
   
   // Generate magic link for one-click login
   const loginUrl = await generateMagicLink(supabase, email);
+  const subject = `Nuova richiesta: ${interventionLabel} a ${request.city}`;
   
   const plainTextContent = `Nuova richiesta assegnata a te!
 
@@ -108,16 +177,17 @@ ${loginUrl}
 IdrauliciSubito
 https://idraulicisubito.com`;
 
-  const emailResponse = await resend.emails.send({
-    from: "IdrauliciSubito <notifiche@idraulicisubito.com>",
-    reply_to: "supporto@idraulicisubito.com",
-    to: [email],
-    subject: `Nuova richiesta: ${interventionLabel} a ${request.city}`,
-    text: plainTextContent,
-    headers: {
-      "List-Unsubscribe": "<mailto:supporto@idraulicisubito.com?subject=unsubscribe>",
-    },
-    html: `<!DOCTYPE html>
+  try {
+    const emailResponse = await resend.emails.send({
+      from: "IdrauliciSubito <notifiche@idraulicisubito.com>",
+      reply_to: "supporto@idraulicisubito.com",
+      to: [email],
+      subject: subject,
+      text: plainTextContent,
+      headers: {
+        "List-Unsubscribe": "<mailto:supporto@idraulicisubito.com?subject=unsubscribe>",
+      },
+      html: `<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="utf-8">
@@ -216,9 +286,44 @@ Se non accetti entro il tempo previsto, la richiesta verra riassegnata.
 </table>
 </body>
 </html>`,
-  });
+    });
 
-  console.log(`[assign-request] Email sent to ${email}:`, emailResponse);
+    console.log(`[assign-request] Email sent to ${email}:`, emailResponse);
+    
+    // Log successful email
+    await logEmail(
+      supabase,
+      'assignment',
+      email,
+      fullName,
+      subject,
+      emailResponse.data?.id || null,
+      request.id,
+      plumberId,
+      'sent'
+    );
+
+    return { success: true, emailId: emailResponse.data?.id };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error(`[assign-request] Email send failed:`, error);
+    
+    // Log failed email
+    await logEmail(
+      supabase,
+      'assignment',
+      email,
+      fullName,
+      subject,
+      null,
+      request.id,
+      plumberId,
+      'failed',
+      errorMessage
+    );
+
+    return { success: false, error: errorMessage };
+  }
 }
 
 serve(async (req) => {
@@ -337,12 +442,21 @@ serve(async (req) => {
       .single();
 
     if (plumber) {
-      try {
-        await sendAssignmentEmail(supabase, plumber.email, plumber.full_name, request, timerMinutes);
-        console.log(`[assign-request] Notification email sent to: ${plumber.email}`);
-      } catch (emailError) {
-        console.error(`[assign-request] Failed to send email:`, emailError);
-        // Don't fail the assignment if email fails
+      const emailResult = await sendAssignmentEmail(
+        supabase, 
+        supabaseUrl, 
+        supabaseServiceKey, 
+        plumber.email, 
+        plumber.full_name, 
+        request, 
+        timerMinutes,
+        assignedPlumber.id
+      );
+      
+      if (emailResult.success) {
+        console.log(`[assign-request] Notification email sent to: ${plumber.email}, ID: ${emailResult.emailId}`);
+      } else {
+        console.error(`[assign-request] Failed to send email: ${emailResult.error}`);
       }
     }
 

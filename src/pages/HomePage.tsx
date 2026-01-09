@@ -275,8 +275,8 @@ export default function HomePage() {
             alt="" 
             className="w-full h-full object-cover object-right-top md:object-right"
           />
-          {/* Overlay for text readability - lighter to show more image */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/70 to-transparent" />
+          {/* Overlay for text readability - minimal to show image */}
+          <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/40 to-transparent" />
         </div>
         
         <div className="container mx-auto px-4 relative z-10">

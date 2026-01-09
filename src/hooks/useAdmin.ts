@@ -1,26 +1,16 @@
-import { useState, useEffect, useLayoutEffect } from 'react';
+// @refresh reset
+import { useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
 export function useAdmin(user: User | null) {
   const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [checkedUserId, setCheckedUserId] = useState<string | null>(null);
+  const [inFlight, setInFlight] = useState(false);
 
-  // When auth resolves (user changes null -> object), we must flip loading to true
-  // *before* other effects (e.g. route guards) run, otherwise they may redirect.
-  useLayoutEffect(() => {
-    if (user) setLoading(true);
-  }, [user?.id]);
-
-  useEffect(() => {
-    if (user) {
-      checkAdminStatus(user.id);
-    } else {
-      setIsAdmin(false);
-      setLoading(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id]);
+  // Key idea: when user changes, `checkedUserId !== user.id` becomes true immediately
+  // (same render), so consumers won’t redirect based on stale isAdmin=false.
+  const loading = !!user && (checkedUserId !== user.id || inFlight);
 
   const checkAdminStatus = async (userId: string) => {
     const { data, error } = await supabase
@@ -37,15 +27,29 @@ export function useAdmin(user: User | null) {
       setIsAdmin((data?.length ?? 0) > 0);
     }
 
-    setLoading(false);
+    setCheckedUserId(userId);
+    setInFlight(false);
   };
+
+  useEffect(() => {
+    if (!user) {
+      setIsAdmin(false);
+      setCheckedUserId(null);
+      setInFlight(false);
+      return;
+    }
+
+    setInFlight(true);
+    checkAdminStatus(user.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
 
   return {
     isAdmin,
     loading,
     refreshStatus: () => {
       if (!user) return;
-      setLoading(true);
+      setInFlight(true);
       return checkAdminStatus(user.id);
     },
   };

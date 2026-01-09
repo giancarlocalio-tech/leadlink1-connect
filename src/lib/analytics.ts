@@ -18,8 +18,17 @@ export type AnalyticsEvent =
   | 'page_view'
   | 'lead_form_start'
   | 'lead_form_step'
+  | 'lead_form_step_time'
   | 'lead_form_submit'
   | 'lead_form_success'
+  | 'lead_form_error'
+  | 'lead_form_abandon'
+  | 'lead_form_field_focus'
+  | 'lead_form_field_blur'
+  | 'lead_form_validation_fail'
+  | 'wizard_open'
+  | 'wizard_close'
+  | 'wizard_step'
   | 'plumber_registration_start'
   | 'plumber_registration_submit'
   | 'cta_click'
@@ -168,30 +177,53 @@ export function trackAdsConversion(
   window.gtag('event', 'conversion', conversionData);
 }
 
+// Step timing tracker
+let stepStartTime: number | null = null;
+let currentStepName: string | null = null;
+
 // Specific tracking functions for key events
 export const analytics = {
   // Track when user starts filling the lead form
   leadFormStart: (interventionType?: string, source?: string) => {
+    stepStartTime = Date.now();
+    currentStepName = 'start';
     trackEvent('lead_form_start', {
       intervention_type: interventionType,
       source: source || 'organic',
     });
   },
 
-  // Track form step progression
+  // Track form step progression with timing
   leadFormStep: (step: number, stepName: string) => {
+    const timeSpent = stepStartTime ? Math.round((Date.now() - stepStartTime) / 1000) : 0;
+    
+    // Track time spent on previous step
+    if (currentStepName && timeSpent > 0) {
+      trackEvent('lead_form_step_time', {
+        step_name: currentStepName,
+        time_seconds: timeSpent,
+      });
+    }
+    
+    // Track new step
     trackEvent('lead_form_step', {
       step_number: step,
       step_name: stepName,
     });
+    
+    // Reset timer for new step
+    stepStartTime = Date.now();
+    currentStepName = stepName;
   },
 
-  // Track form submission
+  // Track form submission attempt
   leadFormSubmit: (interventionType: string, city: string, urgency: string) => {
+    const timeSpent = stepStartTime ? Math.round((Date.now() - stepStartTime) / 1000) : 0;
     trackEvent('lead_form_submit', {
       intervention_type: interventionType,
       city: city,
       urgency: urgency,
+      time_on_last_step: timeSpent,
     });
   },
 
@@ -203,6 +235,94 @@ export const analytics = {
     });
     // Track Google Ads conversion with GCLID
     trackAdsConversion(interventionType, city);
+    // Reset timer
+    stepStartTime = null;
+    currentStepName = null;
+  },
+
+  // Track submission errors
+  leadFormError: (errorType: string, errorMessage: string, step: string) => {
+    trackEvent('lead_form_error', {
+      error_type: errorType,
+      error_message: errorMessage,
+      step: step,
+    });
+  },
+
+  // Track form abandonment
+  leadFormAbandon: (step: string, interventionType?: string, timeSpent?: number) => {
+    trackEvent('lead_form_abandon', {
+      abandoned_at_step: step,
+      intervention_type: interventionType,
+      time_spent_seconds: timeSpent || (stepStartTime ? Math.round((Date.now() - stepStartTime) / 1000) : 0),
+    });
+    // Reset timer
+    stepStartTime = null;
+    currentStepName = null;
+  },
+
+  // Track field interactions
+  leadFormFieldFocus: (fieldName: string, step: string) => {
+    trackEvent('lead_form_field_focus', {
+      field_name: fieldName,
+      step: step,
+    });
+  },
+
+  leadFormFieldBlur: (fieldName: string, step: string, hasValue: boolean) => {
+    trackEvent('lead_form_field_blur', {
+      field_name: fieldName,
+      step: step,
+      has_value: hasValue,
+    });
+  },
+
+  // Track validation failures
+  leadFormValidationFail: (step: string, missingFields: string[]) => {
+    trackEvent('lead_form_validation_fail', {
+      step: step,
+      missing_fields: missingFields.join(','),
+    });
+  },
+
+  // Wizard modal tracking
+  wizardOpen: () => {
+    stepStartTime = Date.now();
+    currentStepName = 'wizard_intervention';
+    trackEvent('wizard_open', {});
+  },
+
+  wizardClose: (step: string, interventionType?: string, completed: boolean = false) => {
+    const timeSpent = stepStartTime ? Math.round((Date.now() - stepStartTime) / 1000) : 0;
+    trackEvent('wizard_close', {
+      closed_at_step: step,
+      intervention_type: interventionType,
+      completed: completed,
+      time_spent_seconds: timeSpent,
+    });
+    if (!completed) {
+      stepStartTime = null;
+      currentStepName = null;
+    }
+  },
+
+  wizardStep: (step: string, interventionType?: string) => {
+    const timeSpent = stepStartTime ? Math.round((Date.now() - stepStartTime) / 1000) : 0;
+    
+    if (currentStepName && timeSpent > 0) {
+      trackEvent('lead_form_step_time', {
+        step_name: currentStepName,
+        time_seconds: timeSpent,
+      });
+    }
+    
+    trackEvent('wizard_step', {
+      step: step,
+      intervention_type: interventionType,
+    });
+    
+    stepStartTime = Date.now();
+    currentStepName = step;
   },
 
   // Track plumber registration

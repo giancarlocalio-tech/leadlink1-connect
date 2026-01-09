@@ -139,32 +139,38 @@ export default function RequestPage() {
     if (currentStepIndex < STEPS.length - 1) {
       const nextStep = currentStepIndex + 1;
       setCurrentStepIndex(nextStep);
-      // Track step progression
+      // Track step progression with timing
       analytics.leadFormStep(nextStep + 1, STEPS[nextStep]);
     }
   };
 
   const goBack = () => {
     if (currentStepIndex > 0) {
+      // Track going back
+      analytics.leadFormStep(currentStepIndex, STEPS[currentStepIndex - 1]);
       setCurrentStepIndex(prev => prev - 1);
     } else {
+      // Track abandonment when going back to home from first step
+      analytics.leadFormAbandon('description', formData.interventionType);
       navigate('/');
     }
   };
 
   const handleSubmit = async () => {
     // Full validation before submit
-    if (
-      !formData.interventionType ||
-      !formData.city ||
-      !formData.description.trim() ||
-      !formData.urgency ||
-      !formData.propertyType ||
-      !formData.accessibility ||
-      !formData.clientName.trim() ||
-      !formData.clientPhone.trim() ||
-      !formData.privacyAccepted
-    ) {
+    const missingFields: string[] = [];
+    if (!formData.interventionType) missingFields.push('interventionType');
+    if (!formData.city) missingFields.push('city');
+    if (!formData.description.trim()) missingFields.push('description');
+    if (!formData.urgency) missingFields.push('urgency');
+    if (!formData.propertyType) missingFields.push('propertyType');
+    if (!formData.accessibility) missingFields.push('accessibility');
+    if (!formData.clientName.trim()) missingFields.push('clientName');
+    if (!formData.clientPhone.trim()) missingFields.push('clientPhone');
+    if (!formData.privacyAccepted) missingFields.push('privacyAccepted');
+
+    if (missingFields.length > 0) {
+      analytics.leadFormValidationFail(currentStep, missingFields);
       toast.error('Compila tutti i campi obbligatori.');
       return;
     }
@@ -192,12 +198,25 @@ export default function RequestPage() {
       wizard_answers: wizardAnswers.length > 0 ? wizardAnswers : null,
     };
 
+    const startTime = Date.now();
+    
     const { data, error } = await supabase.functions.invoke('notify-plumbers', {
       body: { request: requestPayload },
     });
 
+    const submissionTime = Math.round((Date.now() - startTime) / 1000);
+
     if (error || (data as any)?.error) {
-      console.error('Error submitting request:', error || (data as any)?.error);
+      const errorMessage = error?.message || (data as any)?.error || 'Unknown error';
+      console.error('Error submitting request:', errorMessage);
+      
+      // Track submission error
+      analytics.leadFormError(
+        submissionTime > 10 ? 'timeout' : 'api_error',
+        errorMessage,
+        currentStep
+      );
+      
       toast.error('Si è verificato un errore. Riprova.');
       setIsSubmitting(false);
       return;
@@ -325,6 +344,8 @@ export default function RequestPage() {
                 placeholder="Il tuo nome"
                 value={formData.clientName}
                 onChange={(e) => updateFormData('clientName', e.target.value)}
+                onFocus={() => analytics.leadFormFieldFocus('clientName', 'contact')}
+                onBlur={(e) => analytics.leadFormFieldBlur('clientName', 'contact', !!e.target.value)}
                 className="text-base"
                 autoFocus
               />
@@ -340,6 +361,8 @@ export default function RequestPage() {
                 placeholder="Il tuo numero di telefono"
                 value={formData.clientPhone}
                 onChange={(e) => updateFormData('clientPhone', e.target.value)}
+                onFocus={() => analytics.leadFormFieldFocus('clientPhone', 'contact')}
+                onBlur={(e) => analytics.leadFormFieldBlur('clientPhone', 'contact', !!e.target.value)}
                 className="text-base"
               />
             </div>
@@ -354,6 +377,8 @@ export default function RequestPage() {
                 placeholder="La tua email"
                 value={formData.clientEmail}
                 onChange={(e) => updateFormData('clientEmail', e.target.value)}
+                onFocus={() => analytics.leadFormFieldFocus('clientEmail', 'contact')}
+                onBlur={(e) => analytics.leadFormFieldBlur('clientEmail', 'contact', !!e.target.value)}
                 className="text-base"
               />
             </div>

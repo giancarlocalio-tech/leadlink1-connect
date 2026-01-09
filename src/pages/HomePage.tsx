@@ -33,6 +33,7 @@ import type { InterventionType } from '@/lib/types';
 import { INTERVENTION_LABELS } from '@/lib/types';
 import { CATEGORY_FLOWS, getNextQuestionId, type WizardQuestion } from '@/lib/wizardConfig';
 import { CityAutocomplete, type ItalianCity } from '@/components/CityAutocomplete';
+import analytics from '@/lib/analytics';
 
 // All intervention types for the first selection
 const ALL_INTERVENTION_TYPES: InterventionType[] = [
@@ -100,6 +101,12 @@ export default function HomePage() {
     document.title = "Idraulici Subito - Trova Idraulici Professionisti nella Tua Zona | Preventivi Gratuiti";
   }, []);
 
+  // Track wizard open
+  const openWizard = () => {
+    setShowModal(true);
+    analytics.wizardOpen();
+  };
+
   const filteredTypes = ALL_INTERVENTION_TYPES.filter(type =>
     INTERVENTION_LABELS[type].toLowerCase().includes(searchFilter.toLowerCase())
   );
@@ -140,12 +147,15 @@ export default function HomePage() {
         }]);
         setCurrentQuestionId('rubinetto_tipo');
         setStep('questions');
+        analytics.wizardStep('questions', type);
       } else {
         setCurrentQuestionId(flow.startQuestionId);
         setStep('questions');
+        analytics.wizardStep('questions', type);
       }
     } else {
       setStep('city');
+      analytics.wizardStep('city', type);
     }
   };
 
@@ -165,17 +175,22 @@ export default function HomePage() {
       setCurrentQuestionId(nextId);
     } else {
       setStep('city');
+      analytics.wizardStep('city', selectedType || undefined);
     }
   };
 
   const handleContinue = () => {
     if (selectedType && city.trim()) {
+      // Track wizard completion before navigating
+      analytics.wizardClose(step, selectedType, true);
+      analytics.leadFormStart(selectedType, 'wizard');
+      
       navigate('/richiesta', {
         state: {
           interventionType: selectedType,
           answers: answers,
           city: city.trim(),
-          cityData: selectedCity, // Pass full city data for matching
+          cityData: selectedCity,
         },
       });
     }
@@ -233,6 +248,9 @@ export default function HomePage() {
   };
 
   const closeModal = () => {
+    // Track abandonment if closing without completing
+    analytics.wizardClose(step, selectedType || undefined, false);
+    
     setShowModal(false);
     setSearchFilter('');
     setStep('intervention');
@@ -261,7 +279,7 @@ export default function HomePage() {
 
           <div className="max-w-xl mx-auto">
             <Button 
-              onClick={() => setShowModal(true)}
+              onClick={openWizard}
               className="w-full text-base md:text-lg py-6 px-6 shadow-lg hover:shadow-xl transition-all gap-3"
               size="lg"
             >

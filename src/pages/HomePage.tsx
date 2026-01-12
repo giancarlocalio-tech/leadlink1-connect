@@ -266,8 +266,8 @@ export default function HomePage() {
 
   return (
     <Layout>
-      {/* Hero Section - ProntoPro style */}
-      <section className="relative overflow-hidden min-h-[500px] md:min-h-[550px] flex items-center justify-center">
+      {/* Hero Section - Conversion Optimized */}
+      <section className="relative overflow-hidden min-h-[550px] md:min-h-[600px] flex items-center justify-center">
         {/* Background Image */}
         <div className="absolute inset-0">
           <img 
@@ -276,44 +276,80 @@ export default function HomePage() {
             className="w-full h-full object-cover object-[25%_center] md:object-center"
           />
           {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/60" />
         </div>
         
-        <div className="container mx-auto px-4 relative z-10 text-center py-16 md:py-24">
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-8 animate-fade-in leading-tight drop-shadow-lg">
-            Trova subito il tuo idraulico<br />
-            per qualsiasi intervento.
+        <div className="container mx-auto px-4 relative z-10 text-center py-12 md:py-20">
+          {/* Urgency Badge */}
+          <div className="inline-flex items-center gap-2 bg-success text-white px-4 py-2 rounded-full text-sm font-semibold mb-6 animate-pulse shadow-lg">
+            <Phone className="h-4 w-4" />
+            <span>12 idraulici disponibili ORA nella tua zona</span>
+          </div>
+          
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 animate-fade-in leading-tight drop-shadow-lg">
+            Idraulico in <span className="text-primary">30 minuti</span>
           </h1>
           
-          {/* Search-style CTA */}
-          <div className="max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-white/90 mb-8 max-w-xl mx-auto">
+            Preventivo GRATIS in 30 secondi. Nessun obbligo.
+          </p>
+          
+          {/* GIANT CTA Button */}
+          <div className="max-w-md mx-auto mb-6">
             <button 
               onClick={openWizard}
-              className="w-full flex flex-col sm:flex-row gap-3 bg-white rounded-xl sm:rounded-full p-2 shadow-2xl cursor-pointer hover:shadow-[0_25px_60px_-12px_rgba(0,0,0,0.35)] transition-shadow"
+              className="w-full group relative bg-primary hover:bg-primary/90 text-primary-foreground text-xl md:text-2xl font-bold py-5 md:py-6 px-8 rounded-2xl shadow-[0_10px_40px_-10px_hsl(var(--primary))] hover:shadow-[0_15px_50px_-10px_hsl(var(--primary))] transition-all transform hover:scale-[1.02] active:scale-[0.98]"
             >
-              <div className="flex-1 flex items-center gap-3 px-4 py-3 sm:py-0">
-                <Search className="h-5 w-5 text-muted-foreground shrink-0" />
-                <span className="text-muted-foreground text-left">Di cosa hai bisogno?</span>
-              </div>
-              <div className="bg-primary text-primary-foreground text-base md:text-lg py-3 px-8 rounded-lg sm:rounded-full font-semibold hover:bg-primary/90 transition-colors">
-                Cerca
-              </div>
+              <span className="flex items-center justify-center gap-3">
+                <span>🔧</span>
+                <span>Richiedi Preventivo Gratis</span>
+                <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </button>
+            <p className="text-white/80 text-sm mt-3 flex items-center justify-center gap-2">
+              <Clock className="h-4 w-4" />
+              Solo 30 secondi • 100% Gratuito
+            </p>
+          </div>
+          
+          {/* Secondary quick actions */}
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+            <button 
+              onClick={openWizard}
+              className="flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium transition-colors"
+            >
+              <Droplets className="h-4 w-4" />
+              Perdita d'acqua
+            </button>
+            <button 
+              onClick={openWizard}
+              className="flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium transition-colors"
+            >
+              <Flame className="h-4 w-4" />
+              Caldaia
+            </button>
+            <button 
+              onClick={openWizard}
+              className="flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium transition-colors"
+            >
+              <Trash2 className="h-4 w-4" />
+              Scarico intasato
             </button>
           </div>
           
           {/* Trust indicators */}
-          <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 mt-8">
-            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-              <Shield className="h-4 w-4 text-white" />
-              <span className="text-white text-sm font-medium">100% Gratuito</span>
+          <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
+            <div className="flex items-center gap-2 text-white/90">
+              <Shield className="h-5 w-5 text-success" />
+              <span className="text-sm font-medium">Professionisti Verificati</span>
             </div>
-            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-              <Clock className="h-4 w-4 text-white" />
-              <span className="text-white text-sm font-medium">Risposte in 15 min</span>
+            <div className="flex items-center gap-2 text-white/90">
+              <CheckCircle className="h-5 w-5 text-success" />
+              <span className="text-sm font-medium">Senza impegno</span>
             </div>
-            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-              <Star className="h-4 w-4 text-white fill-white" />
-              <span className="text-white text-sm font-medium">4.8/5</span>
+            <div className="flex items-center gap-2 text-white/90">
+              <Star className="h-5 w-5 text-yellow-400 fill-yellow-400" />
+              <span className="text-sm font-medium">4.8/5 (500+ recensioni)</span>
             </div>
           </div>
         </div>

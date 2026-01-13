@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/Layout';
+import { generateJsonLd, getCityFAQs, BASE_URL } from '@/lib/seoJsonLd';
 import heroBg from '@/assets/hero-bg.avif';
 
 // City-specific data
@@ -74,46 +75,26 @@ export default function CityLandingPage() {
   const pageDescription = `Cerchi un idraulico a ${cityData.name}? ✓ Professionisti verificati ✓ Risposta in 15 min ✓ Preventivi gratuiti. Riparazioni, installazioni e emergenze idrauliche in tutta ${cityData.name} e provincia.`;
   const canonicalUrl = `https://idraulicisubito.com/idraulico-${citySlug}`;
 
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": `Idraulici Subito ${cityData.name}`,
-    "description": cityData.description,
-    "url": canonicalUrl,
-    "areaServed": [
-      {
-        "@type": "City",
-        "name": cityData.name,
-        "containedInPlace": {
-          "@type": "AdministrativeArea",
-          "name": cityData.province
-        }
-      },
-      ...cityData.nearbyAreas.map(area => ({
-        "@type": "City",
-        "name": area
-      }))
-    ],
-    "serviceType": [
-      "Pronto intervento idraulico",
-      "Riparazione perdite acqua",
-      "Installazione impianti idraulici",
-      "Manutenzione caldaie",
-      "Spurgo scarichi"
-    ],
-    "priceRange": "€€",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "500"
+  const structuredData = generateJsonLd(
+    {
+      name: `Idraulici Subito ${cityData.name}`,
+      description: cityData.description,
+      url: canonicalUrl,
+      areaServed: [
+        { type: 'City', name: cityData.name, containedIn: cityData.province },
+        ...cityData.nearbyAreas.map(area => ({ type: 'City' as const, name: area }))
+      ],
+      serviceTypes: [
+        "Pronto intervento idraulico",
+        "Riparazione perdite acqua",
+        "Installazione impianti idraulici",
+        "Manutenzione caldaie",
+        "Spurgo scarichi"
+      ]
     },
-    "openingHoursSpecification": {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-      "opens": "00:00",
-      "closes": "23:59"
-    }
-  };
+    getCityFAQs('idraulico', cityData.name),
+    [{ name: `Idraulico ${cityData.name}`, url: canonicalUrl }]
+  );
 
   return (
     <Layout>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -46,15 +47,6 @@ export default function RequestPage() {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // SEO Meta tags
-  useEffect(() => {
-    document.title = "Richiedi Preventivo Idraulico Gratuito | Idraulici Subito";
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 'Compila il modulo per ricevere preventivi gratuiti da idraulici professionisti nella tua zona. Risposta rapida garantita.');
-    }
-  }, []);
-  
   const [formData, setFormData] = useState<RequestFormData>({
     interventionType: '',
     city: '',
@@ -410,6 +402,15 @@ export default function RequestPage() {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Richiedi Preventivo Idraulico Gratuito | Idraulici Subito</title>
+        <meta name="description" content="Compila il modulo per ricevere preventivi gratuiti da idraulici professionisti nella tua zona. Risposta rapida garantita." />
+        <link rel="canonical" href="https://idraulicisubito.com/richiesta" />
+        <meta property="og:title" content="Richiedi Preventivo Idraulico Gratuito | Idraulici Subito" />
+        <meta property="og:description" content="Compila il modulo per ricevere preventivi gratuiti da idraulici professionisti nella tua zona." />
+        <meta property="og:url" content="https://idraulicisubito.com/richiesta" />
+        <meta name="robots" content="noindex, follow" />
+      </Helmet>
       <div className="py-8 md:py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-lg mx-auto">

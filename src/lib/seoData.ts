@@ -639,6 +639,41 @@ export const KEYWORD_PAGES: KeywordPageData[] = [
     h1: 'Disotturazione WC e Scarichi',
     description: 'Servizio di disotturazione WC e scarichi intasati. Intervento rapido per sturare water, lavandini e tubature ostruiti.',
     keywords: ['disotturazione wc', 'wc intasato', 'sturare wc', 'water intasato', 'riparazione sciacquone water']
+  },
+  {
+    slug: 'sostituzione-caldaia',
+    title: 'Sostituzione Caldaia - Cambio Caldaia Vecchia',
+    h1: 'Sostituzione Caldaia Professionale',
+    description: 'Servizio di sostituzione caldaia vecchia con nuova caldaia a condensazione. Preventivi gratuiti, installazione certificata e smaltimento incluso.',
+    keywords: ['sostituzione caldaia', 'cambio caldaia', 'cambiare caldaia', 'sostituzione caldaia a condensazione', 'cambio caldaia vecchia']
+  },
+  {
+    slug: 'installazione-caldaia',
+    title: 'Installazione Caldaia - Montaggio e Prima Accensione',
+    h1: 'Installazione Caldaia Certificata',
+    description: 'Servizio di installazione caldaia a condensazione con prima accensione e collaudo. Tecnici abilitati, garanzia e certificazione di conformità.',
+    keywords: ['installazione caldaia', 'installazione caldaia a condensazione', 'montaggio caldaia', 'prima accensione caldaia']
+  },
+  {
+    slug: 'caldaia-perde-acqua',
+    title: 'Caldaia Perde Acqua - Riparazione Perdite Caldaia',
+    h1: 'Caldaia Perde Acqua: Intervento Rapido',
+    description: 'La caldaia perde acqua? Intervento urgente per riparare perdite caldaia, guasti valvola e problemi pressione. Tecnici disponibili 24h.',
+    keywords: ['caldaia perde acqua', 'perdita caldaia', 'caldaia gocciola', 'perdita acqua caldaia', 'caldaia perde acqua calda']
+  },
+  {
+    slug: 'riparazione-scaldabagno',
+    title: 'Riparazione Scaldabagno - Assistenza e Manutenzione',
+    h1: 'Riparazione Scaldabagno Professionale',
+    description: 'Riparazione scaldabagno a gas ed elettrico. Sostituzione anodo, resistenza, termostato e valvola. Intervento rapido con tecnici qualificati.',
+    keywords: ['riparazione scaldabagno', 'scaldabagno non funziona', 'riparazione scaldabagno a gas', 'assistenza scaldabagno']
+  },
+  {
+    slug: 'installazione-scaldabagno',
+    title: 'Installazione Scaldabagno - Montaggio a Gas ed Elettrico',
+    h1: 'Installazione Scaldabagno',
+    description: 'Installazione scaldabagno a gas ed elettrico. Montaggio professionale, allaccio gas e scarico fumi a norma. Preventivi gratuiti.',
+    keywords: ['installazione scaldabagno', 'montaggio scaldabagno', 'installazione scaldabagno a gas', 'installazione boiler']
   }
 ];
 

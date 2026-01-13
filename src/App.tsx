@@ -70,6 +70,11 @@ const App = () => (
             <Route path="/impianto-idraulico-bagno" element={<KeywordLandingPage slug="impianto-idraulico-bagno" />} />
             <Route path="/idraulico-onesto" element={<KeywordLandingPage slug="idraulico-onesto" />} />
             <Route path="/disotturazione-wc" element={<KeywordLandingPage slug="disotturazione-wc" />} />
+            <Route path="/sostituzione-caldaia" element={<KeywordLandingPage slug="sostituzione-caldaia" />} />
+            <Route path="/installazione-caldaia" element={<KeywordLandingPage slug="installazione-caldaia" />} />
+            <Route path="/caldaia-perde-acqua" element={<KeywordLandingPage slug="caldaia-perde-acqua" />} />
+            <Route path="/riparazione-scaldabagno" element={<KeywordLandingPage slug="riparazione-scaldabagno" />} />
+            <Route path="/installazione-scaldabagno" element={<KeywordLandingPage slug="installazione-scaldabagno" />} />
             
             {/* Dynamic city and city+service SEO pages - catches patterns like "milano" or "milano-manutenzione-caldaie" */}
             <Route path="/:slug" element={<DynamicLandingPage type="city-service" />} />

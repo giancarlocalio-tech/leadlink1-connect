@@ -322,6 +322,207 @@ const App = () => (
             <Route path="/idraulico-zona-industriale" element={<KeywordLandingPage slug="idraulico-zona-industriale" />} />
             <Route path="/idraulico-nuovo-quartiere" element={<KeywordLandingPage slug="idraulico-nuovo-quartiere" />} />
             
+            {/* Problemi WC e Sanitari */}
+            <Route path="/wc-non-scarica" element={<KeywordLandingPage slug="wc-non-scarica" />} />
+            <Route path="/wc-perde-dalla-base" element={<KeywordLandingPage slug="wc-perde-dalla-base" />} />
+            <Route path="/cassetta-scarico-non-si-riempie" element={<KeywordLandingPage slug="cassetta-scarico-non-si-riempie" />} />
+            <Route path="/pulsante-wc-non-funziona" element={<KeywordLandingPage slug="pulsante-wc-non-funziona" />} />
+            <Route path="/bidet-non-scarica" element={<KeywordLandingPage slug="bidet-non-scarica" />} />
+            <Route path="/lavabo-crepato" element={<KeywordLandingPage slug="lavabo-crepato" />} />
+            <Route path="/piatto-doccia-rotto" element={<KeywordLandingPage slug="piatto-doccia-rotto" />} />
+            <Route path="/vasca-da-bagno-perde" element={<KeywordLandingPage slug="vasca-da-bagno-perde" />} />
+            <Route path="/sanitari-traballanti" element={<KeywordLandingPage slug="sanitari-traballanti" />} />
+            
+            {/* Problemi Doccia */}
+            <Route path="/doccia-fredda" element={<KeywordLandingPage slug="doccia-fredda" />} />
+            <Route path="/doccia-scottante" element={<KeywordLandingPage slug="doccia-scottante" />} />
+            <Route path="/doccia-gocciola" element={<KeywordLandingPage slug="doccia-gocciola" />} />
+            <Route path="/box-doccia-perde" element={<KeywordLandingPage slug="box-doccia-perde" />} />
+            <Route path="/colonna-doccia-installazione" element={<KeywordLandingPage slug="colonna-doccia-installazione" />} />
+            <Route path="/doccetta-bloccata" element={<KeywordLandingPage slug="doccetta-bloccata" />} />
+            
+            {/* Problemi Cucina */}
+            <Route path="/lavello-cucina-intasato" element={<KeywordLandingPage slug="lavello-cucina-intasato" />} />
+            <Route path="/rubinetto-cucina-perde" element={<KeywordLandingPage slug="rubinetto-cucina-perde" />} />
+            <Route path="/installazione-rubinetto-estraibile" element={<KeywordLandingPage slug="installazione-rubinetto-estraibile" />} />
+            <Route path="/attacco-lavastoviglie" element={<KeywordLandingPage slug="attacco-lavastoviglie" />} />
+            <Route path="/odore-lavandino-cucina" element={<KeywordLandingPage slug="odore-lavandino-cucina" />} />
+            <Route path="/scarico-lavello-doppio" element={<KeywordLandingPage slug="scarico-lavello-doppio" />} />
+            
+            {/* Marche Condizionatori */}
+            <Route path="/assistenza-condizionatore-daikin" element={<KeywordLandingPage slug="assistenza-condizionatore-daikin" />} />
+            <Route path="/assistenza-condizionatore-mitsubishi" element={<KeywordLandingPage slug="assistenza-condizionatore-mitsubishi" />} />
+            <Route path="/assistenza-condizionatore-samsung" element={<KeywordLandingPage slug="assistenza-condizionatore-samsung" />} />
+            <Route path="/assistenza-condizionatore-lg" element={<KeywordLandingPage slug="assistenza-condizionatore-lg" />} />
+            <Route path="/assistenza-condizionatore-panasonic" element={<KeywordLandingPage slug="assistenza-condizionatore-panasonic" />} />
+            <Route path="/assistenza-condizionatore-fujitsu" element={<KeywordLandingPage slug="assistenza-condizionatore-fujitsu" />} />
+            <Route path="/assistenza-condizionatore-hisense" element={<KeywordLandingPage slug="assistenza-condizionatore-hisense" />} />
+            <Route path="/assistenza-condizionatore-toshiba" element={<KeywordLandingPage slug="assistenza-condizionatore-toshiba" />} />
+            
+            {/* Problemi Condizionatori */}
+            <Route path="/condizionatore-non-parte" element={<KeywordLandingPage slug="condizionatore-non-parte" />} />
+            <Route path="/condizionatore-errore" element={<KeywordLandingPage slug="condizionatore-errore" />} />
+            <Route path="/condizionatore-ghiaccia" element={<KeywordLandingPage slug="condizionatore-ghiaccia" />} />
+            <Route path="/condizionatore-non-scalda" element={<KeywordLandingPage slug="condizionatore-non-scalda" />} />
+            <Route path="/pulizia-filtri-condizionatore" element={<KeywordLandingPage slug="pulizia-filtri-condizionatore" />} />
+            <Route path="/sanificazione-condizionatore" element={<KeywordLandingPage slug="sanificazione-condizionatore" />} />
+            
+            {/* Marche Caldaie Aggiuntive */}
+            <Route path="/assistenza-caldaia-hermann" element={<KeywordLandingPage slug="assistenza-caldaia-hermann" />} />
+            <Route path="/assistenza-caldaia-biasi" element={<KeywordLandingPage slug="assistenza-caldaia-biasi" />} />
+            <Route path="/assistenza-caldaia-sime" element={<KeywordLandingPage slug="assistenza-caldaia-sime" />} />
+            <Route path="/assistenza-caldaia-fondital" element={<KeywordLandingPage slug="assistenza-caldaia-fondital" />} />
+            <Route path="/assistenza-caldaia-ocean" element={<KeywordLandingPage slug="assistenza-caldaia-ocean" />} />
+            <Route path="/assistenza-caldaia-chaffoteaux" element={<KeywordLandingPage slug="assistenza-caldaia-chaffoteaux" />} />
+            <Route path="/assistenza-caldaia-radiant" element={<KeywordLandingPage slug="assistenza-caldaia-radiant" />} />
+            <Route path="/assistenza-caldaia-italtherm" element={<KeywordLandingPage slug="assistenza-caldaia-italtherm" />} />
+            
+            {/* Errori Caldaia */}
+            <Route path="/caldaia-errore-e01" element={<KeywordLandingPage slug="caldaia-errore-e01" />} />
+            <Route path="/caldaia-errore-e02" element={<KeywordLandingPage slug="caldaia-errore-e02" />} />
+            <Route path="/caldaia-errore-e03" element={<KeywordLandingPage slug="caldaia-errore-e03" />} />
+            <Route path="/caldaia-errore-e04" element={<KeywordLandingPage slug="caldaia-errore-e04" />} />
+            <Route path="/caldaia-pressione-bassa" element={<KeywordLandingPage slug="caldaia-pressione-bassa" />} />
+            <Route path="/caldaia-pressione-alta" element={<KeywordLandingPage slug="caldaia-pressione-alta" />} />
+            <Route path="/caldaia-non-fa-acqua-calda" element={<KeywordLandingPage slug="caldaia-non-fa-acqua-calda" />} />
+            <Route path="/caldaia-fischia" element={<KeywordLandingPage slug="caldaia-fischia" />} />
+            <Route path="/caldaia-gocciola" element={<KeywordLandingPage slug="caldaia-gocciola" />} />
+            
+            {/* Emergenze */}
+            <Route path="/allagamento-casa" element={<KeywordLandingPage slug="allagamento-casa" />} />
+            <Route path="/rottura-tubo-principale" element={<KeywordLandingPage slug="rottura-tubo-principale" />} />
+            <Route path="/scarico-fognario-intasato" element={<KeywordLandingPage slug="scarico-fognario-intasato" />} />
+            <Route path="/perdita-gas-domestico" element={<KeywordLandingPage slug="perdita-gas-domestico" />} />
+            <Route path="/caldaia-esplode-rumore" element={<KeywordLandingPage slug="caldaia-esplode-rumore" />} />
+            <Route path="/wc-trabocca" element={<KeywordLandingPage slug="wc-trabocca" />} />
+            <Route path="/tubo-scoppiato-muro" element={<KeywordLandingPage slug="tubo-scoppiato-muro" />} />
+            
+            {/* Tipi Impianto */}
+            <Route path="/impianto-acqua-calda-sanitaria" element={<KeywordLandingPage slug="impianto-acqua-calda-sanitaria" />} />
+            <Route path="/impianto-solare-termico" element={<KeywordLandingPage slug="impianto-solare-termico" />} />
+            <Route path="/impianto-geotermico" element={<KeywordLandingPage slug="impianto-geotermico" />} />
+            <Route path="/impianto-a-zone" element={<KeywordLandingPage slug="impianto-a-zone" />} />
+            <Route path="/impianto-autonomo" element={<KeywordLandingPage slug="impianto-autonomo" />} />
+            <Route path="/impianto-centralizzato" element={<KeywordLandingPage slug="impianto-centralizzato" />} />
+            <Route path="/impianto-antincendio" element={<KeywordLandingPage slug="impianto-antincendio" />} />
+            
+            {/* Interventi Riscaldamento */}
+            <Route path="/sostituzione-circolatore" element={<KeywordLandingPage slug="sostituzione-circolatore" />} />
+            <Route path="/sostituzione-vaso-espansione" element={<KeywordLandingPage slug="sostituzione-vaso-espansione" />} />
+            <Route path="/sostituzione-scambiatore" element={<KeywordLandingPage slug="sostituzione-scambiatore" />} />
+            <Route path="/pulizia-scambiatore" element={<KeywordLandingPage slug="pulizia-scambiatore" />} />
+            <Route path="/sostituzione-valvola-gas" element={<KeywordLandingPage slug="sostituzione-valvola-gas" />} />
+            <Route path="/sostituzione-scheda-caldaia" element={<KeywordLandingPage slug="sostituzione-scheda-caldaia" />} />
+            <Route path="/bilanciamento-impianto" element={<KeywordLandingPage slug="bilanciamento-impianto" />} />
+            
+            {/* Elettrodomestici */}
+            <Route path="/installazione-frigorifero-americano" element={<KeywordLandingPage slug="installazione-frigorifero-americano" />} />
+            <Route path="/installazione-macchina-caffe" element={<KeywordLandingPage slug="installazione-macchina-caffe" />} />
+            <Route path="/installazione-asciugatrice" element={<KeywordLandingPage slug="installazione-asciugatrice" />} />
+            <Route path="/spostamento-lavatrice" element={<KeywordLandingPage slug="spostamento-lavatrice" />} />
+            
+            {/* Problemi Acqua */}
+            <Route path="/acqua-gialla-rubinetto" element={<KeywordLandingPage slug="acqua-gialla-rubinetto" />} />
+            <Route path="/acqua-puzza-uova" element={<KeywordLandingPage slug="acqua-puzza-uova" />} />
+            <Route path="/acqua-troppo-dura" element={<KeywordLandingPage slug="acqua-troppo-dura" />} />
+            <Route path="/bolle-aria-tubazioni" element={<KeywordLandingPage slug="bolle-aria-tubazioni" />} />
+            <Route path="/acqua-non-arriva-piani-alti" element={<KeywordLandingPage slug="acqua-non-arriva-piani-alti" />} />
+            
+            {/* Tipi Intervento */}
+            <Route path="/intervento-non-invasivo" element={<KeywordLandingPage slug="intervento-non-invasivo" />} />
+            <Route path="/ricerca-perdite-termocamera" element={<KeywordLandingPage slug="ricerca-perdite-termocamera" />} />
+            <Route path="/ricerca-perdite-gas-tracciante" element={<KeywordLandingPage slug="ricerca-perdite-gas-tracciante" />} />
+            <Route path="/relining-tubazioni" element={<KeywordLandingPage slug="relining-tubazioni" />} />
+            
+            {/* Ambienti Specifici */}
+            <Route path="/idraulico-bed-breakfast" element={<KeywordLandingPage slug="idraulico-bed-breakfast" />} />
+            <Route path="/idraulico-palestra" element={<KeywordLandingPage slug="idraulico-palestra" />} />
+            <Route path="/idraulico-piscina" element={<KeywordLandingPage slug="idraulico-piscina" />} />
+            <Route path="/idraulico-bar-ristorante" element={<KeywordLandingPage slug="idraulico-bar-ristorante" />} />
+            <Route path="/idraulico-studio-medico" element={<KeywordLandingPage slug="idraulico-studio-medico" />} />
+            <Route path="/idraulico-parrucchiere" element={<KeywordLandingPage slug="idraulico-parrucchiere" />} />
+            <Route path="/idraulico-scuola" element={<KeywordLandingPage slug="idraulico-scuola" />} />
+            <Route path="/idraulico-chiesa" element={<KeywordLandingPage slug="idraulico-chiesa" />} />
+            
+            {/* Installazioni Bagno */}
+            <Route path="/installazione-doccia-walk-in" element={<KeywordLandingPage slug="installazione-doccia-walk-in" />} />
+            <Route path="/installazione-vasca-idromassaggio" element={<KeywordLandingPage slug="installazione-vasca-idromassaggio" />} />
+            <Route path="/installazione-doccia-idromassaggio" element={<KeywordLandingPage slug="installazione-doccia-idromassaggio" />} />
+            <Route path="/installazione-sanitrit" element={<KeywordLandingPage slug="installazione-sanitrit" />} />
+            <Route path="/bagno-disabili" element={<KeywordLandingPage slug="bagno-disabili" />} />
+            <Route path="/secondo-bagno" element={<KeywordLandingPage slug="secondo-bagno" />} />
+            
+            {/* Tipologie Caldaie */}
+            <Route path="/caldaia-condensazione" element={<KeywordLandingPage slug="caldaia-condensazione" />} />
+            <Route path="/caldaia-tradizionale" element={<KeywordLandingPage slug="caldaia-tradizionale" />} />
+            <Route path="/caldaia-murale" element={<KeywordLandingPage slug="caldaia-murale" />} />
+            <Route path="/caldaia-basamento" element={<KeywordLandingPage slug="caldaia-basamento" />} />
+            <Route path="/caldaia-biomassa" element={<KeywordLandingPage slug="caldaia-biomassa" />} />
+            
+            {/* Scaldabagni */}
+            <Route path="/scaldabagno-elettrico" element={<KeywordLandingPage slug="scaldabagno-elettrico" />} />
+            <Route path="/scaldabagno-gas" element={<KeywordLandingPage slug="scaldabagno-gas" />} />
+            <Route path="/scaldabagno-istantaneo" element={<KeywordLandingPage slug="scaldabagno-istantaneo" />} />
+            <Route path="/scaldabagno-accumulo" element={<KeywordLandingPage slug="scaldabagno-accumulo" />} />
+            <Route path="/scaldabagno-pompa-calore" element={<KeywordLandingPage slug="scaldabagno-pompa-calore" />} />
+            
+            {/* Costi Aggiuntivi */}
+            <Route path="/costo-idraulico-orario" element={<KeywordLandingPage slug="costo-idraulico-orario" />} />
+            <Route path="/costo-chiamata-idraulico" element={<KeywordLandingPage slug="costo-chiamata-idraulico" />} />
+            <Route path="/costo-spurgo" element={<KeywordLandingPage slug="costo-spurgo" />} />
+            <Route path="/costo-sostituzione-wc" element={<KeywordLandingPage slug="costo-sostituzione-wc" />} />
+            <Route path="/costo-sostituzione-lavandino" element={<KeywordLandingPage slug="costo-sostituzione-lavandino" />} />
+            <Route path="/costo-sostituzione-bidet" element={<KeywordLandingPage slug="costo-sostituzione-bidet" />} />
+            <Route path="/costo-allaccio-acqua" element={<KeywordLandingPage slug="costo-allaccio-acqua" />} />
+            <Route path="/costo-rifacimento-bagno-piccolo" element={<KeywordLandingPage slug="costo-rifacimento-bagno-piccolo" />} />
+            
+            {/* Guide e FAQ */}
+            <Route path="/quando-chiamare-idraulico" element={<KeywordLandingPage slug="quando-chiamare-idraulico" />} />
+            <Route path="/come-scegliere-idraulico" element={<KeywordLandingPage slug="come-scegliere-idraulico" />} />
+            <Route path="/idraulico-vs-fai-da-te" element={<KeywordLandingPage slug="idraulico-vs-fai-da-te" />} />
+            <Route path="/garanzia-lavori-idraulico" element={<KeywordLandingPage slug="garanzia-lavori-idraulico" />} />
+            <Route path="/preventivo-idraulico-gratuito" element={<KeywordLandingPage slug="preventivo-idraulico-gratuito" />} />
+            <Route path="/manutenzione-periodica-impianti" element={<KeywordLandingPage slug="manutenzione-periodica-impianti" />} />
+            
+            {/* Regioni */}
+            <Route path="/idraulico-lombardia" element={<KeywordLandingPage slug="idraulico-lombardia" />} />
+            <Route path="/idraulico-lazio" element={<KeywordLandingPage slug="idraulico-lazio" />} />
+            <Route path="/idraulico-campania" element={<KeywordLandingPage slug="idraulico-campania" />} />
+            <Route path="/idraulico-piemonte" element={<KeywordLandingPage slug="idraulico-piemonte" />} />
+            <Route path="/idraulico-emilia-romagna" element={<KeywordLandingPage slug="idraulico-emilia-romagna" />} />
+            <Route path="/idraulico-veneto" element={<KeywordLandingPage slug="idraulico-veneto" />} />
+            <Route path="/idraulico-toscana" element={<KeywordLandingPage slug="idraulico-toscana" />} />
+            <Route path="/idraulico-sicilia" element={<KeywordLandingPage slug="idraulico-sicilia" />} />
+            <Route path="/idraulico-puglia" element={<KeywordLandingPage slug="idraulico-puglia" />} />
+            <Route path="/idraulico-liguria" element={<KeywordLandingPage slug="idraulico-liguria" />} />
+            
+            {/* Risparmio Energetico */}
+            <Route path="/pompa-calore-aria-acqua" element={<KeywordLandingPage slug="pompa-calore-aria-acqua" />} />
+            <Route path="/pompa-calore-aria-aria" element={<KeywordLandingPage slug="pompa-calore-aria-aria" />} />
+            <Route path="/caldaia-ibrida" element={<KeywordLandingPage slug="caldaia-ibrida" />} />
+            <Route path="/contabilizzazione-calore" element={<KeywordLandingPage slug="contabilizzazione-calore" />} />
+            <Route path="/cronotermostato-smart" element={<KeywordLandingPage slug="cronotermostato-smart" />} />
+            
+            {/* Outdoor */}
+            <Route path="/fontana-giardino" element={<KeywordLandingPage slug="fontana-giardino" />} />
+            <Route path="/irrigazione-automatica" element={<KeywordLandingPage slug="irrigazione-automatica" />} />
+            <Route path="/laghetto-giardino" element={<KeywordLandingPage slug="laghetto-giardino" />} />
+            <Route path="/rubinetto-esterno" element={<KeywordLandingPage slug="rubinetto-esterno" />} />
+            <Route path="/doccia-esterna" element={<KeywordLandingPage slug="doccia-esterna" />} />
+            
+            {/* Certificazioni */}
+            <Route path="/certificazione-conformita-impianto" element={<KeywordLandingPage slug="certificazione-conformita-impianto" />} />
+            <Route path="/libretto-caldaia" element={<KeywordLandingPage slug="libretto-caldaia" />} />
+            <Route path="/bollino-blu-caldaia" element={<KeywordLandingPage slug="bollino-blu-caldaia" />} />
+            <Route path="/collaudo-impianto" element={<KeywordLandingPage slug="collaudo-impianto" />} />
+            
+            {/* Problemi Meno Comuni */}
+            <Route path="/incrostazioni-tubazioni" element={<KeywordLandingPage slug="incrostazioni-tubazioni" />} />
+            <Route path="/corrosione-tubazioni" element={<KeywordLandingPage slug="corrosione-tubazioni" />} />
+            <Route path="/radici-tubazioni" element={<KeywordLandingPage slug="radici-tubazioni" />} />
+            <Route path="/grasso-tubazioni" element={<KeywordLandingPage slug="grasso-tubazioni" />} />
+            <Route path="/oggetti-scarico" element={<KeywordLandingPage slug="oggetti-scarico" />} />
+            
             {/* Blog Routes */}
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/categoria/:category" element={<BlogCategoryPage />} />

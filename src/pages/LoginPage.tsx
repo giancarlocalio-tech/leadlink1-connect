@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Wrench, Mail, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -129,6 +130,12 @@ export default function LoginPage() {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Login Idraulici | Idraulici Subito</title>
+        <meta name="description" content="Accedi al tuo account idraulico su Idraulici Subito per gestire le richieste di lavoro." />
+        <link rel="canonical" href="https://idraulicisubito.com/login" />
+        <meta name="robots" content="noindex, follow" />
+      </Helmet>
       <div className="min-h-[80vh] flex items-center justify-center py-12 px-4">
         <div className="w-full max-w-md">
           {/* Header */}

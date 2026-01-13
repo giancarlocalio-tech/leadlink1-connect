@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Servizi principali -->
   <url><loc>https://www.idraulicisubito.com/servizi/riparazione-perdite</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.idraulicisubito.com/servizi/sturamento-scarichi</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.idraulicisubito.com/servizi/installazione-sanitari</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -28,4 +29,25 @@
   <url><loc>https://www.idraulicisubito.com/servizi/contabilizzazione-calore</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.idraulicisubito.com/servizi/trasformazione-vasca-doccia</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.idraulicisubito.com/servizi/rilevazione-perdite</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <!-- Servizi aggiuntivi -->
+  <url><loc>https://www.idraulicisubito.com/servizi/sostituzione-caldaia</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.idraulicisubito.com/servizi/pulizia-caldaia</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/servizi/controllo-fumi</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/servizi/bollino-blu</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/servizi/sostituzione-wc</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/servizi/installazione-bidet</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/servizi/installazione-box-doccia</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/servizi/sostituzione-piatto-doccia</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/servizi/installazione-vasca</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/servizi/installazione-lavabo</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/servizi/installazione-lavatrice</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/servizi/installazione-lavastoviglie</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/servizi/riparazione-cassetta-wc</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/servizi/sostituzione-galleggiante</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/servizi/riparazione-scaldabagno</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/servizi/sostituzione-scaldabagno</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/servizi/sfiatare-termosifoni</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/servizi/sostituzione-termosifoni</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/servizi/riparazione-tubature</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.idraulicisubito.com/servizi/sostituzione-tubature</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
 </urlset>

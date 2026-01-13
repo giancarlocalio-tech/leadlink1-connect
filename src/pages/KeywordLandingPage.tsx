@@ -5,6 +5,7 @@ import { MapPin, Clock, Shield, Star, ArrowRight, CheckCircle, Phone, Loader2, N
 import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/Layout';
 import { getKeywordPageBySlug, CITIES } from '@/lib/seoData';
+import { generateJsonLd, getKeywordFAQs, BASE_URL } from '@/lib/seoJsonLd';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import heroBg from '@/assets/hero-bg.avif';
 
@@ -35,100 +36,24 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
   
   if (!pageData) return null;
 
-  const canonicalUrl = `https://idraulicisubito.com/${pageData.slug}`;
+  const canonicalUrl = `${BASE_URL}/${pageData.slug}`;
 
-  const baseUrl = 'https://idraulicisubito.com';
-
-  // Structured data (single JSON-LD graph to avoid duplicates)
-  const localBusinessData = {
-    "@type": "LocalBusiness",
-    "@id": `${canonicalUrl}#localbusiness`,
-    "name": `Idraulici Subito - ${pageData.h1}`,
-    "description": pageData.description,
-    "url": canonicalUrl,
-    "areaServed": { "@type": "Country", "name": "Italia" },
-    "serviceType": [
-      pageData.h1,
-      "Pronto intervento idraulico",
-      "Riparazione perdite acqua",
-      "Installazione impianti idraulici"
-    ],
-    "priceRange": "€€",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "500"
+  // Generate structured data using utility
+  const structuredData = generateJsonLd(
+    {
+      name: `Idraulici Subito - ${pageData.h1}`,
+      description: pageData.description,
+      url: canonicalUrl,
+      serviceTypes: [
+        pageData.h1,
+        "Pronto intervento idraulico",
+        "Riparazione perdite acqua",
+        "Installazione impianti idraulici"
+      ]
     },
-    "openingHoursSpecification": {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday"
-      ],
-      "opens": "00:00",
-      "closes": "23:59"
-    }
-  };
-
-  const faqData = {
-    "@type": "FAQPage",
-    "@id": `${canonicalUrl}#faq`,
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": `Quanto costa un servizio di ${pageData.h1.toLowerCase()}?`,
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": `Il costo per ${pageData.h1.toLowerCase()} varia in base al tipo di intervento. Su Idraulici Subito puoi richiedere preventivi gratuiti e confrontare le offerte dei professionisti della tua zona.`
-        }
-      },
-      {
-        "@type": "Question",
-        "name": `Come trovo un professionista affidabile per ${pageData.h1.toLowerCase()}?`,
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": `Su Idraulici Subito tutti i professionisti sono verificati e recensiti dai clienti. Inserisci la tua richiesta e riceverai contatti da esperti qualificati nella tua zona.`
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Quanto tempo ci vuole per ricevere un preventivo?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "In media ricevi una risposta entro 15 minuti dalla tua richiesta. Per emergenze urgenti, i nostri professionisti premium rispondono ancora più velocemente."
-        }
-      }
-    ]
-  };
-
-  const breadcrumbData = {
-    "@type": "BreadcrumbList",
-    "@id": `${canonicalUrl}#breadcrumb`,
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": baseUrl
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": pageData.h1,
-        "item": canonicalUrl
-      }
-    ]
-  };
-
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@graph": [localBusinessData, faqData, breadcrumbData]
-  };
+    getKeywordFAQs(pageData.h1),
+    [{ name: pageData.h1, url: canonicalUrl }]
+  );
 
   // Nearby cities to show when no location is detected
   const popularCities = CITIES.slice(0, 12);

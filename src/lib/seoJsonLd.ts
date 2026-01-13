@@ -1,0 +1,166 @@
+// Centralized JSON-LD structured data generator
+// Ensures consistent schema markup across all pages
+
+const BASE_URL = 'https://idraulicisubito.com';
+
+interface LocalBusinessOptions {
+  name: string;
+  description: string;
+  url: string;
+  areaServed?: AreaServed[];
+  serviceTypes?: string[];
+}
+
+interface AreaServed {
+  type: 'Country' | 'City';
+  name: string;
+  containedIn?: string;
+}
+
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+// Generate LocalBusiness schema
+function generateLocalBusiness(options: LocalBusinessOptions) {
+  const areaServed = options.areaServed?.map((area) => {
+    if (area.type === 'Country') {
+      return { "@type": "Country", "name": area.name };
+    }
+    return area.containedIn
+      ? {
+          "@type": "City",
+          "name": area.name,
+          "containedInPlace": {
+            "@type": "AdministrativeArea",
+            "name": area.containedIn
+          }
+        }
+      : { "@type": "City", "name": area.name };
+  }) || [{ "@type": "Country", "name": "Italia" }];
+
+  return {
+    "@type": "LocalBusiness",
+    "@id": `${options.url}#localbusiness`,
+    "name": options.name,
+    "description": options.description,
+    "url": options.url,
+    "areaServed": areaServed.length === 1 ? areaServed[0] : areaServed,
+    "serviceType": options.serviceTypes || [
+      "Pronto intervento idraulico",
+      "Riparazione perdite acqua",
+      "Installazione impianti idraulici"
+    ],
+    "priceRange": "€€",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "reviewCount": "500"
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "opens": "00:00",
+      "closes": "23:59"
+    }
+  };
+}
+
+// Generate FAQPage schema
+function generateFAQPage(url: string, faqs: FAQItem[]) {
+  return {
+    "@type": "FAQPage",
+    "@id": `${url}#faq`,
+    "mainEntity": faqs.map((faq) => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
+}
+
+// Generate BreadcrumbList schema
+function generateBreadcrumbs(items: BreadcrumbItem[]) {
+  const fullItems = [{ name: "Home", url: BASE_URL }, ...items];
+  
+  return {
+    "@type": "BreadcrumbList",
+    "@id": `${items[items.length - 1]?.url || BASE_URL}#breadcrumb`,
+    "itemListElement": fullItems.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": item.name,
+      "item": item.url
+    }))
+  };
+}
+
+// Generate complete JSON-LD graph
+export function generateJsonLd(
+  localBusiness: LocalBusinessOptions,
+  faqs: FAQItem[],
+  breadcrumbs: BreadcrumbItem[]
+) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      generateLocalBusiness(localBusiness),
+      generateFAQPage(localBusiness.url, faqs),
+      generateBreadcrumbs(breadcrumbs)
+    ]
+  };
+}
+
+// Preset FAQs for common page types
+export function getKeywordFAQs(serviceName: string) {
+  return [
+    {
+      question: `Quanto costa un servizio di ${serviceName.toLowerCase()}?`,
+      answer: `Il costo per ${serviceName.toLowerCase()} varia in base al tipo di intervento. Su Idraulici Subito puoi richiedere preventivi gratuiti e confrontare le offerte dei professionisti della tua zona.`
+    },
+    {
+      question: `Come trovo un professionista affidabile per ${serviceName.toLowerCase()}?`,
+      answer: `Su Idraulici Subito tutti i professionisti sono verificati e recensiti dai clienti. Inserisci la tua richiesta e riceverai contatti da esperti qualificati nella tua zona.`
+    },
+    {
+      question: "Quanto tempo ci vuole per ricevere un preventivo?",
+      answer: "In media ricevi una risposta entro 15 minuti dalla tua richiesta. Per emergenze urgenti, i nostri professionisti premium rispondono ancora più velocemente."
+    }
+  ];
+}
+
+export function getCityFAQs(serviceName: string, cityName: string) {
+  return [
+    {
+      question: `Quanto costa un ${serviceName.toLowerCase()} a ${cityName}?`,
+      answer: `Il costo di un ${serviceName.toLowerCase()} a ${cityName} varia in base al tipo di intervento. Su Idraulici Subito puoi richiedere preventivi gratuiti e confrontare le offerte dei professionisti della tua zona.`
+    },
+    {
+      question: `Come trovo un ${serviceName.toLowerCase()} affidabile a ${cityName}?`,
+      answer: `Su Idraulici Subito tutti i professionisti sono verificati e recensiti dai clienti. Inserisci la tua richiesta e riceverai contatti da ${serviceName.toLowerCase()}i qualificati di ${cityName} e provincia.`
+    },
+    {
+      question: `Quanto tempo ci vuole per ricevere un preventivo a ${cityName}?`,
+      answer: `In media ricevi una risposta entro 15 minuti dalla tua richiesta. Per emergenze urgenti a ${cityName}, i nostri professionisti premium rispondono ancora più velocemente.`
+    }
+  ];
+}
+
+export { BASE_URL };

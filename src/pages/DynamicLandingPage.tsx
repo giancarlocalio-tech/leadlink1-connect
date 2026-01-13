@@ -23,12 +23,12 @@ import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/Layout';
 import { 
   getCityBySlug, 
-  getServiceBySlug, 
   CityData, 
   ServiceData,
   SERVICES,
   CITIES 
 } from '@/lib/seoData';
+import { generateJsonLd, getCityFAQs, BASE_URL } from '@/lib/seoJsonLd';
 import heroBg from '@/assets/hero-bg.avif';
 
 // Icon mapping
@@ -87,7 +87,6 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
   // Generate page content based on whether it's city-only or city+service
   const serviceName = serviceData?.name || 'Idraulico';
   const serviceShortName = serviceData?.shortName || 'Idraulico';
-  const baseUrl = 'https://idraulicisubito.com';
   
   const pageTitle = serviceData 
     ? `${serviceData.name} ${cityData.name} - Professionisti Verificati | Preventivi Gratuiti`
@@ -98,136 +97,47 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
     : `Cerchi un idraulico a ${cityData.name}? ✓ Professionisti verificati ✓ Risposta in 15 min ✓ Preventivi gratuiti. Riparazioni, installazioni e emergenze idrauliche in tutta ${cityData.name} e provincia.`;
     
   const canonicalUrl = serviceData 
-    ? `${baseUrl}/${cityData.slug}-${serviceData.slug}`
-    : `${baseUrl}/${cityData.slug}`;
+    ? `${BASE_URL}/${cityData.slug}-${serviceData.slug}`
+    : `${BASE_URL}/${cityData.slug}`;
 
   const h1Text = serviceData
     ? `${serviceData.name} a ${cityData.name}`
     : `Idraulico a ${cityData.name}`;
 
-  // Structured data (single JSON-LD graph to avoid duplicates)
-  const structuredData = {
-    "@type": "LocalBusiness",
-    "@id": `${canonicalUrl}#localbusiness`,
-    "name": `Idraulici Subito - ${serviceName} ${cityData.name}`,
-    "description": pageDescription,
-    "url": canonicalUrl,
-    "areaServed": [
-      {
-        "@type": "City",
-        "name": cityData.name,
-        "containedInPlace": {
-          "@type": "AdministrativeArea",
-          "name": cityData.province
-        }
-      },
-      ...cityData.nearbyAreas.map((area) => ({
-        "@type": "City",
-        "name": area
-      }))
-    ],
-    "serviceType": serviceData
-      ? [serviceData.name, ...serviceData.keywords]
-      : [
-          "Pronto intervento idraulico",
-          "Riparazione perdite acqua",
-          "Installazione impianti idraulici",
-          "Manutenzione caldaie",
-          "Spurgo scarichi"
-        ],
-    "priceRange": "€€",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "500"
-    },
-    "openingHoursSpecification": {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday"
-      ],
-      "opens": "00:00",
-      "closes": "23:59"
-    }
-  };
+  // Build area served array
+  const areaServed = [
+    { type: 'City' as const, name: cityData.name, containedIn: cityData.province },
+    ...cityData.nearbyAreas.map((area) => ({ type: 'City' as const, name: area }))
+  ];
 
-  const faqData = {
-    "@type": "FAQPage",
-    "@id": `${canonicalUrl}#faq`,
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": `Quanto costa un ${serviceShortName.toLowerCase()} a ${cityData.name}?`,
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": `Il costo di un ${serviceShortName.toLowerCase()} a ${cityData.name} varia in base al tipo di intervento. Su Idraulici Subito puoi richiedere preventivi gratuiti e confrontare le offerte dei professionisti della tua zona.`
-        }
-      },
-      {
-        "@type": "Question",
-        "name": `Come trovo un ${serviceShortName.toLowerCase()} affidabile a ${cityData.name}?`,
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": `Su Idraulici Subito tutti i professionisti sono verificati e recensiti dai clienti. Inserisci la tua richiesta e riceverai contatti da ${serviceShortName.toLowerCase()}i qualificati di ${cityData.name} e provincia.`
-        }
-      },
-      {
-        "@type": "Question",
-        "name": `Quanto tempo ci vuole per ricevere un preventivo a ${cityData.name}?`,
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": `In media ricevi una risposta entro 15 minuti dalla tua richiesta. Per emergenze urgenti a ${cityData.name}, i nostri professionisti premium rispondono ancora più velocemente.`
-        }
-      }
-    ]
-  };
+  // Build breadcrumbs
+  const breadcrumbs = serviceData
+    ? [
+        { name: cityData.name, url: `${BASE_URL}/${cityData.slug}` },
+        { name: serviceData.name, url: canonicalUrl }
+      ]
+    : [{ name: `Idraulico ${cityData.name}`, url: canonicalUrl }];
 
-  const breadcrumbData = {
-    "@type": "BreadcrumbList",
-    "@id": `${canonicalUrl}#breadcrumb`,
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": baseUrl
-      },
-      ...(serviceData
-        ? [
-            {
-              "@type": "ListItem",
-              "position": 2,
-              "name": cityData.name,
-              "item": `${baseUrl}/${cityData.slug}`
-            },
-            {
-              "@type": "ListItem",
-              "position": 3,
-              "name": serviceData.name,
-              "item": canonicalUrl
-            }
-          ]
+  // Generate structured data using utility
+  const jsonLd = generateJsonLd(
+    {
+      name: `Idraulici Subito - ${serviceName} ${cityData.name}`,
+      description: pageDescription,
+      url: canonicalUrl,
+      areaServed,
+      serviceTypes: serviceData
+        ? [serviceData.name, ...serviceData.keywords]
         : [
-            {
-              "@type": "ListItem",
-              "position": 2,
-              "name": `Idraulico ${cityData.name}`,
-              "item": canonicalUrl
-            }
-          ])
-    ]
-  };
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [structuredData, faqData, breadcrumbData]
-  };
+            "Pronto intervento idraulico",
+            "Riparazione perdite acqua",
+            "Installazione impianti idraulici",
+            "Manutenzione caldaie",
+            "Spurgo scarichi"
+          ]
+    },
+    getCityFAQs(serviceShortName, cityData.name),
+    breadcrumbs
+  );
 
   // Services to display
   const displayServices = serviceData 

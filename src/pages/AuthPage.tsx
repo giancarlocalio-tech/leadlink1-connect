@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Wrench, Mail, Lock, User, Phone, Building, Users, Clock, Shield, Star, Zap, X, MapPin, Check, ArrowLeft, Briefcase, CalendarDays } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -356,6 +357,12 @@ export default function AuthPage() {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Registrazione Idraulici | Idraulici Subito</title>
+        <meta name="description" content="Registrati come idraulico professionista su Idraulici Subito. Ricevi richieste di lavoro nella tua zona e trova nuovi clienti." />
+        <link rel="canonical" href="https://idraulicisubito.com/auth" />
+        <meta name="robots" content="noindex, follow" />
+      </Helmet>
       <div className="py-8 md:py-12">
         <div className="container mx-auto px-4">
           {mode === 'register' && (

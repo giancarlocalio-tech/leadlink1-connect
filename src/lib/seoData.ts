@@ -554,28 +554,28 @@ export const KEYWORD_PAGES: KeywordPageData[] = [
     title: 'Idraulico Vicino a Me - Trova Professionisti nella Tua Zona',
     h1: 'Trova un Idraulico Vicino a Te',
     description: 'Cerchi un idraulico vicino a te? Trova professionisti verificati nella tua zona con risposta in 15 minuti. Preventivi gratuiti e senza impegno.',
-    keywords: ['idraulico vicino a me', 'idraulico nelle vicinanze', 'idraulico zona']
+    keywords: ['idraulico vicino a me', 'idraulico nelle vicinanze', 'idraulico zona', 'cerco idraulico', 'cerco un idraulico', 'trova idraulico']
   },
   {
     slug: 'pronto-intervento-idraulico',
     title: 'Pronto Intervento Idraulico 24h - Emergenze Idrauliche',
     h1: 'Pronto Intervento Idraulico 24 Ore',
     description: 'Pronto intervento idraulico disponibile 24 ore su 24, 7 giorni su 7. Emergenze idrauliche risolte in tempi rapidi da professionisti qualificati.',
-    keywords: ['pronto intervento idraulico', 'emergenza idraulico', 'idraulico 24 ore', 'idraulico urgente']
+    keywords: ['pronto intervento idraulico', 'idraulico pronto intervento', 'emergenza idraulico', 'idraulico 24 ore', 'pronto idraulico']
   },
   {
     slug: 'idraulico-urgente',
     title: 'Idraulico Urgente - Intervento Immediato per Emergenze',
     h1: 'Idraulico Urgente - Intervento Immediato',
     description: 'Hai bisogno di un idraulico urgente? Intervento immediato per perdite, allagamenti e guasti. Professionisti disponibili anche nei festivi.',
-    keywords: ['idraulico urgente', 'idraulico immediato', 'emergenza casa', 'allagamento']
+    keywords: ['idraulico urgente', 'idraulico immediato', 'emergenza casa', 'allagamento', 'sos idraulico', 'idraulico emergenza']
   },
   {
     slug: 'assistenza-caldaie',
     title: 'Assistenza Caldaie - Manutenzione e Riparazione',
     h1: 'Assistenza Caldaie Professionale',
     description: 'Assistenza caldaie di tutte le marche. Manutenzione ordinaria, riparazione guasti e sostituzione caldaie. Tecnici certificati e qualificati.',
-    keywords: ['assistenza caldaie', 'manutenzione caldaia', 'riparazione caldaia', 'tecnico caldaie']
+    keywords: ['assistenza caldaie', 'manutenzione caldaia', 'riparazione caldaia', 'tecnico caldaie', 'pronto intervento caldaia', 'idraulico caldaia']
   },
   {
     slug: 'spurgo-pozzi-neri',
@@ -583,6 +583,62 @@ export const KEYWORD_PAGES: KeywordPageData[] = [
     h1: 'Spurgo Pozzi Neri e Fognature',
     description: 'Servizio spurgo pozzi neri e fognature con autobotti professionali. Svuotamento fosse biologiche e pulizia pozzetti in tutta Italia.',
     keywords: ['spurgo pozzi neri', 'autospurgo', 'svuotamento fosse', 'pulizia fognature']
+  },
+  {
+    slug: 'idraulico-24-ore',
+    title: 'Idraulico 24 Ore - Disponibile Giorno e Notte',
+    h1: 'Idraulico 24 Ore su 24',
+    description: 'Servizio idraulico disponibile 24 ore su 24, anche nei weekend e festivi. Interventi rapidi per emergenze idrauliche h24.',
+    keywords: ['idraulico 24 ore', 'idraulico 24h', 'idraulico h24', 'idraulico 24 ore su 24', 'pronto intervento idraulico h24']
+  },
+  {
+    slug: 'idraulico-a-domicilio',
+    title: 'Idraulico a Domicilio - Interventi a Casa Tua',
+    h1: 'Idraulico a Domicilio',
+    description: 'Servizio di idraulico a domicilio. Professionisti qualificati che intervengono direttamente a casa tua per riparazioni e manutenzioni.',
+    keywords: ['idraulico a domicilio', 'idraulico casa', 'intervento idraulico', 'assistenza idraulico']
+  },
+  {
+    slug: 'preventivo-idraulico',
+    title: 'Preventivo Idraulico Gratuito - Prezzi e Costi',
+    h1: 'Preventivo Idraulico Gratuito',
+    description: 'Richiedi un preventivo idraulico gratuito e senza impegno. Confronta prezzi e tariffe di idraulici qualificati nella tua zona.',
+    keywords: ['preventivo idraulico', 'idraulico prezzi', 'prezzi idraulico', 'idraulico economico', 'tariffe idraulico', 'idraulico prezzo onesto']
+  },
+  {
+    slug: 'termoidraulica',
+    title: 'Termoidraulica - Impianti Termici e Idraulici',
+    h1: 'Servizi di Termoidraulica Professionale',
+    description: 'Servizi di termoidraulica: installazione e manutenzione impianti termici, caldaie, riscaldamento e climatizzazione. Tecnici qualificati.',
+    keywords: ['termoidraulica', 'impianto termoidraulico', 'termoidraulico', 'impianti termici']
+  },
+  {
+    slug: 'impianto-idraulico',
+    title: 'Impianto Idraulico - Installazione e Rifacimento',
+    h1: 'Impianto Idraulico Professionale',
+    description: 'Realizzazione e rifacimento impianti idraulici per casa e azienda. Impianti a norma con materiali di qualità e garanzia.',
+    keywords: ['impianto idraulico', 'impianti idraulici', 'impianto idrico', 'impianto idrico sanitario', 'installazione impianti idraulici']
+  },
+  {
+    slug: 'impianto-idraulico-bagno',
+    title: 'Impianto Idraulico Bagno - Realizzazione e Rifacimento',
+    h1: 'Impianto Idraulico Bagno',
+    description: 'Realizzazione e rifacimento impianto idraulico bagno. Impianti bagno multistrato, a vista o tradizionali con professionisti qualificati.',
+    keywords: ['impianto idraulico bagno', 'impianti idraulici bagno', 'impianto bagno', 'impianti bagno', 'impianto idrico bagno']
+  },
+  {
+    slug: 'idraulico-onesto',
+    title: 'Idraulico Onesto - Professionisti Affidabili',
+    h1: 'Trova un Idraulico Onesto',
+    description: 'Cerchi un idraulico onesto e affidabile? Trova professionisti verificati con recensioni reali e prezzi trasparenti.',
+    keywords: ['idraulico onesto', 'idraulico prezzo onesto', 'idraulico affidabile', 'idraulico serio']
+  },
+  {
+    slug: 'disotturazione-wc',
+    title: 'Disotturazione WC - Sturare Water Intasato',
+    h1: 'Disotturazione WC e Scarichi',
+    description: 'Servizio di disotturazione WC e scarichi intasati. Intervento rapido per sturare water, lavandini e tubature ostruiti.',
+    keywords: ['disotturazione wc', 'wc intasato', 'sturare wc', 'water intasato', 'riparazione sciacquone water']
   }
 ];
 

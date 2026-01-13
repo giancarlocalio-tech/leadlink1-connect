@@ -865,6 +865,570 @@ export const CITIES: CityData[] = [
     population: '52.000',
     neighborhoods: ['Centro', 'Chieti Scalo', 'Madonna delle Piane', 'Brecciarola'],
     nearbyAreas: ['Pescara', 'Lanciano', 'Francavilla al Mare', 'Ortona', 'Vasto']
+  },
+  // === NUOVE CITTÀ AGGIUNTE - Lombardia ===
+  {
+    slug: 'busto-arsizio',
+    name: 'Busto Arsizio',
+    province: 'VA',
+    region: 'Lombardia',
+    population: '84.000',
+    neighborhoods: ['Centro', 'Sacconago', 'Borsano', 'Sant\'Anna', 'Madonna Regina'],
+    nearbyAreas: ['Gallarate', 'Legnano', 'Castellanza', 'Olgiate Olona', 'Saronno']
+  },
+  {
+    slug: 'legnano',
+    name: 'Legnano',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '60.000',
+    neighborhoods: ['Centro', 'Canazza', 'Mazzafame', 'San Bernardino', 'Flora'],
+    nearbyAreas: ['Busto Arsizio', 'Parabiago', 'Nerviano', 'San Giorgio su Legnano']
+  },
+  {
+    slug: 'gallarate',
+    name: 'Gallarate',
+    province: 'VA',
+    region: 'Lombardia',
+    population: '54.000',
+    neighborhoods: ['Centro', 'Arnate', 'Cedrate', 'Crenna', 'Madonna in Campagna'],
+    nearbyAreas: ['Busto Arsizio', 'Saronno', 'Cassano Magnago', 'Cardano al Campo']
+  },
+  {
+    slug: 'saronno',
+    name: 'Saronno',
+    province: 'VA',
+    region: 'Lombardia',
+    population: '40.000',
+    neighborhoods: ['Centro', 'Cassina Ferrara', 'Prealpi', 'Matteotti'],
+    nearbyAreas: ['Origgio', 'Uboldo', 'Gerenzano', 'Ceriano Laghetto', 'Caronno Pertusella']
+  },
+  {
+    slug: 'seregno',
+    name: 'Seregno',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '45.000',
+    neighborhoods: ['Centro', 'San Salvatore', 'Ceredo', 'Santa Valeria'],
+    nearbyAreas: ['Desio', 'Lissone', 'Giussano', 'Meda', 'Cabiate']
+  },
+  {
+    slug: 'desio',
+    name: 'Desio',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '42.000',
+    neighborhoods: ['Centro', 'San Giorgio', 'Spaccone', 'Cattaneo'],
+    nearbyAreas: ['Seregno', 'Lissone', 'Nova Milanese', 'Cesano Maderno']
+  },
+  {
+    slug: 'lissone',
+    name: 'Lissone',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '46.000',
+    neighborhoods: ['Centro', 'Santa Margherita', 'Bareggia', 'San Mauro'],
+    nearbyAreas: ['Monza', 'Desio', 'Seregno', 'Biassono', 'Vedano al Lambro']
+  },
+  {
+    slug: 'cantu',
+    name: 'Cantù',
+    province: 'CO',
+    region: 'Lombardia',
+    population: '40.000',
+    neighborhoods: ['Centro', 'Vighizzolo', 'Fecchio', 'Mirabello'],
+    nearbyAreas: ['Mariano Comense', 'Carimate', 'Cermenate', 'Figino Serenza']
+  },
+  {
+    slug: 'crema',
+    name: 'Crema',
+    province: 'CR',
+    region: 'Lombardia',
+    population: '35.000',
+    neighborhoods: ['Centro', 'San Bernardino', 'Castelnuovo', 'Santa Maria'],
+    nearbyAreas: ['Offanengo', 'Sergnano', 'Vaiano Cremasco', 'Palazzo Pignano']
+  },
+  // === NUOVE CITTÀ - Piemonte ===
+  {
+    slug: 'novara',
+    name: 'Novara',
+    province: 'NO',
+    region: 'Piemonte',
+    population: '104.000',
+    neighborhoods: ['Centro', 'Sant\'Andrea', 'Bicocca', 'Vignale', 'San Paolo'],
+    nearbyAreas: ['Galliate', 'Trecate', 'Oleggio', 'Cameri', 'Borgomanero']
+  },
+  {
+    slug: 'asti',
+    name: 'Asti',
+    province: 'AT',
+    region: 'Piemonte',
+    population: '76.000',
+    neighborhoods: ['Centro', 'San Pietro', 'Tanaro', 'Viatosto', 'Torretta'],
+    nearbyAreas: ['Nizza Monferrato', 'Canelli', 'San Damiano d\'Asti', 'Costigliole d\'Asti']
+  },
+  {
+    slug: 'cuneo',
+    name: 'Cuneo',
+    province: 'CN',
+    region: 'Piemonte',
+    population: '56.000',
+    neighborhoods: ['Centro', 'San Paolo', 'San Rocco', 'Madonna dell\'Olmo', 'Roata Rossi'],
+    nearbyAreas: ['Borgo San Dalmazzo', 'Boves', 'Mondovì', 'Saluzzo', 'Fossano']
+  },
+  {
+    slug: 'alessandria',
+    name: 'Alessandria',
+    province: 'AL',
+    region: 'Piemonte',
+    population: '94.000',
+    neighborhoods: ['Centro', 'Cristo', 'Pista', 'San Michele', 'Orti'],
+    nearbyAreas: ['Valenza', 'Tortona', 'Casale Monferrato', 'Novi Ligure', 'Acqui Terme']
+  },
+  {
+    slug: 'moncalieri',
+    name: 'Moncalieri',
+    province: 'TO',
+    region: 'Piemonte',
+    population: '58.000',
+    neighborhoods: ['Centro', 'Borgo San Pietro', 'Santa Maria', 'Tagliaferro', 'Testona'],
+    nearbyAreas: ['Torino', 'Nichelino', 'Trofarello', 'La Loggia', 'Cambiano']
+  },
+  {
+    slug: 'rivoli',
+    name: 'Rivoli',
+    province: 'TO',
+    region: 'Piemonte',
+    population: '49.000',
+    neighborhoods: ['Centro', 'Cascine Vica', 'Tetti Neirotti', 'Bruere'],
+    nearbyAreas: ['Collegno', 'Grugliasco', 'Alpignano', 'Rosta', 'Villarbasse']
+  },
+  // === NUOVE CITTÀ - Veneto ===
+  {
+    slug: 'bassano-del-grappa',
+    name: 'Bassano del Grappa',
+    province: 'VI',
+    region: 'Veneto',
+    population: '43.000',
+    neighborhoods: ['Centro', 'Sant\'Eusebio', 'Rubbio', 'Campese', 'Angarano'],
+    nearbyAreas: ['Marostica', 'Cassola', 'Romano d\'Ezzelino', 'Rosà', 'Mussolente']
+  },
+  {
+    slug: 'schio',
+    name: 'Schio',
+    province: 'VI',
+    region: 'Veneto',
+    population: '39.000',
+    neighborhoods: ['Centro', 'Magrè', 'Santa Caterina', 'San Vito', 'Giavenale'],
+    nearbyAreas: ['Thiene', 'Valdagno', 'Malo', 'Santorso', 'Piovene Rocchette']
+  },
+  {
+    slug: 'conegliano',
+    name: 'Conegliano',
+    province: 'TV',
+    region: 'Veneto',
+    population: '35.000',
+    neighborhoods: ['Centro', 'Collalbrigo', 'Scomigo', 'Ogliano', 'Costa'],
+    nearbyAreas: ['Vittorio Veneto', 'Susegana', 'San Vendemiano', 'Pieve di Soligo']
+  },
+  {
+    slug: 'chioggia',
+    name: 'Chioggia',
+    province: 'VE',
+    region: 'Veneto',
+    population: '50.000',
+    neighborhoods: ['Centro', 'Sottomarina', 'Borgo San Giovanni', 'Ca\' Lino', 'Brondolo'],
+    nearbyAreas: ['Cavarzere', 'Codevigo', 'Cona', 'Piove di Sacco']
+  },
+  // === NUOVE CITTÀ - Toscana ===
+  {
+    slug: 'massa',
+    name: 'Massa',
+    province: 'MS',
+    region: 'Toscana',
+    population: '69.000',
+    neighborhoods: ['Centro', 'Marina di Massa', 'Turano', 'Altagnana', 'Castagnetola'],
+    nearbyAreas: ['Carrara', 'Montignoso', 'Forte dei Marmi', 'Pietrasanta']
+  },
+  {
+    slug: 'carrara',
+    name: 'Carrara',
+    province: 'MS',
+    region: 'Toscana',
+    population: '62.000',
+    neighborhoods: ['Centro', 'Marina di Carrara', 'Avenza', 'Fossola', 'Torano'],
+    nearbyAreas: ['Massa', 'Sarzana', 'Ortonovo', 'Fosdinovo']
+  },
+  {
+    slug: 'viareggio',
+    name: 'Viareggio',
+    province: 'LU',
+    region: 'Toscana',
+    population: '62.000',
+    neighborhoods: ['Centro', 'Darsena', 'Marco Polo', 'Torre del Lago', 'Bicchio'],
+    nearbyAreas: ['Camaiore', 'Pietrasanta', 'Massarosa', 'Forte dei Marmi']
+  },
+  {
+    slug: 'empoli',
+    name: 'Empoli',
+    province: 'FI',
+    region: 'Toscana',
+    population: '49.000',
+    neighborhoods: ['Centro', 'Pontorme', 'Pozzale', 'Cortenuova', 'Serravalle'],
+    nearbyAreas: ['Montelupo Fiorentino', 'Fucecchio', 'Vinci', 'Cerreto Guidi', 'Castelfiorentino']
+  },
+  {
+    slug: 'scandicci',
+    name: 'Scandicci',
+    province: 'FI',
+    region: 'Toscana',
+    population: '50.000',
+    neighborhoods: ['Centro', 'Casellina', 'Vingone', 'San Giusto', 'Le Bagnese'],
+    nearbyAreas: ['Firenze', 'Lastra a Signa', 'Signa', 'Impruneta']
+  },
+  // === NUOVE CITTÀ - Lazio ===
+  {
+    slug: 'guidonia',
+    name: 'Guidonia Montecelio',
+    province: 'RM',
+    region: 'Lazio',
+    population: '90.000',
+    neighborhoods: ['Centro', 'Villanova', 'Colleverde', 'Marco Simone', 'Setteville'],
+    nearbyAreas: ['Tivoli', 'Monterotondo', 'Mentana', 'Sant\'Angelo Romano']
+  },
+  {
+    slug: 'tivoli',
+    name: 'Tivoli',
+    province: 'RM',
+    region: 'Lazio',
+    population: '57.000',
+    neighborhoods: ['Centro', 'Tivoli Terme', 'Villa Adriana', 'Campolimpido', 'Favale'],
+    nearbyAreas: ['Guidonia', 'Palestrina', 'San Polo dei Cavalieri', 'Castel Madama']
+  },
+  {
+    slug: 'civitavecchia',
+    name: 'Civitavecchia',
+    province: 'RM',
+    region: 'Lazio',
+    population: '53.000',
+    neighborhoods: ['Centro', 'San Gordiano', 'Boccelle', 'Aurelia', 'La Scaglia'],
+    nearbyAreas: ['Santa Marinella', 'Tarquinia', 'Tolfa', 'Allumiere']
+  },
+  {
+    slug: 'velletri',
+    name: 'Velletri',
+    province: 'RM',
+    region: 'Lazio',
+    population: '53.000',
+    neighborhoods: ['Centro', 'Pratolungo', 'Lazzaria', 'Ponte di Mele'],
+    nearbyAreas: ['Lariano', 'Artena', 'Genzano di Roma', 'Cisterna di Latina']
+  },
+  {
+    slug: 'pomezia',
+    name: 'Pomezia',
+    province: 'RM',
+    region: 'Lazio',
+    population: '63.000',
+    neighborhoods: ['Centro', 'Torvaianica', 'Martin Pescatore', 'Santa Palomba'],
+    nearbyAreas: ['Ardea', 'Aprilia', 'Albano Laziale', 'Marino']
+  },
+  // === NUOVE CITTÀ - Puglia ===
+  {
+    slug: 'altamura',
+    name: 'Altamura',
+    province: 'BA',
+    region: 'Puglia',
+    population: '70.000',
+    neighborhoods: ['Centro', 'Parco Tridente', 'Via Santeramo', 'Fornaci'],
+    nearbyAreas: ['Gravina in Puglia', 'Santeramo in Colle', 'Matera', 'Acquaviva delle Fonti']
+  },
+  {
+    slug: 'molfetta',
+    name: 'Molfetta',
+    province: 'BA',
+    region: 'Puglia',
+    population: '59.000',
+    neighborhoods: ['Centro', 'Molfetta Alta', 'Madonna della Rosa', 'Sant\'Andrea'],
+    nearbyAreas: ['Giovinazzo', 'Bisceglie', 'Terlizzi', 'Bari']
+  },
+  {
+    slug: 'cerignola',
+    name: 'Cerignola',
+    province: 'FG',
+    region: 'Puglia',
+    population: '58.000',
+    neighborhoods: ['Centro', 'Terra Vecchia', 'Borgo Libertà', 'Torricelli'],
+    nearbyAreas: ['San Ferdinando di Puglia', 'Stornara', 'Orta Nova', 'Trinitapoli']
+  },
+  {
+    slug: 'martina-franca',
+    name: 'Martina Franca',
+    province: 'TA',
+    region: 'Puglia',
+    population: '49.000',
+    neighborhoods: ['Centro', 'Pergolo', 'Motolese', 'Montedoro'],
+    nearbyAreas: ['Locorotondo', 'Alberobello', 'Ceglie Messapica', 'Taranto']
+  },
+  // === NUOVE CITTÀ - Campania ===
+  {
+    slug: 'battipaglia',
+    name: 'Battipaglia',
+    province: 'SA',
+    region: 'Campania',
+    population: '51.000',
+    neighborhoods: ['Centro', 'Serroni', 'Sant\'Anna', 'Taverna'],
+    nearbyAreas: ['Eboli', 'Pontecagnano Faiano', 'Bellizzi', 'Olevano sul Tusciano']
+  },
+  {
+    slug: 'cava-de-tirreni',
+    name: 'Cava de\' Tirreni',
+    province: 'SA',
+    region: 'Campania',
+    population: '54.000',
+    neighborhoods: ['Centro', 'Annunziata', 'Santa Lucia', 'Pregiato', 'San Pietro'],
+    nearbyAreas: ['Vietri sul Mare', 'Nocera Superiore', 'Salerno', 'Maiori']
+  },
+  {
+    slug: 'aversa',
+    name: 'Aversa',
+    province: 'CE',
+    region: 'Campania',
+    population: '54.000',
+    neighborhoods: ['Centro', 'Canosa', 'Ischitella', 'Gescal'],
+    nearbyAreas: ['Giugliano', 'Casoria', 'Afragola', 'Villa di Briano', 'Trentola-Ducenta']
+  },
+  {
+    slug: 'torre-del-greco',
+    name: 'Torre del Greco',
+    province: 'NA',
+    region: 'Campania',
+    population: '85.000',
+    neighborhoods: ['Centro', 'Santa Maria la Bruna', 'Leopardi', 'Cappuccini'],
+    nearbyAreas: ['Ercolano', 'Torre Annunziata', 'Portici', 'Boscoreale']
+  },
+  // === NUOVE CITTÀ - Sicilia ===
+  {
+    slug: 'marsala',
+    name: 'Marsala',
+    province: 'TP',
+    region: 'Sicilia',
+    population: '82.000',
+    neighborhoods: ['Centro', 'Strasatti', 'Lato Mazara', 'Terrenove'],
+    nearbyAreas: ['Mazara del Vallo', 'Trapani', 'Petrosino', 'Salemi']
+  },
+  {
+    slug: 'vittoria',
+    name: 'Vittoria',
+    province: 'RG',
+    region: 'Sicilia',
+    population: '64.000',
+    neighborhoods: ['Centro', 'Fanello', 'Macconi', 'Scoglitti'],
+    nearbyAreas: ['Ragusa', 'Comiso', 'Acate', 'Gela', 'Santa Croce Camerina']
+  },
+  {
+    slug: 'modica',
+    name: 'Modica',
+    province: 'RG',
+    region: 'Sicilia',
+    population: '55.000',
+    neighborhoods: ['Modica Alta', 'Modica Bassa', 'Sorda', 'Frigintini'],
+    nearbyAreas: ['Ragusa', 'Scicli', 'Ispica', 'Pozzallo', 'Rosolini']
+  },
+  {
+    slug: 'acireale',
+    name: 'Acireale',
+    province: 'CT',
+    region: 'Sicilia',
+    population: '53.000',
+    neighborhoods: ['Centro', 'Santa Maria la Scala', 'Pozzillo', 'Guardia', 'Mangano'],
+    nearbyAreas: ['Catania', 'Giarre', 'Aci Catena', 'Aci Sant\'Antonio', 'Riposto']
+  },
+  {
+    slug: 'milazzo',
+    name: 'Milazzo',
+    province: 'ME',
+    region: 'Sicilia',
+    population: '32.000',
+    neighborhoods: ['Centro', 'Borgo', 'San Papino', 'Santa Marina'],
+    nearbyAreas: ['Barcellona Pozzo di Gotto', 'Terme Vigliatore', 'Lipari', 'Furnari']
+  },
+  // === NUOVE CITTÀ - Sardegna ===
+  {
+    slug: 'olbia',
+    name: 'Olbia',
+    province: 'SS',
+    region: 'Sardegna',
+    population: '60.000',
+    neighborhoods: ['Centro', 'Bandinu', 'San Nicola', 'Poltu Quatu', 'Porto Rotondo'],
+    nearbyAreas: ['San Teodoro', 'Arzachena', 'Golfo Aranci', 'Loiri Porto San Paolo']
+  },
+  {
+    slug: 'quartu-sant-elena',
+    name: 'Quartu Sant\'Elena',
+    province: 'CA',
+    region: 'Sardegna',
+    population: '71.000',
+    neighborhoods: ['Centro', 'Margine Rosso', 'Poetto', 'Is Arenas', 'Pitz\'e Serra'],
+    nearbyAreas: ['Cagliari', 'Selargius', 'Quartucciu', 'Maracalagonis', 'Villasimius']
+  },
+  {
+    slug: 'alghero',
+    name: 'Alghero',
+    province: 'SS',
+    region: 'Sardegna',
+    population: '44.000',
+    neighborhoods: ['Centro', 'Fertilia', 'Maristella', 'Maria Pia', 'Calabona'],
+    nearbyAreas: ['Sassari', 'Villanova Monteleone', 'Uri', 'Ittiri', 'Stintino']
+  },
+  // === NUOVE CITTÀ - Calabria ===
+  {
+    slug: 'lamezia-terme',
+    name: 'Lamezia Terme',
+    province: 'CZ',
+    region: 'Calabria',
+    population: '70.000',
+    neighborhoods: ['Nicastro', 'Sambiase', 'Sant\'Eufemia', 'Fronti', 'San Teodoro'],
+    nearbyAreas: ['Catanzaro', 'Maida', 'Curinga', 'Gizzeria', 'Falerna']
+  },
+  {
+    slug: 'rende',
+    name: 'Rende',
+    province: 'CS',
+    region: 'Calabria',
+    population: '36.000',
+    neighborhoods: ['Centro', 'Roges', 'Quattromiglia', 'Commenda', 'Arcavacata'],
+    nearbyAreas: ['Cosenza', 'Montalto Uffugo', 'Castrolibero', 'San Fili']
+  },
+  // === NUOVE CITTÀ - Marche ===
+  {
+    slug: 'civitanova-marche',
+    name: 'Civitanova Marche',
+    province: 'MC',
+    region: 'Marche',
+    population: '42.000',
+    neighborhoods: ['Centro', 'Civitanova Alta', 'San Marone', 'Santa Maria Apparente'],
+    nearbyAreas: ['Porto Sant\'Elpidio', 'Potenza Picena', 'Montecosaro', 'Porto Recanati']
+  },
+  {
+    slug: 'san-benedetto-del-tronto',
+    name: 'San Benedetto del Tronto',
+    province: 'AP',
+    region: 'Marche',
+    population: '48.000',
+    neighborhoods: ['Centro', 'Porto d\'Ascoli', 'Ragnola', 'Ponterotto', 'Salaria'],
+    nearbyAreas: ['Grottammare', 'Monteprandone', 'Acquaviva Picena', 'Martinsicuro']
+  },
+  {
+    slug: 'senigallia',
+    name: 'Senigallia',
+    province: 'AN',
+    region: 'Marche',
+    population: '45.000',
+    neighborhoods: ['Centro', 'Marzocca', 'Cesanella', 'Ciarnin', 'Portone'],
+    nearbyAreas: ['Fano', 'Ancona', 'Mondolfo', 'Ostra', 'Trecastelli']
+  },
+  // === NUOVE CITTÀ - Abruzzo ===
+  {
+    slug: 'montesilvano',
+    name: 'Montesilvano',
+    province: 'PE',
+    region: 'Abruzzo',
+    population: '54.000',
+    neighborhoods: ['Centro', 'Montesilvano Colle', 'Villa Verrocchio', 'Montesilvano Spiaggia'],
+    nearbyAreas: ['Pescara', 'Silvi', 'Cappelle sul Tavo', 'Spoltore', 'Città Sant\'Angelo']
+  },
+  {
+    slug: 'vasto',
+    name: 'Vasto',
+    province: 'CH',
+    region: 'Abruzzo',
+    population: '42.000',
+    neighborhoods: ['Centro', 'Vasto Marina', 'San Salvo Marina', 'Incoronata'],
+    nearbyAreas: ['San Salvo', 'Cupello', 'Monteodorisio', 'Casalbordino']
+  },
+  {
+    slug: 'lanciano',
+    name: 'Lanciano',
+    province: 'CH',
+    region: 'Abruzzo',
+    population: '36.000',
+    neighborhoods: ['Centro', 'Civitanova', 'Lancianovecchia', 'Santa Rita'],
+    nearbyAreas: ['Fossacesia', 'Castel Frentano', 'Frisa', 'Rocca San Giovanni']
+  },
+  // === NUOVE CITTÀ - Umbria ===
+  {
+    slug: 'terni',
+    name: 'Terni',
+    province: 'TR',
+    region: 'Umbria',
+    population: '111.000',
+    neighborhoods: ['Centro', 'Borgo Rivo', 'Cesi', 'Piediluco', 'Papigno'],
+    nearbyAreas: ['Narni', 'Orvieto', 'Spoleto', 'Amelia', 'Acquasparta']
+  },
+  {
+    slug: 'foligno',
+    name: 'Foligno',
+    province: 'PG',
+    region: 'Umbria',
+    population: '58.000',
+    neighborhoods: ['Centro', 'Sportella Marini', 'Pale', 'Scopoli', 'Colfiorito'],
+    nearbyAreas: ['Spello', 'Trevi', 'Bevagna', 'Montefalco', 'Nocera Umbra']
+  },
+  {
+    slug: 'spoleto',
+    name: 'Spoleto',
+    province: 'PG',
+    region: 'Umbria',
+    population: '39.000',
+    neighborhoods: ['Centro', 'San Giacomo', 'Madonna di Lugo', 'Bazzano Inferiore'],
+    nearbyAreas: ['Foligno', 'Norcia', 'Trevi', 'Campello sul Clitunno']
+  },
+  // === NUOVE CITTÀ - Molise ===
+  {
+    slug: 'isernia',
+    name: 'Isernia',
+    province: 'IS',
+    region: 'Molise',
+    population: '22.000',
+    neighborhoods: ['Centro', 'San Lazzaro', 'Santo Spirito', 'Conocchia'],
+    nearbyAreas: ['Venafro', 'Agnone', 'Frosolone', 'Castel di Sangro']
+  },
+  {
+    slug: 'termoli',
+    name: 'Termoli',
+    province: 'CB',
+    region: 'Molise',
+    population: '33.000',
+    neighborhoods: ['Centro', 'Borgo Antico', 'Difesa Grande', 'Rio Vivo'],
+    nearbyAreas: ['Campomarino', 'San Giacomo degli Schiavoni', 'Guglionesi', 'Larino']
+  },
+  // === NUOVE CITTÀ - Trentino-Alto Adige ===
+  {
+    slug: 'merano',
+    name: 'Merano',
+    province: 'BZ',
+    region: 'Trentino-Alto Adige',
+    population: '40.000',
+    neighborhoods: ['Centro', 'Maia Alta', 'Maia Bassa', 'Quarazze', 'Sinigo'],
+    nearbyAreas: ['Lana', 'Tirolo', 'Lagundo', 'Marlengo', 'Naturno']
+  },
+  {
+    slug: 'rovereto',
+    name: 'Rovereto',
+    province: 'TN',
+    region: 'Trentino-Alto Adige',
+    population: '40.000',
+    neighborhoods: ['Centro', 'Borgo Sacco', 'Lizzana', 'Marco', 'Noriglio'],
+    nearbyAreas: ['Riva del Garda', 'Mori', 'Ala', 'Isera', 'Villa Lagarina']
+  },
+  {
+    slug: 'bressanone',
+    name: 'Bressanone',
+    province: 'BZ',
+    region: 'Trentino-Alto Adige',
+    population: '22.000',
+    neighborhoods: ['Centro', 'Stufles', 'Millan', 'Sant\'Andrea', 'Sarnes'],
+    nearbyAreas: ['Varna', 'Fortezza', 'Chiusa', 'Luson', 'Naz-Sciaves']
   }
 ];
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
+import { Helmet } from 'react-helmet-async';
+import {
   Check, 
   Star, 
   Users, 
@@ -134,14 +135,6 @@ export default function PlumberLandingPage() {
     service_areas: string[];
   } | null>(null);
 
-  // SEO meta tags
-  useEffect(() => {
-    document.title = 'Diventa Partner Idraulici Subito | Trova Nuovi Clienti';
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 'Registrati come idraulico partner e ricevi richieste di lavoro qualificate nella tua zona. Aumenta il tuo fatturato con Idraulici Subito.');
-    }
-  }, []);
 
   // Redirect solo se non stiamo registrando e l'utente ha già un profilo
   useEffect(() => {
@@ -309,6 +302,14 @@ export default function PlumberLandingPage() {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Diventa Partner Idraulici Subito | Trova Nuovi Clienti</title>
+        <meta name="description" content="Registrati come idraulico partner e ricevi richieste di lavoro qualificate nella tua zona. Aumenta il tuo fatturato con Idraulici Subito." />
+        <link rel="canonical" href="https://idraulicisubito.com/per-idraulici" />
+        <meta property="og:title" content="Diventa Partner Idraulici Subito | Trova Nuovi Clienti" />
+        <meta property="og:description" content="Registrati come idraulico partner e ricevi richieste di lavoro qualificate nella tua zona." />
+        <meta property="og:url" content="https://idraulicisubito.com/per-idraulici" />
+      </Helmet>
       {/* Hero Section */}
       <section className="relative py-16 md:py-24 bg-gradient-to-br from-primary/10 via-background to-secondary/10">
         <div className="container mx-auto px-4">

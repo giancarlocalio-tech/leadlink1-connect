@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { 
   Check, 
   Star, 
@@ -67,17 +68,8 @@ export default function LandingPage() {
   const source = searchParams.get('utm_source') || (searchParams.get('gclid') ? 'google_ads' : 'direct');
 
   useEffect(() => {
-    // SEO Meta tags for landing page
-    document.title = "Cerchi Nuovi Clienti? Diventa Partner Idraulici Subito | +40% Fatturato";
-    
     // Track page view
     analytics.pageView('/lp/idraulico', 'Landing Page Idraulici - Google Ads');
-    
-    // Update meta description
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) {
-      metaDesc.setAttribute('content', 'Sei un idraulico? Ricevi richieste qualificate ogni giorno. Nessun costo fisso, paghi solo per i contatti. Registrazione gratuita in 2 minuti.');
-    }
   }, []);
 
   const handleCityChange = (cityData: ItalianCity | null, displayValue: string) => {
@@ -114,6 +106,16 @@ export default function LandingPage() {
   };
 
   return (
+    <>
+      <Helmet>
+        <title>Cerchi Nuovi Clienti? Diventa Partner Idraulici Subito | +40% Fatturato</title>
+        <meta name="description" content="Sei un idraulico? Ricevi richieste qualificate ogni giorno. Nessun costo fisso, paghi solo per i contatti. Registrazione gratuita in 2 minuti." />
+        <link rel="canonical" href="https://idraulicisubito.com/lp/idraulico" />
+        <meta property="og:title" content="Cerchi Nuovi Clienti? Diventa Partner Idraulici Subito" />
+        <meta property="og:description" content="Sei un idraulico? Ricevi richieste qualificate ogni giorno. Nessun costo fisso." />
+        <meta property="og:url" content="https://idraulicisubito.com/lp/idraulico" />
+        <meta name="robots" content="noindex, follow" />
+      </Helmet>
     <div className="min-h-screen bg-background">
       {/* Minimal Header */}
       <header className="py-4 px-4 border-b border-border bg-background/95 backdrop-blur sticky top-0 z-50">
@@ -374,5 +376,6 @@ export default function LandingPage() {
         </div>
       </footer>
     </div>
+    </>
   );
 }

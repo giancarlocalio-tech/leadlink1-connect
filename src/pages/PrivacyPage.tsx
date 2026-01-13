@@ -1,13 +1,16 @@
-import { useEffect } from 'react';
 import { Layout } from '@/components/Layout';
+import { Helmet } from 'react-helmet-async';
 
 export default function PrivacyPage() {
-  useEffect(() => {
-    document.title = "Privacy Policy | Idraulici Subito";
-  }, []);
-
   return (
     <Layout>
+      <Helmet>
+        <title>Privacy Policy | Idraulici Subito</title>
+        <meta name="description" content="Informativa sulla privacy di Idraulici Subito: come trattiamo i tuoi dati personali." />
+        <link rel="canonical" href="https://idraulicisubito.com/privacy" />
+        <meta property="og:title" content="Privacy Policy | Idraulici Subito" />
+        <meta property="og:url" content="https://idraulicisubito.com/privacy" />
+      </Helmet>
       <div className="py-8 md:py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto prose prose-slate">

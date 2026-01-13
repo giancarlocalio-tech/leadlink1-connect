@@ -105,10 +105,10 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
     ? `${serviceData.name} a ${cityData.name}`
     : `Idraulico a ${cityData.name}`;
 
-  // Structured data
+  // Structured data (single JSON-LD graph to avoid duplicates)
   const structuredData = {
-    "@context": "https://schema.org",
     "@type": "LocalBusiness",
+    "@id": `${canonicalUrl}#localbusiness`,
     "name": `Idraulici Subito - ${serviceName} ${cityData.name}`,
     "description": pageDescription,
     "url": canonicalUrl,
@@ -121,12 +121,12 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
           "name": cityData.province
         }
       },
-      ...cityData.nearbyAreas.map(area => ({
+      ...cityData.nearbyAreas.map((area) => ({
         "@type": "City",
         "name": area
       }))
     ],
-    "serviceType": serviceData 
+    "serviceType": serviceData
       ? [serviceData.name, ...serviceData.keywords]
       : [
           "Pronto intervento idraulico",
@@ -143,16 +143,23 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
     },
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
       "opens": "00:00",
       "closes": "23:59"
     }
   };
 
-  // FAQ structured data
   const faqData = {
-    "@context": "https://schema.org",
     "@type": "FAQPage",
+    "@id": `${canonicalUrl}#faq`,
     "mainEntity": [
       {
         "@type": "Question",
@@ -181,10 +188,9 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
     ]
   };
 
-  // Breadcrumb structured data
   const breadcrumbData = {
-    "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    "@id": `${canonicalUrl}#breadcrumb`,
     "itemListElement": [
       {
         "@type": "ListItem",
@@ -192,28 +198,35 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
         "name": "Home",
         "item": baseUrl
       },
-      ...(serviceData ? [
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": cityData.name,
-          "item": `${baseUrl}/${cityData.slug}`
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": serviceData.name,
-          "item": canonicalUrl
-        }
-      ] : [
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": `Idraulico ${cityData.name}`,
-          "item": canonicalUrl
-        }
-      ])
+      ...(serviceData
+        ? [
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": cityData.name,
+              "item": `${baseUrl}/${cityData.slug}`
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": serviceData.name,
+              "item": canonicalUrl
+            }
+          ]
+        : [
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": `Idraulico ${cityData.name}`,
+              "item": canonicalUrl
+            }
+          ])
     ]
+  };
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [structuredData, faqData, breadcrumbData]
   };
 
   // Services to display
@@ -233,14 +246,8 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
         <meta property="og:type" content="website" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-        <script type="application/ld+json">
-          {JSON.stringify(faqData)}
-        </script>
-        <script type="application/ld+json">
-          {JSON.stringify(breadcrumbData)}
+        <script type="application/ld+json" key="structured-data">
+          {JSON.stringify(jsonLd)}
         </script>
       </Helmet>
 

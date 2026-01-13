@@ -39,10 +39,10 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
 
   const baseUrl = 'https://idraulicisubito.com';
 
-  // LocalBusiness structured data
+  // Structured data (single JSON-LD graph to avoid duplicates)
   const localBusinessData = {
-    "@context": "https://schema.org",
     "@type": "LocalBusiness",
+    "@id": `${canonicalUrl}#localbusiness`,
     "name": `Idraulici Subito - ${pageData.h1}`,
     "description": pageData.description,
     "url": canonicalUrl,
@@ -61,16 +61,23 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
     },
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
       "opens": "00:00",
       "closes": "23:59"
     }
   };
 
-  // FAQ structured data
   const faqData = {
-    "@context": "https://schema.org",
     "@type": "FAQPage",
+    "@id": `${canonicalUrl}#faq`,
     "mainEntity": [
       {
         "@type": "Question",
@@ -99,10 +106,9 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
     ]
   };
 
-  // Breadcrumb structured data
   const breadcrumbData = {
-    "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    "@id": `${canonicalUrl}#breadcrumb`,
     "itemListElement": [
       {
         "@type": "ListItem",
@@ -117,6 +123,11 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
         "item": canonicalUrl
       }
     ]
+  };
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [localBusinessData, faqData, breadcrumbData]
   };
 
   // Nearby cities to show when no location is detected
@@ -134,9 +145,9 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
         <meta property="og:type" content="website" />
         <meta name="twitter:title" content={pageData.title} />
         <meta name="twitter:description" content={pageData.description} />
-        <script type="application/ld+json">{JSON.stringify(localBusinessData)}</script>
-        <script type="application/ld+json">{JSON.stringify(faqData)}</script>
-        <script type="application/ld+json">{JSON.stringify(breadcrumbData)}</script>
+        <script type="application/ld+json" key="structured-data">
+          {JSON.stringify(structuredData)}
+        </script>
       </Helmet>
 
       <section className="relative overflow-hidden min-h-[450px] flex items-center justify-center">

@@ -25,6 +25,9 @@ import LandingLavoriZonaPage from "./pages/LandingLavoriZonaPage";
 import LandingComeFunzionaPage from "./pages/LandingComeFunzionaPage";
 import DynamicLandingPage from "./pages/DynamicLandingPage";
 import KeywordLandingPage from "./pages/KeywordLandingPage";
+import BlogPage from "./pages/BlogPage";
+import BlogArticlePage from "./pages/BlogArticlePage";
+import BlogCategoryPage from "./pages/BlogCategoryPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -119,6 +122,11 @@ const App = () => (
             <Route path="/bagno-allagato" element={<KeywordLandingPage slug="bagno-allagato" />} />
             <Route path="/cucina-allagata" element={<KeywordLandingPage slug="cucina-allagata" />} />
             <Route path="/cantina-allagata" element={<KeywordLandingPage slug="cantina-allagata" />} />
+            
+            {/* Blog Routes */}
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/categoria/:category" element={<BlogCategoryPage />} />
+            <Route path="/blog/:slug" element={<BlogArticlePage />} />
             
             {/* Dynamic city and city+service SEO pages - catches patterns like "milano" or "milano-manutenzione-caldaie" */}
             <Route path="/:slug" element={<DynamicLandingPage type="city-service" />} />

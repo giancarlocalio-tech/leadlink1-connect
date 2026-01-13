@@ -24,10 +24,10 @@ export default function BlogPage() {
       name: 'Blog Idraulici Subito - Guide e Consigli Idraulici',
       description: 'Guide pratiche, consigli di manutenzione e news dal mondo dell\'idraulica. Articoli scritti da professionisti per aiutarti a gestire gli impianti di casa.',
       url: canonicalUrl,
-      areaServed: [{ name: 'Italia' }],
+      areaServed: [{ type: 'Country' as const, name: 'Italia' }],
     },
     [],
-    [{ name: 'Blog' }]
+    [{ name: 'Blog', url: canonicalUrl }]
   );
 
   return (

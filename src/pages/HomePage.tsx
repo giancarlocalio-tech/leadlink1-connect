@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { 
   Droplets, 
   Wrench, 
@@ -96,11 +97,6 @@ export default function HomePage() {
   const [selectedCity, setSelectedCity] = useState<ItalianCity | null>(null);
   const [searchFilter, setSearchFilter] = useState('');
   const [showModal, setShowModal] = useState(false);
-
-  // SEO Meta tags
-  useEffect(() => {
-    document.title = "Idraulici Subito - Trova Idraulici Professionisti nella Tua Zona | Preventivi Gratuiti";
-  }, []);
 
   // Track wizard open
   const openWizard = () => {
@@ -266,6 +262,14 @@ export default function HomePage() {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Idraulici Subito - Trova Idraulici Professionisti nella Tua Zona | Preventivi Gratuiti</title>
+        <meta name="description" content="Trova idraulici professionisti verificati nella tua città. Richiedi preventivi gratuiti per riparazioni, installazioni, caldaie, scarichi intasati e emergenze idrauliche. Risposta in 15 minuti." />
+        <link rel="canonical" href="https://idraulicisubito.com/" />
+        <meta property="og:title" content="Idraulici Subito - Trova Idraulici Professionisti nella Tua Zona" />
+        <meta property="og:description" content="Trova idraulici professionisti verificati nella tua città. Richiedi preventivi gratuiti per riparazioni e installazioni. Risposta in 15 minuti." />
+        <meta property="og:url" content="https://idraulicisubito.com/" />
+      </Helmet>
       {/* Hero Section - Conversion Optimized */}
       <section className="relative overflow-hidden min-h-[550px] md:min-h-[600px] flex items-center justify-center">
         {/* Background Image */}

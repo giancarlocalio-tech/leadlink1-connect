@@ -58,23 +58,22 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
   let cityData: CityData | undefined;
   let serviceData: ServiceData | undefined;
   
-  if (type === 'city-service') {
-    // Format: {city}-{service} e.g., "milano-manutenzione-caldaie"
-    // We need to find the city and service by trying different split points
-    for (const service of SERVICES) {
-      if (slug.endsWith(`-${service.slug}`)) {
-        const citySlug = slug.replace(`-${service.slug}`, '');
-        cityData = getCityBySlug(citySlug);
-        if (cityData) {
-          serviceData = service;
-          break;
-        }
+  // Try to match city-service format first: {city}-{service} e.g., "milano-manutenzione-caldaie"
+  for (const service of SERVICES) {
+    if (slug.endsWith(`-${service.slug}`)) {
+      const citySlug = slug.replace(`-${service.slug}`, '');
+      const foundCity = getCityBySlug(citySlug);
+      if (foundCity) {
+        cityData = foundCity;
+        serviceData = service;
+        break;
       }
     }
-  } else {
-    // Just city: e.g., "milano" or "idraulico-milano"
-    const cleanSlug = slug.replace('idraulico-', '');
-    cityData = getCityBySlug(cleanSlug);
+  }
+  
+  // If no service match, try city-only: e.g., "milano"
+  if (!cityData) {
+    cityData = getCityBySlug(slug);
   }
   
   useEffect(() => {

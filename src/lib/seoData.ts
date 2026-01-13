@@ -1524,6 +1524,143 @@ export const SERVICES: ServiceData[] = [
     description: 'Ristrutturazione completa bagno con impianti idraulici a norma',
     keywords: ['ristrutturazione bagno', 'rifacimento bagno', 'bagno nuovo'],
     icon: 'Home'
+  },
+  // === NUOVI SERVIZI ===
+  {
+    slug: 'scaldabagno',
+    name: 'Riparazione Scaldabagno',
+    shortName: 'Scaldabagno',
+    description: 'Riparazione, manutenzione e installazione scaldabagno a gas ed elettrici',
+    keywords: ['scaldabagno', 'boiler', 'riparazione scaldabagno', 'installazione scaldabagno'],
+    icon: 'Zap'
+  },
+  {
+    slug: 'autoclave',
+    name: 'Installazione Autoclave',
+    shortName: 'Autoclave',
+    description: 'Installazione e riparazione autoclave per aumentare la pressione dell\'acqua',
+    keywords: ['autoclave', 'pompa autoclave', 'pressione acqua', 'autoclave domestica'],
+    icon: 'Gauge'
+  },
+  {
+    slug: 'addolcitore-acqua',
+    name: 'Addolcitore Acqua',
+    shortName: 'Addolcitore',
+    description: 'Installazione e manutenzione addolcitori acqua per eliminare il calcare',
+    keywords: ['addolcitore acqua', 'anticalcare', 'depuratore', 'filtro acqua'],
+    icon: 'Filter'
+  },
+  {
+    slug: 'depuratore-acqua',
+    name: 'Depuratore Acqua',
+    shortName: 'Depuratore',
+    description: 'Installazione depuratori acqua domestici a osmosi inversa e microfiltrazione',
+    keywords: ['depuratore acqua', 'osmosi inversa', 'filtro acqua potabile', 'purificatore'],
+    icon: 'Droplets'
+  },
+  {
+    slug: 'pompa-calore',
+    name: 'Pompa di Calore',
+    shortName: 'Pompa Calore',
+    description: 'Installazione e manutenzione pompe di calore aria-acqua e geotermiche',
+    keywords: ['pompa di calore', 'pompa calore aria acqua', 'riscaldamento pompa calore'],
+    icon: 'Thermometer'
+  },
+  {
+    slug: 'pannelli-solari-termici',
+    name: 'Pannelli Solari Termici',
+    shortName: 'Solare Termico',
+    description: 'Installazione pannelli solari termici per acqua calda sanitaria e riscaldamento',
+    keywords: ['pannelli solari termici', 'solare termico', 'acqua calda solare'],
+    icon: 'Sun'
+  },
+  {
+    slug: 'termosifoni',
+    name: 'Termosifoni e Radiatori',
+    shortName: 'Termosifoni',
+    description: 'Installazione, sostituzione e riparazione termosifoni e radiatori',
+    keywords: ['termosifoni', 'radiatori', 'caloriferi', 'sostituzione termosifoni'],
+    icon: 'Heater'
+  },
+  {
+    slug: 'valvole-termostatiche',
+    name: 'Valvole Termostatiche',
+    shortName: 'Valvole',
+    description: 'Installazione valvole termostatiche obbligatorie per risparmio energetico',
+    keywords: ['valvole termostatiche', 'contabilizzazione calore', 'risparmio energetico'],
+    icon: 'Settings'
+  },
+  {
+    slug: 'impianto-gas',
+    name: 'Impianto Gas',
+    shortName: 'Gas',
+    description: 'Installazione, manutenzione e certificazione impianti gas domestici',
+    keywords: ['impianto gas', 'tubazioni gas', 'allaccio gas', 'certificazione gas'],
+    icon: 'Flame'
+  },
+  {
+    slug: 'contatore-acqua',
+    name: 'Contatore Acqua',
+    shortName: 'Contatore',
+    description: 'Installazione e sostituzione contatori acqua condominiali e individuali',
+    keywords: ['contatore acqua', 'sottocontatore', 'misuratore acqua', 'contabilizzazione acqua'],
+    icon: 'Activity'
+  },
+  {
+    slug: 'box-doccia',
+    name: 'Installazione Box Doccia',
+    shortName: 'Box Doccia',
+    description: 'Installazione box doccia, cabine doccia e piatti doccia a filo pavimento',
+    keywords: ['box doccia', 'cabina doccia', 'piatto doccia', 'installazione doccia'],
+    icon: 'Droplet'
+  },
+  {
+    slug: 'vasca-doccia',
+    name: 'Trasformazione Vasca in Doccia',
+    shortName: 'Vasca-Doccia',
+    description: 'Trasformazione vasca da bagno in doccia walk-in moderna e accessibile',
+    keywords: ['vasca in doccia', 'trasformazione vasca', 'sostituzione vasca', 'doccia anziani'],
+    icon: 'RefreshCw'
+  },
+  {
+    slug: 'rubinetteria',
+    name: 'Rubinetteria',
+    shortName: 'Rubinetti',
+    description: 'Installazione e riparazione rubinetti, miscelatori e sistemi di erogazione',
+    keywords: ['rubinetteria', 'rubinetti', 'miscelatori', 'sostituzione rubinetto'],
+    icon: 'Pipette'
+  },
+  {
+    slug: 'scarichi-fognature',
+    name: 'Scarichi e Fognature',
+    shortName: 'Fognature',
+    description: 'Installazione, riparazione e manutenzione scarichi e reti fognarie',
+    keywords: ['scarichi', 'fognature', 'rete fognaria', 'allaccio fognatura'],
+    icon: 'ArrowDown'
+  },
+  {
+    slug: 'certificazione-impianti',
+    name: 'Certificazione Impianti',
+    shortName: 'Certificazioni',
+    description: 'Rilascio certificazioni di conformità per impianti idraulici e gas',
+    keywords: ['certificazione impianti', 'dichiarazione conformità', 'certificato impianto'],
+    icon: 'FileCheck'
+  },
+  {
+    slug: 'irrigazione-giardino',
+    name: 'Impianto Irrigazione',
+    shortName: 'Irrigazione',
+    description: 'Progettazione e installazione impianti di irrigazione automatica per giardini',
+    keywords: ['impianto irrigazione', 'irrigazione giardino', 'impianto automatico', 'irrigazione a goccia'],
+    icon: 'Sprout'
+  },
+  {
+    slug: 'piscine',
+    name: 'Impianti Piscine',
+    shortName: 'Piscine',
+    description: 'Installazione e manutenzione impianti idraulici per piscine e spa',
+    keywords: ['impianto piscina', 'idraulico piscina', 'filtrazione piscina', 'pompa piscina'],
+    icon: 'Waves'
   }
 ];
 
@@ -1917,6 +2054,335 @@ export const KEYWORD_PAGES: KeywordPageData[] = [
     h1: 'Cantina Allagata: Soluzioni',
     description: 'Cantina o garage allagati? Servizio di aspirazione acqua, ricerca cause infiltrazione e installazione pompe sommerse.',
     keywords: ['cantina allagata', 'garage allagato', 'aspirazione acqua cantina', 'infiltrazioni cantina']
+  },
+  // ============================================
+  // NUOVE PROBLEMATICHE - Caldaie e Riscaldamento
+  // ============================================
+  {
+    slug: 'caldaia-non-parte',
+    title: 'Caldaia Non Parte - Cause e Soluzioni',
+    h1: 'Caldaia Non Parte: Cosa Fare',
+    description: 'La caldaia non si accende? Scopri le cause più comuni e le soluzioni. Intervento tecnico rapido per riparare caldaie bloccate.',
+    keywords: ['caldaia non parte', 'caldaia non si accende', 'caldaia bloccata', 'caldaia non funziona']
+  },
+  {
+    slug: 'caldaia-va-in-blocco',
+    title: 'Caldaia Va in Blocco - Reset e Riparazione',
+    h1: 'Caldaia Va in Blocco: Soluzioni',
+    description: 'Caldaia che va in blocco continuamente? Cause del blocco, come fare il reset e quando chiamare il tecnico.',
+    keywords: ['caldaia in blocco', 'caldaia blocco', 'reset caldaia', 'caldaia si blocca']
+  },
+  {
+    slug: 'caldaia-rumorosa',
+    title: 'Caldaia Rumorosa - Cause Rumori Strani',
+    h1: 'Caldaia Rumorosa: Diagnosi',
+    description: 'Caldaia che fa rumore? Fischi, gorgoglii e vibrazioni: scopri le cause dei rumori caldaia e come risolvere.',
+    keywords: ['caldaia rumorosa', 'caldaia fa rumore', 'caldaia fischia', 'caldaia gorgoglia']
+  },
+  {
+    slug: 'termosifone-non-scalda',
+    title: 'Termosifone Non Scalda - Cause e Rimedi',
+    h1: 'Termosifone Non Scalda',
+    description: 'Termosifone freddo o che scalda poco? Cause comuni e soluzioni: sfiatare aria, lavaggio impianto e sostituzione valvole.',
+    keywords: ['termosifone non scalda', 'termosifone freddo', 'radiatore freddo', 'calorifero non funziona']
+  },
+  {
+    slug: 'sfiatare-termosifoni',
+    title: 'Sfiatare Termosifoni - Come Fare e Quando',
+    h1: 'Sfiatare i Termosifoni',
+    description: 'Come sfiatare i termosifoni correttamente per eliminare aria dall\'impianto. Guida passo passo e intervento professionale.',
+    keywords: ['sfiatare termosifoni', 'sfiato termosifone', 'aria termosifoni', 'spurgo radiatori']
+  },
+  {
+    slug: 'lavaggio-impianto-riscaldamento',
+    title: 'Lavaggio Impianto Riscaldamento - Pulizia Professionale',
+    h1: 'Lavaggio Impianto Riscaldamento',
+    description: 'Servizio lavaggio impianto riscaldamento per eliminare fanghi e incrostazioni. Migliora efficienza caldaia e riduci consumi.',
+    keywords: ['lavaggio impianto riscaldamento', 'pulizia termosifoni', 'lavaggio radiatori', 'fanghi impianto']
+  },
+  // ============================================
+  // NUOVE PROBLEMATICHE - Scarichi e Tubazioni
+  // ============================================
+  {
+    slug: 'lavandino-intasato',
+    title: 'Lavandino Intasato - Come Sturarlo',
+    h1: 'Lavandino Intasato: Soluzioni',
+    description: 'Lavandino intasato in cucina o bagno? Metodi per sturare lo scarico e quando chiamare un idraulico professionista.',
+    keywords: ['lavandino intasato', 'lavandino otturato', 'sturare lavandino', 'scarico lavandino intasato']
+  },
+  {
+    slug: 'doccia-intasata',
+    title: 'Doccia Intasata - Disostruzione Scarico Doccia',
+    h1: 'Doccia Intasata: Come Risolvere',
+    description: 'Scarico doccia intasato da capelli e sapone? Metodi casalinghi e disostruzione professionale per docce ostruite.',
+    keywords: ['doccia intasata', 'scarico doccia intasato', 'sturare doccia', 'piletta doccia intasata']
+  },
+  {
+    slug: 'bidet-intasato',
+    title: 'Bidet Intasato - Disostruzione e Riparazione',
+    h1: 'Bidet Intasato',
+    description: 'Bidet intasato o che scarica lento? Intervento di disostruzione e riparazione scarico bidet con idraulico professionista.',
+    keywords: ['bidet intasato', 'scarico bidet intasato', 'bidet otturato', 'sturare bidet']
+  },
+  {
+    slug: 'vasca-intasata',
+    title: 'Vasca da Bagno Intasata - Disostruzione Scarico',
+    h1: 'Vasca da Bagno Intasata',
+    description: 'Vasca da bagno che non scarica? Disostruzione scarico vasca con sonda e idrogetto professionale.',
+    keywords: ['vasca intasata', 'scarico vasca intasato', 'vasca non scarica', 'sturare vasca']
+  },
+  {
+    slug: 'fognatura-intasata',
+    title: 'Fognatura Intasata - Spurgo e Disostruzione',
+    h1: 'Fognatura Intasata: Intervento',
+    description: 'Fognatura intasata con risalita cattivi odori? Spurgo fognature con autospurgo e disostruzione professionale.',
+    keywords: ['fognatura intasata', 'fogna intasata', 'spurgo fognatura', 'fognatura ostruita']
+  },
+  {
+    slug: 'pozzetto-intasato',
+    title: 'Pozzetto Intasato - Pulizia e Svuotamento',
+    h1: 'Pozzetto Intasato',
+    description: 'Pozzetto o tombino intasato? Servizio pulizia pozzetti, svuotamento e disostruzione con attrezzature professionali.',
+    keywords: ['pozzetto intasato', 'tombino intasato', 'pulizia pozzetto', 'svuotamento pozzetto']
+  },
+  {
+    slug: 'odore-fogna-bagno',
+    title: 'Odore di Fogna in Bagno - Cause e Rimedi',
+    h1: 'Odore di Fogna in Bagno',
+    description: 'Puzza di fogna in bagno? Scopri le cause: sifone secco, guarnizioni usurate, problemi fognatura e soluzioni.',
+    keywords: ['odore fogna bagno', 'puzza fogna', 'cattivo odore bagno', 'fetore bagno']
+  },
+  {
+    slug: 'odore-fogna-cucina',
+    title: 'Odore di Fogna in Cucina - Cause e Soluzioni',
+    h1: 'Odore di Fogna in Cucina',
+    description: 'Cattivo odore di fogna in cucina? Cause comuni dal lavandino, lavastoviglie e soluzioni professionali.',
+    keywords: ['odore fogna cucina', 'puzza lavandino cucina', 'cattivo odore cucina', 'scarico cucina puzza']
+  },
+  // ============================================
+  // NUOVE PROBLEMATICHE - Perdite Specifiche
+  // ============================================
+  {
+    slug: 'tubo-che-perde',
+    title: 'Tubo che Perde Acqua - Riparazione Urgente',
+    h1: 'Tubo che Perde Acqua',
+    description: 'Tubo che gocciola o perde acqua? Intervento urgente per riparare perdite tubazioni, giunti e raccordi.',
+    keywords: ['tubo che perde', 'tubo gocciola', 'perdita tubo', 'riparare tubo']
+  },
+  {
+    slug: 'giunto-che-perde',
+    title: 'Giunto che Perde - Riparazione Raccordi Idraulici',
+    h1: 'Giunto che Perde Acqua',
+    description: 'Giunto o raccordo idraulico che perde? Sostituzione guarnizioni e riparazione giunti con idraulico professionista.',
+    keywords: ['giunto che perde', 'raccordo perde', 'perdita giunto', 'giunto idraulico']
+  },
+  {
+    slug: 'sifone-che-perde',
+    title: 'Sifone che Perde - Riparazione e Sostituzione',
+    h1: 'Sifone che Perde Acqua',
+    description: 'Sifone lavandino o bidet che perde? Riparazione perdite sifone, sostituzione guarnizioni e montaggio nuovo sifone.',
+    keywords: ['sifone che perde', 'sifone perde acqua', 'perdita sifone', 'sifone gocciola']
+  },
+  {
+    slug: 'cassetta-wc-perde',
+    title: 'Cassetta WC Perde - Riparazione Scarico Water',
+    h1: 'Cassetta WC che Perde',
+    description: 'Cassetta WC che perde acqua? Riparazione galleggiante, valvola e meccanismo scarico. Intervento rapido.',
+    keywords: ['cassetta wc perde', 'sciacquone perde', 'cassetta scarico perde', 'galleggiante wc']
+  },
+  {
+    slug: 'flessibile-che-perde',
+    title: 'Flessibile che Perde - Sostituzione Tubi Flessibili',
+    h1: 'Flessibile che Perde Acqua',
+    description: 'Tubo flessibile rubinetto o lavatrice che perde? Sostituzione flessibili usurati con nuovi tubi in acciaio inox.',
+    keywords: ['flessibile che perde', 'tubo flessibile perde', 'sostituzione flessibile', 'flessibile lavatrice']
+  },
+  {
+    slug: 'boiler-perde-acqua',
+    title: 'Boiler Perde Acqua - Riparazione Scaldabagno',
+    h1: 'Boiler che Perde Acqua',
+    description: 'Scaldabagno o boiler che perde acqua dalla base o dalla valvola? Intervento riparazione o sostituzione.',
+    keywords: ['boiler perde acqua', 'scaldabagno perde', 'boiler gocciola', 'perdita scaldabagno']
+  },
+  {
+    slug: 'lavatrice-perde-acqua',
+    title: 'Lavatrice Perde Acqua - Cause e Riparazioni',
+    h1: 'Lavatrice che Perde Acqua',
+    description: 'Lavatrice che perde acqua da sotto o durante il lavaggio? Cause comuni e intervento idraulico per riparazioni.',
+    keywords: ['lavatrice perde acqua', 'lavatrice perde', 'perdita lavatrice', 'lavatrice gocciola']
+  },
+  {
+    slug: 'lavastoviglie-perde-acqua',
+    title: 'Lavastoviglie Perde Acqua - Riparazione Perdite',
+    h1: 'Lavastoviglie che Perde Acqua',
+    description: 'Lavastoviglie che perde acqua da sotto la porta o dal tubo? Diagnosi e riparazione perdite lavastoviglie.',
+    keywords: ['lavastoviglie perde acqua', 'lavastoviglie perde', 'perdita lavastoviglie', 'acqua sotto lavastoviglie']
+  },
+  // ============================================
+  // NUOVE PROBLEMATICHE - Rubinetteria
+  // ============================================
+  {
+    slug: 'miscelatore-che-perde',
+    title: 'Miscelatore che Perde - Riparazione Rubinetto',
+    h1: 'Miscelatore che Perde',
+    description: 'Miscelatore doccia, lavandino o cucina che gocciola? Riparazione o sostituzione cartuccia miscelatore.',
+    keywords: ['miscelatore che perde', 'miscelatore gocciola', 'riparare miscelatore', 'cartuccia miscelatore']
+  },
+  {
+    slug: 'rubinetto-bloccato',
+    title: 'Rubinetto Bloccato dal Calcare - Sblocco e Riparazione',
+    h1: 'Rubinetto Bloccato',
+    description: 'Rubinetto duro o bloccato dal calcare? Sblocco maniglia, sostituzione cartuccia e riparazione rubinetti incrostati.',
+    keywords: ['rubinetto bloccato', 'rubinetto duro', 'rubinetto calcare', 'sbloccare rubinetto']
+  },
+  {
+    slug: 'soffione-doccia-intasato',
+    title: 'Soffione Doccia Intasato dal Calcare',
+    h1: 'Soffione Doccia Intasato',
+    description: 'Soffione doccia con getti ostruiti dal calcare? Pulizia professionale o sostituzione soffione e doccetta.',
+    keywords: ['soffione intasato', 'soffione doccia calcare', 'doccetta intasata', 'pulire soffione']
+  },
+  {
+    slug: 'aeratore-rubinetto-intasato',
+    title: 'Aeratore Rubinetto Intasato - Pulizia e Sostituzione',
+    h1: 'Aeratore Rubinetto Intasato',
+    description: 'Aeratore (rompigetto) rubinetto otturato dal calcare? Pulizia o sostituzione per ripristinare flusso acqua normale.',
+    keywords: ['aeratore intasato', 'rompigetto intasato', 'filtro rubinetto', 'acqua rubinetto debole']
+  },
+  // ============================================
+  // NUOVE PROBLEMATICHE - Acqua e Pressione
+  // ============================================
+  {
+    slug: 'acqua-marrone-rubinetto',
+    title: 'Acqua Marrone dal Rubinetto - Cause e Soluzioni',
+    h1: 'Acqua Marrone dal Rubinetto',
+    description: 'Esce acqua marrone o gialla dal rubinetto? Cause: ruggine tubazioni, lavori acquedotto, e soluzioni.',
+    keywords: ['acqua marrone rubinetto', 'acqua gialla', 'acqua sporca rubinetto', 'acqua arrugginita']
+  },
+  {
+    slug: 'acqua-non-esce',
+    title: 'Acqua Non Esce dal Rubinetto - Cause e Soluzioni',
+    h1: 'Acqua Non Esce dal Rubinetto',
+    description: 'Non esce acqua dal rubinetto? Cause: contatore chiuso, tubazioni gelate, guasti e come risolvere.',
+    keywords: ['acqua non esce', 'rubinetto senza acqua', 'manca acqua', 'no acqua rubinetto']
+  },
+  {
+    slug: 'tubazioni-gelate',
+    title: 'Tubazioni Gelate - Scongelare Tubi Acqua',
+    h1: 'Tubazioni Gelate: Cosa Fare',
+    description: 'Tubi dell\'acqua gelati in inverno? Come scongelare tubazioni ghiacciate senza romperle e prevenire danni.',
+    keywords: ['tubazioni gelate', 'tubi gelati', 'scongelare tubi', 'tubature ghiacciate']
+  },
+  {
+    slug: 'colpo-ariete',
+    title: 'Colpo d\'Ariete - Rumori Tubazioni Acqua',
+    h1: 'Colpo d\'Ariete nelle Tubazioni',
+    description: 'Rumori forti (botti) quando si chiude il rubinetto? Il colpo d\'ariete: cause, rischi e soluzioni.',
+    keywords: ['colpo ariete', 'botti tubazioni', 'rumore tubi acqua', 'vibrazioni tubazioni']
+  },
+  {
+    slug: 'gorgoglio-scarichi',
+    title: 'Gorgoglio negli Scarichi - Cause Rumore',
+    h1: 'Gorgoglio negli Scarichi',
+    description: 'Gli scarichi fanno rumore di gorgoglio? Cause: sfiato mancante, intasamento parziale e soluzioni.',
+    keywords: ['gorgoglio scarichi', 'rumore scarichi', 'scarico fa rumore', 'glu glu scarico']
+  },
+  // ============================================
+  // NUOVE KEYWORD - Tipologie Edifici
+  // ============================================
+  {
+    slug: 'idraulico-condominio',
+    title: 'Idraulico per Condominio - Manutenzione Parti Comuni',
+    h1: 'Idraulico per Condominio',
+    description: 'Servizi idraulici per condomini: manutenzione colonne, autoclave condominiale, spurgo fognature e pronto intervento.',
+    keywords: ['idraulico condominio', 'manutenzione condominio', 'colonne condominiali', 'autoclave condominio']
+  },
+  {
+    slug: 'idraulico-ristorante',
+    title: 'Idraulico per Ristoranti e Locali - Interventi Commerciali',
+    h1: 'Idraulico per Ristoranti',
+    description: 'Idraulico specializzato per ristoranti, bar e locali commerciali. Manutenzione cucine professionali e impianti.',
+    keywords: ['idraulico ristorante', 'idraulico bar', 'idraulico commerciale', 'cucina professionale']
+  },
+  {
+    slug: 'idraulico-ufficio',
+    title: 'Idraulico per Uffici e Aziende - Interventi Business',
+    h1: 'Idraulico per Uffici',
+    description: 'Servizi idraulici per uffici e aziende: manutenzione bagni, impianti e pronto intervento per attività commerciali.',
+    keywords: ['idraulico ufficio', 'idraulico azienda', 'idraulico business', 'manutenzione uffici']
+  },
+  {
+    slug: 'idraulico-negozio',
+    title: 'Idraulico per Negozi - Interventi Rapidi Attività',
+    h1: 'Idraulico per Negozi',
+    description: 'Pronto intervento idraulico per negozi e attività commerciali. Riparazioni rapide per non fermare l\'attività.',
+    keywords: ['idraulico negozio', 'idraulico attività commerciale', 'idraulico negozi', 'emergenza negozio']
+  },
+  {
+    slug: 'idraulico-hotel',
+    title: 'Idraulico per Hotel e B&B - Assistenza Strutture Ricettive',
+    h1: 'Idraulico per Hotel',
+    description: 'Servizi idraulici per hotel, B&B e strutture ricettive. Manutenzione programmata e pronto intervento h24.',
+    keywords: ['idraulico hotel', 'idraulico b&b', 'idraulico albergo', 'manutenzione hotel']
+  },
+  // ============================================
+  // NUOVE KEYWORD - Marche Caldaie
+  // ============================================
+  {
+    slug: 'assistenza-caldaia-vaillant',
+    title: 'Assistenza Caldaia Vaillant - Riparazione e Manutenzione',
+    h1: 'Assistenza Caldaia Vaillant',
+    description: 'Centro assistenza caldaie Vaillant: manutenzione, riparazione guasti e ricambi originali. Tecnici qualificati.',
+    keywords: ['assistenza vaillant', 'caldaia vaillant', 'riparazione vaillant', 'manutenzione vaillant']
+  },
+  {
+    slug: 'assistenza-caldaia-baxi',
+    title: 'Assistenza Caldaia Baxi - Riparazione e Manutenzione',
+    h1: 'Assistenza Caldaia Baxi',
+    description: 'Centro assistenza caldaie Baxi: manutenzione ordinaria, riparazione guasti e installazione. Tecnici certificati.',
+    keywords: ['assistenza baxi', 'caldaia baxi', 'riparazione baxi', 'manutenzione baxi']
+  },
+  {
+    slug: 'assistenza-caldaia-junkers',
+    title: 'Assistenza Caldaia Junkers Bosch - Riparazione',
+    h1: 'Assistenza Caldaia Junkers',
+    description: 'Assistenza caldaie Junkers Bosch: manutenzione, riparazione e ricambi. Intervento rapido in tutta la città.',
+    keywords: ['assistenza junkers', 'caldaia junkers', 'riparazione junkers', 'junkers bosch']
+  },
+  {
+    slug: 'assistenza-caldaia-immergas',
+    title: 'Assistenza Caldaia Immergas - Manutenzione e Riparazioni',
+    h1: 'Assistenza Caldaia Immergas',
+    description: 'Servizio assistenza caldaie Immergas: manutenzione annuale, riparazione guasti e sostituzione caldaie.',
+    keywords: ['assistenza immergas', 'caldaia immergas', 'riparazione immergas', 'manutenzione immergas']
+  },
+  {
+    slug: 'assistenza-caldaia-ariston',
+    title: 'Assistenza Caldaia Ariston - Manutenzione e Riparazioni',
+    h1: 'Assistenza Caldaia Ariston',
+    description: 'Centro assistenza caldaie Ariston: manutenzione, riparazione e installazione. Ricambi originali garantiti.',
+    keywords: ['assistenza ariston', 'caldaia ariston', 'riparazione ariston', 'manutenzione ariston']
+  },
+  {
+    slug: 'assistenza-caldaia-beretta',
+    title: 'Assistenza Caldaia Beretta - Manutenzione e Riparazioni',
+    h1: 'Assistenza Caldaia Beretta',
+    description: 'Assistenza tecnica caldaie Beretta: manutenzione ordinaria, riparazioni urgenti e sostituzione caldaia.',
+    keywords: ['assistenza beretta', 'caldaia beretta', 'riparazione beretta', 'manutenzione beretta']
+  },
+  {
+    slug: 'assistenza-caldaia-ferroli',
+    title: 'Assistenza Caldaia Ferroli - Manutenzione e Riparazioni',
+    h1: 'Assistenza Caldaia Ferroli',
+    description: 'Servizio assistenza caldaie Ferroli: manutenzione, riparazione guasti e prima accensione. Tecnici abilitati.',
+    keywords: ['assistenza ferroli', 'caldaia ferroli', 'riparazione ferroli', 'manutenzione ferroli']
+  },
+  {
+    slug: 'assistenza-caldaia-riello',
+    title: 'Assistenza Caldaia Riello - Manutenzione e Riparazioni',
+    h1: 'Assistenza Caldaia Riello',
+    description: 'Centro assistenza caldaie Riello: manutenzione programmata, riparazioni e installazione nuove caldaie.',
+    keywords: ['assistenza riello', 'caldaia riello', 'riparazione riello', 'manutenzione riello']
   }
 ];
 

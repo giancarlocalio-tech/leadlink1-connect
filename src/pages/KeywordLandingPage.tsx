@@ -1,9 +1,11 @@
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { MapPin, Clock, Shield, Star, ArrowRight, CheckCircle, Phone } from 'lucide-react';
+import { MapPin, Clock, Shield, Star, ArrowRight, CheckCircle, Phone, Loader2, Navigation, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/Layout';
-import { getKeywordPageBySlug, KEYWORD_PAGES } from '@/lib/seoData';
+import { getKeywordPageBySlug, CITIES } from '@/lib/seoData';
+import { useGeolocation } from '@/hooks/useGeolocation';
 import heroBg from '@/assets/hero-bg.avif';
 
 interface KeywordLandingPageProps {
@@ -13,6 +15,23 @@ interface KeywordLandingPageProps {
 export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
   const navigate = useNavigate();
   const pageData = getKeywordPageBySlug(slug);
+  const { loading, error, cityData, cityName, requestLocation } = useGeolocation();
+  const [hasRequested, setHasRequested] = useState(false);
+
+  // Check if this is the "vicino a me" page
+  const isNearMePage = slug === 'idraulico-vicino-a-me';
+
+  // Auto-request location on "vicino a me" page
+  useEffect(() => {
+    if (isNearMePage && !hasRequested) {
+      // Small delay to let page render first
+      const timer = setTimeout(() => {
+        requestLocation();
+        setHasRequested(true);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [isNearMePage, hasRequested, requestLocation]);
   
   if (!pageData) return null;
 
@@ -35,6 +54,9 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
       "reviewCount": "500"
     }
   };
+
+  // Nearby cities to show when no location is detected
+  const popularCities = CITIES.slice(0, 12);
 
   return (
     <Layout>
@@ -60,6 +82,68 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
           <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
             {pageData.description}
           </p>
+
+          {/* Geolocation Section - Only for "vicino a me" page */}
+          {isNearMePage && (
+            <div className="mb-8">
+              {loading && (
+                <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 text-white">
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <span>Rilevamento posizione in corso...</span>
+                </div>
+              )}
+
+              {!loading && cityData && (
+                <div className="space-y-4">
+                  <div className="inline-flex items-center gap-2 bg-green-500/80 backdrop-blur-sm rounded-full px-6 py-3 text-white">
+                    <Navigation className="h-5 w-5" />
+                    <span>Posizione rilevata: <strong>{cityName}</strong></span>
+                  </div>
+                  <div className="block">
+                    <Button 
+                      onClick={() => navigate(`/${cityData.slug}`)}
+                      size="lg"
+                      className="text-lg py-6 px-10 rounded-full font-semibold bg-white text-primary hover:bg-white/90"
+                    >
+                      <MapPin className="mr-2 h-5 w-5" />
+                      Idraulico a {cityName}
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {!loading && error && (
+                <div className="space-y-4">
+                  <div className="inline-flex items-center gap-2 bg-orange-500/80 backdrop-blur-sm rounded-full px-6 py-3 text-white">
+                    <AlertCircle className="h-5 w-5" />
+                    <span>{error}</span>
+                  </div>
+                  <div className="block">
+                    <Button 
+                      onClick={() => {
+                        setHasRequested(false);
+                        requestLocation();
+                      }}
+                      variant="outline"
+                      className="bg-white/10 border-white text-white hover:bg-white/20"
+                    >
+                      <Navigation className="mr-2 h-4 w-4" />
+                      Riprova
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {!loading && !cityData && !error && hasRequested && (
+                <div className="inline-flex items-center gap-2 bg-blue-500/80 backdrop-blur-sm rounded-full px-6 py-3 text-white">
+                  <MapPin className="h-5 w-5" />
+                  <span>Seleziona la tua città qui sotto</span>
+                </div>
+              )}
+            </div>
+          )}
+
           <Button onClick={() => navigate('/')} size="lg" className="text-lg py-6 px-10 rounded-full font-semibold">
             Richiedi Preventivo Gratuito <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
@@ -77,6 +161,47 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
           </div>
         </div>
       </section>
+
+      {/* Cities Grid - Enhanced for "vicino a me" page */}
+      {isNearMePage && (
+        <section className="py-16 bg-muted/50">
+          <div className="container mx-auto px-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-center mb-4">
+              {cityData ? `Altri idraulici vicino a ${cityName}` : 'Seleziona la tua città'}
+            </h2>
+            <p className="text-muted-foreground text-center mb-10 max-w-2xl mx-auto">
+              {cityData 
+                ? 'Trova idraulici professionisti anche nelle città vicine'
+                : 'Scegli la tua città per trovare idraulici nella tua zona'
+              }
+            </p>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 max-w-5xl mx-auto">
+              {(cityData 
+                ? CITIES.filter(c => c.region === cityData.region && c.slug !== cityData.slug).slice(0, 12)
+                : popularCities
+              ).map((city) => (
+                <Link
+                  key={city.slug}
+                  to={`/${city.slug}`}
+                  className="bg-card hover:bg-primary/10 border border-border rounded-lg p-4 text-center transition-colors group"
+                >
+                  <MapPin className="h-5 w-5 text-primary mx-auto mb-2 group-hover:scale-110 transition-transform" />
+                  <span className="font-medium text-sm">{city.name}</span>
+                  <span className="block text-xs text-muted-foreground mt-1">{city.province}</span>
+                </Link>
+              ))}
+            </div>
+
+            {/* Show more cities link */}
+            <div className="text-center mt-8">
+              <p className="text-muted-foreground text-sm">
+                Servizio attivo in oltre 50 città italiane
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="py-16 bg-primary/5">
         <div className="container mx-auto px-4">

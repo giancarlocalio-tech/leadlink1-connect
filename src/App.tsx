@@ -63,7 +63,7 @@ const App = () => (
             <Route path="/assistenza-caldaie" element={<KeywordLandingPage slug="assistenza-caldaie" />} />
             <Route path="/spurgo-pozzi-neri" element={<KeywordLandingPage slug="spurgo-pozzi-neri" />} />
             
-            {/* Dynamic city + service SEO pages - catches patterns like "milano-manutenzione-caldaie" */}
+            {/* Dynamic city and city+service SEO pages - catches patterns like "milano" or "milano-manutenzione-caldaie" */}
             <Route path="/:slug" element={<DynamicLandingPage type="city-service" />} />
             
             <Route path="*" element={<NotFound />} />

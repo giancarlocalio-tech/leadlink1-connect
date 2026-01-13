@@ -35,6 +35,7 @@ import { INTERVENTION_LABELS } from '@/lib/types';
 import { CATEGORY_FLOWS, getNextQuestionId, type WizardQuestion } from '@/lib/wizardConfig';
 import { CityAutocomplete, type ItalianCity } from '@/components/CityAutocomplete';
 import analytics from '@/lib/analytics';
+import { generateJsonLd, BASE_URL } from '@/lib/seoJsonLd';
 import heroBg from '@/assets/hero-bg.avif';
 
 // All intervention types for the first selection
@@ -260,6 +261,32 @@ export default function HomePage() {
 
   const progress = step === 'intervention' ? 20 : step === 'questions' ? 50 + (answers.length * 10) : 90;
 
+  const homePageFAQs = [
+    {
+      question: "Come funziona Idraulici Subito?",
+      answer: "Semplice: descrivi il tuo problema, inserisci la tua città e ricevi preventivi gratuiti da idraulici verificati della tua zona in pochi minuti."
+    },
+    {
+      question: "È davvero gratuito?",
+      answer: "Sì, richiedere preventivi è completamente gratuito e senza impegno. Paghi solo se decidi di procedere con un professionista."
+    },
+    {
+      question: "Quanto tempo ci vuole per ricevere un preventivo?",
+      answer: "In media ricevi una risposta entro 15 minuti dalla tua richiesta. Per emergenze urgenti, i nostri professionisti premium rispondono ancora più velocemente."
+    }
+  ];
+
+  const structuredData = generateJsonLd(
+    {
+      name: 'Idraulici Subito',
+      description: 'Trova idraulici professionisti verificati nella tua città. Richiedi preventivi gratuiti per riparazioni, installazioni, caldaie, scarichi intasati e emergenze idrauliche.',
+      url: BASE_URL,
+      areaServed: [{ type: 'Country', name: 'Italia' }]
+    },
+    homePageFAQs,
+    []
+  );
+
   return (
     <Layout>
       <Helmet>
@@ -269,6 +296,9 @@ export default function HomePage() {
         <meta property="og:title" content="Idraulici Subito - Trova Idraulici Professionisti nella Tua Zona" />
         <meta property="og:description" content="Trova idraulici professionisti verificati nella tua città. Richiedi preventivi gratuiti per riparazioni e installazioni. Risposta in 15 minuti." />
         <meta property="og:url" content="https://idraulicisubito.com/" />
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
       </Helmet>
       {/* Hero Section - Conversion Optimized */}
       <section className="relative overflow-hidden min-h-[550px] md:min-h-[600px] flex items-center justify-center">

@@ -55,14 +55,14 @@ export function Footer() {
                   Area Idraulici
                 </Link>
               </li>
-              {/* Keyword pages for SEO */}
-              {KEYWORD_PAGES.map((page) => (
+              {/* Keyword pages for SEO - show first 8 */}
+              {KEYWORD_PAGES.slice(0, 8).map((page) => (
                 <li key={page.slug}>
                   <Link 
                     to={`/${page.slug}`} 
                     className="text-muted-foreground hover:text-foreground text-sm transition-colors"
                   >
-                    {page.h1.replace('Trova un ', '').replace(' - Intervento Immediato', '')}
+                    {page.h1.replace('Trova un ', '').replace(' - Intervento Immediato', '').replace(' Professionale', '').replace(' Gratuito', '')}
                   </Link>
                 </li>
               ))}

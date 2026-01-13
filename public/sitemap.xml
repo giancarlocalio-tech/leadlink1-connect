@@ -69,6 +69,54 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
+  <url>
+    <loc>https://idraulicisubito.com/idraulico-24-ore</loc>
+    <lastmod>2026-01-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://idraulicisubito.com/idraulico-a-domicilio</loc>
+    <lastmod>2026-01-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://idraulicisubito.com/preventivo-idraulico</loc>
+    <lastmod>2026-01-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://idraulicisubito.com/termoidraulica</loc>
+    <lastmod>2026-01-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://idraulicisubito.com/impianto-idraulico</loc>
+    <lastmod>2026-01-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://idraulicisubito.com/impianto-idraulico-bagno</loc>
+    <lastmod>2026-01-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://idraulicisubito.com/idraulico-onesto</loc>
+    <lastmod>2026-01-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://idraulicisubito.com/disotturazione-wc</loc>
+    <lastmod>2026-01-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <!-- City Pages (50 cities) -->
   <url><loc>https://idraulicisubito.com/milano</loc><lastmod>2026-01-13</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>

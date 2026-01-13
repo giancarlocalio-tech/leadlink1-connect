@@ -1,11 +1,17 @@
 import { Link } from 'react-router-dom';
-import { Wrench } from 'lucide-react';
+import { Wrench, MapPin } from 'lucide-react';
+
+// City pages for SEO internal linking
+const CITY_PAGES = [
+  { slug: 'brescia', name: 'Brescia' },
+  { slug: 'milano', name: 'Milano' },
+];
 
 export function Footer() {
   return (
     <footer className="bg-card border-t border-border mt-auto">
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center gap-2 mb-4">
               <div className="bg-primary p-2 rounded-lg">
@@ -27,10 +33,40 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link to="/richiesta" className="text-muted-foreground hover:text-foreground text-sm">
+                  Richiedi Preventivo
+                </Link>
+              </li>
+              <li>
+                <Link to="/per-idraulici" className="text-muted-foreground hover:text-foreground text-sm">
+                  Per Idraulici
+                </Link>
+              </li>
+              <li>
                 <Link to="/auth" className="text-muted-foreground hover:text-foreground text-sm">
                   Area Idraulici
                 </Link>
               </li>
+            </ul>
+          </div>
+
+          {/* City pages for SEO */}
+          <div>
+            <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+              <MapPin className="h-4 w-4" />
+              Città Servite
+            </h3>
+            <ul className="space-y-2">
+              {CITY_PAGES.map((city) => (
+                <li key={city.slug}>
+                  <Link 
+                    to={`/idraulico-${city.slug}`} 
+                    className="text-muted-foreground hover:text-foreground text-sm"
+                  >
+                    Idraulico {city.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
           

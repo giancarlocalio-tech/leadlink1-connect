@@ -674,6 +674,259 @@ export const KEYWORD_PAGES: KeywordPageData[] = [
     h1: 'Installazione Scaldabagno',
     description: 'Installazione scaldabagno a gas ed elettrico. Montaggio professionale, allaccio gas e scarico fumi a norma. Preventivi gratuiti.',
     keywords: ['installazione scaldabagno', 'montaggio scaldabagno', 'installazione scaldabagno a gas', 'installazione boiler']
+  },
+  // ============================================
+  // NUOVE KEYWORD LONG-TAIL - Costi e Prezzi
+  // ============================================
+  {
+    slug: 'quanto-costa-idraulico',
+    title: 'Quanto Costa un Idraulico? Prezzi e Tariffe 2025',
+    h1: 'Quanto Costa un Idraulico?',
+    description: 'Scopri quanto costa chiamare un idraulico nel 2025. Prezzi medi per riparazioni, installazioni e pronto intervento. Confronta tariffe e richiedi preventivi gratuiti.',
+    keywords: ['quanto costa idraulico', 'costo idraulico', 'prezzo idraulico', 'tariffa idraulico', 'idraulico costo orario']
+  },
+  {
+    slug: 'costo-pronto-intervento-idraulico',
+    title: 'Costo Pronto Intervento Idraulico - Prezzi Emergenze 24h',
+    h1: 'Costo Pronto Intervento Idraulico',
+    description: 'Quanto costa il pronto intervento idraulico? Prezzi per emergenze notturne, festivi e weekend. Tariffe trasparenti e preventivi immediati.',
+    keywords: ['costo pronto intervento idraulico', 'prezzo idraulico urgente', 'costo idraulico notte', 'tariffa idraulico emergenza']
+  },
+  {
+    slug: 'costo-riparazione-perdita-acqua',
+    title: 'Costo Riparazione Perdita Acqua - Prezzi e Preventivi',
+    h1: 'Costo Riparazione Perdita Acqua',
+    description: 'Quanto costa riparare una perdita acqua? Prezzi per perdite tubature, muri e pavimenti. Preventivi gratuiti da idraulici qualificati.',
+    keywords: ['costo riparazione perdita acqua', 'prezzo riparazione tubo', 'quanto costa riparare perdita', 'costo perdita acqua muro']
+  },
+  {
+    slug: 'costo-sostituzione-rubinetto',
+    title: 'Costo Sostituzione Rubinetto - Prezzi Montaggio Miscelatore',
+    h1: 'Costo Sostituzione Rubinetto',
+    description: 'Quanto costa sostituire un rubinetto? Prezzi per cambio rubinetto cucina, bagno e miscelatore doccia. Preventivi e tariffe idraulico.',
+    keywords: ['costo sostituzione rubinetto', 'prezzo cambio rubinetto', 'quanto costa montare rubinetto', 'costo miscelatore']
+  },
+  {
+    slug: 'costo-spurgo-fognature',
+    title: 'Costo Spurgo Fognature - Prezzi Autospurgo e Pozzi Neri',
+    h1: 'Costo Spurgo Fognature',
+    description: 'Quanto costa lo spurgo fognature? Prezzi autospurgo, svuotamento pozzi neri e fosse biologiche. Tariffe per metro cubo e forfait.',
+    keywords: ['costo spurgo fognature', 'prezzo autospurgo', 'quanto costa spurgo', 'costo svuotamento pozzo nero']
+  },
+  // ============================================
+  // NUOVE KEYWORD LONG-TAIL - Problemi Specifici
+  // ============================================
+  {
+    slug: 'perdita-acqua-sotto-pavimento',
+    title: 'Perdita Acqua Sotto Pavimento - Come Trovare e Riparare',
+    h1: 'Perdita Acqua Sotto Pavimento',
+    description: 'Come trovare e riparare una perdita acqua sotto il pavimento senza rompere. Tecniche di ricerca non invasive e intervento professionale.',
+    keywords: ['perdita acqua sotto pavimento', 'perdita tubo pavimento', 'infiltrazione pavimento', 'ricerca perdite occulte']
+  },
+  {
+    slug: 'perdita-acqua-muro',
+    title: 'Perdita Acqua nel Muro - Ricerca e Riparazione',
+    h1: 'Perdita Acqua nel Muro',
+    description: 'Macchia umidità sul muro? Trova e ripara perdite acqua nascoste nei muri con tecniche termografiche e acustiche non distruttive.',
+    keywords: ['perdita acqua muro', 'infiltrazione muro', 'macchia umidità muro', 'tubo rotto nel muro']
+  },
+  {
+    slug: 'rubinetto-perde-acqua',
+    title: 'Rubinetto Perde Acqua - Come Riparare Gocciolamento',
+    h1: 'Rubinetto Perde Acqua: Riparazione',
+    description: 'Il rubinetto gocciola? Scopri come riparare un rubinetto che perde acqua. Sostituzione guarnizioni, cartuccia e intervento idraulico.',
+    keywords: ['rubinetto perde acqua', 'rubinetto gocciola', 'riparare rubinetto', 'rubinetto che sgocciola']
+  },
+  {
+    slug: 'wc-perde-acqua',
+    title: 'WC Perde Acqua - Riparazione Cassetta e Scarico',
+    h1: 'WC Perde Acqua: Come Riparare',
+    description: 'Il water perde acqua dalla cassetta o dalla base? Intervento rapido per riparare perdite WC, galleggiante e guarnizioni.',
+    keywords: ['wc perde acqua', 'water perde', 'cassetta wc perde', 'wc perde dalla base']
+  },
+  {
+    slug: 'scarico-lento-lavandino',
+    title: 'Scarico Lento Lavandino - Cause e Soluzioni',
+    h1: 'Scarico Lento Lavandino',
+    description: 'Il lavandino scarica lentamente? Cause e soluzioni per scarichi lenti. Disostruzione professionale e pulizia sifone.',
+    keywords: ['scarico lento lavandino', 'lavandino scarica lento', 'lavandino intasato', 'acqua non scende lavandino']
+  },
+  {
+    slug: 'doccia-perde-acqua',
+    title: 'Doccia Perde Acqua - Riparazione Infiltrazioni Box Doccia',
+    h1: 'Doccia Perde Acqua: Soluzioni',
+    description: 'Perdite dalla doccia? Riparazione infiltrazioni box doccia, soffione, miscelatore e piatto doccia. Intervento idraulico professionale.',
+    keywords: ['doccia perde acqua', 'infiltrazione doccia', 'box doccia perde', 'perdita soffione doccia']
+  },
+  {
+    slug: 'tubo-rotto',
+    title: 'Tubo Rotto - Riparazione Urgente Tubature',
+    h1: 'Tubo Rotto: Intervento Urgente',
+    description: 'Tubo rotto in casa? Pronto intervento per riparazione tubature rotte, sostituzione tubi e blocco perdite. Disponibile 24/7.',
+    keywords: ['tubo rotto', 'rottura tubo', 'tubo scoppiato', 'riparazione tubo rotto']
+  },
+  {
+    slug: 'acqua-calda-non-funziona',
+    title: 'Acqua Calda Non Funziona - Cause e Riparazioni',
+    h1: 'Acqua Calda Non Funziona',
+    description: 'Non esce acqua calda? Cause e soluzioni per problemi caldaia, scaldabagno e boiler. Diagnosi e riparazione rapida.',
+    keywords: ['acqua calda non funziona', 'no acqua calda', 'caldaia non scalda acqua', 'scaldabagno non funziona']
+  },
+  {
+    slug: 'pressione-acqua-bassa',
+    title: 'Pressione Acqua Bassa - Cause e Come Aumentarla',
+    h1: 'Pressione Acqua Bassa in Casa',
+    description: 'Pressione acqua troppo bassa in casa? Scopri le cause e le soluzioni per aumentare la pressione dell\'acqua. Installazione autoclave e riduttori.',
+    keywords: ['pressione acqua bassa', 'poca pressione acqua', 'aumentare pressione acqua', 'acqua esce piano']
+  },
+  // ============================================
+  // NUOVE KEYWORD LONG-TAIL - Orari e Disponibilità
+  // ============================================
+  {
+    slug: 'idraulico-festivi',
+    title: 'Idraulico Festivi - Pronto Intervento Sabato, Domenica e Feste',
+    h1: 'Idraulico Disponibile nei Festivi',
+    description: 'Cerchi un idraulico disponibile sabato, domenica e festivi? Pronto intervento anche durante le feste. Tariffe e costi per interventi festivi.',
+    keywords: ['idraulico festivi', 'idraulico domenica', 'idraulico sabato', 'idraulico feste', 'idraulico weekend']
+  },
+  {
+    slug: 'idraulico-notturno',
+    title: 'Idraulico Notturno - Emergenze Idrauliche di Notte',
+    h1: 'Idraulico Notturno 24h',
+    description: 'Emergenza idraulica di notte? Idraulico notturno disponibile per interventi urgenti. Pronto intervento h24 anche in orario notturno.',
+    keywords: ['idraulico notturno', 'idraulico notte', 'idraulico h24', 'emergenza idraulica notte']
+  },
+  // ============================================
+  // NUOVE KEYWORD LONG-TAIL - Servizi Specifici
+  // ============================================
+  {
+    slug: 'installazione-lavatrice',
+    title: 'Installazione Lavatrice - Allacciamento Acqua e Scarico',
+    h1: 'Installazione Lavatrice Professionale',
+    description: 'Servizio di installazione lavatrice con allacciamento acqua e scarico. Montaggio professionale con verifica funzionamento.',
+    keywords: ['installazione lavatrice', 'montaggio lavatrice', 'allacciamento lavatrice', 'attacco lavatrice']
+  },
+  {
+    slug: 'installazione-lavastoviglie',
+    title: 'Installazione Lavastoviglie - Allacciamento e Montaggio',
+    h1: 'Installazione Lavastoviglie',
+    description: 'Installazione lavastoviglie con allacciamento acqua calda/fredda e scarico. Montaggio professionale sotto piano o libera installazione.',
+    keywords: ['installazione lavastoviglie', 'montaggio lavastoviglie', 'allacciamento lavastoviglie', 'attacco lavastoviglie']
+  },
+  {
+    slug: 'installazione-bidet',
+    title: 'Installazione Bidet - Montaggio e Allacciamento',
+    h1: 'Installazione Bidet Professionale',
+    description: 'Installazione bidet nuovo o sostituzione. Montaggio a pavimento o sospeso con allacciamento idraulico a norma.',
+    keywords: ['installazione bidet', 'montaggio bidet', 'sostituzione bidet', 'bidet sospeso']
+  },
+  {
+    slug: 'installazione-wc',
+    title: 'Installazione WC - Montaggio Water e Cassetta',
+    h1: 'Installazione WC Professionale',
+    description: 'Installazione WC nuovo, sostituzione water e cassetta di scarico. Montaggio a pavimento o sospeso con scarico a parete o terra.',
+    keywords: ['installazione wc', 'montaggio water', 'sostituzione wc', 'wc sospeso', 'cassetta incasso']
+  },
+  {
+    slug: 'sostituzione-sifone',
+    title: 'Sostituzione Sifone Lavandino - Riparazione e Montaggio',
+    h1: 'Sostituzione Sifone Lavandino',
+    description: 'Sostituzione sifone lavandino cucina e bagno. Riparazione perdite sifone, montaggio e pulizia professionale.',
+    keywords: ['sostituzione sifone', 'sifone lavandino', 'cambio sifone', 'sifone perde']
+  },
+  {
+    slug: 'riparazione-autoclave',
+    title: 'Riparazione Autoclave - Assistenza e Manutenzione',
+    h1: 'Riparazione Autoclave',
+    description: 'Riparazione autoclave domestica e condominiale. Assistenza pressostato, membrana e pompa. Manutenzione e sostituzione.',
+    keywords: ['riparazione autoclave', 'autoclave non funziona', 'assistenza autoclave', 'autoclave domestica']
+  },
+  {
+    slug: 'installazione-autoclave',
+    title: 'Installazione Autoclave - Aumento Pressione Acqua',
+    h1: 'Installazione Autoclave',
+    description: 'Installazione autoclave per aumentare la pressione dell\'acqua. Sistemi per appartamenti, ville e condomini. Preventivi gratuiti.',
+    keywords: ['installazione autoclave', 'montaggio autoclave', 'autoclave casa', 'pompa pressione acqua']
+  },
+  {
+    slug: 'installazione-addolcitore',
+    title: 'Installazione Addolcitore Acqua - Montaggio e Manutenzione',
+    h1: 'Installazione Addolcitore Acqua',
+    description: 'Installazione addolcitore acqua per eliminare calcare. Montaggio professionale, manutenzione e ricarica sale. Preventivi gratuiti.',
+    keywords: ['installazione addolcitore', 'addolcitore acqua', 'anticalcare casa', 'addolcitore domestico']
+  },
+  {
+    slug: 'ricerca-perdite-acqua',
+    title: 'Ricerca Perdite Acqua - Rilevamento Non Distruttivo',
+    h1: 'Ricerca Perdite Acqua Occulte',
+    description: 'Servizio di ricerca perdite acqua con tecnologie non distruttive: termografia, geofono e gas tracciante. Trova perdite nascoste senza rompere.',
+    keywords: ['ricerca perdite acqua', 'rilevamento perdite', 'perdite occulte', 'trova perdite']
+  },
+  {
+    slug: 'videoispezione-tubature',
+    title: 'Videoispezione Tubature - Ispezione Fognature con Telecamera',
+    h1: 'Videoispezione Tubature e Fognature',
+    description: 'Servizio videoispezione tubature e fognature con telecamera endoscopica. Diagnosi precisa di intasamenti, rotture e infiltrazioni.',
+    keywords: ['videoispezione tubature', 'ispezione fognature', 'telecamera tubature', 'videoispezione scarichi']
+  },
+  {
+    slug: 'disostruzione-colonne-scarico',
+    title: 'Disostruzione Colonne di Scarico - Spurgo Condominiale',
+    h1: 'Disostruzione Colonne di Scarico',
+    description: 'Disostruzione colonne di scarico condominiali intasate. Spurgo con idrogetto professionale e pulizia completa tubazioni verticali.',
+    keywords: ['disostruzione colonne scarico', 'colonna scarico intasata', 'spurgo colonne', 'colonne condominiali']
+  },
+  // ============================================
+  // NUOVE KEYWORD LONG-TAIL - Termini Colloquiali
+  // ============================================
+  {
+    slug: 'idraulico-buono',
+    title: 'Idraulico Buono e Affidabile - Come Trovarlo',
+    h1: 'Come Trovare un Idraulico Buono',
+    description: 'Cerchi un idraulico bravo e affidabile? Trova professionisti con recensioni verificate, prezzi onesti e lavoro garantito.',
+    keywords: ['idraulico buono', 'idraulico bravo', 'buon idraulico', 'idraulico di fiducia']
+  },
+  {
+    slug: 'idraulico-economico',
+    title: 'Idraulico Economico - Prezzi Bassi ma Qualità Garantita',
+    h1: 'Idraulico Economico nella Tua Zona',
+    description: 'Cerchi un idraulico economico? Confronta preventivi gratuiti e trova professionisti con prezzi competitivi senza rinunciare alla qualità.',
+    keywords: ['idraulico economico', 'idraulico low cost', 'idraulico prezzi bassi', 'idraulico conveniente']
+  },
+  {
+    slug: 'cerco-idraulico',
+    title: 'Cerco Idraulico - Trova Professionisti nella Tua Città',
+    h1: 'Cerco un Idraulico',
+    description: 'Stai cercando un idraulico? Trova subito professionisti qualificati nella tua zona. Preventivi gratuiti e risposta rapida.',
+    keywords: ['cerco idraulico', 'cerco un idraulico', 'mi serve idraulico', 'ho bisogno idraulico']
+  },
+  {
+    slug: 'chiamare-idraulico',
+    title: 'Chiamare Idraulico - Quando e Come Contattare un Professionista',
+    h1: 'Quando Chiamare un Idraulico',
+    description: 'Non sai se chiamare un idraulico? Scopri quando è necessario l\'intervento di un professionista e come richiedere assistenza.',
+    keywords: ['chiamare idraulico', 'quando chiamare idraulico', 'contattare idraulico', 'telefonare idraulico']
+  },
+  {
+    slug: 'bagno-allagato',
+    title: 'Bagno Allagato - Pronto Intervento e Soluzioni',
+    h1: 'Bagno Allagato: Cosa Fare',
+    description: 'Bagno allagato? Pronto intervento per bloccare perdite, aspirare acqua e riparare guasti. Intervento urgente disponibile 24/7.',
+    keywords: ['bagno allagato', 'allagamento bagno', 'bagno pieno acqua', 'perdita bagno']
+  },
+  {
+    slug: 'cucina-allagata',
+    title: 'Cucina Allagata - Emergenza Perdite e Riparazioni',
+    h1: 'Cucina Allagata: Intervento Urgente',
+    description: 'Cucina allagata per perdita lavatrice, lavastoviglie o lavandino? Pronto intervento per bloccare l\'acqua e riparare il guasto.',
+    keywords: ['cucina allagata', 'allagamento cucina', 'perdita cucina', 'lavatrice perde']
+  },
+  {
+    slug: 'cantina-allagata',
+    title: 'Cantina Allagata - Aspirazione Acqua e Riparazione',
+    h1: 'Cantina Allagata: Soluzioni',
+    description: 'Cantina o garage allagati? Servizio di aspirazione acqua, ricerca cause infiltrazione e installazione pompe sommerse.',
+    keywords: ['cantina allagata', 'garage allagato', 'aspirazione acqua cantina', 'infiltrazioni cantina']
   }
 ];
 

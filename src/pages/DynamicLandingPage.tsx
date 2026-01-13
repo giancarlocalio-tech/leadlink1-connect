@@ -26,7 +26,8 @@ import {
   getServiceBySlug, 
   CityData, 
   ServiceData,
-  SERVICES 
+  SERVICES,
+  CITIES 
 } from '@/lib/seoData';
 import heroBg from '@/assets/hero-bg.avif';
 
@@ -389,6 +390,24 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
                   </span>
                 ))}
               </div>
+            </div>
+          </div>
+
+          {/* Internal Links - Related Cities */}
+          <div className="mt-12 max-w-4xl mx-auto">
+            <h3 className="font-semibold text-lg mb-4 text-center">Servizi anche in altre città</h3>
+            <div className="flex flex-wrap justify-center gap-2">
+              {CITIES.filter(c => c.slug !== cityData.slug && c.region === cityData.region)
+                .slice(0, 6)
+                .map((city) => (
+                  <Link 
+                    key={city.slug}
+                    to={serviceData ? `/${city.slug}-${serviceData.slug}` : `/${city.slug}`}
+                    className="bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2 rounded-full text-sm transition-colors"
+                  >
+                    {serviceData ? `${serviceData.shortName} ${city.name}` : `Idraulico ${city.name}`}
+                  </Link>
+                ))}
             </div>
           </div>
         </div>

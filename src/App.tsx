@@ -23,7 +23,8 @@ import PlumberPlanSelectionPage from "./pages/PlumberPlanSelectionPage";
 import LandingPage from "./pages/LandingPage";
 import LandingLavoriZonaPage from "./pages/LandingLavoriZonaPage";
 import LandingComeFunzionaPage from "./pages/LandingComeFunzionaPage";
-import CityLandingPage from "./pages/CityLandingPage";
+import DynamicLandingPage from "./pages/DynamicLandingPage";
+import KeywordLandingPage from "./pages/KeywordLandingPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -54,10 +55,17 @@ const App = () => (
             <Route path="/lp/idraulico" element={<LandingPage />} />
             <Route path="/lp/lavori-zona" element={<LandingLavoriZonaPage />} />
             <Route path="/lp/come-funziona" element={<LandingComeFunzionaPage />} />
-            {/* City-specific SEO landing pages */}
-            <Route path="/idraulico-brescia" element={<CityLandingPage />} />
-            <Route path="/idraulico-milano" element={<CityLandingPage />} />
-            <Route path="/:city" element={<CityLandingPage />} />
+            
+            {/* Generic keyword SEO pages */}
+            <Route path="/idraulico-vicino-a-me" element={<KeywordLandingPage slug="idraulico-vicino-a-me" />} />
+            <Route path="/pronto-intervento-idraulico" element={<KeywordLandingPage slug="pronto-intervento-idraulico" />} />
+            <Route path="/idraulico-urgente" element={<KeywordLandingPage slug="idraulico-urgente" />} />
+            <Route path="/assistenza-caldaie" element={<KeywordLandingPage slug="assistenza-caldaie" />} />
+            <Route path="/spurgo-pozzi-neri" element={<KeywordLandingPage slug="spurgo-pozzi-neri" />} />
+            
+            {/* Dynamic city + service SEO pages - catches patterns like "milano-manutenzione-caldaie" */}
+            <Route path="/:slug" element={<DynamicLandingPage type="city-service" />} />
+            
             <Route path="*" element={<NotFound />} />
           </Routes>
           <CookieConsent />

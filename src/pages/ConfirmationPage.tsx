@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { CheckCircle, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/Layout';
@@ -25,6 +26,12 @@ export default function ConfirmationPage() {
   }, [location.state]);
   return (
     <Layout>
+      <Helmet>
+        <title>Richiesta Confermata | Idraulici Subito</title>
+        <meta name="description" content="La tua richiesta è stata inviata con successo. Gli idraulici della tua zona ti contatteranno a breve." />
+        <link rel="canonical" href="https://idraulicisubito.com/conferma" />
+        <meta name="robots" content="noindex, follow" />
+      </Helmet>
       <div className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="max-w-lg mx-auto text-center">

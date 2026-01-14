@@ -29,21 +29,22 @@ interface BreadcrumbItem {
 
 // Generate Service schema (more appropriate for service aggregators)
 function generateService(options: LocalBusinessOptions) {
-  const areaServed = options.areaServed?.map((area) => {
-    if (area.type === 'Country') {
-      return { "@type": "Country", "name": area.name };
-    }
-    return area.containedIn
-      ? {
-          "@type": "City",
-          "name": area.name,
-          "containedInPlace": {
-            "@type": "AdministrativeArea",
-            "name": area.containedIn
+  const areaServed =
+    options.areaServed?.map((area) => {
+      if (area.type === 'Country') {
+        return { "@type": "Country", "name": area.name };
+      }
+      return area.containedIn
+        ? {
+            "@type": "City",
+            "name": area.name,
+            "containedInPlace": {
+              "@type": "AdministrativeArea",
+              "name": area.containedIn,
+            },
           }
-        }
-      : { "@type": "City", "name": area.name };
-  }) || [{ "@type": "Country", "name": "Italia" }];
+        : { "@type": "City", "name": area.name };
+    }) || [{ "@type": "Country", "name": "Italia" }];
 
   return {
     "@type": "Service",
@@ -55,15 +56,15 @@ function generateService(options: LocalBusinessOptions) {
     "serviceType": options.serviceTypes || [
       "Pronto intervento idraulico",
       "Riparazione perdite acqua",
-      "Installazione impianti idraulici"
+      "Installazione impianti idraulici",
     ],
     "provider": {
       "@type": "Organization",
       "@id": `${BASE_URL}#organization`,
       "name": "Idraulici Subito",
       "url": BASE_URL,
-      "logo": `${BASE_URL}/logo.png`
-    }
+      "logo": `${BASE_URL}/favicon.png`,
+    },
   };
 }
 
@@ -79,11 +80,11 @@ function generateWebPage(options: LocalBusinessOptions) {
       "@type": "WebSite",
       "@id": `${BASE_URL}#website`,
       "url": BASE_URL,
-      "name": "Idraulici Subito"
+      "name": "Idraulici Subito",
     },
     "about": {
-      "@id": `${options.url}#service`
-    }
+      "@id": `${options.url}#service`,
+    },
   };
 }
 
@@ -97,16 +98,16 @@ function generateFAQPage(url: string, faqs: FAQItem[]) {
       "name": faq.question,
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": faq.answer
-      }
-    }))
+        "text": faq.answer,
+      },
+    })),
   };
 }
 
 // Generate BreadcrumbList schema
 function generateBreadcrumbs(items: BreadcrumbItem[]) {
   const fullItems = [{ name: "Home", url: BASE_URL }, ...items];
-  
+
   return {
     "@type": "BreadcrumbList",
     "@id": `${items[items.length - 1]?.url || BASE_URL}#breadcrumb`,
@@ -114,26 +115,23 @@ function generateBreadcrumbs(items: BreadcrumbItem[]) {
       "@type": "ListItem",
       "position": index + 1,
       "name": item.name,
-      "item": item.url
-    }))
+      "item": item.url,
+    })),
   };
 }
 
-// Generate complete JSON-LD graph
+// Generate complete JSON-LD objects (array format = best compatibility with Google)
 export function generateJsonLd(
   serviceOptions: LocalBusinessOptions,
   faqs: FAQItem[],
   breadcrumbs: BreadcrumbItem[]
 ) {
-  return {
-    "@context": "https://schema.org",
-    "@graph": [
-      generateWebPage(serviceOptions),
-      generateService(serviceOptions),
-      generateFAQPage(serviceOptions.url, faqs),
-      generateBreadcrumbs(breadcrumbs)
-    ]
-  };
+  return [
+    { "@context": "https://schema.org", ...generateWebPage(serviceOptions) },
+    { "@context": "https://schema.org", ...generateService(serviceOptions) },
+    { "@context": "https://schema.org", ...generateFAQPage(serviceOptions.url, faqs) },
+    { "@context": "https://schema.org", ...generateBreadcrumbs(breadcrumbs) },
+  ];
 }
 
 // Preset FAQs for common page types

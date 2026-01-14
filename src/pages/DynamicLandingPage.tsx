@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { 
@@ -29,6 +29,7 @@ import {
   CITIES 
 } from '@/lib/seoData';
 import { generateJsonLd, getCityFAQs, BASE_URL } from '@/lib/seoJsonLd';
+import InlineWizard from '@/components/InlineWizard';
 import heroBg from '@/assets/hero-bg.avif';
 
 // Icon mapping
@@ -52,6 +53,7 @@ interface DynamicLandingPageProps {
 export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
   const params = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const [showWizard, setShowWizard] = useState(false);
   
   // Parse the slug to extract city and optionally service
   const slug = params.slug || '';
@@ -144,6 +146,33 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
     ? [serviceData]
     : SERVICES.slice(0, 3);
 
+  // Show wizard inline
+  if (showWizard) {
+    return (
+      <Layout>
+        <Helmet>
+          <title>{pageTitle}</title>
+          <meta name="description" content={pageDescription} />
+          <link rel="canonical" href={canonicalUrl} />
+          <meta property="og:title" content={pageTitle} />
+          <meta property="og:description" content={pageDescription} />
+          <meta property="og:url" content={canonicalUrl} />
+          <meta property="og:type" content="website" />
+          <meta name="twitter:title" content={pageTitle} />
+          <meta name="twitter:description" content={pageDescription} />
+          <script type="application/ld+json" key="structured-data">
+            {JSON.stringify(jsonLd)}
+          </script>
+        </Helmet>
+        <div className="py-8 md:py-12">
+          <div className="container mx-auto px-4">
+            <InlineWizard onClose={() => setShowWizard(false)} defaultCity={cityData.name} />
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       <Helmet>
@@ -192,7 +221,7 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
           </p>
           
           <Button 
-            onClick={() => navigate('/')}
+            onClick={() => setShowWizard(true)}
             size="lg"
             className="text-lg py-6 px-10 rounded-full font-semibold shadow-xl"
           >
@@ -407,7 +436,7 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
             Riceverai risposte da professionisti della tua zona.
           </p>
           <Button 
-            onClick={() => navigate('/')}
+            onClick={() => setShowWizard(true)}
             size="lg"
             variant="secondary"
             className="text-lg py-6 px-10 rounded-full font-semibold"

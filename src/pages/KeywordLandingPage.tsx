@@ -7,6 +7,7 @@ import { Layout } from '@/components/Layout';
 import { getKeywordPageBySlug, CITIES } from '@/lib/seoData';
 import { generateJsonLd, getKeywordFAQs, BASE_URL } from '@/lib/seoJsonLd';
 import { useGeolocation } from '@/hooks/useGeolocation';
+import InlineWizard from '@/components/InlineWizard';
 import heroBg from '@/assets/hero-bg.avif';
 
 interface KeywordLandingPageProps {
@@ -18,6 +19,7 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
   const pageData = getKeywordPageBySlug(slug);
   const { loading, error, cityData, cityName, requestLocation } = useGeolocation();
   const [hasRequested, setHasRequested] = useState(false);
+  const [showWizard, setShowWizard] = useState(false);
 
   // Check if this is the "vicino a me" page
   const isNearMePage = slug === 'idraulico-vicino-a-me';
@@ -57,6 +59,33 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
 
   // Nearby cities to show when no location is detected
   const popularCities = CITIES.slice(0, 12);
+
+  // Show wizard inline
+  if (showWizard) {
+    return (
+      <Layout>
+        <Helmet>
+          <title>{pageData.title}</title>
+          <meta name="description" content={pageData.description} />
+          <link rel="canonical" href={canonicalUrl} />
+          <meta property="og:title" content={pageData.title} />
+          <meta property="og:description" content={pageData.description} />
+          <meta property="og:url" content={canonicalUrl} />
+          <meta property="og:type" content="website" />
+          <meta name="twitter:title" content={pageData.title} />
+          <meta name="twitter:description" content={pageData.description} />
+          <script type="application/ld+json" key="structured-data">
+            {JSON.stringify(structuredData)}
+          </script>
+        </Helmet>
+        <div className="py-8 md:py-12">
+          <div className="container mx-auto px-4">
+            <InlineWizard onClose={() => setShowWizard(false)} defaultCity={cityName || ''} />
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -150,7 +179,7 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
             </div>
           )}
 
-          <Button onClick={() => navigate('/')} size="lg" className="text-lg py-6 px-10 rounded-full font-semibold">
+          <Button onClick={() => setShowWizard(true)} size="lg" className="text-lg py-6 px-10 rounded-full font-semibold">
             Richiedi Preventivo Gratuito <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
           
@@ -236,7 +265,7 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
           <p className="text-primary-foreground/90 mb-8 max-w-xl mx-auto">
             Richiedi un preventivo gratuito in meno di 2 minuti.
           </p>
-          <Button onClick={() => navigate('/')} size="lg" variant="secondary" className="text-lg py-6 px-10 rounded-full font-semibold">
+          <Button onClick={() => setShowWizard(true)} size="lg" variant="secondary" className="text-lg py-6 px-10 rounded-full font-semibold">
             Inizia Ora <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         </div>

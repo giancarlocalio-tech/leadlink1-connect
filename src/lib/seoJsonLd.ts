@@ -27,8 +27,8 @@ interface BreadcrumbItem {
   url: string;
 }
 
-// Generate LocalBusiness schema
-function generateLocalBusiness(options: LocalBusinessOptions) {
+// Generate Service schema (more appropriate for service aggregators)
+function generateService(options: LocalBusinessOptions) {
   const areaServed = options.areaServed?.map((area) => {
     if (area.type === 'Country') {
       return { "@type": "Country", "name": area.name };
@@ -46,8 +46,8 @@ function generateLocalBusiness(options: LocalBusinessOptions) {
   }) || [{ "@type": "Country", "name": "Italia" }];
 
   return {
-    "@type": "LocalBusiness",
-    "@id": `${options.url}#localbusiness`,
+    "@type": "Service",
+    "@id": `${options.url}#service`,
     "name": options.name,
     "description": options.description,
     "url": options.url,
@@ -57,25 +57,32 @@ function generateLocalBusiness(options: LocalBusinessOptions) {
       "Riparazione perdite acqua",
       "Installazione impianti idraulici"
     ],
-    "priceRange": "€€",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "500"
+    "provider": {
+      "@type": "Organization",
+      "@id": `${BASE_URL}#organization`,
+      "name": "Idraulici Subito",
+      "url": BASE_URL,
+      "logo": `${BASE_URL}/logo.png`
+    }
+  };
+}
+
+// Generate WebPage schema
+function generateWebPage(options: LocalBusinessOptions) {
+  return {
+    "@type": "WebPage",
+    "@id": `${options.url}#webpage`,
+    "url": options.url,
+    "name": options.name,
+    "description": options.description,
+    "isPartOf": {
+      "@type": "WebSite",
+      "@id": `${BASE_URL}#website`,
+      "url": BASE_URL,
+      "name": "Idraulici Subito"
     },
-    "openingHoursSpecification": {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday"
-      ],
-      "opens": "00:00",
-      "closes": "23:59"
+    "about": {
+      "@id": `${options.url}#service`
     }
   };
 }
@@ -114,15 +121,16 @@ function generateBreadcrumbs(items: BreadcrumbItem[]) {
 
 // Generate complete JSON-LD graph
 export function generateJsonLd(
-  localBusiness: LocalBusinessOptions,
+  serviceOptions: LocalBusinessOptions,
   faqs: FAQItem[],
   breadcrumbs: BreadcrumbItem[]
 ) {
   return {
     "@context": "https://schema.org",
     "@graph": [
-      generateLocalBusiness(localBusiness),
-      generateFAQPage(localBusiness.url, faqs),
+      generateWebPage(serviceOptions),
+      generateService(serviceOptions),
+      generateFAQPage(serviceOptions.url, faqs),
       generateBreadcrumbs(breadcrumbs)
     ]
   };

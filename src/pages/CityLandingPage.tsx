@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { 
@@ -16,6 +16,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/Layout';
 import { generateJsonLd, getCityFAQs, BASE_URL } from '@/lib/seoJsonLd';
+import InlineWizard from '@/components/InlineWizard';
 import heroBg from '@/assets/hero-bg.avif';
 
 // City-specific data
@@ -57,6 +58,7 @@ const SERVICES = [
 export default function CityLandingPage() {
   const { city } = useParams<{ city: string }>();
   const navigate = useNavigate();
+  const [showWizard, setShowWizard] = useState(false);
   
   // Extract city from URL path (e.g., /idraulico-brescia -> brescia)
   const pathname = window.location.pathname;
@@ -95,6 +97,33 @@ export default function CityLandingPage() {
     getCityFAQs('idraulico', cityData.name),
     [{ name: `Idraulico ${cityData.name}`, url: canonicalUrl }]
   );
+
+  // Show wizard inline
+  if (showWizard) {
+    return (
+      <Layout>
+        <Helmet>
+          <title>{pageTitle}</title>
+          <meta name="description" content={pageDescription} />
+          <link rel="canonical" href={canonicalUrl} />
+          <meta property="og:title" content={pageTitle} />
+          <meta property="og:description" content={pageDescription} />
+          <meta property="og:url" content={canonicalUrl} />
+          <meta property="og:type" content="website" />
+          <meta name="twitter:title" content={pageTitle} />
+          <meta name="twitter:description" content={pageDescription} />
+          <script type="application/ld+json">
+            {JSON.stringify(structuredData)}
+          </script>
+        </Helmet>
+        <div className="py-8 md:py-12">
+          <div className="container mx-auto px-4">
+            <InlineWizard onClose={() => setShowWizard(false)} defaultCity={cityData.name} />
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -141,7 +170,7 @@ export default function CityLandingPage() {
           </p>
           
           <Button 
-            onClick={() => navigate('/')}
+            onClick={() => setShowWizard(true)}
             size="lg"
             className="text-lg py-6 px-10 rounded-full font-semibold shadow-xl"
           >
@@ -270,7 +299,7 @@ export default function CityLandingPage() {
             Riceverai risposte da professionisti della tua zona.
           </p>
           <Button 
-            onClick={() => navigate('/')}
+            onClick={() => setShowWizard(true)}
             size="lg"
             variant="secondary"
             className="text-lg py-6 px-10 rounded-full font-semibold"

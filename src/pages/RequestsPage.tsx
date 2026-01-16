@@ -62,7 +62,9 @@ function RequestsContent() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      navigate('/auth');
+      // Preserve the current URL with query params so user returns here after login
+      const returnUrl = window.location.pathname + window.location.search;
+      navigate(`/auth?returnUrl=${encodeURIComponent(returnUrl)}`);
     }
   }, [user, authLoading, navigate]);
 

@@ -134,11 +134,15 @@ export default function AuthPage() {
     if (mode === 'reset-password') return;
     
     if (user && !authLoading && !profileLoading) {
-      // Redirect to dashboard regardless of profile status
-      // Dashboard will handle missing profile case
-      navigate('/dashboard');
+      // Check for returnUrl parameter to redirect back to original page
+      const returnUrl = searchParams.get('returnUrl');
+      if (returnUrl) {
+        navigate(decodeURIComponent(returnUrl));
+      } else {
+        navigate('/dashboard');
+      }
     }
-  }, [user, profile, authLoading, profileLoading, navigate, mode]);
+  }, [user, profile, authLoading, profileLoading, navigate, mode, searchParams]);
 
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();

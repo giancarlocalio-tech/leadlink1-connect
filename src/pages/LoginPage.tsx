@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Wrench, Mail, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user, loading: authLoading, signIn, resetPassword, updatePassword } = useAuth();
   
   const [mode, setMode] = useState<'login' | 'forgot-password' | 'reset-password'>('login');
@@ -40,9 +41,15 @@ export default function LoginPage() {
     if (mode === 'reset-password') return;
     
     if (user && !authLoading) {
-      navigate('/dashboard');
+      // Check for returnUrl parameter to redirect back to original page
+      const returnUrl = searchParams.get('returnUrl');
+      if (returnUrl) {
+        navigate(decodeURIComponent(returnUrl));
+      } else {
+        navigate('/dashboard');
+      }
     }
-  }, [user, authLoading, navigate, mode]);
+  }, [user, authLoading, navigate, mode, searchParams]);
 
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -124,7 +131,13 @@ export default function LoginPage() {
       }
     } else {
       toast.success('Accesso effettuato!');
-      navigate('/dashboard');
+      // Check for returnUrl parameter to redirect back to original page
+      const returnUrl = searchParams.get('returnUrl');
+      if (returnUrl) {
+        navigate(decodeURIComponent(returnUrl));
+      } else {
+        navigate('/dashboard');
+      }
     }
   };
 

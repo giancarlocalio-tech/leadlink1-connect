@@ -1069,11 +1069,6 @@ export default function AdminPage() {
                           <p className="text-xs text-muted-foreground">
                             {formatDate(wa.created_at)}
                           </p>
-                          {wa.read_at && (
-                            <p className="text-xs text-blue-600 dark:text-blue-400">
-                              Letto: {formatDate(wa.read_at)}
-                            </p>
-                          )}
                         </div>
                         <div>
                           {getWhatsAppStatusBadge(wa)}
@@ -1085,7 +1080,7 @@ export default function AdminPage() {
               </div>
 
               {/* Summary Stats */}
-              <div className="grid grid-cols-4 gap-4 text-center">
+              <div className="grid grid-cols-3 gap-4 text-center">
                 <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3">
                   <p className="text-2xl font-bold text-green-600 dark:text-green-400">
                     {plumberAssignments.filter(a => a.response_type === 'accepted').length}
@@ -1103,12 +1098,6 @@ export default function AdminPage() {
                     {plumberEmails.filter(e => e.opened_at).length}/{plumberEmails.length}
                   </p>
                   <p className="text-xs text-muted-foreground">Email aperte</p>
-                </div>
-                <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3">
-                  <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                    {plumberWhatsApps.filter(w => w.read_at).length}/{plumberWhatsApps.length}
-                  </p>
-                  <p className="text-xs text-muted-foreground">WA letti</p>
                 </div>
               </div>
             </div>

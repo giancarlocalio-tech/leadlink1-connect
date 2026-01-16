@@ -458,6 +458,30 @@ serve(async (req) => {
       } else {
         console.error(`[assign-request] Failed to send email: ${emailResult.error}`);
       }
+
+      // Send WhatsApp notification (fire and forget)
+      try {
+        const whatsappResponse = await fetch(`${supabaseUrl}/functions/v1/send-whatsapp-notification`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${supabaseServiceKey}`,
+          },
+          body: JSON.stringify({
+            request_id: request_id,
+            plumber_id: assignedPlumber.id,
+          }),
+        });
+        
+        if (whatsappResponse.ok) {
+          console.log(`[assign-request] WhatsApp notification sent to plumber: ${assignedPlumber.id}`);
+        } else {
+          const whatsappError = await whatsappResponse.text();
+          console.error(`[assign-request] WhatsApp notification failed: ${whatsappError}`);
+        }
+      } catch (whatsappErr) {
+        console.error(`[assign-request] WhatsApp notification error:`, whatsappErr);
+      }
     }
 
     return new Response(

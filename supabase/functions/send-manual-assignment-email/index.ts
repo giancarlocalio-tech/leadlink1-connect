@@ -205,6 +205,30 @@ Hai ricevuto una nuova richiesta di intervento nella tua zona.
       status: "sent"
     });
 
+    // Send WhatsApp notification (fire and forget)
+    try {
+      const whatsappResponse = await fetch(`${supabaseUrl}/functions/v1/send-whatsapp-notification`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${supabaseServiceKey}`,
+        },
+        body: JSON.stringify({
+          request_id: request_id,
+          plumber_id: plumber_id,
+        }),
+      });
+      
+      if (whatsappResponse.ok) {
+        console.log("WhatsApp notification sent successfully");
+      } else {
+        const whatsappError = await whatsappResponse.text();
+        console.error("WhatsApp notification failed:", whatsappError);
+      }
+    } catch (whatsappErr) {
+      console.error("WhatsApp notification error:", whatsappErr);
+    }
+
     return new Response(
       JSON.stringify({ success: true, emailId: emailResponse.data?.id }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }

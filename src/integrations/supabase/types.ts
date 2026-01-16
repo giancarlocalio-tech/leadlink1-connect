@@ -653,10 +653,12 @@ export type Database = {
       whatsapp_logs: {
         Row: {
           created_at: string
+          delivered_at: string | null
           error_message: string | null
           id: string
           message_type: string
           plumber_id: string | null
+          read_at: string | null
           recipient_name: string | null
           recipient_phone: string
           request_id: string | null
@@ -665,10 +667,12 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          delivered_at?: string | null
           error_message?: string | null
           id?: string
           message_type?: string
           plumber_id?: string | null
+          read_at?: string | null
           recipient_name?: string | null
           recipient_phone: string
           request_id?: string | null
@@ -677,10 +681,12 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          delivered_at?: string | null
           error_message?: string | null
           id?: string
           message_type?: string
           plumber_id?: string | null
+          read_at?: string | null
           recipient_name?: string | null
           recipient_phone?: string
           request_id?: string | null

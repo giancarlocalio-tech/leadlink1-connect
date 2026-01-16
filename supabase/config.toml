@@ -50,3 +50,6 @@ verify_jwt = false
 
 [functions.respond-io-channel-status]
 verify_jwt = false
+
+[functions.respond-io-webhook]
+verify_jwt = false

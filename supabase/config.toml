@@ -47,3 +47,6 @@ verify_jwt = false
 
 [functions.send-whatsapp-notification]
 verify_jwt = false
+
+[functions.respond-io-channel-status]
+verify_jwt = false

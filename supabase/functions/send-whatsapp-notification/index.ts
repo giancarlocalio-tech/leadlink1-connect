@@ -36,7 +36,17 @@ interface SendMessageRequest {
   plumber_id: string;
 }
 
-async function sendWhatsAppMessage(phone: string, message: string): Promise<{ success: boolean; error?: string; messageId?: string }> {
+interface TemplateParams {
+  name: string;
+  city: string;
+  interventionType: string;
+  urgency: string;
+}
+
+async function sendWhatsAppTemplate(
+  phone: string, 
+  templateParams: TemplateParams
+): Promise<{ success: boolean; error?: string; messageId?: string }> {
   try {
     // Format phone number - remove leading 0 and ensure country code
     let formattedPhone = phone.replace(/\s+/g, '').replace(/^0+/, '');
@@ -49,7 +59,8 @@ async function sendWhatsAppMessage(phone: string, message: string): Promise<{ su
     // Remove + if present for API
     formattedPhone = formattedPhone.replace(/^\+/, '');
     
-    console.log(`Sending WhatsApp message to: ${formattedPhone}`);
+    console.log(`Sending WhatsApp template to: ${formattedPhone}`);
+    console.log(`Template params:`, templateParams);
     
     // First, find or create contact
     const contactResponse = await fetch(`https://api.respond.io/v2/contact/phone:${formattedPhone}`, {
@@ -90,34 +101,52 @@ async function sendWhatsAppMessage(phone: string, message: string): Promise<{ su
       console.log(`Created new contact: ${contactId}`);
     }
     
-    // Send message via channel
+    // Send template message via channel
+    const templatePayload = {
+      channelId: parseInt(respondIoChannelId),
+      message: {
+        type: 'whatsapp_template',
+        template: {
+          name: 'richiestidraulico',
+          languageCode: 'it',
+          components: [
+            {
+              type: 'body',
+              parameters: [
+                { type: 'text', text: templateParams.name },
+                { type: 'text', text: templateParams.city },
+                { type: 'text', text: templateParams.interventionType },
+                { type: 'text', text: templateParams.urgency },
+              ],
+            },
+          ],
+        },
+      },
+    };
+
+    console.log(`Sending template payload:`, JSON.stringify(templatePayload, null, 2));
+
     const messageResponse = await fetch(`https://api.respond.io/v2/contact/id:${contactId}/message`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${respondIoApiKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        channelId: parseInt(respondIoChannelId),
-        message: {
-          type: 'text',
-          text: message,
-        },
-      }),
+      body: JSON.stringify(templatePayload),
     });
     
     if (!messageResponse.ok) {
       const errorText = await messageResponse.text();
-      console.error(`Failed to send message: ${errorText}`);
-      return { success: false, error: `Failed to send message: ${errorText}` };
+      console.error(`Failed to send template message: ${errorText}`);
+      return { success: false, error: `Failed to send template: ${errorText}` };
     }
     
     const messageData = await messageResponse.json();
-    console.log(`Message sent successfully:`, messageData);
+    console.log(`Template message sent successfully:`, messageData);
     
-    return { success: true, messageId: messageData.id };
+    return { success: true, messageId: messageData.id || messageData.messageId };
   } catch (error) {
-    console.error(`Error sending WhatsApp message:`, error);
+    console.error(`Error sending WhatsApp template:`, error);
     return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
   }
 }
@@ -179,24 +208,13 @@ serve(async (req) => {
     const interventionLabel = INTERVENTION_LABELS[request.intervention_type] || request.intervention_type;
     const urgencyLabel = URGENCY_LABELS[request.urgency] || request.urgency;
 
-    // Build WhatsApp message
-    const message = `🔧 *NUOVA RICHIESTA IDRAULICISUBITO*
-
-Ciao ${plumber.full_name}!
-
-Hai ricevuto una nuova richiesta nella tua zona.
-
-📍 *Città:* ${request.city}
-🔨 *Tipo:* ${interventionLabel}
-⏰ *Urgenza:* ${urgencyLabel}
-📝 *Descrizione:* ${request.description}
-
-⚠️ Hai 24 ore per accettare.
-
-👉 Accedi alla dashboard per accettare:
-https://idraulicisubito.com/dashboard`;
-
-    const result = await sendWhatsAppMessage(plumber.phone, message);
+    // Send WhatsApp template message
+    const result = await sendWhatsAppTemplate(plumber.phone, {
+      name: plumber.full_name,
+      city: request.city,
+      interventionType: interventionLabel,
+      urgency: urgencyLabel,
+    });
 
     // Log the WhatsApp notification
     await supabase.from("whatsapp_logs").insert({

@@ -107,7 +107,7 @@ async function sendWhatsAppTemplate(
       message: {
         type: 'whatsapp_template',
         template: {
-          name: 'richiestidraulico',
+          name: 'richiestidraulco',
           languageCode: 'it',
           components: [
             {

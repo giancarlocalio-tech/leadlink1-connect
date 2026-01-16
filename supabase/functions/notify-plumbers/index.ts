@@ -478,13 +478,62 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log(`Emails sent: ${successCount} success, ${failedCount} failed`);
 
+    // Send WhatsApp notifications to trial plumbers who match the city
+    const trialPlumbers = matchingPlumbers.filter((plumber) => {
+      const subsData = plumber.plumber_subscriptions;
+      let sub: any = null;
+      
+      if (Array.isArray(subsData)) {
+        sub = subsData.length > 0 ? subsData[0] : null;
+      } else if (subsData && typeof subsData === 'object') {
+        sub = subsData;
+      }
+      
+      return sub && sub.is_trial === true && (sub.free_requests_remaining ?? 0) > 0;
+    });
+
+    console.log(`Found ${trialPlumbers.length} trial plumbers for WhatsApp notification`);
+
+    // Send WhatsApp to each trial plumber
+    const whatsappPromises = trialPlumbers.map(async (plumber) => {
+      try {
+        const whatsappResponse = await fetch(`${supabaseUrl}/functions/v1/send-whatsapp-notification`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${supabaseServiceKey}`,
+          },
+          body: JSON.stringify({
+            request_id: serviceRequest.id,
+            plumber_id: plumber.id,
+          }),
+        });
+
+        const whatsappResult = await whatsappResponse.json();
+        console.log(`WhatsApp sent to ${plumber.full_name}:`, whatsappResult);
+        return { success: whatsappResult.success, plumber_id: plumber.id, name: plumber.full_name };
+      } catch (whatsappError) {
+        console.error(`Failed to send WhatsApp to ${plumber.full_name}:`, whatsappError);
+        return { success: false, plumber_id: plumber.id, name: plumber.full_name, error: whatsappError };
+      }
+    });
+
+    const whatsappResults = await Promise.all(whatsappPromises);
+    const whatsappSuccessCount = whatsappResults.filter((r) => r.success).length;
+    const whatsappFailedCount = whatsappResults.filter((r) => !r.success).length;
+
+    console.log(`WhatsApp sent: ${whatsappSuccessCount} success, ${whatsappFailedCount} failed`);
+
     return new Response(
       JSON.stringify({
         request_id,
         message: "Notifications sent",
-        notified: successCount,
-        failed: failedCount,
-        details: results,
+        email_notified: successCount,
+        email_failed: failedCount,
+        whatsapp_notified: whatsappSuccessCount,
+        whatsapp_failed: whatsappFailedCount,
+        email_details: results,
+        whatsapp_details: whatsappResults,
       }),
       {
         status: 200,

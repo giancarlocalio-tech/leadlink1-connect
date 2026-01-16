@@ -18,7 +18,9 @@ import {
   MailOpen,
   Send,
   Timer,
-  TrendingUp
+  TrendingUp,
+  MessageCircle,
+  CheckCheck
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -103,6 +105,22 @@ interface EmailLog {
   request_id: string | null;
 }
 
+// WhatsApp log type
+interface WhatsAppLog {
+  id: string;
+  recipient_phone: string;
+  recipient_name: string;
+  message_type: string;
+  request_id: string | null;
+  plumber_id: string | null;
+  status: string;
+  error_message: string | null;
+  respond_io_message_id: string | null;
+  created_at: string;
+  delivered_at: string | null;
+  read_at: string | null;
+}
+
 export default function AdminPage() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
@@ -129,7 +147,12 @@ export default function AdminPage() {
   const [selectedPlumber, setSelectedPlumber] = useState<PlumberWithSubscription | null>(null);
   const [plumberAssignments, setPlumberAssignments] = useState<AssignmentLog[]>([]);
   const [plumberEmails, setPlumberEmails] = useState<EmailLog[]>([]);
+  const [plumberWhatsApps, setPlumberWhatsApps] = useState<WhatsAppLog[]>([]);
   const [loadingPlumberDetails, setLoadingPlumberDetails] = useState(false);
+  
+  // Request detail WhatsApp logs
+  const [requestWhatsApps, setRequestWhatsApps] = useState<WhatsAppLog[]>([]);
+  const [loadingRequestWhatsApps, setLoadingRequestWhatsApps] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -239,8 +262,42 @@ export default function AdminPage() {
       } else {
         setPlumberEmails(emailsData || []);
       }
+      
+      // Fetch WhatsApp logs for this plumber
+      const { data: whatsappData, error: whatsappError } = await supabase
+        .from('whatsapp_logs')
+        .select('*')
+        .eq('plumber_id', plumber.id)
+        .order('created_at', { ascending: false })
+        .limit(20);
+      
+      if (whatsappError) {
+        console.error('Error fetching whatsapp logs:', whatsappError);
+      } else {
+        setPlumberWhatsApps(whatsappData || []);
+      }
     } finally {
       setLoadingPlumberDetails(false);
+    }
+  };
+  
+  // Fetch WhatsApp logs when a request is selected
+  const fetchRequestWhatsApps = async (requestId: string) => {
+    setLoadingRequestWhatsApps(true);
+    try {
+      const { data, error } = await supabase
+        .from('whatsapp_logs')
+        .select('*')
+        .eq('request_id', requestId)
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        console.error('Error fetching request whatsapp logs:', error);
+      } else {
+        setRequestWhatsApps(data || []);
+      }
+    } finally {
+      setLoadingRequestWhatsApps(false);
     }
   };
 
@@ -389,6 +446,22 @@ export default function AdminPage() {
       return <Badge variant="outline"><Send className="h-3 w-3 mr-1" />Inviata</Badge>;
     }
     return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />Errore</Badge>;
+  };
+
+  const getWhatsAppStatusBadge = (wa: WhatsAppLog) => {
+    if (wa.read_at) {
+      return <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"><CheckCheck className="h-3 w-3 mr-1" />Letto</Badge>;
+    }
+    if (wa.delivered_at) {
+      return <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"><CheckCircle className="h-3 w-3 mr-1" />Consegnato</Badge>;
+    }
+    if (wa.status === 'sent') {
+      return <Badge variant="outline"><Send className="h-3 w-3 mr-1" />Inviato</Badge>;
+    }
+    if (wa.status === 'failed') {
+      return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />Errore</Badge>;
+    }
+    return <Badge variant="outline"><Clock className="h-3 w-3 mr-1" />In attesa</Badge>;
   };
 
   if (authLoading || adminLoading) {
@@ -689,8 +762,13 @@ export default function AdminPage() {
       </AlertDialog>
 
       {/* Request detail dialog */}
-      <AlertDialog open={!!selectedRequest} onOpenChange={() => setSelectedRequest(null)}>
-        <AlertDialogContent className="max-w-md">
+      <AlertDialog open={!!selectedRequest} onOpenChange={(open) => {
+        if (!open) {
+          setSelectedRequest(null);
+          setRequestWhatsApps([]);
+        }
+      }}>
+        <AlertDialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <AlertDialogHeader>
             <AlertDialogTitle>Dettagli richiesta</AlertDialogTitle>
           </AlertDialogHeader>
@@ -755,6 +833,52 @@ export default function AdminPage() {
                   )}
                 </div>
               )}
+              
+              {/* WhatsApp Logs for this request */}
+              <div className="pt-4 border-t border-border">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                    <MessageCircle className="h-4 w-4 text-green-600" />
+                    Notifiche WhatsApp
+                  </p>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => fetchRequestWhatsApps(selectedRequest.id)}
+                    disabled={loadingRequestWhatsApps}
+                  >
+                    {loadingRequestWhatsApps ? (
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+                    ) : (
+                      'Carica'
+                    )}
+                  </Button>
+                </div>
+                {requestWhatsApps.length > 0 ? (
+                  <div className="space-y-2 max-h-40 overflow-y-auto">
+                    {requestWhatsApps.map((wa) => (
+                      <div key={wa.id} className="flex items-center justify-between bg-muted/50 rounded p-2 text-sm">
+                        <div className="flex-1 min-w-0">
+                          <p className="truncate text-foreground font-medium">{wa.recipient_name}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {wa.recipient_phone} • {formatDate(wa.created_at)}
+                          </p>
+                          {wa.read_at && (
+                            <p className="text-xs text-blue-600 dark:text-blue-400">
+                              Letto: {formatDate(wa.read_at)}
+                            </p>
+                          )}
+                        </div>
+                        <div>
+                          {getWhatsAppStatusBadge(wa)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground">Clicca "Carica" per vedere le notifiche</p>
+                )}
+              </div>
             </div>
           )}
           <AlertDialogFooter>
@@ -924,8 +1048,44 @@ export default function AdminPage() {
                 )}
               </div>
 
+              {/* WhatsApp History */}
+              <div className="bg-muted/50 rounded-lg p-4">
+                <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <MessageCircle className="h-4 w-4 text-green-600" />
+                  WhatsApp Inviati ({plumberWhatsApps.length})
+                </h4>
+                {loadingPlumberDetails ? (
+                  <div className="flex justify-center py-4">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                  </div>
+                ) : plumberWhatsApps.length === 0 ? (
+                  <p className="text-muted-foreground text-sm">Nessun WhatsApp inviato</p>
+                ) : (
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {plumberWhatsApps.map((wa) => (
+                      <div key={wa.id} className="flex items-center justify-between bg-background rounded p-2 text-sm">
+                        <div className="flex-1 min-w-0">
+                          <p className="truncate text-foreground">{wa.message_type}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {formatDate(wa.created_at)}
+                          </p>
+                          {wa.read_at && (
+                            <p className="text-xs text-blue-600 dark:text-blue-400">
+                              Letto: {formatDate(wa.read_at)}
+                            </p>
+                          )}
+                        </div>
+                        <div>
+                          {getWhatsAppStatusBadge(wa)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               {/* Summary Stats */}
-              <div className="grid grid-cols-3 gap-4 text-center">
+              <div className="grid grid-cols-4 gap-4 text-center">
                 <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3">
                   <p className="text-2xl font-bold text-green-600 dark:text-green-400">
                     {plumberAssignments.filter(a => a.response_type === 'accepted').length}
@@ -943,6 +1103,12 @@ export default function AdminPage() {
                     {plumberEmails.filter(e => e.opened_at).length}/{plumberEmails.length}
                   </p>
                   <p className="text-xs text-muted-foreground">Email aperte</p>
+                </div>
+                <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3">
+                  <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                    {plumberWhatsApps.filter(w => w.read_at).length}/{plumberWhatsApps.length}
+                  </p>
+                  <p className="text-xs text-muted-foreground">WA letti</p>
                 </div>
               </div>
             </div>

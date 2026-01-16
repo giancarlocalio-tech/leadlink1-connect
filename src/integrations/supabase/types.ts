@@ -650,6 +650,67 @@ export type Database = {
         }
         Relationships: []
       }
+      whatsapp_logs: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          id: string
+          message_type: string
+          plumber_id: string | null
+          recipient_name: string | null
+          recipient_phone: string
+          request_id: string | null
+          respond_io_message_id: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          message_type?: string
+          plumber_id?: string | null
+          recipient_name?: string | null
+          recipient_phone: string
+          request_id?: string | null
+          respond_io_message_id?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          message_type?: string
+          plumber_id?: string | null
+          recipient_name?: string | null
+          recipient_phone?: string
+          request_id?: string | null
+          respond_io_message_id?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_logs_plumber_id_fkey"
+            columns: ["plumber_id"]
+            isOneToOne: false
+            referencedRelation: "plumber_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "whatsapp_logs_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "service_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "whatsapp_logs_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "service_requests_plumber_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       service_requests_plumber_view: {

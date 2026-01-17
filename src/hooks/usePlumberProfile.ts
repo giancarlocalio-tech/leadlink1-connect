@@ -103,6 +103,27 @@ export function usePlumberProfile() {
       }).catch((err) => {
         console.error('Error sending welcome email:', err);
       });
+
+      // Notify owner about new plumber registration
+      supabase.functions.invoke('notify-owner-registration', {
+        body: {
+          plumber_name: profileData.full_name,
+          plumber_email: profileData.email,
+          plumber_phone: profileData.phone,
+          business_name: profileData.business_name,
+          main_city: profileData.main_city,
+          service_areas: profileData.service_areas,
+          intervention_types: profileData.intervention_types,
+        },
+      }).then(({ data: notifyData, error: notifyError }) => {
+        if (notifyError) {
+          console.error('Error notifying owner:', notifyError);
+        } else {
+          console.log('Owner notified successfully:', notifyData);
+        }
+      }).catch((err) => {
+        console.error('Error notifying owner:', err);
+      });
     }
     return { error: null, data };
   };

@@ -364,7 +364,7 @@ export default function AuthPage() {
       <Helmet>
         <title>Registrazione Idraulici | Idraulici Subito</title>
         <meta name="description" content="Registrati come idraulico professionista su Idraulici Subito. Ricevi richieste di lavoro nella tua zona e trova nuovi clienti." />
-        <link rel="canonical" href="https://idraulicisubito.com/auth" />
+        <link rel="canonical" href="https://www.idraulicisubito.com/auth" />
         <meta name="robots" content="noindex, follow" />
       </Helmet>
       <div className="py-8 md:py-12">

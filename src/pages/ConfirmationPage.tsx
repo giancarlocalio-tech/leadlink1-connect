@@ -29,7 +29,7 @@ export default function ConfirmationPage() {
       <Helmet>
         <title>Richiesta Confermata | Idraulici Subito</title>
         <meta name="description" content="La tua richiesta è stata inviata con successo. Gli idraulici della tua zona ti contatteranno a breve." />
-        <link rel="canonical" href="https://idraulicisubito.com/conferma" />
+        <link rel="canonical" href="https://www.idraulicisubito.com/conferma" />
         <meta name="robots" content="noindex, follow" />
       </Helmet>
       <div className="py-16 md:py-24">

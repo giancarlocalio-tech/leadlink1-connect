@@ -146,7 +146,7 @@ export default function LoginPage() {
       <Helmet>
         <title>Login Idraulici | Idraulici Subito</title>
         <meta name="description" content="Accedi al tuo account idraulico su Idraulici Subito per gestire le richieste di lavoro." />
-        <link rel="canonical" href="https://idraulicisubito.com/login" />
+        <link rel="canonical" href="https://www.idraulicisubito.com/login" />
         <meta name="robots" content="noindex, follow" />
       </Helmet>
       <div className="min-h-[80vh] flex items-center justify-center py-12 px-4">

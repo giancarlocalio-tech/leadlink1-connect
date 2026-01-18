@@ -39,7 +39,7 @@ const URGENCY_LABELS: Record<string, string> = {
 };
 
 async function generateMagicLink(supabase: any, email: string, appOrigin?: string): Promise<string> {
-  const origin = appOrigin || "https://idraulicisubito.com";
+  const origin = appOrigin || "https://www.idraulicisubito.com";
   let loginUrl = `${origin}/auth?mode=login`;
   
   try {
@@ -98,7 +98,7 @@ ${loginUrl}
 
 ---
 IdrauliciSubito
-https://idraulicisubito.com`;
+https://www.idraulicisubito.com`;
 
   const emailResponse = await resend.emails.send({
     from: "IdrauliciSubito <notifiche@idraulicisubito.com>",
@@ -198,7 +198,7 @@ Non perdere questa occasione! Accetta subito.
 <!-- Footer -->
 <tr>
 <td style="padding:20px;text-align:center;font-family:Arial,sans-serif;">
-<p style="margin:0;font-size:12px;color:#999999;">IdrauliciSubito - https://idraulicisubito.com</p>
+<p style="margin:0;font-size:12px;color:#999999;">IdrauliciSubito - https://www.idraulicisubito.com</p>
 </td>
 </tr>
 

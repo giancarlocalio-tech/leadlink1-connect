@@ -7,9 +7,9 @@ export default function TermsPage() {
       <Helmet>
         <title>Termini di Utilizzo | Idraulici Subito</title>
         <meta name="description" content="Termini e condizioni d'uso della piattaforma Idraulici Subito per clienti e professionisti." />
-        <link rel="canonical" href="https://idraulicisubito.com/termini" />
+        <link rel="canonical" href="https://www.idraulicisubito.com/termini" />
         <meta property="og:title" content="Termini di Utilizzo | Idraulici Subito" />
-        <meta property="og:url" content="https://idraulicisubito.com/termini" />
+        <meta property="og:url" content="https://www.idraulicisubito.com/termini" />
       </Helmet>
       <div className="py-8 md:py-12">
         <div className="container mx-auto px-4">

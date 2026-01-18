@@ -7,9 +7,9 @@ export default function PrivacyPage() {
       <Helmet>
         <title>Privacy Policy | Idraulici Subito</title>
         <meta name="description" content="Informativa sulla privacy di Idraulici Subito: come trattiamo i tuoi dati personali." />
-        <link rel="canonical" href="https://idraulicisubito.com/privacy" />
+        <link rel="canonical" href="https://www.idraulicisubito.com/privacy" />
         <meta property="og:title" content="Privacy Policy | Idraulici Subito" />
-        <meta property="og:url" content="https://idraulicisubito.com/privacy" />
+        <meta property="og:url" content="https://www.idraulicisubito.com/privacy" />
       </Helmet>
       <div className="py-8 md:py-12">
         <div className="container mx-auto px-4">

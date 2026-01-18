@@ -110,10 +110,10 @@ export default function LandingPage() {
       <Helmet>
         <title>Cerchi Nuovi Clienti? Diventa Partner Idraulici Subito | +40% Fatturato</title>
         <meta name="description" content="Sei un idraulico? Ricevi richieste qualificate ogni giorno. Nessun costo fisso, paghi solo per i contatti. Registrazione gratuita in 2 minuti." />
-        <link rel="canonical" href="https://idraulicisubito.com/lp/idraulico" />
+        <link rel="canonical" href="https://www.idraulicisubito.com/lp/idraulico" />
         <meta property="og:title" content="Cerchi Nuovi Clienti? Diventa Partner Idraulici Subito" />
         <meta property="og:description" content="Sei un idraulico? Ricevi richieste qualificate ogni giorno. Nessun costo fisso." />
-        <meta property="og:url" content="https://idraulicisubito.com/lp/idraulico" />
+        <meta property="og:url" content="https://www.idraulicisubito.com/lp/idraulico" />
         <meta name="robots" content="noindex, follow" />
       </Helmet>
     <div className="min-h-screen bg-background">

@@ -75,7 +75,7 @@ export default function CityLandingPage() {
 
   const pageTitle = `Idraulico ${cityData.name} - Pronto Intervento 24/7 | Preventivi Gratuiti`;
   const pageDescription = `Cerchi un idraulico a ${cityData.name}? ✓ Professionisti verificati ✓ Risposta in 15 min ✓ Preventivi gratuiti. Riparazioni, installazioni e emergenze idrauliche in tutta ${cityData.name} e provincia.`;
-  const canonicalUrl = `https://idraulicisubito.com/idraulico-${citySlug}`;
+  const canonicalUrl = `https://www.idraulicisubito.com/idraulico-${citySlug}`;
 
   const structuredData = generateJsonLd(
     {

@@ -344,7 +344,7 @@ serve(async (req) => {
               // Send welcome email only on first Stripe sync
               if (isFirstStripeSync) {
                 logStep("First Stripe sync - sending welcome email");
-                const appOrigin = req.headers.get("origin") || "https://idraulicisubito.com";
+                const appOrigin = req.headers.get("origin") || "https://www.idraulicisubito.com";
                 await sendWelcomeEmail(
                   plumberProfile.email,
                   plumberProfile.full_name,
@@ -377,7 +377,7 @@ serve(async (req) => {
               
               // Send welcome email for new subscription
               logStep("New subscription - sending welcome email");
-              const appOrigin = req.headers.get("origin") || "https://idraulicisubito.com";
+              const appOrigin = req.headers.get("origin") || "https://www.idraulicisubito.com";
               await sendWelcomeEmail(
                 plumberProfile.email,
                 plumberProfile.full_name,

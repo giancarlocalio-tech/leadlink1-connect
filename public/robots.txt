@@ -3,12 +3,18 @@ Allow: /
 Disallow: /dashboard
 Disallow: /admin
 Disallow: /auth/confirm
+Disallow: /richiesta?
+Disallow: /*?q=
+Disallow: /*?*
 
 User-agent: Bingbot
 Allow: /
 Disallow: /dashboard
 Disallow: /admin
 Disallow: /auth/confirm
+Disallow: /richiesta?
+Disallow: /*?q=
+Disallow: /*?*
 
 User-agent: Twitterbot
 Allow: /
@@ -21,5 +27,8 @@ Allow: /
 Disallow: /dashboard
 Disallow: /admin
 Disallow: /auth/confirm
+Disallow: /richiesta?
+Disallow: /*?q=
+Disallow: /*?*
 
-Sitemap: https://idraulicisubito.com/sitemap.xml
+Sitemap: https://www.idraulicisubito.com/sitemap.xml

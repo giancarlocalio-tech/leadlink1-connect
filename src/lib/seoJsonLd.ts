@@ -1,7 +1,7 @@
 // Centralized JSON-LD structured data generator
 // Ensures consistent schema markup across all pages
 
-const BASE_URL = 'https://idraulicisubito.com';
+const BASE_URL = 'https://www.idraulicisubito.com';
 
 interface LocalBusinessOptions {
   name: string;

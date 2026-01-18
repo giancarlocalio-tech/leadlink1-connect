@@ -4301,7 +4301,7 @@ export function generateAllCityServiceCombinations(): { city: CityData; service:
 }
 
 export function generateSitemapUrls(): string[] {
-  const baseUrl = 'https://idraulicisubito.com';
+  const baseUrl = 'https://www.idraulicisubito.com';
   const urls: string[] = [
     baseUrl + '/',
     baseUrl + '/richiesta',

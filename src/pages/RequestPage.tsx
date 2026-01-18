@@ -405,10 +405,10 @@ export default function RequestPage() {
       <Helmet>
         <title>Richiedi Preventivo Idraulico Gratuito | Idraulici Subito</title>
         <meta name="description" content="Compila il modulo per ricevere preventivi gratuiti da idraulici professionisti nella tua zona. Risposta rapida garantita." />
-        <link rel="canonical" href="https://idraulicisubito.com/richiesta" />
+        <link rel="canonical" href="https://www.idraulicisubito.com/richiesta" />
         <meta property="og:title" content="Richiedi Preventivo Idraulico Gratuito | Idraulici Subito" />
         <meta property="og:description" content="Compila il modulo per ricevere preventivi gratuiti da idraulici professionisti nella tua zona." />
-        <meta property="og:url" content="https://idraulicisubito.com/richiesta" />
+        <meta property="og:url" content="https://www.idraulicisubito.com/richiesta" />
         <meta name="robots" content="noindex, follow" />
       </Helmet>
       <div className="py-8 md:py-12">

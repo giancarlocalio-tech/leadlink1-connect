@@ -179,7 +179,7 @@ Hai ricevuto una nuova richiesta di intervento nella tua zona.
 
 <tr>
 <td style="padding:20px;text-align:center;font-family:Arial,sans-serif;">
-<p style="margin:0;font-size:12px;color:#999999;">IdrauliciSubito - https://idraulicisubito.com</p>
+<p style="margin:0;font-size:12px;color:#999999;">IdrauliciSubito - https://www.idraulicisubito.com</p>
 </td>
 </tr>
 

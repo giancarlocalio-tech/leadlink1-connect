@@ -305,10 +305,10 @@ export default function PlumberLandingPage() {
       <Helmet>
         <title>Diventa Partner Idraulici Subito | Trova Nuovi Clienti</title>
         <meta name="description" content="Registrati come idraulico partner e ricevi richieste di lavoro qualificate nella tua zona. Aumenta il tuo fatturato con Idraulici Subito." />
-        <link rel="canonical" href="https://idraulicisubito.com/per-idraulici" />
+        <link rel="canonical" href="https://www.idraulicisubito.com/per-idraulici" />
         <meta property="og:title" content="Diventa Partner Idraulici Subito | Trova Nuovi Clienti" />
         <meta property="og:description" content="Registrati come idraulico partner e ricevi richieste di lavoro qualificate nella tua zona." />
-        <meta property="og:url" content="https://idraulicisubito.com/per-idraulici" />
+        <meta property="og:url" content="https://www.idraulicisubito.com/per-idraulici" />
       </Helmet>
       {/* Hero Section */}
       <section className="relative py-16 md:py-24 bg-gradient-to-br from-primary/10 via-background to-secondary/10">

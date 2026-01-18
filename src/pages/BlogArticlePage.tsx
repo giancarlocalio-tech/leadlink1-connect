@@ -23,7 +23,7 @@ export default function BlogArticlePage() {
 
   if (!article) return null;
 
-  const canonicalUrl = `https://idraulicisubito.com/blog/${article.slug}`;
+  const canonicalUrl = `https://www.idraulicisubito.com/blog/${article.slug}`;
   const category = BLOG_CATEGORIES.find(c => c.slug === article.category);
 
   // JSON-LD per articolo blog
@@ -42,10 +42,10 @@ export default function BlogArticlePage() {
     publisher: {
       '@type': 'Organization',
       name: 'Idraulici Subito',
-      url: 'https://idraulicisubito.com',
+      url: 'https://www.idraulicisubito.com',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://idraulicisubito.com/logo.png'
+        url: 'https://www.idraulicisubito.com/logo.png'
       }
     },
     mainEntityOfPage: {

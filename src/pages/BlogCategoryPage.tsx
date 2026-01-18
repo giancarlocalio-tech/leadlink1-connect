@@ -30,7 +30,7 @@ export default function BlogCategoryPage() {
 
   if (!category) return null;
 
-  const canonicalUrl = `https://idraulicisubito.com/blog/categoria/${category.slug}`;
+  const canonicalUrl = `https://www.idraulicisubito.com/blog/categoria/${category.slug}`;
 
   return (
     <Layout>

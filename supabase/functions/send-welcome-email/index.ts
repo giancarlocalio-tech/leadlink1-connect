@@ -42,7 +42,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     const planLabel = PLAN_LABELS[plan_type] || plan_type;
 
-    const appOrigin = (app_origin || "https://idraulicisubito.com").replace(/\/$/, "");
+    const appOrigin = (app_origin || "https://www.idraulicisubito.com").replace(/\/$/, "");
 
     // Direct link to dashboard - the user just registered so they're already authenticated
     // No need for magic link which expires quickly
@@ -237,7 +237,7 @@ Hai domande? Rispondi a questa email e saremo felici di aiutarti!
 <tr>
 <td style="padding:20px;text-align:center;font-family:Arial,sans-serif;">
 <p style="margin:0;font-size:12px;color:#999999;">Questa email e stata inviata da IdrauliciSubito</p>
-<p style="margin:8px 0 0 0;font-size:12px;color:#999999;">IdrauliciSubito - https://idraulicisubito.com</p>
+<p style="margin:8px 0 0 0;font-size:12px;color:#999999;">IdrauliciSubito - https://www.idraulicisubito.com</p>
 </td>
 </tr>
 

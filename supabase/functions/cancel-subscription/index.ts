@@ -154,7 +154,7 @@ serve(async (req) => {
                 <p>Se cambi idea, puoi riattivare il tuo abbonamento in qualsiasi momento dalla tua area personale.</p>
                 
                 <p style="text-align: center;">
-                  <a href="https://idraulicisubito.com/abbonamento" class="button">Riattiva Abbonamento</a>
+                  <a href="https://www.idraulicisubito.com/abbonamento" class="button">Riattiva Abbonamento</a>
                 </p>
                 
                 <p>Grazie per aver utilizzato IdrauliciSubito!</p>

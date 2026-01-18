@@ -292,10 +292,10 @@ export default function HomePage() {
       <Helmet>
         <title>Idraulici Subito - Trova Idraulici Professionisti nella Tua Zona | Preventivi Gratuiti</title>
         <meta name="description" content="Trova idraulici professionisti verificati nella tua città. Richiedi preventivi gratuiti per riparazioni, installazioni, caldaie, scarichi intasati e emergenze idrauliche. Risposta in 15 minuti." />
-        <link rel="canonical" href="https://idraulicisubito.com/" />
+        <link rel="canonical" href="https://www.idraulicisubito.com/" />
         <meta property="og:title" content="Idraulici Subito - Trova Idraulici Professionisti nella Tua Zona" />
         <meta property="og:description" content="Trova idraulici professionisti verificati nella tua città. Richiedi preventivi gratuiti per riparazioni e installazioni. Risposta in 15 minuti." />
-        <meta property="og:url" content="https://idraulicisubito.com/" />
+        <meta property="og:url" content="https://www.idraulicisubito.com/" />
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
         </script>

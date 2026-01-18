@@ -17,7 +17,7 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
 
 export default function BlogPage() {
   const latestArticles = getLatestArticles(6);
-  const canonicalUrl = 'https://idraulicisubito.com/blog';
+  const canonicalUrl = 'https://www.idraulicisubito.com/blog';
 
   const jsonLd = generateJsonLd(
     {

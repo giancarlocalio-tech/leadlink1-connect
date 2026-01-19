@@ -1,8 +1,9 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Wrench, User, LogOut, Shield } from 'lucide-react';
+import { User, LogOut, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { useAdmin } from '@/hooks/useAdmin';
+import logo from '@/assets/logo.png';
 
 export function Header() {
   const location = useLocation();
@@ -27,9 +28,7 @@ export function Header() {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <div className="bg-primary p-2 rounded-lg">
-              <Wrench className="h-6 w-6 text-primary-foreground" />
-            </div>
+            <img src={logo} alt="Idraulici Subito" className="h-10 w-auto" />
             <span className="text-xl font-bold text-foreground">Idraulici Subito</span>
           </Link>
           

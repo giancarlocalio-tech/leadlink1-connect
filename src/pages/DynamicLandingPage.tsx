@@ -17,7 +17,11 @@ import {
   Thermometer,
   CircleSlash,
   Home,
-  Bath
+  Bath,
+  AlertTriangle,
+  Lightbulb,
+  Euro,
+  HelpCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/Layout';
@@ -29,6 +33,7 @@ import {
   CITIES 
 } from '@/lib/seoData';
 import { generateJsonLd, getCityFAQs, BASE_URL } from '@/lib/seoJsonLd';
+import { getServiceRichContent, generateCityServiceContent } from '@/lib/serviceContent';
 import InlineWizard from '@/components/InlineWizard';
 import heroBg from '@/assets/hero-bg.avif';
 
@@ -258,8 +263,8 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
           </h2>
           <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
             {serviceData
-              ? serviceData.description
-              : `I nostri idraulici a ${cityData.name} offrono una gamma completa di servizi per la tua casa o attività`
+              ? generateCityServiceContent(cityData.name, serviceData.name, serviceData.slug)
+              : `I nostri idraulici a ${cityData.name} offrono una gamma completa di servizi per la tua casa o attività. Dalle riparazioni urgenti alle installazioni programmate, trovi professionisti verificati pronti a intervenire in tutti i quartieri della città.`
             }
           </p>
           
@@ -297,6 +302,117 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
           )}
         </div>
       </section>
+
+      {/* Rich Content Section - Only for service pages */}
+      {serviceData && (() => {
+        const richContent = getServiceRichContent(serviceData.slug);
+        if (!richContent) return null;
+        
+        return (
+          <section className="py-16">
+            <div className="container mx-auto px-4">
+              {/* Common Problems */}
+              <div className="max-w-5xl mx-auto mb-16">
+                <h2 className="text-2xl md:text-3xl font-bold text-center mb-4 flex items-center justify-center gap-3">
+                  <AlertTriangle className="h-7 w-7 text-amber-500" />
+                  Problemi Comuni - {serviceData.name} a {cityData.name}
+                </h2>
+                <p className="text-muted-foreground text-center mb-10 max-w-2xl mx-auto">
+                  Ecco i problemi più frequenti che risolviamo per i nostri clienti a {cityData.name}
+                </p>
+                
+                <div className="grid md:grid-cols-2 gap-6">
+                  {richContent.commonProblems.map((problem, index) => (
+                    <div key={index} className="bg-card rounded-xl p-6 border border-border shadow-sm">
+                      <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
+                        <HelpCircle className="h-5 w-5 text-primary flex-shrink-0" />
+                        {problem.title}
+                      </h3>
+                      <p className="text-muted-foreground">{problem.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tips Section */}
+              <div className="max-w-4xl mx-auto mb-16">
+                <h2 className="text-2xl md:text-3xl font-bold text-center mb-4 flex items-center justify-center gap-3">
+                  <Lightbulb className="h-7 w-7 text-yellow-500" />
+                  Consigli Utili
+                </h2>
+                <p className="text-muted-foreground text-center mb-8">
+                  Suggerimenti dai nostri professionisti per prevenire problemi
+                </p>
+                
+                <div className="bg-primary/5 rounded-2xl p-8">
+                  <ul className="space-y-4">
+                    {richContent.tips.map((tip, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <CheckCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                        <span>{tip}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {richContent.diyWarning && (
+                  <div className="mt-6 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl p-6">
+                    <div className="flex items-start gap-3">
+                      <AlertTriangle className="h-6 w-6 text-amber-600 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-semibold text-amber-800 dark:text-amber-200 mb-1">Attenzione al fai-da-te</h4>
+                        <p className="text-amber-700 dark:text-amber-300 text-sm">{richContent.diyWarning}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Price Range & When to Call */}
+              <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
+                {/* Price Indication */}
+                <div className="bg-card rounded-xl p-8 border border-border shadow-sm">
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                    <Euro className="h-6 w-6 text-primary" />
+                    Prezzi Indicativi a {cityData.name}
+                  </h3>
+                  <div className="text-3xl font-bold text-primary mb-2">
+                    {richContent.priceRange.min}€ - {richContent.priceRange.max}€
+                  </div>
+                  <p className="text-muted-foreground text-sm mb-4">{richContent.priceRange.note}</p>
+                  <p className="text-sm">
+                    I prezzi sono indicativi e variano in base alla complessità dell'intervento. 
+                    <strong> Richiedi un preventivo gratuito</strong> per conoscere il costo esatto.
+                  </p>
+                </div>
+
+                {/* When to Call */}
+                <div className="bg-card rounded-xl p-8 border border-border shadow-sm">
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                    <Phone className="h-6 w-6 text-primary" />
+                    Quando Chiamare un Professionista
+                  </h3>
+                  <ul className="space-y-3">
+                    {richContent.whenToCall.slice(0, 5).map((reason, index) => (
+                      <li key={index} className="flex items-start gap-2 text-sm">
+                        <ArrowRight className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                        <span>{reason}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Urgency Info */}
+              <div className="max-w-3xl mx-auto mt-12 bg-primary/10 rounded-2xl p-8 text-center">
+                <Clock className="h-10 w-10 text-primary mx-auto mb-4" />
+                <h3 className="text-xl font-bold mb-3">Urgenza dell'Intervento</h3>
+                <p className="text-muted-foreground">{richContent.urgencyInfo}</p>
+              </div>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* Coverage Areas */}
       <section className="py-16">
@@ -366,30 +482,60 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
           </h2>
           
           <div className="max-w-3xl mx-auto space-y-6">
-            <div className="bg-card rounded-lg p-6 shadow-sm">
-              <h3 className="font-semibold text-lg mb-2">
-                Quanto costa un {serviceShortName.toLowerCase()} a {cityData.name}?
-              </h3>
-              <p className="text-muted-foreground">
-                Il costo varia in base al tipo di intervento. Su Idraulici Subito puoi richiedere preventivi gratuiti e confrontare le offerte dei professionisti della tua zona.
-              </p>
-            </div>
+            {/* Dynamic FAQ based on rich content */}
+            {serviceData && (() => {
+              const richContent = getServiceRichContent(serviceData.slug);
+              if (richContent) {
+                return (
+                  <>
+                    <div className="bg-card rounded-lg p-6 shadow-sm">
+                      <h3 className="font-semibold text-lg mb-2">
+                        Quanto costa {serviceData.name.toLowerCase()} a {cityData.name}?
+                      </h3>
+                      <p className="text-muted-foreground">
+                        I prezzi per {serviceData.name.toLowerCase()} a {cityData.name} partono da {richContent.priceRange.min}€ e possono arrivare a {richContent.priceRange.max}€ per interventi standard. {richContent.priceRange.note}. Su Idraulici Subito puoi richiedere preventivi gratuiti e confrontare le offerte.
+                      </p>
+                    </div>
+                    
+                    <div className="bg-card rounded-lg p-6 shadow-sm">
+                      <h3 className="font-semibold text-lg mb-2">
+                        Quali sono i problemi più comuni per {serviceData.name.toLowerCase()}?
+                      </h3>
+                      <p className="text-muted-foreground">
+                        A {cityData.name} i problemi più frequenti sono: {richContent.commonProblems.map(p => p.title.toLowerCase()).join(', ')}. I nostri professionisti sono esperti nella risoluzione di tutti questi problemi.
+                      </p>
+                    </div>
+                    
+                    <div className="bg-card rounded-lg p-6 shadow-sm">
+                      <h3 className="font-semibold text-lg mb-2">
+                        Quando devo chiamare un professionista per {serviceData.name.toLowerCase()}?
+                      </h3>
+                      <p className="text-muted-foreground">
+                        {richContent.urgencyInfo} Contattaci quando noti: {richContent.whenToCall.slice(0, 3).join(', ').toLowerCase()}.
+                      </p>
+                    </div>
+                  </>
+                );
+              }
+              return null;
+            })()}
             
+            {/* Default FAQs */}
             <div className="bg-card rounded-lg p-6 shadow-sm">
               <h3 className="font-semibold text-lg mb-2">
                 Come trovo un {serviceShortName.toLowerCase()} affidabile a {cityData.name}?
               </h3>
               <p className="text-muted-foreground">
-                Tutti i professionisti su Idraulici Subito sono verificati e recensiti dai clienti. Inserisci la tua richiesta e riceverai contatti da {serviceShortName.toLowerCase()}i qualificati di {cityData.name} e provincia.
+                Tutti i professionisti su Idraulici Subito sono verificati e recensiti dai clienti. Inserisci la tua richiesta e riceverai contatti da professionisti qualificati di {cityData.name} e provincia, con risposta media in 15 minuti.
               </p>
             </div>
             
             <div className="bg-card rounded-lg p-6 shadow-sm">
               <h3 className="font-semibold text-lg mb-2">
-                Quanto tempo ci vuole per ricevere un preventivo?
+                È possibile richiedere un intervento urgente a {cityData.name}?
               </h3>
               <p className="text-muted-foreground">
-                In media ricevi una risposta entro 15 minuti dalla tua richiesta. Per emergenze urgenti, i nostri professionisti premium rispondono ancora più velocemente.
+                Sì, i nostri professionisti offrono servizio di pronto intervento 24/7 per emergenze a {cityData.name} e in tutti i comuni limitrofi come {cityData.nearbyAreas.slice(0, 3).join(', ')}. Per urgenze, indica "Subito" come tempistica nella richiesta.
               </p>
             </div>
           </div>

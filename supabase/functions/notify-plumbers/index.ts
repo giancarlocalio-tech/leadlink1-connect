@@ -522,7 +522,160 @@ const handler = async (req: Request): Promise<Response> => {
     const whatsappSuccessCount = whatsappResults.filter((r) => r.success).length;
     const whatsappFailedCount = whatsappResults.filter((r) => !r.success).length;
 
-    console.log(`WhatsApp sent: ${whatsappSuccessCount} success, ${whatsappFailedCount} failed`);
+    console.log(`WhatsApp sent to registered plumbers: ${whatsappSuccessCount} success, ${whatsappFailedCount} failed`);
+
+    // ====== SEND WHATSAPP TO UNREGISTERED PLUMBERS ======
+    // Fetch unregistered plumbers that match the request city
+    const requestCityLower = serviceRequest.city.toLowerCase().trim();
+    const requestCityName = requestCityLower.replace(/\s*\([^)]*\)\s*$/, '').trim();
+    
+    const { data: unregisteredPlumbers, error: unregError } = await supabase
+      .from("unregistered_plumbers")
+      .select("*")
+      .eq("is_active", true);
+
+    if (unregError) {
+      console.error("Error fetching unregistered plumbers:", unregError);
+    }
+
+    // Filter by city (case-insensitive, flexible matching)
+    const matchingUnregistered = (unregisteredPlumbers || []).filter((p) => {
+      const pCityLower = (p.city || '').toLowerCase().trim();
+      const pCityName = pCityLower.replace(/\s*\([^)]*\)\s*$/, '').trim();
+      
+      return pCityLower === requestCityLower || 
+             pCityName === requestCityName ||
+             pCityLower.includes(requestCityName) || 
+             requestCityLower.includes(pCityName);
+    });
+
+    console.log(`Found ${matchingUnregistered.length} unregistered plumbers matching city ${serviceRequest.city}`);
+
+    // Send WhatsApp to unregistered plumbers with FULL client contact info
+    const respondIoApiKey = Deno.env.get("RESPOND_IO_API_KEY");
+    const respondIoChannelId = Deno.env.get("RESPOND_IO_CHANNEL_ID");
+    
+    const unregWhatsappPromises = matchingUnregistered.map(async (unreg) => {
+      try {
+        // Format phone number
+        let formattedPhone = unreg.phone.replace(/\s+/g, '').replace(/^0+/, '');
+        if (!formattedPhone.startsWith('+') && !formattedPhone.startsWith('39')) {
+          formattedPhone = '39' + formattedPhone;
+        }
+        formattedPhone = formattedPhone.replace(/^\+/, '');
+
+        console.log(`Sending WhatsApp to unregistered plumber ${unreg.full_name}: ${formattedPhone}`);
+
+        // Find or create contact in respond.io
+        const contactResponse = await fetch(`https://api.respond.io/v2/contact/phone:${formattedPhone}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${respondIoApiKey}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        let contactId: string;
+
+        if (contactResponse.ok) {
+          const contactData = await contactResponse.json();
+          contactId = contactData.id;
+          console.log(`Found existing contact: ${contactId}`);
+        } else {
+          // Create new contact
+          const createContactResponse = await fetch(`https://api.respond.io/v2/contact`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${respondIoApiKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              phone: formattedPhone,
+              firstName: unreg.full_name,
+            }),
+          });
+
+          if (!createContactResponse.ok) {
+            const errorText = await createContactResponse.text();
+            console.error(`Failed to create contact for ${unreg.full_name}: ${errorText}`);
+            return { success: false, name: unreg.full_name, error: errorText };
+          }
+
+          const newContact = await createContactResponse.json();
+          contactId = newContact.id;
+          console.log(`Created new contact: ${contactId}`);
+        }
+
+        // Prepare message with FULL client details
+        const interventionLabel = INTERVENTION_LABELS[serviceRequest.intervention_type] || serviceRequest.intervention_type;
+        const urgencyLabel = URGENCY_LABELS[serviceRequest.urgency] || serviceRequest.urgency;
+        
+        const messageText = `🔧 *Nuova richiesta di intervento*
+
+📍 *Città:* ${serviceRequest.city}
+🔧 *Intervento:* ${interventionLabel}
+⏰ *Urgenza:* ${urgencyLabel}
+
+👤 *Cliente:* ${serviceRequest.client_name}
+📞 *Telefono:* ${serviceRequest.client_phone}
+${serviceRequest.client_email ? `📧 *Email:* ${serviceRequest.client_email}` : ''}
+
+📝 *Descrizione:* ${serviceRequest.description || 'Nessuna descrizione'}
+
+Contatta subito il cliente!
+
+_Vuoi ricevere richieste esclusive? Registrati su idraulicisubito.com_`;
+
+        // Send direct text message (not template)
+        const messagePayload = {
+          channelId: parseInt(respondIoChannelId || '0'),
+          message: {
+            type: 'text',
+            text: messageText,
+          },
+        };
+
+        const messageResponse = await fetch(`https://api.respond.io/v2/contact/id:${contactId}/message`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${respondIoApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(messagePayload),
+        });
+
+        if (!messageResponse.ok) {
+          const errorText = await messageResponse.text();
+          console.error(`Failed to send message to ${unreg.full_name}: ${errorText}`);
+          return { success: false, name: unreg.full_name, error: errorText };
+        }
+
+        const messageData = await messageResponse.json();
+        console.log(`WhatsApp sent to unregistered ${unreg.full_name}:`, messageData);
+
+        // Log the WhatsApp notification
+        await supabase.from("whatsapp_logs").insert({
+          recipient_phone: unreg.phone,
+          recipient_name: unreg.full_name,
+          message_type: "unregistered_lead",
+          request_id: serviceRequest.id,
+          plumber_id: null,
+          status: "sent",
+          respond_io_message_id: messageData.id || messageData.messageId || null,
+        });
+
+        return { success: true, name: unreg.full_name, messageId: messageData.id };
+      } catch (err) {
+        console.error(`Error sending WhatsApp to ${unreg.full_name}:`, err);
+        return { success: false, name: unreg.full_name, error: err instanceof Error ? err.message : 'Unknown error' };
+      }
+    });
+
+    const unregWhatsappResults = await Promise.all(unregWhatsappPromises);
+    const unregSuccessCount = unregWhatsappResults.filter((r) => r.success).length;
+    const unregFailedCount = unregWhatsappResults.filter((r) => !r.success).length;
+
+    console.log(`WhatsApp sent to unregistered plumbers: ${unregSuccessCount} success, ${unregFailedCount} failed`);
 
     return new Response(
       JSON.stringify({
@@ -530,10 +683,13 @@ const handler = async (req: Request): Promise<Response> => {
         message: "Notifications sent",
         email_notified: successCount,
         email_failed: failedCount,
-        whatsapp_notified: whatsappSuccessCount,
-        whatsapp_failed: whatsappFailedCount,
+        whatsapp_registered_notified: whatsappSuccessCount,
+        whatsapp_registered_failed: whatsappFailedCount,
+        whatsapp_unregistered_notified: unregSuccessCount,
+        whatsapp_unregistered_failed: unregFailedCount,
         email_details: results,
-        whatsapp_details: whatsappResults,
+        whatsapp_registered_details: whatsappResults,
+        whatsapp_unregistered_details: unregWhatsappResults,
       }),
       {
         status: 200,

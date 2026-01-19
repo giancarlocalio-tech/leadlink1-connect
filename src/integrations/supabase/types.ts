@@ -629,6 +629,39 @@ export type Database = {
         }
         Relationships: []
       }
+      unregistered_plumbers: {
+        Row: {
+          city: string
+          created_at: string
+          full_name: string
+          id: string
+          is_active: boolean
+          notes: string | null
+          phone: string
+          updated_at: string
+        }
+        Insert: {
+          city?: string
+          created_at?: string
+          full_name: string
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          phone: string
+          updated_at?: string
+        }
+        Update: {
+          city?: string
+          created_at?: string
+          full_name?: string
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          phone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string | null

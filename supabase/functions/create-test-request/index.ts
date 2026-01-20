@@ -96,6 +96,30 @@ serve(async (req) => {
     const assignResult = await assignResponse.json();
     logStep("assign-request response", assignResult);
 
+    // Call notify-plumbers to send WhatsApp/Email notifications
+    logStep("Calling notify-plumbers function");
+    
+    const notifyResponse = await fetch(`${supabaseUrl}/functions/v1/notify-plumbers`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${serviceRoleKey}`
+      },
+      body: JSON.stringify({ 
+        request_id: requestData.id,
+        city,
+        urgency,
+        intervention_type,
+        client_name,
+        client_phone,
+        client_email,
+        description: requestData.description
+      })
+    });
+
+    const notifyResult = await notifyResponse.json();
+    logStep("notify-plumbers response", notifyResult);
+
     // Fetch the updated request to see who it was assigned to
     const { data: updatedRequest, error: fetchError } = await supabase
       .from('service_requests')

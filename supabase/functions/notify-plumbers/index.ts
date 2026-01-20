@@ -606,34 +606,35 @@ const handler = async (req: Request): Promise<Response> => {
           console.log(`Created new contact: ${contactId}`);
         }
 
-        // Prepare message with FULL client details
+        // Prepare template params using the approved "richiestidraulco" template
         const interventionLabel = INTERVENTION_LABELS[serviceRequest.intervention_type] || serviceRequest.intervention_type;
         const urgencyLabel = URGENCY_LABELS[serviceRequest.urgency] || serviceRequest.urgency;
         
-        const messageText = `🔧 *Nuova richiesta di intervento*
-
-📍 *Città:* ${serviceRequest.city}
-🔧 *Intervento:* ${interventionLabel}
-⏰ *Urgenza:* ${urgencyLabel}
-
-👤 *Cliente:* ${serviceRequest.client_name}
-📞 *Telefono:* ${serviceRequest.client_phone}
-${serviceRequest.client_email ? `📧 *Email:* ${serviceRequest.client_email}` : ''}
-
-📝 *Descrizione:* ${serviceRequest.description || 'Nessuna descrizione'}
-
-Contatta subito il cliente!
-
-_Vuoi ricevere richieste esclusive? Registrati su idraulicisubito.com_`;
-
-        // Send direct text message (not template)
-        const messagePayload = {
+        // Use the approved template "richiestidraulco" with variables:
+        // {{1}} = Name, {{2}} = City, {{3}} = Type, {{4}} = Urgency
+        const templatePayload = {
           channelId: parseInt(respondIoChannelId || '0'),
           message: {
-            type: 'text',
-            text: messageText,
+            type: 'whatsapp_template',
+            template: {
+              name: 'richiestidraulco',
+              languageCode: 'it',
+              components: [
+                {
+                  type: 'body',
+                  parameters: [
+                    { type: 'text', text: unreg.full_name },
+                    { type: 'text', text: serviceRequest.city },
+                    { type: 'text', text: interventionLabel },
+                    { type: 'text', text: urgencyLabel },
+                  ],
+                },
+              ],
+            },
           },
         };
+
+        console.log(`Sending template to unregistered ${unreg.full_name}:`, JSON.stringify(templatePayload, null, 2));
 
         const messageResponse = await fetch(`https://api.respond.io/v2/contact/id:${contactId}/message`, {
           method: 'POST',
@@ -641,7 +642,7 @@ _Vuoi ricevere richieste esclusive? Registrati su idraulicisubito.com_`;
             'Authorization': `Bearer ${respondIoApiKey}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(messagePayload),
+          body: JSON.stringify(templatePayload),
         });
 
         if (!messageResponse.ok) {

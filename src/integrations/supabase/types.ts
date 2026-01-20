@@ -194,6 +194,119 @@ export type Database = {
           },
         ]
       }
+      credit_packages: {
+        Row: {
+          created_at: string
+          credits: number
+          id: string
+          is_active: boolean
+          name: string
+          price_cents: number
+          price_per_credit: number
+          sort_order: number
+          stripe_price_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          credits: number
+          id?: string
+          is_active?: boolean
+          name: string
+          price_cents: number
+          price_per_credit: number
+          sort_order?: number
+          stripe_price_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          credits?: number
+          id?: string
+          is_active?: boolean
+          name?: string
+          price_cents?: number
+          price_per_credit?: number
+          sort_order?: number
+          stripe_price_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      credit_transactions: {
+        Row: {
+          amount_cents: number | null
+          balance_after: number
+          created_at: string
+          credits: number
+          description: string | null
+          id: string
+          package_id: string | null
+          plumber_id: string
+          request_id: string | null
+          stripe_payment_intent_id: string | null
+          transaction_type: string
+          unlock_reason: string | null
+        }
+        Insert: {
+          amount_cents?: number | null
+          balance_after: number
+          created_at?: string
+          credits: number
+          description?: string | null
+          id?: string
+          package_id?: string | null
+          plumber_id: string
+          request_id?: string | null
+          stripe_payment_intent_id?: string | null
+          transaction_type: string
+          unlock_reason?: string | null
+        }
+        Update: {
+          amount_cents?: number | null
+          balance_after?: number
+          created_at?: string
+          credits?: number
+          description?: string | null
+          id?: string
+          package_id?: string | null
+          plumber_id?: string
+          request_id?: string | null
+          stripe_payment_intent_id?: string | null
+          transaction_type?: string
+          unlock_reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credit_transactions_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "credit_packages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credit_transactions_plumber_id_fkey"
+            columns: ["plumber_id"]
+            isOneToOne: false
+            referencedRelation: "plumber_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credit_transactions_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "service_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credit_transactions_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "service_requests_plumber_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       email_logs: {
         Row: {
           created_at: string
@@ -296,6 +409,44 @@ export type Database = {
           region?: string
         }
         Relationships: []
+      }
+      plumber_credits: {
+        Row: {
+          balance: number
+          created_at: string
+          id: string
+          plumber_id: string
+          total_purchased: number
+          total_spent: number
+          updated_at: string
+        }
+        Insert: {
+          balance?: number
+          created_at?: string
+          id?: string
+          plumber_id: string
+          total_purchased?: number
+          total_spent?: number
+          updated_at?: string
+        }
+        Update: {
+          balance?: number
+          created_at?: string
+          id?: string
+          plumber_id?: string
+          total_purchased?: number
+          total_spent?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plumber_credits_plumber_id_fkey"
+            columns: ["plumber_id"]
+            isOneToOne: true
+            referencedRelation: "plumber_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       plumber_profiles: {
         Row: {
@@ -629,6 +780,30 @@ export type Database = {
         }
         Relationships: []
       }
+      unlock_costs: {
+        Row: {
+          created_at: string
+          credits_cost: number
+          id: string
+          updated_at: string
+          urgency: string
+        }
+        Insert: {
+          created_at?: string
+          credits_cost: number
+          id?: string
+          updated_at?: string
+          urgency: string
+        }
+        Update: {
+          created_at?: string
+          credits_cost?: number
+          id?: string
+          updated_at?: string
+          urgency?: string
+        }
+        Relationships: []
+      }
       unregistered_plumbers: {
         Row: {
           city: string
@@ -895,6 +1070,18 @@ export type Database = {
           client_name: string
           client_phone: string
           message: string
+          success: boolean
+        }[]
+      }
+      unlock_contact_with_credits: {
+        Args: { p_plumber_id: string; p_request_id: string }
+        Returns: {
+          client_email: string
+          client_name: string
+          client_phone: string
+          credits_spent: number
+          message: string
+          new_balance: number
           success: boolean
         }[]
       }

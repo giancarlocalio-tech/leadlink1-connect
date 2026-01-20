@@ -6,7 +6,8 @@ import {
   User, 
   Settings,
   LogOut,
-  Shield
+  Shield,
+  Coins
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import {
@@ -29,7 +30,7 @@ import { useAdmin } from '@/hooks/useAdmin';
 const menuItems = [
   { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
   { title: 'Richieste', url: '/dashboard/richieste', icon: FileText },
-  { title: 'Abbonamento', url: '/dashboard/abbonamento', icon: CreditCard },
+  { title: 'Crediti', url: '/dashboard/crediti', icon: Coins },
   { title: 'Profilo', url: '/dashboard/profilo', icon: User },
 ];
 

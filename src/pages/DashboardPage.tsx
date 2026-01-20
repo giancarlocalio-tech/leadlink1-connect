@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { StatsCards } from '@/components/dashboard/StatsCards';
-import { SubscriptionCard } from '@/components/dashboard/SubscriptionCard';
+import { CreditsCard } from '@/components/dashboard/CreditsCard';
 import { RequestCard } from '@/components/dashboard/RequestCard';
 import { AssignedRequestCard } from '@/components/dashboard/AssignedRequestCard';
 import { TrialPaywall } from '@/components/dashboard/TrialPaywall';
@@ -15,6 +15,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import { SubscriptionProvider, useSubscriptionContext } from '@/contexts/SubscriptionContext';
 import { useTrialRequests } from '@/hooks/useTrialRequests';
+import { useCredits } from '@/hooks/useCredits';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { ServiceRequest, InterventionType, UrgencyType, PropertyType, AccessibilityType } from '@/lib/types';
@@ -43,6 +44,8 @@ function DashboardContent() {
     getBasicContactsRemaining,
     unlocks
   } = useSubscriptionContext();
+  
+  const { credits } = useCredits();
 
   const {
     requests: trialRequests,
@@ -321,14 +324,13 @@ function DashboardContent() {
         />
 
         <div className="grid gap-6 lg:grid-cols-3">
-          {/* Subscription Card */}
+          {/* Credits Card */}
           <div className="lg:col-span-1">
-            <SubscriptionCard
-              subscription={subscription}
-              currentPlan={getCurrentPlan()}
-              unlocksRemaining={getMonthlyUnlocksRemaining()}
-              basicContactsRemaining={getBasicContactsRemaining()}
-              onUpgrade={() => navigate('/dashboard/abbonamento')}
+            <CreditsCard
+              balance={credits?.balance ?? 0}
+              freeRequestsRemaining={freeRequestsRemaining}
+              isTrial={isInTrialMode}
+              onBuyCredits={() => navigate('/dashboard/crediti')}
             />
           </div>
 

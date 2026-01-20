@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Lock, ArrowRight, Star, Shield, Zap } from 'lucide-react';
+import { Lock, ArrowRight, Star, Shield, Zap, Coins } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -27,8 +27,9 @@ export function TrialPaywall({ freeRequestsRemaining }: TrialPaywallProps) {
                 </p>
               </div>
             </div>
-            <Button variant="outline" size="sm" onClick={() => navigate('/dashboard/abbonamento')}>
-              Vedi piani
+            <Button variant="outline" size="sm" onClick={() => navigate('/dashboard/crediti')}>
+              <Coins className="h-4 w-4 mr-1" />
+              Acquista crediti
             </Button>
           </div>
         </CardContent>
@@ -45,7 +46,7 @@ export function TrialPaywall({ freeRequestsRemaining }: TrialPaywallProps) {
         </div>
         <CardTitle className="text-2xl">Le tue richieste gratuite sono terminate</CardTitle>
         <CardDescription className="text-base">
-          Per continuare a ricevere nuovi clienti, scegli un piano di abbonamento
+          Per continuare a ricevere nuovi clienti, acquista crediti
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -57,11 +58,11 @@ export function TrialPaywall({ freeRequestsRemaining }: TrialPaywallProps) {
           </div>
           <div className="flex items-center gap-3 p-3 rounded-lg bg-card border border-border">
             <Shield className="h-5 w-5 text-primary flex-shrink-0" />
-            <span className="text-sm">Contatti esclusivi - nessuna competizione</span>
+            <span className="text-sm">Paghi solo i contatti che sblocchi</span>
           </div>
           <div className="flex items-center gap-3 p-3 rounded-lg bg-card border border-border">
-            <Zap className="h-5 w-5 text-green-500 flex-shrink-0" />
-            <span className="text-sm">Notifiche immediate via email</span>
+            <Zap className="h-5 w-5 text-success flex-shrink-0" />
+            <span className="text-sm">Notifiche immediate via email e WhatsApp</span>
           </div>
         </div>
 
@@ -70,13 +71,14 @@ export function TrialPaywall({ freeRequestsRemaining }: TrialPaywallProps) {
           <Button 
             size="lg" 
             className="w-full text-lg"
-            onClick={() => navigate('/dashboard/abbonamento')}
+            onClick={() => navigate('/dashboard/crediti')}
           >
-            Scegli il tuo piano
+            <Coins className="mr-2 h-5 w-5" />
+            Acquista crediti
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
           <p className="text-xs text-muted-foreground">
-            Piani a partire da €29/mese • Annulla quando vuoi
+            A partire da €100 per ~34 crediti • Nessuna scadenza
           </p>
         </div>
       </CardContent>

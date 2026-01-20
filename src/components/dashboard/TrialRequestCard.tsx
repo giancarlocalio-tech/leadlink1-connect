@@ -7,7 +7,9 @@ import {
   Home,
   AlertTriangle,
   Zap,
-  CheckCircle2
+  CheckCircle2,
+  Coins,
+  Lock
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -20,6 +22,13 @@ import {
   ACCESSIBILITY_LABELS 
 } from '@/lib/types';
 import type { TrialRequest, ClaimResult } from '@/hooks/useTrialRequests';
+
+// Credit costs per urgency level
+const UNLOCK_COSTS: Record<UrgencyType, number> = {
+  subito: 5,
+  entro_24_ore: 3,
+  prossimi_giorni: 2,
+};
 
 interface TrialRequestCardProps {
   request: TrialRequest;
@@ -65,6 +74,9 @@ export function TrialRequestCard({
       onAccepted?.();
     }
   };
+
+  const unlockCost = UNLOCK_COSTS[request.urgency];
+  const trialExhausted = freeRequestsRemaining <= 0;
 
   // Show claimed state with client info
   if (claimResult?.success) {
@@ -166,23 +178,41 @@ export function TrialRequestCard({
 
         {/* Action section */}
         <div className="p-4 border-t border-border">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-4">
             <div className="text-sm text-muted-foreground">
-              <span className="font-medium text-foreground">Chi prima arriva, meglio alloggia!</span>
-              <p className="text-xs">Accetta per primo per ottenere i dati del cliente</p>
+              {trialExhausted ? (
+                <>
+                  <span className="font-medium text-foreground flex items-center gap-1">
+                    <Lock className="h-3.5 w-3.5" />
+                    Contatto bloccato
+                  </span>
+                  <p className="text-xs flex items-center gap-1 mt-0.5">
+                    <Coins className="h-3 w-3" />
+                    Servono <span className="font-semibold text-primary">{unlockCost} crediti</span> per sbloccare
+                  </p>
+                </>
+              ) : (
+                <>
+                  <span className="font-medium text-foreground">Chi prima arriva, meglio alloggia!</span>
+                  <p className="text-xs">Accetta per primo per ottenere i dati del cliente</p>
+                </>
+              )}
             </div>
             <Button
               onClick={handleClaim}
-              disabled={claiming || freeRequestsRemaining <= 0}
+              disabled={claiming || trialExhausted}
               size="sm"
-              className="gap-2"
+              className="gap-2 shrink-0"
+              variant={trialExhausted ? "outline" : "default"}
             >
               {claiming ? (
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+              ) : trialExhausted ? (
+                <Coins className="h-4 w-4" />
               ) : (
                 <Zap className="h-4 w-4" />
               )}
-              Accetta ora
+              {trialExhausted ? `${unlockCost} crediti` : 'Accetta ora'}
             </Button>
           </div>
         </div>

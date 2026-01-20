@@ -197,7 +197,7 @@ function DashboardContent() {
     ? trialRequests.length
     : requests.filter(r => !isRequestUnlocked(r.id)).length;
 
-  if (authLoading || profileLoading) {
+  if (authLoading || profileLoading || subLoading) {
     return (
       <DashboardLayout title="Dashboard">
         <div className="py-16 flex items-center justify-center">

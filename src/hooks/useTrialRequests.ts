@@ -32,6 +32,10 @@ export interface AcceptedTrialRequest extends TrialRequest {
   accepted_at: string;
 }
 
+/**
+ * Hook for fetching and claiming available requests
+ * Works for both trial users (free claims) and credit-based users (paid unlocks)
+ */
 export function useTrialRequests(profileOverride?: PlumberProfile | null) {
   const { profile: internalProfile } = usePlumberProfile();
   const profile = profileOverride ?? internalProfile;
@@ -46,19 +50,21 @@ export function useTrialRequests(profileOverride?: PlumberProfile | null) {
   const freeRequestsRemaining = subscription?.free_requests_remaining ?? 0;
 
   const fetchAvailableRequests = useCallback(async () => {
-    if (!profile || !isTrial) {
+    if (!profile) {
       setRequests([]);
       setLoading(false);
       return;
     }
 
     try {
+      // Fetch all available requests in the plumber's service areas
+      // With credit-based system, all plumbers can see all requests
       const { data, error } = await supabase.rpc('get_trial_available_requests', {
         p_plumber_id: profile.id,
       });
 
       if (error) {
-        console.error('Error fetching trial requests:', error);
+        console.error('Error fetching available requests:', error);
         setRequests([]);
       } else {
         setRequests((data || []) as TrialRequest[]);
@@ -69,10 +75,10 @@ export function useTrialRequests(profileOverride?: PlumberProfile | null) {
     } finally {
       setLoading(false);
     }
-  }, [profile, isTrial]);
+  }, [profile]);
 
   const fetchAcceptedRequests = useCallback(async () => {
-    if (!profile || !isTrial) {
+    if (!profile) {
       return;
     }
 
@@ -85,11 +91,10 @@ export function useTrialRequests(profileOverride?: PlumberProfile | null) {
           'id, intervention_type, urgency, property_type, accessibility, city, description, created_at, is_exclusive, client_name, client_phone, client_email, status, is_contact_unlocked'
         )
         .eq('is_contact_unlocked', true)
-        .eq('status', 'accepted')
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('Error fetching accepted trial requests:', error);
+        console.error('Error fetching accepted requests:', error);
         return;
       }
 
@@ -120,7 +125,7 @@ export function useTrialRequests(profileOverride?: PlumberProfile | null) {
     } catch (err) {
       console.error('Error in fetchAcceptedRequests:', err);
     }
-  }, [profile, isTrial]);
+  }, [profile]);
 
   // Fetch requests on mount and when profile changes
   useEffect(() => {
@@ -130,7 +135,7 @@ export function useTrialRequests(profileOverride?: PlumberProfile | null) {
 
   // Refresh every 30 seconds to catch new requests / accepted requests
   useEffect(() => {
-    if (!isTrial || !profile) return;
+    if (!profile) return;
 
     const interval = setInterval(() => {
       fetchAvailableRequests();
@@ -138,7 +143,7 @@ export function useTrialRequests(profileOverride?: PlumberProfile | null) {
     }, 30000);
 
     return () => clearInterval(interval);
-  }, [isTrial, profile, fetchAvailableRequests, fetchAcceptedRequests]);
+  }, [profile, fetchAvailableRequests, fetchAcceptedRequests]);
 
   const claimRequest = async (requestId: string): Promise<ClaimResult> => {
     if (!profile) {
@@ -146,7 +151,7 @@ export function useTrialRequests(profileOverride?: PlumberProfile | null) {
     }
 
     if (freeRequestsRemaining <= 0) {
-      return { success: false, message: 'Hai esaurito le richieste gratuite. Scegli un piano per continuare.' };
+      return { success: false, message: 'Hai esaurito le richieste gratuite. Usa i crediti per sbloccare.' };
     }
 
     // Get the request data before claiming (we need city and intervention_type for the email)

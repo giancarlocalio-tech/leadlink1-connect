@@ -275,7 +275,7 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Find plumbers who serve this city and handle this intervention type
-    // Join with subscriptions to filter by active/trial status
+    // With credit-based system: notify ALL plumbers in the area (they can unlock with trial or credits)
     const { data: plumbersWithSubs, error: plumbersError } = await supabase
       .from("plumber_profiles")
       .select(`
@@ -290,6 +290,9 @@ const handler = async (req: Request): Promise<Response> => {
           is_trial,
           free_requests_remaining,
           is_available
+        ),
+        plumber_credits (
+          balance
         )
       `)
       .contains("intervention_types", [serviceRequest.intervention_type]);
@@ -308,8 +311,9 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Filter plumbers who:
     // 1. Serve the request city
-    // 2. Have an active subscription OR are in trial with remaining requests
-    // 3. Are available
+    // 2. Are available
+    // 3. Have trial requests remaining OR have credits (can potentially unlock)
+    // With credit-based system: all registered plumbers can see requests and buy credits
     const matchingPlumbers = (plumbersWithSubs || []).filter((plumber) => {
       // Check if the city is in their service areas
       const serviceAreas = plumber.service_areas || [];
@@ -341,11 +345,20 @@ const handler = async (req: Request): Promise<Response> => {
       if (Array.isArray(subsData)) {
         sub = subsData.length > 0 ? subsData[0] : null;
       } else if (subsData && typeof subsData === 'object') {
-        // Sometimes Supabase returns a single object instead of array for 1:1 relations
         sub = subsData;
       }
       
-      console.log(`Plumber ${plumber.email}: subscription data type=${typeof subsData}, isArray=${Array.isArray(subsData)}, raw=${JSON.stringify(subsData)}`);
+      // Check credits - plumber_credits can be array or object
+      const creditsData = (plumber as any).plumber_credits;
+      let creditBalance = 0;
+      
+      if (Array.isArray(creditsData) && creditsData.length > 0) {
+        creditBalance = creditsData[0]?.balance ?? 0;
+      } else if (creditsData && typeof creditsData === 'object') {
+        creditBalance = creditsData.balance ?? 0;
+      }
+      
+      console.log(`Plumber ${plumber.email}: subscription=${JSON.stringify(sub)}, creditBalance=${creditBalance}`);
       
       if (!sub) {
         console.log(`Plumber ${plumber.email}: no subscription found after parsing`);
@@ -358,14 +371,19 @@ const handler = async (req: Request): Promise<Response> => {
         return false;
       }
 
-      // Active subscription OR trial with remaining requests
-      // Note: trial users have status 'pending' but should still receive notifications
-      const hasActiveSubscription = sub.status === 'active' && !sub.is_trial;
+      // With credit-based system:
+      // - Trial users with remaining free requests can unlock for free
+      // - Users with credits can pay to unlock
+      // - Users with neither can still see requests (might buy credits later)
+      // Notify ALL available plumbers in the area
       const hasTrialRequestsLeft = sub.is_trial === true && (sub.free_requests_remaining ?? 0) > 0;
+      const hasCredits = creditBalance > 0;
+      const isRegistered = true; // All plumbers in DB are registered
 
-      console.log(`Plumber ${plumber.email}: status=${sub.status}, is_trial=${sub.is_trial}, free_remaining=${sub.free_requests_remaining}, hasActive=${hasActiveSubscription}, hasTrial=${hasTrialRequestsLeft}`);
+      console.log(`Plumber ${plumber.email}: is_trial=${sub.is_trial}, free_remaining=${sub.free_requests_remaining}, hasTrialLeft=${hasTrialRequestsLeft}, hasCredits=${hasCredits}`);
 
-      return hasActiveSubscription || hasTrialRequestsLeft;
+      // Notify all registered plumbers in the area (they can always buy credits)
+      return isRegistered;
     });
 
     console.log("Matching plumbers for city:", matchingPlumbers.length);

@@ -73,12 +73,10 @@ function RequestsContent() {
   }, [user, authLoading, navigate]);
 
   useEffect(() => {
-    if (user && profile && !isTrial) {
-      fetchRequests();
-    } else if (isTrial) {
-      setLoadingRequests(false);
-    }
-  }, [user, profile, isTrial]);
+    // With credit-based system, all users see the same requests via useTrialRequests
+    // No need to fetch separately for non-trial users
+    setLoadingRequests(false);
+  }, [user, profile]);
 
   // Scroll to highlighted request when loaded
   useEffect(() => {

@@ -30,9 +30,20 @@ const UNLOCK_COSTS: Record<UrgencyType, number> = {
   prossimi_giorni: 2,
 };
 
+export interface UnlockWithCreditsResult {
+  success: boolean;
+  message: string;
+  credits_spent?: number;
+  new_balance?: number;
+  client_name?: string;
+  client_phone?: string;
+  client_email?: string;
+}
+
 interface TrialRequestCardProps {
   request: TrialRequest;
   onClaim: (requestId: string) => Promise<ClaimResult>;
+  onUnlockWithCredits?: (requestId: string) => Promise<UnlockWithCreditsResult>;
   claiming: boolean;
   freeRequestsRemaining: number;
   onAccepted?: () => void;
@@ -41,11 +52,14 @@ interface TrialRequestCardProps {
 export function TrialRequestCard({ 
   request, 
   onClaim, 
+  onUnlockWithCredits,
   claiming, 
   freeRequestsRemaining,
   onAccepted
 }: TrialRequestCardProps) {
   const [claimResult, setClaimResult] = useState<ClaimResult | null>(null);
+  const [creditUnlockResult, setCreditUnlockResult] = useState<UnlockWithCreditsResult | null>(null);
+  const [unlocking, setUnlocking] = useState(false);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('it-IT', {
@@ -75,8 +89,91 @@ export function TrialRequestCard({
     }
   };
 
+  const handleUnlockWithCredits = async () => {
+    if (!onUnlockWithCredits) return;
+    
+    setUnlocking(true);
+    try {
+      const result = await onUnlockWithCredits(request.id);
+      if (result.success) {
+        setCreditUnlockResult(result);
+        onAccepted?.();
+      } else {
+        // Show error via toast (imported from sonner)
+        const { toast } = await import('sonner');
+        toast.error(result.message);
+      }
+    } finally {
+      setUnlocking(false);
+    }
+  };
+
   const unlockCost = UNLOCK_COSTS[request.urgency];
   const trialExhausted = freeRequestsRemaining <= 0;
+  const isProcessing = claiming || unlocking;
+
+  // Show unlocked state with client info (credit unlock)
+  if (creditUnlockResult?.success) {
+    return (
+      <Card className="overflow-hidden border-success/50 bg-success/5">
+        <CardContent className="p-0">
+          {/* Success Header */}
+          <div className="p-4 border-b border-success/30 bg-success/10">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-success">
+                <CheckCircle2 className="h-5 w-5" />
+                <span className="font-semibold">Contatto sbloccato!</span>
+              </div>
+              <Badge variant="secondary" className="gap-1">
+                <Coins className="h-3 w-3" />
+                -{creditUnlockResult.credits_spent} crediti
+              </Badge>
+            </div>
+          </div>
+
+          {/* Request Details */}
+          <div className="p-4 border-b border-border">
+            <div className="flex flex-wrap gap-2 mb-3">
+              <Badge variant="default">
+                {INTERVENTION_LABELS[request.intervention_type]}
+              </Badge>
+              <Badge variant={getUrgencyVariant(request.urgency)}>
+                {request.urgency === 'subito' && <AlertTriangle className="h-3 w-3 mr-1" />}
+                {URGENCY_LABELS[request.urgency]}
+              </Badge>
+            </div>
+            <p className="text-foreground leading-relaxed">{request.description}</p>
+          </div>
+
+          {/* Client Contact Info */}
+          <div className="p-4 bg-success/5">
+            <h4 className="font-medium mb-3">Dati del cliente</h4>
+            <div className="space-y-2">
+              <p className="font-medium text-foreground">{creditUnlockResult.client_name}</p>
+              <div className="flex flex-wrap gap-4">
+                <a
+                  href={`tel:${creditUnlockResult.client_phone}`}
+                  className="flex items-center gap-2 text-primary hover:underline font-medium"
+                >
+                  <Phone className="h-4 w-4" />
+                  {creditUnlockResult.client_phone}
+                </a>
+                {creditUnlockResult.client_email && (
+                  <a
+                    href={`mailto:${creditUnlockResult.client_email}`}
+                    className="flex items-center gap-2 text-primary hover:underline"
+                  >
+                    <Mail className="h-4 w-4" />
+                    {creditUnlockResult.client_email}
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   // Show claimed state with client info
   if (claimResult?.success) {
@@ -199,20 +296,20 @@ export function TrialRequestCard({
               )}
             </div>
             <Button
-              onClick={handleClaim}
-              disabled={claiming || trialExhausted}
+              onClick={trialExhausted ? handleUnlockWithCredits : handleClaim}
+              disabled={isProcessing || (trialExhausted && !onUnlockWithCredits)}
               size="sm"
               className="gap-2 shrink-0"
-              variant={trialExhausted ? "outline" : "default"}
+              variant={trialExhausted ? "default" : "default"}
             >
-              {claiming ? (
+              {isProcessing ? (
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
               ) : trialExhausted ? (
                 <Coins className="h-4 w-4" />
               ) : (
                 <Zap className="h-4 w-4" />
               )}
-              {trialExhausted ? `${unlockCost} crediti` : 'Accetta ora'}
+              {trialExhausted ? `Sblocca (${unlockCost} crediti)` : 'Accetta ora'}
             </Button>
           </div>
         </div>

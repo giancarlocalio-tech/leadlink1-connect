@@ -10,9 +10,11 @@ import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { RequestCard } from '@/components/dashboard/RequestCard';
 import { TrialPaywall } from '@/components/dashboard/TrialPaywall';
 import { TrialRequestCard } from '@/components/dashboard/TrialRequestCard';
+import type { UnlockWithCreditsResult } from '@/components/dashboard/TrialRequestCard';
 import { AcceptedTrialRequestCard } from '@/components/dashboard/AcceptedTrialRequestCard';
 import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
+import { useCredits } from '@/hooks/useCredits';
 import { SubscriptionProvider, useSubscriptionContext } from '@/contexts/SubscriptionContext';
 import { useTrialRequests } from '@/hooks/useTrialRequests';
 import { supabase } from '@/integrations/supabase/client';
@@ -52,6 +54,8 @@ function RequestsContent() {
     freeRequestsRemaining,
     claimRequest,
   } = useTrialRequests(profile);
+
+  const { refreshCredits, refreshTransactions } = useCredits();
   
   const [requests, setRequests] = useState<ServiceRequest[]>([]);
   const [loadingRequests, setLoadingRequests] = useState(true);
@@ -125,6 +129,43 @@ function RequestsContent() {
     const plan = getCurrentPlan();
     const isExclusive = plan?.contacts_are_exclusive ?? false;
     return await unlockContact(requestId, isExclusive);
+  };
+
+  // Function to unlock a request using credits (for trial exhausted users)
+  const handleUnlockWithCredits = async (requestId: string): Promise<UnlockWithCreditsResult> => {
+    if (!profile) {
+      return { success: false, message: 'Profilo non trovato' };
+    }
+
+    const { data, error } = await supabase.rpc('unlock_contact_with_credits', {
+      p_plumber_id: profile.id,
+      p_request_id: requestId,
+    });
+
+    if (error) {
+      console.error('Error unlocking with credits:', error);
+      return { success: false, message: error.message };
+    }
+
+    if (data && data.length > 0) {
+      const result = data[0];
+      if (result.success) {
+        // Refresh credits balance and transactions
+        await Promise.all([refreshCredits(), refreshTransactions()]);
+        return {
+          success: true,
+          message: result.message,
+          credits_spent: result.credits_spent,
+          new_balance: result.new_balance,
+          client_name: result.client_name,
+          client_phone: result.client_phone,
+          client_email: result.client_email,
+        };
+      }
+      return { success: false, message: result.message };
+    }
+
+    return { success: false, message: 'Nessun risultato dalla funzione' };
   };
 
   // Filter requests (for non-trial users)
@@ -261,6 +302,7 @@ function RequestsContent() {
                   <TrialRequestCard
                     request={request}
                     onClaim={claimRequest}
+                    onUnlockWithCredits={handleUnlockWithCredits}
                     claiming={claiming === request.id}
                     freeRequestsRemaining={freeRequestsRemaining}
                   />

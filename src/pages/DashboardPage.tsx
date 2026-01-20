@@ -372,73 +372,51 @@ function DashboardContent() {
             />
           </div>
 
-          {/* Recent Requests - Only shown for trial users */}
-          {isInTrialMode && (
-            <div className="lg:col-span-2">
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <div>
-                    <CardTitle>Richieste disponibili</CardTitle>
-                    <CardDescription>
-                      Le richieste disponibili nella tua zona
-                    </CardDescription>
+          {/* Recent Requests - Shown for all users */}
+          <div className="lg:col-span-2">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle>Richieste disponibili</CardTitle>
+                  <CardDescription>
+                    Le richieste disponibili nella tua zona
+                  </CardDescription>
+                </div>
+                <Button variant="outline" size="sm" onClick={() => navigate('/dashboard/richieste')}>
+                  Vedi tutte
+                  <ArrowRight className="h-4 w-4 ml-1" />
+                </Button>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {loadingTrialRequests ? (
+                  <div className="py-8 text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
                   </div>
-                  <Button variant="outline" size="sm" onClick={() => navigate('/dashboard/richieste')}>
-                    Vedi tutte
-                    <ArrowRight className="h-4 w-4 ml-1" />
-                  </Button>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {loadingTrialRequests ? (
-                    <div className="py-8 text-center">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-                    </div>
-                  ) : trialRequests.length === 0 ? (
-                    <div className="py-8 text-center">
-                      <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                      <h3 className="font-semibold mb-2">Nessuna richiesta</h3>
-                      <p className="text-muted-foreground text-sm">
-                        Non ci sono richieste nelle tue zone di servizio.
-                      </p>
-                    </div>
-                  ) : (
-                    trialRequests.slice(0, 3).map((request) => (
-                      <TrialRequestCard
-                        key={request.id}
-                        request={request}
-                        onClaim={claimTrialRequest}
-                        onUnlockWithCredits={handleUnlockWithCredits}
-                        claiming={claimingTrialRequestId === request.id}
-                        freeRequestsRemaining={trialFreeRequestsRemaining}
-                        creditBalance={credits?.balance ?? 0}
-                        onAccepted={() => fetchAssignedRequests()}
-                      />
-                    ))
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-          )}
-
-          {/* Info card for subscribers - they only see assigned/accepted requests */}
-          {!isInTrialMode && (
-            <div className="lg:col-span-2">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Zap className="h-5 w-5 text-primary" />
-                    Come funziona
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    Le richieste verranno assegnate automaticamente a te in base al tuo piano e alla tua disponibilità. 
-                    Quando ricevi una richiesta, la vedrai nella sezione "Richieste assegnate a te" in alto.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          )}
+                ) : trialRequests.length === 0 ? (
+                  <div className="py-8 text-center">
+                    <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                    <h3 className="font-semibold mb-2">Nessuna richiesta</h3>
+                    <p className="text-muted-foreground text-sm">
+                      Non ci sono richieste nelle tue zone di servizio.
+                    </p>
+                  </div>
+                ) : (
+                  trialRequests.slice(0, 3).map((request) => (
+                    <TrialRequestCard
+                      key={request.id}
+                      request={request}
+                      onClaim={claimTrialRequest}
+                      onUnlockWithCredits={handleUnlockWithCredits}
+                      claiming={claimingTrialRequestId === request.id}
+                      freeRequestsRemaining={trialFreeRequestsRemaining}
+                      creditBalance={credits?.balance ?? 0}
+                      onAccepted={() => fetchAssignedRequests()}
+                    />
+                  ))
+                )}
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </DashboardLayout>

@@ -324,6 +324,7 @@ serve(async (req) => {
               .update({
                 plan_type: planType,
                 status: 'active',
+                is_trial: false, // User has paid, no longer in trial
                 stripe_customer_id: customerId,
                 stripe_subscription_id: stripeSubscriptionId,
                 current_period_start: subscriptionStart,
@@ -363,6 +364,7 @@ serve(async (req) => {
                 plumber_id: plumberProfile.id,
                 plan_type: planType,
                 status: 'active',
+                is_trial: false, // User has paid, no longer in trial
                 stripe_customer_id: customerId,
                 stripe_subscription_id: stripeSubscriptionId,
                 current_period_start: subscriptionStart,

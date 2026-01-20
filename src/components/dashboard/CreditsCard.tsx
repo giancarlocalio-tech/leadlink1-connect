@@ -1,4 +1,4 @@
-import { Coins, ArrowRight, Sparkles } from 'lucide-react';
+import { Coins, ArrowRight, Sparkles, AlertTriangle, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -16,7 +16,7 @@ export function CreditsCard({
   isTrial = false,
   onBuyCredits 
 }: CreditsCardProps) {
-  // Trial users: show trial info
+  // Trial users with free requests remaining
   if (isTrial && freeRequestsRemaining > 0) {
     return (
       <Card className="border-primary/30 bg-gradient-to-r from-primary/5 to-primary/10">
@@ -26,7 +26,10 @@ export function CreditsCard({
               <Sparkles className="h-5 w-5 text-primary" />
               Prova gratuita attiva
             </CardTitle>
-            <Badge variant="secondary">Trial</Badge>
+            <Badge className="bg-primary/20 text-primary hover:bg-primary/30 border-primary/30">
+              <Sparkles className="h-3 w-3 mr-1" />
+              Trial
+            </Badge>
           </div>
           <CardDescription>
             Hai ancora <span className="font-semibold text-primary">{freeRequestsRemaining}</span>{' '}
@@ -48,40 +51,90 @@ export function CreditsCard({
     );
   }
 
-  // Trial exhausted or non-trial users: show credits balance
+  // Trial exhausted (user used all free requests, no credits yet)
+  if (isTrial && freeRequestsRemaining <= 0 && balance === 0) {
+    return (
+      <Card className="border-destructive/30 bg-gradient-to-br from-destructive/5 via-background to-destructive/10">
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-destructive" />
+              Trial terminato
+            </CardTitle>
+            <Badge variant="destructive" className="gap-1">
+              <AlertTriangle className="h-3 w-3" />
+              Esaurito
+            </Badge>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-baseline gap-2 mb-4">
+            <span className="text-4xl font-bold text-muted-foreground">0</span>
+            <span className="text-muted-foreground">crediti disponibili</span>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Hai usato tutte le richieste gratuite. Acquista crediti per continuare a ricevere clienti.
+          </p>
+        </CardContent>
+        <CardFooter>
+          <Button onClick={onBuyCredits} className="w-full gap-2">
+            <Coins className="h-4 w-4" />
+            Acquista crediti ora
+          </Button>
+        </CardFooter>
+      </Card>
+    );
+  }
+
+  // Non-trial users with credits
+  const hasCredits = balance > 0;
+  
   return (
-    <Card className="bg-gradient-to-br from-primary/10 via-background to-primary/5 border-primary/20">
+    <Card className={hasCredits 
+      ? "bg-gradient-to-br from-success/10 via-background to-success/5 border-success/30"
+      : "bg-gradient-to-br from-destructive/10 via-background to-destructive/5 border-destructive/30"
+    }>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg flex items-center gap-2">
-            <Coins className="h-5 w-5 text-primary" />
+            <Coins className={`h-5 w-5 ${hasCredits ? 'text-success' : 'text-destructive'}`} />
             I tuoi crediti
           </CardTitle>
-          {balance === 0 && (
-            <Badge variant="destructive">Esauriti</Badge>
+          {hasCredits ? (
+            <Badge className="bg-success/20 text-success hover:bg-success/30 border-success/30 gap-1">
+              <CheckCircle className="h-3 w-3" />
+              Attivi
+            </Badge>
+          ) : (
+            <Badge variant="destructive" className="gap-1">
+              <AlertTriangle className="h-3 w-3" />
+              Esauriti
+            </Badge>
           )}
         </div>
       </CardHeader>
       <CardContent>
         <div className="flex items-baseline gap-2 mb-4">
-          <span className="text-4xl font-bold">{balance}</span>
+          <span className={`text-4xl font-bold ${hasCredits ? 'text-success' : 'text-muted-foreground'}`}>
+            {balance}
+          </span>
           <span className="text-muted-foreground">crediti disponibili</span>
         </div>
         
-        {balance === 0 ? (
+        {hasCredits ? (
           <p className="text-sm text-muted-foreground">
-            Acquista crediti per sbloccare i contatti dei clienti nella tua zona.
+            Usa i crediti per sbloccare i contatti. Il costo varia in base all'urgenza.
           </p>
         ) : (
           <p className="text-sm text-muted-foreground">
-            Usa i crediti per sbloccare i contatti. Il costo varia in base all'urgenza.
+            Acquista crediti per sbloccare i contatti dei clienti nella tua zona.
           </p>
         )}
       </CardContent>
       <CardFooter>
-        <Button onClick={onBuyCredits} className="w-full gap-2" variant={balance === 0 ? 'default' : 'outline'}>
+        <Button onClick={onBuyCredits} className="w-full gap-2" variant={hasCredits ? 'outline' : 'default'}>
           <Coins className="h-4 w-4" />
-          {balance === 0 ? 'Acquista crediti' : 'Ricarica crediti'}
+          {hasCredits ? 'Ricarica crediti' : 'Acquista crediti'}
         </Button>
       </CardFooter>
     </Card>

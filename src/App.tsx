@@ -1,7 +1,7 @@
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { CookieConsent } from "@/components/CookieConsent";
 import HomePage from "./pages/HomePage";
@@ -48,7 +48,7 @@ const App = () => (
             <Route path="/auth/confirm" element={<AuthConfirmPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/dashboard/richieste" element={<RequestsPage />} />
-            <Route path="/dashboard/abbonamento" element={<SubscriptionPage />} />
+            <Route path="/dashboard/abbonamento" element={<Navigate to="/dashboard/crediti" replace />} />
             <Route path="/dashboard/crediti" element={<CreditsPage />} />
             <Route path="/dashboard/pagamento-completato" element={<PaymentSuccessPage />} />
             <Route path="/dashboard/profilo" element={<ProfilePage />} />

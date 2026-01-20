@@ -46,6 +46,7 @@ interface TrialRequestCardProps {
   onUnlockWithCredits?: (requestId: string) => Promise<UnlockWithCreditsResult>;
   claiming: boolean;
   freeRequestsRemaining: number;
+  creditBalance?: number;
   onAccepted?: () => void;
 }
 
@@ -55,6 +56,7 @@ export function TrialRequestCard({
   onUnlockWithCredits,
   claiming, 
   freeRequestsRemaining,
+  creditBalance = 0,
   onAccepted
 }: TrialRequestCardProps) {
   const [claimResult, setClaimResult] = useState<ClaimResult | null>(null);
@@ -110,6 +112,7 @@ export function TrialRequestCard({
 
   const unlockCost = UNLOCK_COSTS[request.urgency];
   const trialExhausted = freeRequestsRemaining <= 0;
+  const hasInsufficientCredits = trialExhausted && creditBalance < unlockCost;
   const isProcessing = claiming || unlocking;
 
   // Show unlocked state with client info (credit unlock)
@@ -283,10 +286,17 @@ export function TrialRequestCard({
                     <Lock className="h-3.5 w-3.5" />
                     Contatto bloccato
                   </span>
-                  <p className="text-xs flex items-center gap-1 mt-0.5">
-                    <Coins className="h-3 w-3" />
-                    Servono <span className="font-semibold text-primary">{unlockCost} crediti</span> per sbloccare
-                  </p>
+                  {hasInsufficientCredits ? (
+                    <p className="text-xs flex items-center gap-1 mt-0.5 text-destructive">
+                      <Coins className="h-3 w-3" />
+                      Crediti insufficienti ({creditBalance}/{unlockCost})
+                    </p>
+                  ) : (
+                    <p className="text-xs flex items-center gap-1 mt-0.5">
+                      <Coins className="h-3 w-3" />
+                      Servono <span className="font-semibold text-primary">{unlockCost} crediti</span> per sbloccare
+                    </p>
+                  )}
                 </>
               ) : (
                 <>
@@ -297,10 +307,10 @@ export function TrialRequestCard({
             </div>
             <Button
               onClick={trialExhausted ? handleUnlockWithCredits : handleClaim}
-              disabled={isProcessing || (trialExhausted && !onUnlockWithCredits)}
+              disabled={isProcessing || (trialExhausted && (!onUnlockWithCredits || hasInsufficientCredits))}
               size="sm"
               className="gap-2 shrink-0"
-              variant={trialExhausted ? "default" : "default"}
+              variant={hasInsufficientCredits ? "outline" : "default"}
             >
               {isProcessing ? (
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -309,7 +319,11 @@ export function TrialRequestCard({
               ) : (
                 <Zap className="h-4 w-4" />
               )}
-              {trialExhausted ? `Sblocca (${unlockCost} crediti)` : 'Accetta ora'}
+              {hasInsufficientCredits 
+                ? 'Crediti insufficienti' 
+                : trialExhausted 
+                  ? `Sblocca (${unlockCost} crediti)` 
+                  : 'Accetta ora'}
             </Button>
           </div>
         </div>

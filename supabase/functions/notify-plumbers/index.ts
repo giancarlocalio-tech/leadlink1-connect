@@ -561,17 +561,25 @@ const handler = async (req: Request): Promise<Response> => {
     
     const unregWhatsappPromises = matchingUnregistered.map(async (unreg) => {
       try {
-        // Format phone number
-        let formattedPhone = unreg.phone.replace(/\s+/g, '').replace(/^0+/, '');
-        if (!formattedPhone.startsWith('+') && !formattedPhone.startsWith('39')) {
-          formattedPhone = '39' + formattedPhone;
+        // Format phone number for Italian numbers
+        // Remove spaces, leading zeros, and +
+        let cleanPhone = unreg.phone.replace(/\s+/g, '').replace(/^0+/, '').replace(/^\+/, '');
+        
+        // If it's a 10-digit Italian number (3xxxxxxxxx), add 39 prefix
+        // Italian mobile numbers start with 3 and are 10 digits
+        if (cleanPhone.length === 10 && cleanPhone.startsWith('3')) {
+          cleanPhone = '39' + cleanPhone;
         }
-        formattedPhone = formattedPhone.replace(/^\+/, '');
+        // If already starts with 39 and is 12 digits, it's already formatted
+        // Otherwise add 39 prefix
+        else if (!cleanPhone.startsWith('39')) {
+          cleanPhone = '39' + cleanPhone;
+        }
 
-        console.log(`Sending WhatsApp to unregistered plumber ${unreg.full_name}: ${formattedPhone}`);
+        console.log(`Sending WhatsApp to unregistered plumber ${unreg.full_name}: ${cleanPhone}`);
 
         // Find or create contact in respond.io
-        const contactResponse = await fetch(`https://api.respond.io/v2/contact/phone:${formattedPhone}`, {
+        const contactResponse = await fetch(`https://api.respond.io/v2/contact/phone:${cleanPhone}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${respondIoApiKey}`,
@@ -586,7 +594,10 @@ const handler = async (req: Request): Promise<Response> => {
           contactId = contactData.id;
           console.log(`Found existing contact: ${contactId}`);
         } else {
-          // Create new contact
+          // Create new contact with proper phone format (+39...)
+          const phoneWithPlus = '+' + cleanPhone;
+          console.log(`Creating new contact with phone: ${phoneWithPlus}`);
+          
           const createContactResponse = await fetch(`https://api.respond.io/v2/contact`, {
             method: 'POST',
             headers: {
@@ -594,7 +605,7 @@ const handler = async (req: Request): Promise<Response> => {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              phone: formattedPhone,
+              phone: phoneWithPlus,
               firstName: unreg.full_name,
             }),
           });
@@ -652,6 +663,18 @@ const handler = async (req: Request): Promise<Response> => {
         if (!messageResponse.ok) {
           const errorText = await messageResponse.text();
           console.error(`Failed to send message to ${unreg.full_name}: ${errorText}`);
+          
+          // Log the failed WhatsApp notification
+          await supabase.from("whatsapp_logs").insert({
+            recipient_phone: '+' + cleanPhone,
+            recipient_name: unreg.full_name,
+            message_type: "unregistered_lead",
+            request_id: serviceRequest.id,
+            plumber_id: null,
+            status: "failed",
+            error_message: `Failed to send template: ${errorText}`,
+          });
+          
           return { success: false, name: unreg.full_name, error: errorText };
         }
 

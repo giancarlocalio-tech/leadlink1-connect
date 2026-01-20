@@ -55,7 +55,7 @@ function RequestsContent() {
     claimRequest,
   } = useTrialRequests(profile);
 
-  const { refreshCredits, refreshTransactions } = useCredits();
+  const { credits, refreshCredits, refreshTransactions } = useCredits();
   
   const [requests, setRequests] = useState<ServiceRequest[]>([]);
   const [loadingRequests, setLoadingRequests] = useState(true);
@@ -305,6 +305,7 @@ function RequestsContent() {
                     onUnlockWithCredits={handleUnlockWithCredits}
                     claiming={claiming === request.id}
                     freeRequestsRemaining={freeRequestsRemaining}
+                    creditBalance={credits?.balance ?? 0}
                   />
                 </div>
               ))

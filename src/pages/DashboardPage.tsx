@@ -16,6 +16,7 @@ import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import { SubscriptionProvider, useSubscriptionContext } from '@/contexts/SubscriptionContext';
 import { useTrialRequests } from '@/hooks/useTrialRequests';
 import { useCredits } from '@/hooks/useCredits';
+import type { UnlockWithCreditsResult } from '@/components/dashboard/TrialRequestCard';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { ServiceRequest, InterventionType, UrgencyType, PropertyType, AccessibilityType } from '@/lib/types';
@@ -45,7 +46,7 @@ function DashboardContent() {
     unlocks
   } = useSubscriptionContext();
   
-  const { credits } = useCredits();
+  const { credits, refreshCredits, refreshTransactions } = useCredits();
 
   const {
     requests: trialRequests,
@@ -180,6 +181,43 @@ function DashboardContent() {
     const plan = getCurrentPlan();
     const isExclusive = plan?.contacts_are_exclusive ?? false;
     return await unlockContact(requestId, isExclusive);
+  };
+
+  // Function to unlock a request using credits (for trial exhausted users)
+  const handleUnlockWithCredits = async (requestId: string): Promise<UnlockWithCreditsResult> => {
+    if (!profile) {
+      return { success: false, message: 'Profilo non trovato' };
+    }
+
+    const { data, error } = await supabase.rpc('unlock_contact_with_credits', {
+      p_plumber_id: profile.id,
+      p_request_id: requestId,
+    });
+
+    if (error) {
+      console.error('Error unlocking with credits:', error);
+      return { success: false, message: error.message };
+    }
+
+    if (data && data.length > 0) {
+      const result = data[0];
+      if (result.success) {
+        // Refresh credits balance and transactions
+        await Promise.all([refreshCredits(), refreshTransactions()]);
+        return {
+          success: true,
+          message: result.message,
+          credits_spent: result.credits_spent,
+          new_balance: result.new_balance,
+          client_name: result.client_name,
+          client_phone: result.client_phone,
+          client_email: result.client_email,
+        };
+      }
+      return { success: false, message: result.message };
+    }
+
+    return { success: false, message: 'Nessun risultato dalla funzione' };
   };
 
   const isInTrialMode = subscription?.is_trial === true;
@@ -369,6 +407,7 @@ function DashboardContent() {
                         key={request.id}
                         request={request}
                         onClaim={claimTrialRequest}
+                        onUnlockWithCredits={handleUnlockWithCredits}
                         claiming={claimingTrialRequestId === request.id}
                         freeRequestsRemaining={trialFreeRequestsRemaining}
                         onAccepted={() => fetchAssignedRequests()}

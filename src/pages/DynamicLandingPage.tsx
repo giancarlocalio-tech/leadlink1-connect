@@ -37,6 +37,13 @@ import { getServiceRichContent, generateCityServiceContent } from '@/lib/service
 import InlineWizard from '@/components/InlineWizard';
 import heroBg from '@/assets/hero-bg.avif';
 
+// SEO Components
+import { Breadcrumb } from '@/components/seo/Breadcrumb';
+import { LocalStats } from '@/components/seo/LocalStats';
+import { ProfessionalsList } from '@/components/seo/ProfessionalsList';
+import { RelatedServices } from '@/components/seo/RelatedServices';
+import { CustomerReviews } from '@/components/seo/CustomerReviews';
+
 // Icon mapping
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Wrench,
@@ -117,8 +124,8 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
     ...cityData.nearbyAreas.map((area) => ({ type: 'City' as const, name: area }))
   ];
 
-  // Build breadcrumbs
-  const breadcrumbs = serviceData
+  // Build breadcrumbs for both visual and JSON-LD
+  const breadcrumbItems = serviceData
     ? [
         { name: cityData.name, url: `${BASE_URL}/${cityData.slug}` },
         { name: serviceData.name, url: canonicalUrl }
@@ -143,7 +150,7 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
           ]
     },
     getCityFAQs(serviceShortName, cityData.name),
-    breadcrumbs
+    breadcrumbItems
   );
 
   // Services to display
@@ -198,6 +205,9 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
           {JSON.stringify(jsonLd)}
         </script>
       </Helmet>
+
+      {/* Breadcrumb Navigation */}
+      <Breadcrumb items={breadcrumbItems} />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden min-h-[450px] md:min-h-[500px] flex items-center justify-center">
@@ -255,6 +265,9 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
           </div>
         </div>
       </section>
+
+      {/* Local Statistics Section - Like ProntoPro */}
+      <LocalStats cityName={cityData.name} serviceName={serviceData?.name} />
 
       {/* Services Section */}
       <section className="py-16 bg-muted/50">
@@ -478,6 +491,16 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
         </div>
       </section>
 
+      {/* Professionals List Section - Like ProntoPro */}
+      <ProfessionalsList 
+        cityName={cityData.name} 
+        serviceName={serviceData?.name}
+        onRequestQuote={() => setShowWizard(true)}
+      />
+
+      {/* Customer Reviews Section */}
+      <CustomerReviews cityName={cityData.name} />
+
       {/* FAQ Section */}
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
@@ -571,6 +594,9 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
           </div>
         </div>
       </section>
+
+      {/* Related Services Grid - Like ProntoPro */}
+      <RelatedServices cityData={cityData} currentServiceSlug={serviceData?.slug} />
 
       {/* CTA Section */}
       <section className="py-16 bg-primary text-primary-foreground">

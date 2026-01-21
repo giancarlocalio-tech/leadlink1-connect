@@ -1469,6 +1469,26 @@ export const CITIES: CityData[] = [
     population: '39.000',
     neighborhoods: ['Centro', 'Mura dei Francesi', 'Morena', 'Sassone', 'Aeroporto'],
     nearbyAreas: ['Roma', 'Marino', 'Frascati', 'Grottaferrata', 'Albano Laziale', 'Castel Gandolfo']
+  },
+  // EMILIA-ROMAGNA - Cesena
+  {
+    slug: 'cesena',
+    name: 'Cesena',
+    province: 'FC',
+    region: 'Emilia-Romagna',
+    population: '97.000',
+    neighborhoods: ['Centro', 'Oltresavio', 'Case Finali', 'San Rocco', 'Fiorenzuola', 'Borello'],
+    nearbyAreas: ['Forlì', 'Rimini', 'Savignano sul Rubicone', 'Gambettola', 'Bertinoro', 'Mercato Saraceno']
+  },
+  // LAZIO - Latina
+  {
+    slug: 'latina',
+    name: 'Latina',
+    province: 'LT',
+    region: 'Lazio',
+    population: '128.000',
+    neighborhoods: ['Centro', 'Borgo Piave', 'Borgo Sabotino', 'Latina Scalo', 'Borgo Faiti', 'Tor Tre Ponti'],
+    nearbyAreas: ['Aprilia', 'Cisterna di Latina', 'Terracina', 'Sabaudia', 'Pontinia', 'Formia']
   }
 ];
 

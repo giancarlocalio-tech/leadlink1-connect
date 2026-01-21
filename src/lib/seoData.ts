@@ -1430,17 +1430,8 @@ export const CITIES: CityData[] = [
     neighborhoods: ['Centro', 'Stufles', 'Millan', 'Sant\'Andrea', 'Sarnes'],
     nearbyAreas: ['Varna', 'Fortezza', 'Chiusa', 'Luson', 'Naz-Sciaves']
   },
-  // === CITTÀ AGGIUNTE PER FIX SOFT 404 ===
-  // PUGLIA - Trani e Manfredonia
-  {
-    slug: 'trani',
-    name: 'Trani',
-    province: 'BT',
-    region: 'Puglia',
-    population: '56.000',
-    neighborhoods: ['Centro Storico', 'Zona Porto', 'Cappuccini', 'Stadio', 'San Paolo'],
-    nearbyAreas: ['Barletta', 'Andria', 'Bisceglie', 'Corato', 'Molfetta']
-  },
+  // === CITTÀ AGGIUNTE PER FIX GSC "SCANSIONATE MA NON INDICIZZATE" ===
+  // Manfredonia (standalone - non duplicata)
   {
     slug: 'manfredonia',
     name: 'Manfredonia',
@@ -1450,45 +1441,345 @@ export const CITIES: CityData[] = [
     neighborhoods: ['Centro', 'Monticchio', 'Siponto', 'Borgo Mezzanone', 'San Leonardo'],
     nearbyAreas: ['Foggia', 'San Giovanni Rotondo', 'Monte Sant\'Angelo', 'Vieste', 'Mattinata']
   },
-  // SICILIA - Trapani
+  // === CITTÀ AGGIUNTE PER FIX GSC "SCANSIONATE MA NON INDICIZZATE" ===
+  // SICILIA
   {
-    slug: 'trapani',
-    name: 'Trapani',
-    province: 'TP',
+    slug: 'bagheria',
+    name: 'Bagheria',
+    province: 'PA',
     region: 'Sicilia',
-    population: '68.000',
-    neighborhoods: ['Centro Storico', 'Rione Cappuccinelli', 'Fontanelle', 'Palma', 'San Giuliano'],
-    nearbyAreas: ['Erice', 'Marsala', 'Mazara del Vallo', 'Alcamo', 'Valderice', 'Paceco']
+    population: '56.000',
+    neighborhoods: ['Centro', 'Aspra', 'Santa Flavia', 'Mongerbino', 'Porticello'],
+    nearbyAreas: ['Palermo', 'Ficarazzi', 'Casteldaccia', 'Altavilla Milicia', 'Termini Imerese']
   },
-  // LAZIO - Ciampino
+  // EMILIA-ROMAGNA
   {
-    slug: 'ciampino',
-    name: 'Ciampino',
-    province: 'RM',
-    region: 'Lazio',
-    population: '39.000',
-    neighborhoods: ['Centro', 'Mura dei Francesi', 'Morena', 'Sassone', 'Aeroporto'],
-    nearbyAreas: ['Roma', 'Marino', 'Frascati', 'Grottaferrata', 'Albano Laziale', 'Castel Gandolfo']
-  },
-  // EMILIA-ROMAGNA - Cesena
-  {
-    slug: 'cesena',
-    name: 'Cesena',
-    province: 'FC',
+    slug: 'formigine',
+    name: 'Formigine',
+    province: 'MO',
     region: 'Emilia-Romagna',
-    population: '97.000',
-    neighborhoods: ['Centro', 'Oltresavio', 'Case Finali', 'San Rocco', 'Fiorenzuola', 'Borello'],
-    nearbyAreas: ['Forlì', 'Rimini', 'Savignano sul Rubicone', 'Gambettola', 'Bertinoro', 'Mercato Saraceno']
+    population: '35.000',
+    neighborhoods: ['Centro', 'Casinalbo', 'Magreta', 'Corlo', 'Colombaro'],
+    nearbyAreas: ['Modena', 'Sassuolo', 'Maranello', 'Fiorano Modenese', 'Castelnuovo Rangone']
   },
-  // LAZIO - Latina
+  // PIEMONTE
   {
-    slug: 'latina',
-    name: 'Latina',
-    province: 'LT',
+    slug: 'biella',
+    name: 'Biella',
+    province: 'BI',
+    region: 'Piemonte',
+    population: '45.000',
+    neighborhoods: ['Centro', 'Chiavazza', 'Pavignano', 'Cossila', 'Oropa'],
+    nearbyAreas: ['Cossato', 'Vigliano Biellese', 'Candelo', 'Gaglianico', 'Verrone']
+  },
+  {
+    slug: 'vercelli',
+    name: 'Vercelli',
+    province: 'VC',
+    region: 'Piemonte',
+    population: '47.000',
+    neighborhoods: ['Centro', 'Cappuccini', 'Porta Milano', 'Belvedere', 'Isola'],
+    nearbyAreas: ['Novara', 'Casale Monferrato', 'Trino', 'Santhià', 'Livorno Ferraris']
+  },
+  {
+    slug: 'verbania',
+    name: 'Verbania',
+    province: 'VB',
+    region: 'Piemonte',
+    population: '31.000',
+    neighborhoods: ['Intra', 'Pallanza', 'Suna', 'Fondotoce', 'Trobaso'],
+    nearbyAreas: ['Stresa', 'Baveno', 'Gravellona Toce', 'Omegna', 'Cannobio']
+  },
+  // FRIULI-VENEZIA GIULIA
+  {
+    slug: 'gorizia',
+    name: 'Gorizia',
+    province: 'GO',
+    region: 'Friuli-Venezia Giulia',
+    population: '35.000',
+    neighborhoods: ['Centro', 'Sant\'Andrea', 'Campagnuzza', 'Piedimonte', 'Lucinico'],
+    nearbyAreas: ['Gradisca d\'Isonzo', 'Monfalcone', 'Cormons', 'Nova Gorica', 'Sagrado']
+  },
+  {
+    slug: 'pordenone',
+    name: 'Pordenone',
+    province: 'PN',
+    region: 'Friuli-Venezia Giulia',
+    population: '51.000',
+    neighborhoods: ['Centro', 'Borgomeduna', 'Torre', 'Villanova', 'Vallenoncello'],
+    nearbyAreas: ['Sacile', 'Porcia', 'Cordenons', 'Roveredo in Piano', 'San Vito al Tagliamento']
+  },
+  // LAZIO
+  {
+    slug: 'rieti',
+    name: 'Rieti',
+    province: 'RI',
     region: 'Lazio',
-    population: '128.000',
-    neighborhoods: ['Centro', 'Borgo Piave', 'Borgo Sabotino', 'Latina Scalo', 'Borgo Faiti', 'Tor Tre Ponti'],
-    nearbyAreas: ['Aprilia', 'Cisterna di Latina', 'Terracina', 'Sabaudia', 'Pontinia', 'Formia']
+    population: '47.000',
+    neighborhoods: ['Centro', 'Madonna del Cuore', 'Campoloniano', 'Villa Reatina', 'Quattro Strade'],
+    nearbyAreas: ['Cittaducale', 'Leonessa', 'Poggio Mirteto', 'Contigliano', 'Greccio']
+  },
+  {
+    slug: 'frosinone',
+    name: 'Frosinone',
+    province: 'FR',
+    region: 'Lazio',
+    population: '46.000',
+    neighborhoods: ['Centro', 'De Matthaeis', 'Cavoni', 'Madonna della Neve', 'Selva Piana'],
+    nearbyAreas: ['Alatri', 'Ferentino', 'Ceccano', 'Veroli', 'Cassino']
+  },
+  {
+    slug: 'viterbo',
+    name: 'Viterbo',
+    province: 'VT',
+    region: 'Lazio',
+    population: '67.000',
+    neighborhoods: ['Centro', 'San Faustino', 'Pianoscarano', 'Bagnaia', 'La Quercia'],
+    nearbyAreas: ['Montefiascone', 'Vitorchiano', 'Vetralla', 'Ronciglione', 'Tarquinia']
+  },
+  // LOMBARDIA - Province minori e hinterland milanese
+  {
+    slug: 'sondrio',
+    name: 'Sondrio',
+    province: 'SO',
+    region: 'Lombardia',
+    population: '22.000',
+    neighborhoods: ['Centro', 'Mossini', 'Triangia', 'Ponchiera', 'Arquino'],
+    nearbyAreas: ['Morbegno', 'Tirano', 'Chiesa in Valmalenco', 'Castione Andevenno', 'Montagna in Valtellina']
+  },
+  {
+    slug: 'rozzano',
+    name: 'Rozzano',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '43.000',
+    neighborhoods: ['Centro', 'Quinto de\'Stampi', 'Valleambrosia', 'Ponte Sesto', 'Fizzonasco'],
+    nearbyAreas: ['Milano', 'Pieve Emanuele', 'Opera', 'Basiglio', 'Assago']
+  },
+  {
+    slug: 'assago',
+    name: 'Assago',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '9.000',
+    neighborhoods: ['Centro', 'Milanofiori', 'Milanofiori Nord'],
+    nearbyAreas: ['Milano', 'Rozzano', 'Corsico', 'Buccinasco', 'Cesano Boscone']
+  },
+  {
+    slug: 'brugherio',
+    name: 'Brugherio',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '35.000',
+    neighborhoods: ['Centro', 'San Damiano', 'Moia', 'Baraggia', 'San Cristoforo'],
+    nearbyAreas: ['Monza', 'Cologno Monzese', 'Sesto San Giovanni', 'Agrate Brianza', 'Carugate']
+  },
+  {
+    slug: 'nova-milanese',
+    name: 'Nova Milanese',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '24.000',
+    neighborhoods: ['Centro', 'Grugnotorto', 'Via Brodolini'],
+    nearbyAreas: ['Desio', 'Muggiò', 'Paderno Dugnano', 'Bovisio-Masciago', 'Varedo']
+  },
+  {
+    slug: 'rho',
+    name: 'Rho',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '51.000',
+    neighborhoods: ['Centro', 'Passirana', 'Lucernate', 'Terrazzano', 'Mazzo'],
+    nearbyAreas: ['Pero', 'Arese', 'Pregnana Milanese', 'Lainate', 'Pogliano Milanese']
+  },
+  {
+    slug: 'peschiera-borromeo',
+    name: 'Peschiera Borromeo',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '24.000',
+    neighborhoods: ['Centro', 'Mezzate', 'San Bovio', 'Mirazzano', 'Bellaria'],
+    nearbyAreas: ['Milano', 'Pantigliate', 'Mediglia', 'San Donato Milanese', 'Segrate']
+  },
+  {
+    slug: 'pieve-emanuele',
+    name: 'Pieve Emanuele',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '16.000',
+    neighborhoods: ['Centro', 'Fizzonasco', 'Tolcinasco'],
+    nearbyAreas: ['Rozzano', 'Opera', 'Locate di Triulzi', 'Basiglio', 'Lacchiarella']
+  },
+  {
+    slug: 'bollate',
+    name: 'Bollate',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '37.000',
+    neighborhoods: ['Centro', 'Ospiate', 'Cassina Nuova', 'Castellazzo'],
+    nearbyAreas: ['Novate Milanese', 'Baranzate', 'Arese', 'Senago', 'Garbagnate Milanese']
+  },
+  {
+    slug: 'vimercate',
+    name: 'Vimercate',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '26.000',
+    neighborhoods: ['Centro', 'Oreno', 'Ruginello', 'Velasca'],
+    nearbyAreas: ['Concorezzo', 'Agrate Brianza', 'Burago di Molgora', 'Arcore', 'Sulbiate']
+  },
+  {
+    slug: 'mariano-comense',
+    name: 'Mariano Comense',
+    province: 'CO',
+    region: 'Lombardia',
+    population: '25.000',
+    neighborhoods: ['Centro', 'Perticato', 'Cascina Ravella'],
+    nearbyAreas: ['Cantù', 'Cabiate', 'Giussano', 'Carugo', 'Lentate sul Seveso']
+  },
+  {
+    slug: 'cesano-maderno',
+    name: 'Cesano Maderno',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '38.000',
+    neighborhoods: ['Centro', 'Binzago', 'Cassina Savina', 'Villaggio Snia'],
+    nearbyAreas: ['Seveso', 'Bovisio-Masciago', 'Desio', 'Limbiate', 'Varedo']
+  },
+  {
+    slug: 'biassono',
+    name: 'Biassono',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '12.000',
+    neighborhoods: ['Centro', 'San Giorgio'],
+    nearbyAreas: ['Monza', 'Vedano al Lambro', 'Lissone', 'Macherio', 'Lesmo']
+  },
+  {
+    slug: 'trezzo-sull-adda',
+    name: 'Trezzo sull\'Adda',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '12.000',
+    neighborhoods: ['Centro', 'Concesa'],
+    nearbyAreas: ['Vaprio d\'Adda', 'Capriate San Gervasio', 'Grezzago', 'Pozzo d\'Adda', 'Trezzano Rosa']
+  },
+  {
+    slug: 'triuggio',
+    name: 'Triuggio',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '9.000',
+    neighborhoods: ['Centro', 'Rancate', 'Canonica', 'Tregasio'],
+    nearbyAreas: ['Albiate', 'Veduggio con Colzano', 'Sovico', 'Carate Brianza', 'Besana in Brianza']
+  },
+  {
+    slug: 'trezzano-rosa',
+    name: 'Trezzano Rosa',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '5.000',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Trezzo sull\'Adda', 'Basiano', 'Grezzago', 'Masate', 'Pozzo d\'Adda']
+  },
+  {
+    slug: 'roncello',
+    name: 'Roncello',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '4.000',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Sulbiate', 'Busnago', 'Ornago', 'Bellusco', 'Mezzago']
+  },
+  {
+    slug: 'settala',
+    name: 'Settala',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '8.000',
+    neighborhoods: ['Centro', 'Caleppio'],
+    nearbyAreas: ['Pantigliate', 'Rodano', 'Vignate', 'Peschiera Borromeo', 'Liscate']
+  },
+  {
+    slug: 'inzago',
+    name: 'Inzago',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '11.000',
+    neighborhoods: ['Centro', 'Naviglio'],
+    nearbyAreas: ['Cassano d\'Adda', 'Gessate', 'Bellinzago Lombardo', 'Pozzuolo Martesana', 'Liscate']
+  },
+  {
+    slug: 'erba',
+    name: 'Erba',
+    province: 'CO',
+    region: 'Lombardia',
+    population: '17.000',
+    neighborhoods: ['Centro', 'Buccinigo', 'Crevenna', 'Villincino'],
+    nearbyAreas: ['Eupilio', 'Albavilla', 'Pusiano', 'Merone', 'Ponte Lambro']
+  },
+  {
+    slug: 'carugate',
+    name: 'Carugate',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '15.000',
+    neighborhoods: ['Centro', 'Cascina Trombetta'],
+    nearbyAreas: ['Cologno Monzese', 'Agrate Brianza', 'Cernusco sul Naviglio', 'Brugherio', 'Bussero']
+  },
+  {
+    slug: 'albiate',
+    name: 'Albiate',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '6.000',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Carate Brianza', 'Triuggio', 'Seregno', 'Sovico', 'Verano Brianza']
+  },
+  {
+    slug: 'agrate-brianza',
+    name: 'Agrate Brianza',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '16.000',
+    neighborhoods: ['Centro', 'Omate'],
+    nearbyAreas: ['Concorezzo', 'Vimercate', 'Carugate', 'Burago di Molgora', 'Brugherio']
+  },
+  {
+    slug: 'abbiategrasso',
+    name: 'Abbiategrasso',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '33.000',
+    neighborhoods: ['Centro', 'Castelletto', 'San Pietro Cusico'],
+    nearbyAreas: ['Magenta', 'Vigevano', 'Gaggiano', 'Ozzero', 'Morimondo']
+  },
+  {
+    slug: 'cassina-de-pecchi',
+    name: 'Cassina de\' Pecchi',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '14.000',
+    neighborhoods: ['Centro', 'Sant\'Agata'],
+    nearbyAreas: ['Cernusco sul Naviglio', 'Vignate', 'Bussero', 'Pioltello', 'Melzo']
+  },
+  {
+    slug: 'cambiago',
+    name: 'Cambiago',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '7.000',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Gessate', 'Cavenago di Brianza', 'Ornago', 'Bellusco', 'Bussero']
+  },
+  {
+    slug: 'opera',
+    name: 'Opera',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '14.000',
+    neighborhoods: ['Centro', 'Noverasco'],
+    nearbyAreas: ['Milano', 'Rozzano', 'Pieve Emanuele', 'Locate di Triulzi', 'San Donato Milanese']
   }
 ];
 

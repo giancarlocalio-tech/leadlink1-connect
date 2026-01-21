@@ -158,11 +158,13 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
         <Helmet>
           <title>{pageTitle}</title>
           <meta name="description" content={pageDescription} />
+          <meta name="robots" content="index, follow" />
           <link rel="canonical" href={canonicalUrl} />
           <meta property="og:title" content={pageTitle} />
           <meta property="og:description" content={pageDescription} />
           <meta property="og:url" content={canonicalUrl} />
           <meta property="og:type" content="website" />
+          <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content={pageTitle} />
           <meta name="twitter:description" content={pageDescription} />
           <script type="application/ld+json" key="structured-data">
@@ -183,11 +185,13 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
+        <meta name="robots" content="index, follow" />
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
         <script type="application/ld+json" key="structured-data">

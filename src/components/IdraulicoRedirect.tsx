@@ -4,19 +4,25 @@ import { getCityBySlug, getServiceBySlug } from '@/lib/seoData';
 
 // Legacy service slug mappings to current slugs
 const LEGACY_SERVICE_SLUGS: Record<string, string> = {
-  'spurgo-fogne': 'scarico-intasato',
-  'riparazione-perdite': 'perdita-acqua',
-  'spurgo': 'scarico-intasato',
-  'perdite': 'perdita-acqua',
+  'spurgo-fogne': 'spurgo-fognature',
+  'riparazione-perdite': 'riparazione-perdite', // Valid service
+  'spurgo': 'spurgo-fognature',
+  'perdite': 'riparazione-perdite',
   'riparazione-caldaia': 'manutenzione-caldaie',
   'riparazione-caldaie': 'manutenzione-caldaie',
-  'installazione-sanitari': 'installazione-sostituzione',
-  'sostituzione-sanitari': 'installazione-sostituzione',
-  'pulizia-scarichi': 'scarico-intasato',
-  'disostruzione': 'scarico-intasato',
-  'disostruzione-scarichi': 'scarico-intasato',
-  'riparazione-tubazioni': 'perdita-acqua',
-  'valvole-termostatiche': 'manutenzione-caldaie', // Redirect to related service
+  'sostituzione-sanitari': 'installazione-sanitari',
+  'pulizia-scarichi': 'scarichi-intasati',
+  'disostruzione': 'scarichi-intasati',
+  'disostruzione-scarichi': 'scarichi-intasati',
+  'riparazione-tubazioni': 'riparazione-perdite',
+  'valvole-termostatiche': 'valvole-termostatiche', // Valid service
+  // Legacy short slugs → valid services
+  'perdita-acqua': 'riparazione-perdite',
+  'scarico-intasato': 'scarichi-intasati',
+  'rubinetto': 'rubinetteria',
+  'bagno': 'ristrutturazione-bagno',
+  'caldaia': 'manutenzione-caldaie',
+  'installazione-scaldabagno': 'scaldabagno',
 };
 
 // Legacy city slug mappings

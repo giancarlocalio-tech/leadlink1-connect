@@ -1,16 +1,16 @@
 import { Users, Star, FileCheck, TrendingUp } from 'lucide-react';
 
 interface LocalStatsProps {
-  cityName: string;
+  cityName?: string;
   serviceName?: string;
 }
 
-// Generate pseudo-random but consistent stats based on city name
-function generateCityStats(cityName: string) {
+// Generate pseudo-random but consistent stats based on input
+function generateStats(seed: string) {
   // Simple hash function for consistent values
   let hash = 0;
-  for (let i = 0; i < cityName.length; i++) {
-    const char = cityName.charCodeAt(i);
+  for (let i = 0; i < seed.length; i++) {
+    const char = seed.charCodeAt(i);
     hash = ((hash << 5) - hash) + char;
     hash = hash & hash;
   }
@@ -31,17 +31,20 @@ function generateCityStats(cityName: string) {
 }
 
 export function LocalStats({ cityName, serviceName }: LocalStatsProps) {
-  const stats = generateCityStats(cityName);
+  const seed = cityName || serviceName || 'italia';
+  const stats = generateStats(seed);
   const serviceText = serviceName ? serviceName.toLowerCase() : 'idraulico';
+  const locationText = cityName ? `a ${cityName}` : 'in Italia';
+  const zoneText = cityName ? `nella zona di ${cityName}` : 'su tutto il territorio';
   
   return (
     <section className="py-12 bg-gradient-to-b from-primary/5 to-background">
       <div className="container mx-auto px-4">
         <h2 className="text-xl md:text-2xl font-bold text-center mb-2">
-          Perché scegliere Idraulici Subito a {cityName}?
+          Perché scegliere Idraulici Subito {locationText}?
         </h2>
         <p className="text-muted-foreground text-center mb-10 max-w-2xl mx-auto text-sm">
-          I numeri che parlano della qualità del nostro servizio nella zona di {cityName}
+          I numeri che parlano della qualità del nostro servizio {zoneText}
         </p>
         
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-5xl mx-auto">
@@ -55,7 +58,7 @@ export function LocalStats({ cityName, serviceName }: LocalStatsProps) {
               {stats.professionals}
             </div>
             <p className="text-sm text-muted-foreground">
-              professionisti pronti ad aiutarti nella zona di {cityName}
+              professionisti pronti ad aiutarti {zoneText}
             </p>
           </div>
 
@@ -83,7 +86,7 @@ export function LocalStats({ cityName, serviceName }: LocalStatsProps) {
               {stats.reviews.toLocaleString('it-IT')}
             </div>
             <p className="text-sm text-muted-foreground">
-              recensioni reali dei clienti della zona di {cityName}
+              recensioni reali dei clienti {zoneText}
             </p>
           </div>
 
@@ -97,7 +100,7 @@ export function LocalStats({ cityName, serviceName }: LocalStatsProps) {
               {stats.clientsLastYear.toLocaleString('it-IT')}
             </div>
             <p className="text-sm text-muted-foreground">
-              clienti si sono affidati a noi per {serviceText} a {cityName}
+              clienti si sono affidati a noi per {serviceText} {locationText}
             </p>
           </div>
         </div>

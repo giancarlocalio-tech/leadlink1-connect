@@ -9,6 +9,10 @@ import { generateJsonLd, getKeywordFAQs, BASE_URL } from '@/lib/seoJsonLd';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import InlineWizard from '@/components/InlineWizard';
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
+import { LocalStats } from '@/components/seo/LocalStats';
+import { ProfessionalsList } from '@/components/seo/ProfessionalsList';
+import { CustomerReviews } from '@/components/seo/CustomerReviews';
+import { RelatedServices } from '@/components/seo/RelatedServices';
 import heroBg from '@/assets/hero-bg.avif';
 
 interface KeywordLandingPageProps {
@@ -244,6 +248,9 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
         </section>
       )}
 
+      {/* Local Stats Section */}
+      <LocalStats serviceName={pageData.h1} />
+
       <section className="py-16 bg-primary/5">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-6 max-w-5xl mx-auto">
@@ -264,6 +271,15 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
           </div>
         </div>
       </section>
+
+      {/* Professionals List Section */}
+      <ProfessionalsList serviceName={pageData.h1} onRequestQuote={() => setShowWizard(true)} />
+
+      {/* Customer Reviews Section */}
+      <CustomerReviews serviceName={pageData.h1} />
+
+      {/* Related Services Section */}
+      <RelatedServices currentServiceSlug={slug} />
 
       <section className="py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 text-center">

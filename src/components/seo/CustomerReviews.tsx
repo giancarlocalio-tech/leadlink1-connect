@@ -1,10 +1,11 @@
 import { Star } from 'lucide-react';
 
 interface CustomerReviewsProps {
-  cityName: string;
+  cityName?: string;
+  serviceName?: string;
 }
 
-function generateReviews(cityName: string) {
+function generateReviews(seed: string) {
   const reviewTemplates = [
     {
       name: 'Maria L.',
@@ -33,10 +34,10 @@ function generateReviews(cityName: string) {
     }
   ];
 
-  // Shuffle based on city name for variety
+  // Shuffle based on seed for variety
   let hash = 0;
-  for (let i = 0; i < cityName.length; i++) {
-    hash = ((hash << 5) - hash) + cityName.charCodeAt(i);
+  for (let i = 0; i < seed.length; i++) {
+    hash = ((hash << 5) - hash) + seed.charCodeAt(i);
   }
   
   return reviewTemplates
@@ -59,8 +60,11 @@ function generateReviews(cityName: string) {
     });
 }
 
-export function CustomerReviews({ cityName }: CustomerReviewsProps) {
-  const reviews = generateReviews(cityName);
+export function CustomerReviews({ cityName, serviceName }: CustomerReviewsProps) {
+  const seed = cityName || serviceName || 'italia';
+  const reviews = generateReviews(seed);
+  const locationText = cityName ? `a ${cityName}` : '';
+  const serviceText = serviceName || 'Idraulici Subito';
   
   return (
     <section className="py-16 bg-background">
@@ -69,7 +73,7 @@ export function CustomerReviews({ cityName }: CustomerReviewsProps) {
           Recensioni dei clienti
         </h2>
         <p className="text-muted-foreground text-center mb-10 max-w-2xl mx-auto">
-          Cosa dicono i clienti che hanno usato Idraulici Subito a {cityName}
+          Cosa dicono i clienti che hanno usato {serviceText} {locationText}
         </p>
         
         <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">

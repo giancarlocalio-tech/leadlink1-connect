@@ -1,14 +1,14 @@
-import { User, MapPin, Calendar } from 'lucide-react';
+import { MapPin, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface ProfessionalsListProps {
-  cityName: string;
+  cityName?: string;
   serviceName?: string;
-  onRequestQuote: () => void;
+  onRequestQuote?: () => void;
 }
 
-// Generate professional data based on city
-function generateProfessionals(cityName: string) {
+// Generate professional data based on seed
+function generateProfessionals(seed: string) {
   const firstNames = ['Marco', 'Giuseppe', 'Andrea', 'Luigi', 'Francesco', 'Alessandro', 'Roberto', 'Luca', 'Stefano', 'Giovanni'];
   const lastInitials = ['R', 'M', 'B', 'P', 'S', 'T', 'C', 'F', 'G', 'L'];
   const colors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-orange-500', 'bg-teal-500', 'bg-pink-500'];
@@ -22,10 +22,12 @@ function generateProfessionals(cityName: string) {
     `Tecnico certificato per caldaie e impianti di riscaldamento. Manutenzione programmata e riparazioni.`
   ];
 
-  // Use city name to create consistent order
+  const locations = ['Milano', 'Roma', 'Torino', 'Bologna', 'Firenze', 'Napoli'];
+
+  // Use seed to create consistent order
   let hash = 0;
-  for (let i = 0; i < cityName.length; i++) {
-    hash = ((hash << 5) - hash) + cityName.charCodeAt(i);
+  for (let i = 0; i < seed.length; i++) {
+    hash = ((hash << 5) - hash) + seed.charCodeAt(i);
   }
   
   const shuffledIndices = [0, 1, 2, 3, 4, 5].sort((a, b) => {
@@ -38,6 +40,7 @@ function generateProfessionals(cityName: string) {
     const nameIdx = (hash + idx) % firstNames.length;
     const initialIdx = (hash + idx * 3) % lastInitials.length;
     const colorIdx = (hash + idx) % colors.length;
+    const locationIdx = (hash + idx * 5) % locations.length;
     
     // Generate a date in the last 2 years
     const monthsAgo = Math.abs((hash + idx * 17) % 24);
@@ -49,7 +52,7 @@ function generateProfessionals(cityName: string) {
       name: `${firstNames[nameIdx]} ${lastInitials[initialIdx]}.`,
       initials: `${firstNames[nameIdx][0]}${lastInitials[initialIdx]}`,
       color: colors[colorIdx],
-      location: cityName,
+      location: locations[locationIdx],
       joinDate: date.toLocaleDateString('it-IT', { month: '2-digit', year: 'numeric' }),
       description: descriptions[idx]
     };
@@ -57,23 +60,31 @@ function generateProfessionals(cityName: string) {
 }
 
 export function ProfessionalsList({ cityName, serviceName, onRequestQuote }: ProfessionalsListProps) {
-  const professionals = generateProfessionals(cityName);
+  const seed = cityName || serviceName || 'italia';
+  const professionals = generateProfessionals(seed);
   const serviceText = serviceName || 'Idraulico';
+  const locationText = cityName ? `a ${cityName}` : 'nella tua zona';
+  
+  // Override location with actual city if provided
+  const displayProfessionals = professionals.map(p => ({
+    ...p,
+    location: cityName || p.location
+  }));
   
   return (
     <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-2">
-          Trova {serviceText} a {cityName}
+          Trova {serviceText} {locationText}
         </h2>
         <p className="text-muted-foreground text-center mb-10 max-w-2xl mx-auto">
-          Professionisti verificati pronti ad aiutarti nella tua zona
+          Professionisti verificati pronti ad aiutarti
         </p>
         
         <div className="max-w-4xl mx-auto">
           {/* Professionals list */}
           <div className="space-y-4 mb-8">
-            {professionals.map((prof) => (
+            {displayProfessionals.map((prof) => (
               <div 
                 key={prof.id}
                 className="bg-card rounded-xl p-5 border border-border shadow-sm hover:shadow-md transition-shadow flex gap-4"
@@ -108,13 +119,15 @@ export function ProfessionalsList({ cityName, serviceName, onRequestQuote }: Pro
           
           {/* CTA buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              onClick={onRequestQuote}
-              size="lg"
-              className="font-semibold"
-            >
-              Trova il tuo esperto
-            </Button>
+            {onRequestQuote && (
+              <Button 
+                onClick={onRequestQuote}
+                size="lg"
+                className="font-semibold"
+              >
+                Trova il tuo esperto
+              </Button>
+            )}
             <Button 
               variant="outline"
               size="lg"

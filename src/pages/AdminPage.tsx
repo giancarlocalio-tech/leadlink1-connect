@@ -785,44 +785,64 @@ export default function AdminPage() {
                               {formatDate(request.created_at)}
                             </span>
                           </div>
-                          {/* Contact unlocks info */}
-                          {request.unlocks && request.unlocks.length > 0 && (
+                          {/* Stato accettazione/sblocco */}
+                          {(request.unlocks && request.unlocks.length > 0) || request.accepted_by_name ? (
                             <div className="mt-2 pt-2 border-t border-border">
-                              <p className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
-                                <Unlock className="h-3 w-3" />
-                                Contatto sbloccato da ({request.unlocks.length}):
-                              </p>
-                              <div className="flex flex-wrap gap-1">
-                                {request.unlocks.map((unlock) => (
+                              {/* Mostra chi ha sbloccato/accettato */}
+                              {request.unlocks && request.unlocks.length > 0 ? (
+                                <>
+                                  <p className="text-xs font-medium text-success mb-1 flex items-center gap-1">
+                                    <CheckCircle className="h-3 w-3" />
+                                    Presa in carico da {request.unlocks.length} idraulic{request.unlocks.length === 1 ? 'o' : 'i'}:
+                                  </p>
+                                  <div className="flex flex-wrap gap-1">
+                                    {request.unlocks.map((unlock) => (
+                                      <Badge 
+                                        key={unlock.id} 
+                                        variant="outline" 
+                                        className="text-xs bg-success/10 border-success/30 text-success"
+                                      >
+                                        <CheckCircle className="h-3 w-3 mr-1" />
+                                        {unlock.plumber?.full_name || 'N/A'}
+                                        {unlock.is_exclusive && ' (Esclusivo)'}
+                                        {unlock.plumber?.phone && (
+                                          <span className="ml-1 text-muted-foreground">• {unlock.plumber.phone}</span>
+                                        )}
+                                      </Badge>
+                                    ))}
+                                  </div>
+                                </>
+                              ) : request.accepted_by_name && (
+                                <>
+                                  <p className="text-xs font-medium text-success mb-1 flex items-center gap-1">
+                                    <CheckCircle className="h-3 w-3" />
+                                    Presa in carico:
+                                  </p>
                                   <Badge 
-                                    key={unlock.id} 
                                     variant="outline" 
-                                    className="text-xs bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800"
+                                    className="text-xs bg-success/10 border-success/30 text-success"
                                   >
-                                    <Coins className="h-3 w-3 mr-1 text-amber-600" />
-                                    {unlock.plumber?.full_name || 'N/A'}
-                                    {unlock.is_exclusive && ' (Esclusivo)'}
+                                    <CheckCircle className="h-3 w-3 mr-1" />
+                                    {request.accepted_by_name}
+                                    {request.accepted_by_phone && (
+                                      <span className="ml-1 text-muted-foreground">• {request.accepted_by_phone}</span>
+                                    )}
                                   </Badge>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                          {/* Legacy: Plumber info for old subscription system */}
-                          {request.status === 'accepted' && request.accepted_by_name && (
-                            <div className="mt-2 pt-2 border-t border-border">
-                              <p className="text-xs text-muted-foreground mb-1">Accettata da (trial):</p>
-                              <p className="text-sm font-medium text-success flex items-center gap-1">
-                                <CheckCircle className="h-3 w-3" />
-                                {request.accepted_by_name}
-                              </p>
-                              {request.accepted_by_phone && (
-                                <p className="text-xs text-muted-foreground">{request.accepted_by_phone}</p>
+                                </>
                               )}
                             </div>
+                          ) : (
+                            <div className="mt-2 pt-2 border-t border-border">
+                              <p className="text-xs text-muted-foreground flex items-center gap-1">
+                                <AlertCircle className="h-3 w-3" />
+                                Nessun idraulico ha ancora preso in carico questa richiesta
+                              </p>
+                            </div>
                           )}
+                          {/* Assegnazione in corso */}
                           {request.status === 'assigned' && request.assigned_to_name && (
                             <div className="mt-2 pt-2 border-t border-border">
-                              <p className="text-xs text-muted-foreground mb-1">Assegnata a:</p>
+                              <p className="text-xs text-muted-foreground mb-1">In attesa di risposta da:</p>
                               <p className="text-sm font-medium text-amber-600 dark:text-amber-400 flex items-center gap-1">
                                 <Clock className="h-3 w-3" />
                                 {request.assigned_to_name}

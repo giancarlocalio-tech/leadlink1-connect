@@ -20,7 +20,9 @@ import {
   Timer,
   TrendingUp,
   MessageCircle,
-  CheckCheck
+  CheckCheck,
+  Coins,
+  Unlock
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -64,7 +66,7 @@ import {
   ACCESSIBILITY_LABELS 
 } from '@/lib/types';
 
-// Extended plumber type with subscription info
+// Extended plumber type with subscription and credits info
 interface PlumberWithSubscription extends PlumberProfile {
   subscription?: {
     plan_type: string;
@@ -75,6 +77,25 @@ interface PlumberWithSubscription extends PlumberProfile {
     monthly_contact_limit: number | null;
     current_period_end: string | null;
   } | null;
+  credits?: {
+    balance: number;
+    total_purchased: number;
+    total_spent: number;
+  } | null;
+}
+
+// Contact unlock info
+interface ContactUnlock {
+  id: string;
+  plumber_id: string;
+  request_id: string;
+  is_exclusive: boolean;
+  unlocked_at: string;
+  plumber?: {
+    full_name: string;
+    phone: string;
+    email: string;
+  };
 }
 
 // Assignment log type
@@ -132,6 +153,7 @@ export default function AdminPage() {
     accepted_by_email?: string; 
     accepted_by_phone?: string; 
     assigned_to_name?: string;
+    unlocks?: ContactUnlock[];
   };
   
   const [requests, setRequests] = useState<ExtendedRequest[]>([]);
@@ -180,7 +202,7 @@ export default function AdminPage() {
   };
 
   const fetchPlumbers = async () => {
-    // Fetch plumbers with their subscription info
+    // Fetch plumbers with their subscription and credits info
     const { data, error } = await supabase
       .from('plumber_profiles')
       .select(`
@@ -193,6 +215,11 @@ export default function AdminPage() {
           monthly_contacts_used,
           monthly_contact_limit,
           current_period_end
+        ),
+        credits:plumber_credits(
+          balance,
+          total_purchased,
+          total_spent
         )
       `)
       .order('created_at', { ascending: false });
@@ -206,6 +233,7 @@ export default function AdminPage() {
         availability: (p.availability as AvailabilityType[]) || [],
         service_areas: (p.service_areas as string[]) || [],
         subscription: Array.isArray(p.subscription) ? p.subscription[0] : p.subscription,
+        credits: Array.isArray(p.credits) ? p.credits[0] : p.credits,
       })));
     }
   };
@@ -314,19 +342,56 @@ export default function AdminPage() {
 
     if (error) {
       console.error('Error fetching requests:', error);
-    } else {
-      setRequests((data || []).map(r => ({
-        ...r,
-        intervention_type: r.intervention_type as InterventionType,
-        urgency: r.urgency as UrgencyType,
-        property_type: r.property_type as PropertyType,
-        accessibility: r.accessibility as AccessibilityType,
-        accepted_by_name: (r.accepted_by as any)?.full_name,
-        accepted_by_email: (r.accepted_by as any)?.email,
-        accepted_by_phone: (r.accepted_by as any)?.phone,
-        assigned_to_name: (r.assigned_to as any)?.full_name,
-      })));
+      return;
     }
+
+    // Fetch all contact unlocks with plumber info
+    const requestIds = (data || []).map(r => r.id);
+    const { data: unlocksData, error: unlocksError } = await supabase
+      .from('contact_unlocks')
+      .select(`
+        id,
+        plumber_id,
+        request_id,
+        is_exclusive,
+        unlocked_at,
+        plumber:plumber_id(full_name, phone, email)
+      `)
+      .in('request_id', requestIds);
+
+    if (unlocksError) {
+      console.error('Error fetching unlocks:', unlocksError);
+    }
+
+    // Group unlocks by request_id
+    const unlocksByRequest = new Map<string, ContactUnlock[]>();
+    (unlocksData || []).forEach((unlock: any) => {
+      const requestId = unlock.request_id;
+      if (!unlocksByRequest.has(requestId)) {
+        unlocksByRequest.set(requestId, []);
+      }
+      unlocksByRequest.get(requestId)!.push({
+        ...unlock,
+        plumber: unlock.plumber ? {
+          full_name: unlock.plumber.full_name,
+          phone: unlock.plumber.phone,
+          email: unlock.plumber.email,
+        } : undefined,
+      });
+    });
+
+    setRequests((data || []).map(r => ({
+      ...r,
+      intervention_type: r.intervention_type as InterventionType,
+      urgency: r.urgency as UrgencyType,
+      property_type: r.property_type as PropertyType,
+      accessibility: r.accessibility as AccessibilityType,
+      accepted_by_name: (r.accepted_by as any)?.full_name,
+      accepted_by_email: (r.accepted_by as any)?.email,
+      accepted_by_phone: (r.accepted_by as any)?.phone,
+      assigned_to_name: (r.assigned_to as any)?.full_name,
+      unlocks: unlocksByRequest.get(r.id) || [],
+    })));
   };
 
   const handleDelete = async () => {
@@ -494,7 +559,7 @@ export default function AdminPage() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 gap-4 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8">
             <div className="bg-card rounded-lg border border-border p-4">
               <div className="flex items-center gap-3">
                 <div className="bg-primary/10 rounded-lg p-2">
@@ -502,18 +567,51 @@ export default function AdminPage() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-foreground">{plumbers.length}</p>
-                  <p className="text-sm text-muted-foreground">Idraulici registrati</p>
+                  <p className="text-xs text-muted-foreground">Idraulici</p>
                 </div>
               </div>
             </div>
             <div className="bg-card rounded-lg border border-border p-4">
               <div className="flex items-center gap-3">
-                <div className="bg-accent rounded-lg p-2">
-                  <FileText className="h-5 w-5 text-accent-foreground" />
+                <div className="bg-blue-500/10 rounded-lg p-2">
+                  <AlertCircle className="h-5 w-5 text-blue-500" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-foreground">{requests.length}</p>
-                  <p className="text-sm text-muted-foreground">Richieste totali</p>
+                  <p className="text-2xl font-bold text-foreground">{requests.filter(r => r.status === 'new').length}</p>
+                  <p className="text-xs text-muted-foreground">Nuove</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-card rounded-lg border border-border p-4">
+              <div className="flex items-center gap-3">
+                <div className="bg-success/10 rounded-lg p-2">
+                  <CheckCircle className="h-5 w-5 text-success" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-foreground">{requests.filter(r => r.status === 'accepted').length}</p>
+                  <p className="text-xs text-muted-foreground">Accettate</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-card rounded-lg border border-border p-4">
+              <div className="flex items-center gap-3">
+                <div className="bg-amber-500/10 rounded-lg p-2">
+                  <Unlock className="h-5 w-5 text-amber-500" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-foreground">{requests.filter(r => r.unlocks && r.unlocks.length > 0).length}</p>
+                  <p className="text-xs text-muted-foreground">Sbloccate</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-card rounded-lg border border-border p-4">
+              <div className="flex items-center gap-3">
+                <div className="bg-destructive/10 rounded-lg p-2">
+                  <XCircle className="h-5 w-5 text-destructive" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-foreground">{requests.filter(r => r.status === 'expired').length}</p>
+                  <p className="text-xs text-muted-foreground">Scadute</p>
                 </div>
               </div>
             </div>
@@ -687,11 +785,33 @@ export default function AdminPage() {
                               {formatDate(request.created_at)}
                             </span>
                           </div>
-                          {/* Plumber info */}
+                          {/* Contact unlocks info */}
+                          {request.unlocks && request.unlocks.length > 0 && (
+                            <div className="mt-2 pt-2 border-t border-border">
+                              <p className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
+                                <Unlock className="h-3 w-3" />
+                                Contatto sbloccato da ({request.unlocks.length}):
+                              </p>
+                              <div className="flex flex-wrap gap-1">
+                                {request.unlocks.map((unlock) => (
+                                  <Badge 
+                                    key={unlock.id} 
+                                    variant="outline" 
+                                    className="text-xs bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800"
+                                  >
+                                    <Coins className="h-3 w-3 mr-1 text-amber-600" />
+                                    {unlock.plumber?.full_name || 'N/A'}
+                                    {unlock.is_exclusive && ' (Esclusivo)'}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          {/* Legacy: Plumber info for old subscription system */}
                           {request.status === 'accepted' && request.accepted_by_name && (
                             <div className="mt-2 pt-2 border-t border-border">
-                              <p className="text-xs text-muted-foreground mb-1">Accettata da:</p>
-                              <p className="text-sm font-medium text-green-600 dark:text-green-400 flex items-center gap-1">
+                              <p className="text-xs text-muted-foreground mb-1">Accettata da (trial):</p>
+                              <p className="text-sm font-medium text-success flex items-center gap-1">
                                 <CheckCircle className="h-3 w-3" />
                                 {request.accepted_by_name}
                               </p>
@@ -703,7 +823,7 @@ export default function AdminPage() {
                           {request.status === 'assigned' && request.assigned_to_name && (
                             <div className="mt-2 pt-2 border-t border-border">
                               <p className="text-xs text-muted-foreground mb-1">Assegnata a:</p>
-                              <p className="text-sm font-medium text-yellow-600 dark:text-yellow-400 flex items-center gap-1">
+                              <p className="text-sm font-medium text-amber-600 dark:text-amber-400 flex items-center gap-1">
                                 <Clock className="h-3 w-3" />
                                 {request.assigned_to_name}
                               </p>
@@ -919,20 +1039,52 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {/* Subscription Status */}
+              {/* Credits Info */}
               <div className="bg-muted/50 rounded-lg p-4">
                 <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-                  <CreditCard className="h-4 w-4" />
-                  Piano e Abbonamento
+                  <Coins className="h-4 w-4 text-amber-500" />
+                  Crediti
                 </h4>
-                {selectedPlumber.subscription ? (
+                {selectedPlumber.credits ? (
+                  <div className="grid grid-cols-3 gap-4 text-center">
+                    <div className="bg-background rounded-lg p-3">
+                      <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">
+                        {selectedPlumber.credits.balance}
+                      </p>
+                      <p className="text-xs text-muted-foreground">Saldo attuale</p>
+                    </div>
+                    <div className="bg-background rounded-lg p-3">
+                      <p className="text-2xl font-bold text-success">
+                        {selectedPlumber.credits.total_purchased}
+                      </p>
+                      <p className="text-xs text-muted-foreground">Acquistati</p>
+                    </div>
+                    <div className="bg-background rounded-lg p-3">
+                      <p className="text-2xl font-bold text-destructive">
+                        {selectedPlumber.credits.total_spent}
+                      </p>
+                      <p className="text-xs text-muted-foreground">Spesi</p>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground text-sm">Nessun credito trovato</p>
+                )}
+              </div>
+
+              {/* Trial Status */}
+              {selectedPlumber.subscription && (
+                <div className="bg-muted/50 rounded-lg p-4">
+                  <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <Timer className="h-4 w-4" />
+                    Stato Trial
+                  </h4>
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
                       <span className="text-sm text-muted-foreground">Piano:</span>
                       {getPlanBadge(selectedPlumber)}
                     </div>
                     
-                    {selectedPlumber.subscription.is_trial ? (
+                    {selectedPlumber.subscription.is_trial && (
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="text-sm text-muted-foreground">Richieste gratuite rimanenti:</span>
@@ -945,31 +1097,6 @@ export default function AdminPage() {
                           className="h-2"
                         />
                       </div>
-                    ) : (
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-muted-foreground">Contatti usati questo mese:</span>
-                          <span className="font-bold text-foreground">
-                            {selectedPlumber.subscription.monthly_contacts_used ?? 0}
-                            {selectedPlumber.subscription.monthly_contact_limit && (
-                              <span className="text-muted-foreground font-normal">
-                                {' '}/ {selectedPlumber.subscription.monthly_contact_limit}
-                              </span>
-                            )}
-                          </span>
-                        </div>
-                        {selectedPlumber.subscription.monthly_contact_limit && (
-                          <Progress 
-                            value={((selectedPlumber.subscription.monthly_contacts_used ?? 0) / selectedPlumber.subscription.monthly_contact_limit) * 100} 
-                            className="h-2"
-                          />
-                        )}
-                        {selectedPlumber.subscription.current_period_end && (
-                          <p className="text-xs text-muted-foreground">
-                            Rinnovo: {formatDate(selectedPlumber.subscription.current_period_end)}
-                          </p>
-                        )}
-                      </div>
                     )}
                     
                     <div className="flex items-center gap-2">
@@ -979,10 +1106,8 @@ export default function AdminPage() {
                       </Badge>
                     </div>
                   </div>
-                ) : (
-                  <p className="text-muted-foreground text-sm">Nessun abbonamento trovato</p>
-                )}
-              </div>
+                </div>
+              )}
 
               {/* Assignment History */}
               <div className="bg-muted/50 rounded-lg p-4">

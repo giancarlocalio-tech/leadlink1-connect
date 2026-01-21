@@ -22,7 +22,8 @@ import {
   MessageCircle,
   CheckCheck,
   Coins,
-  Unlock
+  Unlock,
+  Globe
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -65,6 +66,7 @@ import {
   PROPERTY_LABELS, 
   ACCESSIBILITY_LABELS 
 } from '@/lib/types';
+import { UrlExporter } from '@/components/admin/UrlExporter';
 
 // Extended plumber type with subscription and credits info
 interface PlumberWithSubscription extends PlumberProfile {
@@ -619,7 +621,7 @@ export default function AdminPage() {
 
           {/* Tabs */}
           <Tabs defaultValue="plumbers" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="plumbers">
                 <Users className="h-4 w-4 mr-2" />
                 Idraulici
@@ -627,6 +629,10 @@ export default function AdminPage() {
               <TabsTrigger value="requests">
                 <FileText className="h-4 w-4 mr-2" />
                 Richieste
+              </TabsTrigger>
+              <TabsTrigger value="seo">
+                <Globe className="h-4 w-4 mr-2" />
+                SEO Tools
               </TabsTrigger>
             </TabsList>
 
@@ -877,6 +883,11 @@ export default function AdminPage() {
                   ))}
                 </div>
               )}
+            </TabsContent>
+
+            {/* SEO Tools Tab */}
+            <TabsContent value="seo" className="space-y-4">
+              <UrlExporter />
             </TabsContent>
           </Tabs>
         </div>

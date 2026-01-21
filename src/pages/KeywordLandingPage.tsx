@@ -8,6 +8,7 @@ import { getKeywordPageBySlug, CITIES } from '@/lib/seoData';
 import { generateJsonLd, getKeywordFAQs, BASE_URL } from '@/lib/seoJsonLd';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import InlineWizard from '@/components/InlineWizard';
+import { Breadcrumb } from '@/components/seo/Breadcrumb';
 import heroBg from '@/assets/hero-bg.avif';
 
 interface KeywordLandingPageProps {
@@ -67,6 +68,7 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
         <Helmet>
           <title>{pageData.title}</title>
           <meta name="description" content={pageData.description} />
+          <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
           <link rel="canonical" href={canonicalUrl} />
           <meta property="og:title" content={pageData.title} />
           <meta property="og:description" content={pageData.description} />
@@ -92,6 +94,7 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
       <Helmet>
         <title>{pageData.title}</title>
         <meta name="description" content={pageData.description} />
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content={pageData.title} />
         <meta property="og:description" content={pageData.description} />
@@ -103,6 +106,9 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
           {JSON.stringify(structuredData)}
         </script>
       </Helmet>
+
+      {/* Breadcrumb Navigation */}
+      <Breadcrumb items={[{ name: pageData.h1, url: canonicalUrl }]} />
 
       <section className="relative overflow-hidden min-h-[450px] flex items-center justify-center">
         <div className="absolute inset-0">

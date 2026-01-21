@@ -16,6 +16,7 @@ const LEGACY_SERVICE_SLUGS: Record<string, string> = {
   'disostruzione': 'scarico-intasato',
   'disostruzione-scarichi': 'scarico-intasato',
   'riparazione-tubazioni': 'perdita-acqua',
+  'valvole-termostatiche': 'manutenzione-caldaie', // Redirect to related service
 };
 
 // Legacy city slug mappings

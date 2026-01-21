@@ -1063,6 +1063,7 @@ export type Database = {
         Args: { request_created_at: string; request_id: string }
         Returns: boolean
       }
+      normalize_city_name: { Args: { p_city_name: string }; Returns: string }
       trial_claim_request: {
         Args: { p_plumber_id: string; p_request_id: string }
         Returns: {

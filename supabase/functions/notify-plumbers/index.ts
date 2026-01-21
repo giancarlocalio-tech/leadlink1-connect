@@ -399,12 +399,20 @@ const handler = async (req: Request): Promise<Response> => {
     if (matchingPlumbers.length === 0) {
       console.log("No matching registered plumbers found for this request - continuing to unregistered");
     } else {
-      // Send emails to matching plumbers
-      const emailPromises = matchingPlumbers.map(async (plumber) => {
+      // Send emails to matching plumbers with rate limiting (max 2/second for Resend)
+      const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+      
+      for (let i = 0; i < matchingPlumbers.length; i++) {
+        const plumber = matchingPlumbers[i];
         const interventionLabel = INTERVENTION_LABELS[serviceRequest.intervention_type] || serviceRequest.intervention_type;
         const urgencyLabel = URGENCY_LABELS[serviceRequest.urgency] || serviceRequest.urgency;
 
         try {
+          // Add delay between emails to respect Resend rate limit (2 emails/second)
+          if (i > 0) {
+            await delay(600); // 600ms delay = ~1.6 emails/second (safe margin)
+          }
+          
           const emailResult = await resend.emails.send({
             from: "IdrauliciSubito <noreply@idraulicisubito.com>",
             reply_to: "supporto@idraulicisubito.com",
@@ -421,102 +429,100 @@ const handler = async (req: Request): Promise<Response> => {
                 <meta charset="utf-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
               </head>
-              <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
-                <div style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); padding: 40px 30px; border-radius: 16px 16px 0 0; text-align: center;">
-                  <h1 style="color: white; margin: 0; font-size: 28px;">🔧 Nuova Richiesta di Intervento</h1>
-                </div>
-                
-                <div style="background: white; padding: 40px 30px; border-radius: 0 0 16px 16px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                  <p style="font-size: 18px; margin-top: 0;">Ciao <strong>${plumber.full_name || plumber.business_name}</strong>,</p>
-                  
-                  <p style="font-size: 16px;">È arrivata una nuova richiesta di intervento nella tua zona!</p>
-                  
-                  <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); padding: 24px; border-radius: 12px; margin: 24px 0; border-left: 4px solid #16a34a;">
-                    <h3 style="margin-top: 0; color: #16a34a; font-size: 18px;">📋 Dettagli Richiesta</h3>
-                    <table style="width: 100%; border-collapse: collapse;">
-                      <tr>
-                        <td style="padding: 10px 0; color: #666; width: 140px;"><strong>Tipo intervento:</strong></td>
-                        <td style="padding: 10px 0; font-size: 16px;">${interventionLabel}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 10px 0; color: #666;"><strong>Città:</strong></td>
-                        <td style="padding: 10px 0; font-size: 16px;">${serviceRequest.city}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 10px 0; color: #666;"><strong>Urgenza:</strong></td>
-                        <td style="padding: 10px 0;">
-                          <span style="background: ${serviceRequest.urgency === 'subito' ? '#dc3545' : serviceRequest.urgency === 'entro_24_ore' ? '#ffc107' : '#28a745'}; color: ${serviceRequest.urgency === 'subito' ? 'white' : serviceRequest.urgency === 'entro_24_ore' ? '#333' : 'white'}; padding: 6px 16px; border-radius: 20px; font-size: 14px; font-weight: 600;">
-                            ${urgencyLabel}
-                          </span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 10px 0; color: #666;"><strong>Tipo immobile:</strong></td>
-                        <td style="padding: 10px 0; font-size: 16px;">${serviceRequest.property_type}</td>
-                      </tr>
-                    </table>
-                    
-                    ${serviceRequest.description ? `
-                    <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #eee;">
-                      <strong style="color: #666;">Descrizione:</strong>
-                      <p style="margin: 8px 0 0 0; font-size: 15px;">${serviceRequest.description}</p>
-                    </div>
-                    ` : ''}
-                  </div>
-                  
-                  <div style="text-align: center; margin-top: 32px;">
-                    <a href="https://www.idraulicisubito.com/dashboard/richieste?id=${serviceRequest.id}" 
-                       style="display: inline-block; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; padding: 16px 40px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);">
-                      🚀 Accetta Richiesta
-                    </a>
-                  </div>
-                  
-                  <p style="font-size: 14px; color: #666; margin-top: 24px; text-align: center;">
-                    Chi accetta per primo ottiene i dati del cliente in esclusiva!
-                  </p>
-                </div>
-                
-                <div style="text-align: center; padding: 24px; color: #999; font-size: 12px;">
-                  <p style="margin: 0;">Questa email è stata inviata da IdrauliciSubito</p>
-                  <p style="margin: 8px 0 0 0;">© ${new Date().getFullYear()} IdrauliciSubito. Tutti i diritti riservati.</p>
-                </div>
+              <body style="margin:0;padding:0;background-color:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5;">
+                  <tr>
+                    <td align="center" style="padding:20px;">
+                      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+                        
+                        <!-- Header -->
+                        <tr>
+                          <td style="background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);padding:30px;text-align:center;border-radius:12px 12px 0 0;">
+                            <h1 style="margin:0;color:#ffffff;font-size:24px;font-weight:bold;">🔧 Nuova Richiesta di Intervento</h1>
+                          </td>
+                        </tr>
+                        
+                        <!-- Content -->
+                        <tr>
+                          <td style="background-color:#ffffff;padding:30px;">
+                            <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:#333333;">
+                              Ciao <strong>${plumber.full_name || plumber.business_name}</strong>,
+                            </p>
+                            
+                            <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:#333333;">
+                              Un nuovo cliente ha bisogno del tuo intervento a <strong>${serviceRequest.city}</strong>.
+                            </p>
+                            
+                            <!-- Request Details -->
+                            <div style="background-color:#f0fdf4;border-left:4px solid #16a34a;padding:20px;margin:20px 0;border-radius:0 8px 8px 0;">
+                              <h3 style="margin:0 0 15px 0;color:#16a34a;font-size:16px;">📋 Dettagli richiesta</h3>
+                              <p style="margin:0 0 8px 0;font-size:14px;color:#333;">
+                                <strong>Tipo intervento:</strong> ${interventionLabel}
+                              </p>
+                              <p style="margin:0 0 8px 0;font-size:14px;color:#333;">
+                                <strong>Urgenza:</strong> ${urgencyLabel}
+                              </p>
+                              <p style="margin:0 0 8px 0;font-size:14px;color:#333;">
+                                <strong>Città:</strong> ${serviceRequest.city}
+                              </p>
+                              <p style="margin:0;font-size:14px;color:#333;">
+                                <strong>Descrizione:</strong> ${serviceRequest.description}
+                              </p>
+                            </div>
+                            
+                            <!-- CTA Button -->
+                            <div style="text-align:center;margin:30px 0;">
+                              <a href="https://www.idraulicisubito.com/dashboard/richieste?id=${serviceRequest.id}" 
+                                 style="display:inline-block;background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);color:#ffffff;text-decoration:none;padding:16px 40px;border-radius:8px;font-size:16px;font-weight:bold;">
+                                ⚡ Accetta Richiesta
+                              </a>
+                            </div>
+                            
+                            <p style="margin:20px 0 0 0;font-size:14px;color:#666666;text-align:center;">
+                              <strong>Chi accetta per primo ottiene i dati del cliente!</strong>
+                            </p>
+                          </td>
+                        </tr>
+                        
+                        <!-- Footer -->
+                        <tr>
+                          <td style="background-color:#f9fafb;padding:20px;text-align:center;border-radius:0 0 12px 12px;border-top:1px solid #e5e7eb;">
+                            <p style="margin:0 0 10px 0;font-size:12px;color:#9ca3af;">
+                              Se non vuoi più ricevere notifiche, rispondi a questa email con "STOP".
+                            </p>
+                            <p style="margin:0;font-size:12px;color:#9ca3af;">
+                              © ${new Date().getFullYear()} IdrauliciSubito. Tutti i diritti riservati.
+                            </p>
+                          </td>
+                        </tr>
+                        
+                      </table>
+                    </td>
+                  </tr>
+                </table>
               </body>
               </html>
             `,
           });
 
           console.log(`Email sent to ${plumber.email}:`, emailResult);
-          return { success: true, email: plumber.email, result: emailResult };
+          results.push({ success: true, plumber_id: plumber.id, email: plumber.email });
+          successCount++;
         } catch (emailError) {
           console.error(`Failed to send email to ${plumber.email}:`, emailError);
-          return { success: false, email: plumber.email, error: emailError };
+          results.push({ success: false, plumber_id: plumber.id, email: plumber.email, error: emailError });
+          failedCount++;
         }
-      });
-
-      results = await Promise.all(emailPromises);
-      successCount = results.filter((r) => r.success).length;
-      failedCount = results.filter((r) => !r.success).length;
+      }
 
       console.log(`Emails sent: ${successCount} success, ${failedCount} failed`);
 
-      // Send WhatsApp notifications to trial plumbers who match the city
-      const trialPlumbers = matchingPlumbers.filter((plumber) => {
-        const subsData = plumber.plumber_subscriptions;
-        let sub: any = null;
-        
-        if (Array.isArray(subsData)) {
-          sub = subsData.length > 0 ? subsData[0] : null;
-        } else if (subsData && typeof subsData === 'object') {
-          sub = subsData;
-        }
-        
-        return sub && sub.is_trial === true && (sub.free_requests_remaining ?? 0) > 0;
-      });
+      // Send WhatsApp notifications to ALL matching plumbers (not just trial)
+      // With credit-based system, all plumbers should receive WhatsApp notifications
+      console.log(`Found ${matchingPlumbers.length} plumbers for WhatsApp notification`);
 
-      console.log(`Found ${trialPlumbers.length} trial plumbers for WhatsApp notification`);
-
-      // Send WhatsApp to each trial plumber
-      const whatsappPromises = trialPlumbers.map(async (plumber) => {
+      // Send WhatsApp to each plumber
+      const whatsappPromises = matchingPlumbers.map(async (plumber) => {
         try {
           const whatsappResponse = await fetch(`${supabaseUrl}/functions/v1/send-whatsapp-notification`, {
             method: 'POST',

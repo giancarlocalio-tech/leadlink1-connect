@@ -4689,6 +4689,185 @@ export const KEYWORD_PAGES: KeywordPageData[] = [
     h1: 'Idraulico San Giovanni Napoli',
     description: 'Idraulico a San Giovanni a Teduccio e Ponticelli. Interventi rapidi, pronto intervento 24/7. Preventivo gratuito.',
     keywords: ['idraulico san giovanni napoli', 'idraulico ponticelli', 'idraulico teduccio', 'idraulici napoli est']
+  },
+  
+  // ============================================
+  // MILANO - KEYWORD PAGES (Google Ads)
+  // ============================================
+  {
+    slug: 'idraulico-milano',
+    title: 'Idraulico Milano - Pronto Intervento 24/7 | Preventivo Gratis',
+    h1: 'Idraulico a Milano',
+    description: 'Cerchi un idraulico a Milano? Professionisti verificati, pronto intervento 24/7, preventivo gratuito. Risposta in 15 minuti. ⭐ 4.8/5 recensioni.',
+    keywords: ['idraulico milano', 'idraulico a milano', 'idraulici milano', 'pronto intervento idraulico milano']
+  },
+  {
+    slug: 'termoidraulica-milano',
+    title: 'Termoidraulica Milano - Caldaie, Riscaldamento, Climatizzazione',
+    h1: 'Termoidraulica a Milano',
+    description: 'Servizi di termoidraulica a Milano. Installazione e manutenzione caldaie, impianti di riscaldamento e climatizzazione. Tecnici certificati.',
+    keywords: ['termoidraulica milano', 'termoidraulico milano', 'caldaie milano', 'riscaldamento milano']
+  },
+  {
+    slug: 'pronto-intervento-idraulico-milano',
+    title: 'Pronto Intervento Idraulico Milano 24/7 - Emergenze',
+    h1: 'Pronto Intervento Idraulico Milano',
+    description: 'Emergenza idraulica a Milano? Pronto intervento 24 ore su 24, 7 giorni su 7. Arrivo rapido, risoluzione immediata. Chiama ora!',
+    keywords: ['pronto intervento idraulico milano', 'idraulico milano pronto intervento', 'emergenza idraulico milano', 'idraulico urgente milano']
+  },
+  {
+    slug: 'idraulico-milano-centro',
+    title: 'Idraulico Milano Centro - Duomo e Zona Centrale',
+    h1: 'Idraulico Milano Centro',
+    description: 'Idraulico nel centro di Milano. Interventi rapidi in zona Duomo, Cordusio, San Babila. Preventivo gratuito, risposta in 15 minuti.',
+    keywords: ['idraulico milano centro', 'idraulico centro storico milano', 'idraulico duomo milano', 'idraulico san babila']
+  },
+  {
+    slug: 'idraulico-navigli',
+    title: 'Idraulico Navigli Milano - Pronto Intervento 24/7',
+    h1: 'Idraulico ai Navigli',
+    description: 'Cerchi un idraulico ai Navigli? Professionisti verificati per riparazioni, pronto intervento e manutenzione. Preventivo gratuito in 15 minuti.',
+    keywords: ['idraulico navigli', 'idraulico navigli milano', 'idraulici navigli', 'pronto intervento navigli']
+  },
+  {
+    slug: 'idraulico-porta-romana',
+    title: 'Idraulico Porta Romana Milano - Interventi Rapidi',
+    h1: 'Idraulico a Porta Romana',
+    description: 'Idraulico a Porta Romana. Riparazioni urgenti, manutenzione caldaie, installazioni. Preventivo gratuito, risposta rapida.',
+    keywords: ['idraulico porta romana', 'idraulico porta romana milano', 'idraulici porta romana', 'pronto intervento porta romana']
+  },
+  {
+    slug: 'idraulico-brera',
+    title: 'Idraulico Brera Milano - Servizio Premium',
+    h1: 'Idraulico a Brera',
+    description: 'Idraulico a Brera e Garibaldi. Servizio professionale per riparazioni, manutenzione e installazioni. Interventi rapidi, preventivo gratuito.',
+    keywords: ['idraulico brera', 'idraulico brera milano', 'idraulici brera', 'idraulico garibaldi milano']
+  },
+  {
+    slug: 'idraulico-isola',
+    title: 'Idraulico Isola Milano - Pronto Intervento',
+    h1: 'Idraulico all\'Isola',
+    description: 'Idraulico a Isola Milano. Riparazioni urgenti, perdite, caldaie. Professionisti verificati con preventivo gratuito.',
+    keywords: ['idraulico isola', 'idraulico isola milano', 'idraulici isola', 'pronto intervento isola']
+  },
+  {
+    slug: 'idraulico-citta-studi',
+    title: 'Idraulico Città Studi Milano - Lambrate e Piola',
+    h1: 'Idraulico Città Studi',
+    description: 'Idraulico a Città Studi, Lambrate e Piola. Interventi rapidi, pronto intervento 24/7. Preventivo gratuito.',
+    keywords: ['idraulico citta studi', 'idraulico lambrate', 'idraulico piola', 'idraulici citta studi milano']
+  },
+  {
+    slug: 'idraulico-porta-venezia',
+    title: 'Idraulico Porta Venezia Milano - Interventi 24/7',
+    h1: 'Idraulico a Porta Venezia',
+    description: 'Idraulico a Porta Venezia e Buenos Aires. Riparazioni, manutenzione caldaie, installazioni. Preventivo gratuito.',
+    keywords: ['idraulico porta venezia', 'idraulico porta venezia milano', 'idraulico buenos aires', 'idraulici porta venezia']
+  },
+  {
+    slug: 'idraulico-san-siro',
+    title: 'Idraulico San Siro Milano - Fiera e Stadio',
+    h1: 'Idraulico a San Siro',
+    description: 'Idraulico a San Siro e zona Fiera. Pronto intervento 24/7, riparazioni urgenti, manutenzione. Preventivo gratuito.',
+    keywords: ['idraulico san siro', 'idraulico san siro milano', 'idraulico fiera milano', 'idraulici san siro']
+  },
+  {
+    slug: 'idraulico-bicocca',
+    title: 'Idraulico Bicocca Milano - Niguarda e Greco',
+    h1: 'Idraulico alla Bicocca',
+    description: 'Idraulico a Bicocca, Niguarda e Greco. Interventi rapidi, pronto intervento 24/7. Preventivo gratuito.',
+    keywords: ['idraulico bicocca', 'idraulico bicocca milano', 'idraulico niguarda', 'idraulico greco']
+  },
+  {
+    slug: 'idraulico-loreto',
+    title: 'Idraulico Loreto Milano - Pronto Intervento',
+    h1: 'Idraulico a Loreto',
+    description: 'Idraulico a Piazzale Loreto e dintorni. Riparazioni urgenti, perdite, caldaie. Professionisti verificati.',
+    keywords: ['idraulico loreto', 'idraulico loreto milano', 'idraulico piazzale loreto', 'idraulici loreto']
+  },
+  {
+    slug: 'idraulico-centrale',
+    title: 'Idraulico Stazione Centrale Milano - Interventi Rapidi',
+    h1: 'Idraulico Stazione Centrale',
+    description: 'Idraulico zona Stazione Centrale Milano. Pronto intervento 24/7, riparazioni urgenti. Preventivo gratuito.',
+    keywords: ['idraulico stazione centrale', 'idraulico centrale milano', 'idraulici stazione centrale', 'pronto intervento centrale']
+  },
+  {
+    slug: 'idraulico-corso-buenos-aires',
+    title: 'Idraulico Corso Buenos Aires Milano',
+    h1: 'Idraulico Corso Buenos Aires',
+    description: 'Idraulico in zona Corso Buenos Aires. Interventi rapidi, manutenzione caldaie, installazioni. Preventivo gratuito.',
+    keywords: ['idraulico corso buenos aires', 'idraulico buenos aires milano', 'idraulici buenos aires']
+  },
+  {
+    slug: 'idraulico-sempione',
+    title: 'Idraulico Sempione Milano - Arco della Pace',
+    h1: 'Idraulico a Sempione',
+    description: 'Idraulico a Sempione e Arco della Pace. Riparazioni, pronto intervento, manutenzione caldaie. Preventivo gratuito.',
+    keywords: ['idraulico sempione', 'idraulico sempione milano', 'idraulico arco della pace', 'idraulici sempione']
+  },
+  {
+    slug: 'idraulico-moscova',
+    title: 'Idraulico Moscova Milano - Pronto Intervento',
+    h1: 'Idraulico a Moscova',
+    description: 'Idraulico a Moscova e Corso Como. Servizio professionale, interventi rapidi. Preventivo gratuito.',
+    keywords: ['idraulico moscova', 'idraulico moscova milano', 'idraulico corso como', 'idraulici moscova']
+  },
+  {
+    slug: 'idraulico-porta-genova',
+    title: 'Idraulico Porta Genova Milano - Darsena',
+    h1: 'Idraulico a Porta Genova',
+    description: 'Idraulico a Porta Genova e Darsena. Riparazioni urgenti, manutenzione, installazioni. Preventivo gratuito.',
+    keywords: ['idraulico porta genova', 'idraulico porta genova milano', 'idraulico darsena', 'idraulici porta genova']
+  },
+  {
+    slug: 'idraulico-porta-ticinese',
+    title: 'Idraulico Porta Ticinese Milano - Colonne di San Lorenzo',
+    h1: 'Idraulico a Porta Ticinese',
+    description: 'Idraulico a Porta Ticinese. Pronto intervento 24/7, riparazioni perdite, manutenzione caldaie. Preventivo gratuito.',
+    keywords: ['idraulico porta ticinese', 'idraulico porta ticinese milano', 'idraulico colonne san lorenzo', 'idraulici porta ticinese']
+  },
+  {
+    slug: 'idraulico-bovisa',
+    title: 'Idraulico Bovisa Milano - Politecnico e Dergano',
+    h1: 'Idraulico alla Bovisa',
+    description: 'Idraulico a Bovisa e Dergano. Interventi rapidi, pronto intervento 24/7. Preventivo gratuito.',
+    keywords: ['idraulico bovisa', 'idraulico bovisa milano', 'idraulico dergano', 'idraulici bovisa']
+  },
+  {
+    slug: 'idraulico-affori',
+    title: 'Idraulico Affori Milano - Comasina e Bruzzano',
+    h1: 'Idraulico ad Affori',
+    description: 'Idraulico ad Affori, Comasina e Bruzzano. Riparazioni, manutenzione caldaie, installazioni. Preventivo gratuito.',
+    keywords: ['idraulico affori', 'idraulico affori milano', 'idraulico comasina', 'idraulico bruzzano']
+  },
+  {
+    slug: 'idraulico-quarto-oggiaro',
+    title: 'Idraulico Quarto Oggiaro Milano',
+    h1: 'Idraulico a Quarto Oggiaro',
+    description: 'Idraulico a Quarto Oggiaro. Pronto intervento 24/7, riparazioni urgenti, manutenzione. Preventivo gratuito.',
+    keywords: ['idraulico quarto oggiaro', 'idraulico quarto oggiaro milano', 'idraulici quarto oggiaro']
+  },
+  {
+    slug: 'idraulico-baggio',
+    title: 'Idraulico Baggio Milano - Olmi e Muggiano',
+    h1: 'Idraulico a Baggio',
+    description: 'Idraulico a Baggio, Olmi e Muggiano. Interventi rapidi, riparazioni perdite, caldaie. Preventivo gratuito.',
+    keywords: ['idraulico baggio', 'idraulico baggio milano', 'idraulico olmi', 'idraulico muggiano']
+  },
+  {
+    slug: 'idraulico-corvetto',
+    title: 'Idraulico Corvetto Milano - Rogoredo e Santa Giulia',
+    h1: 'Idraulico a Corvetto',
+    description: 'Idraulico a Corvetto, Rogoredo e Santa Giulia. Pronto intervento 24/7, manutenzione caldaie. Preventivo gratuito.',
+    keywords: ['idraulico corvetto', 'idraulico corvetto milano', 'idraulico rogoredo', 'idraulico santa giulia']
+  },
+  {
+    slug: 'idraulico-certosa',
+    title: 'Idraulico Certosa Milano - Villapizzone',
+    h1: 'Idraulico alla Certosa',
+    description: 'Idraulico a Certosa e Villapizzone. Riparazioni urgenti, perdite, caldaie. Preventivo gratuito.',
+    keywords: ['idraulico certosa', 'idraulico certosa milano', 'idraulico villapizzone', 'idraulici certosa']
   }
 ];
 

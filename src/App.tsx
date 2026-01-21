@@ -510,6 +510,33 @@ const App = () => (
             <Route path="/idraulico-chiaia" element={<KeywordLandingPage slug="idraulico-chiaia" />} />
             <Route path="/idraulico-san-giovanni-napoli" element={<KeywordLandingPage slug="idraulico-san-giovanni-napoli" />} />
             
+            {/* Milano - Città e Quartieri (Google Ads) */}
+            <Route path="/idraulico-milano" element={<KeywordLandingPage slug="idraulico-milano" />} />
+            <Route path="/termoidraulica-milano" element={<KeywordLandingPage slug="termoidraulica-milano" />} />
+            <Route path="/pronto-intervento-idraulico-milano" element={<KeywordLandingPage slug="pronto-intervento-idraulico-milano" />} />
+            <Route path="/idraulico-milano-centro" element={<KeywordLandingPage slug="idraulico-milano-centro" />} />
+            <Route path="/idraulico-navigli" element={<KeywordLandingPage slug="idraulico-navigli" />} />
+            <Route path="/idraulico-porta-romana" element={<KeywordLandingPage slug="idraulico-porta-romana" />} />
+            <Route path="/idraulico-brera" element={<KeywordLandingPage slug="idraulico-brera" />} />
+            <Route path="/idraulico-isola" element={<KeywordLandingPage slug="idraulico-isola" />} />
+            <Route path="/idraulico-citta-studi" element={<KeywordLandingPage slug="idraulico-citta-studi" />} />
+            <Route path="/idraulico-porta-venezia" element={<KeywordLandingPage slug="idraulico-porta-venezia" />} />
+            <Route path="/idraulico-san-siro" element={<KeywordLandingPage slug="idraulico-san-siro" />} />
+            <Route path="/idraulico-bicocca" element={<KeywordLandingPage slug="idraulico-bicocca" />} />
+            <Route path="/idraulico-loreto" element={<KeywordLandingPage slug="idraulico-loreto" />} />
+            <Route path="/idraulico-centrale" element={<KeywordLandingPage slug="idraulico-centrale" />} />
+            <Route path="/idraulico-corso-buenos-aires" element={<KeywordLandingPage slug="idraulico-corso-buenos-aires" />} />
+            <Route path="/idraulico-sempione" element={<KeywordLandingPage slug="idraulico-sempione" />} />
+            <Route path="/idraulico-moscova" element={<KeywordLandingPage slug="idraulico-moscova" />} />
+            <Route path="/idraulico-porta-genova" element={<KeywordLandingPage slug="idraulico-porta-genova" />} />
+            <Route path="/idraulico-porta-ticinese" element={<KeywordLandingPage slug="idraulico-porta-ticinese" />} />
+            <Route path="/idraulico-bovisa" element={<KeywordLandingPage slug="idraulico-bovisa" />} />
+            <Route path="/idraulico-affori" element={<KeywordLandingPage slug="idraulico-affori" />} />
+            <Route path="/idraulico-quarto-oggiaro" element={<KeywordLandingPage slug="idraulico-quarto-oggiaro" />} />
+            <Route path="/idraulico-baggio" element={<KeywordLandingPage slug="idraulico-baggio" />} />
+            <Route path="/idraulico-corvetto" element={<KeywordLandingPage slug="idraulico-corvetto" />} />
+            <Route path="/idraulico-certosa" element={<KeywordLandingPage slug="idraulico-certosa" />} />
+            
             {/* Risparmio Energetico */}
             <Route path="/pompa-calore-aria-acqua" element={<KeywordLandingPage slug="pompa-calore-aria-acqua" />} />
             <Route path="/pompa-calore-aria-aria" element={<KeywordLandingPage slug="pompa-calore-aria-aria" />} />

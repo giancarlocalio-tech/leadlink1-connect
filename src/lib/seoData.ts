@@ -4622,6 +4622,73 @@ export const KEYWORD_PAGES: KeywordPageData[] = [
     h1: 'Oggetto Caduto nello Scarico',
     description: 'Hai perso un oggetto nello scarico? Recupero professionale.',
     keywords: ['oggetto scarico', 'recupero scarico', 'anello scarico']
+  },
+  
+  // ============================================
+  // NAPOLI - KEYWORD PAGES (Google Ads)
+  // ============================================
+  {
+    slug: 'idraulico-napoli',
+    title: 'Idraulico Napoli - Pronto Intervento 24/7 | Preventivo Gratis',
+    h1: 'Idraulico a Napoli',
+    description: 'Cerchi un idraulico a Napoli? Professionisti verificati, pronto intervento 24/7, preventivo gratuito. Risposta in 15 minuti. ⭐ 4.8/5 recensioni.',
+    keywords: ['idraulico napoli', 'idraulico a napoli', 'idraulici napoli', 'pronto intervento idraulico napoli']
+  },
+  {
+    slug: 'termoidraulica-napoli',
+    title: 'Termoidraulica Napoli - Caldaie, Riscaldamento, Climatizzazione',
+    h1: 'Termoidraulica a Napoli',
+    description: 'Servizi di termoidraulica a Napoli. Installazione e manutenzione caldaie, impianti di riscaldamento e climatizzazione. Tecnici certificati.',
+    keywords: ['termoidraulica napoli', 'termoidraulico napoli', 'caldaie napoli', 'riscaldamento napoli']
+  },
+  {
+    slug: 'pronto-intervento-idraulico-napoli',
+    title: 'Pronto Intervento Idraulico Napoli 24/7 - Emergenze',
+    h1: 'Pronto Intervento Idraulico Napoli',
+    description: 'Emergenza idraulica a Napoli? Pronto intervento 24 ore su 24, 7 giorni su 7. Arrivo rapido, risoluzione immediata. Chiama ora!',
+    keywords: ['pronto intervento idraulico napoli', 'idraulico napoli pronto intervento', 'emergenza idraulico napoli', 'idraulico urgente napoli']
+  },
+  {
+    slug: 'idraulico-napoli-centro',
+    title: 'Idraulico Napoli Centro Storico - Pronto Intervento',
+    h1: 'Idraulico Napoli Centro',
+    description: 'Idraulico nel centro storico di Napoli. Interventi rapidi in zona Spaccanapoli, Piazza del Plebiscito, Decumani. Preventivo gratuito.',
+    keywords: ['idraulico napoli centro', 'idraulico centro storico napoli', 'idraulico spaccanapoli', 'idraulico decumani']
+  },
+  {
+    slug: 'idraulico-vomero',
+    title: 'Idraulico Vomero Napoli - Pronto Intervento 24/7',
+    h1: 'Idraulico al Vomero',
+    description: 'Cerchi un idraulico al Vomero? Professionisti verificati per riparazioni, pronto intervento e manutenzione. Preventivo gratuito in 15 minuti.',
+    keywords: ['idraulico vomero', 'idraulico vomero napoli', 'idraulici vomero', 'pronto intervento vomero']
+  },
+  {
+    slug: 'idraulico-fuorigrotta',
+    title: 'Idraulico Fuorigrotta Napoli - Interventi Rapidi',
+    h1: 'Idraulico a Fuorigrotta',
+    description: 'Idraulico a Fuorigrotta e Bagnoli. Riparazioni urgenti, manutenzione caldaie, installazioni. Preventivo gratuito, risposta rapida.',
+    keywords: ['idraulico fuorigrotta', 'idraulico fuorigrotta napoli', 'idraulico bagnoli', 'idraulici fuorigrotta']
+  },
+  {
+    slug: 'idraulico-posillipo',
+    title: 'Idraulico Posillipo Napoli - Servizio Premium',
+    h1: 'Idraulico a Posillipo',
+    description: 'Idraulico a Posillipo. Servizio professionale per riparazioni, manutenzione e installazioni. Interventi rapidi, preventivo gratuito.',
+    keywords: ['idraulico posillipo', 'idraulico posillipo napoli', 'idraulici posillipo', 'pronto intervento posillipo']
+  },
+  {
+    slug: 'idraulico-chiaia',
+    title: 'Idraulico Chiaia Napoli - Pronto Intervento',
+    h1: 'Idraulico a Chiaia',
+    description: 'Idraulico a Chiaia e Mergellina. Riparazioni urgenti, perdite, caldaie. Professionisti verificati con preventivo gratuito.',
+    keywords: ['idraulico chiaia', 'idraulico chiaia napoli', 'idraulico mergellina', 'idraulici chiaia']
+  },
+  {
+    slug: 'idraulico-san-giovanni-napoli',
+    title: 'Idraulico San Giovanni a Teduccio Napoli',
+    h1: 'Idraulico San Giovanni Napoli',
+    description: 'Idraulico a San Giovanni a Teduccio e Ponticelli. Interventi rapidi, pronto intervento 24/7. Preventivo gratuito.',
+    keywords: ['idraulico san giovanni napoli', 'idraulico ponticelli', 'idraulico teduccio', 'idraulici napoli est']
   }
 ];
 

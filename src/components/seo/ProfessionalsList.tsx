@@ -1,5 +1,6 @@
-import { MapPin, Calendar } from 'lucide-react';
+import { MapPin, Calendar, Star, Clock, CheckCircle, Shield, Award, ThumbsUp, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 interface ProfessionalsListProps {
   cityName?: string;
@@ -20,6 +21,15 @@ function generateProfessionals(seed: string) {
     `Idraulico qualificato per interventi residenziali e commerciali. Preventivi gratuiti e trasparenti.`,
     `Esperienza ventennale in tutti i servizi idraulici. Pronto intervento 24/7 per la zona.`,
     `Tecnico certificato per caldaie e impianti di riscaldamento. Manutenzione programmata e riparazioni.`
+  ];
+
+  const specializations = [
+    ['Pronto Intervento', 'Perdite', 'Caldaie'],
+    ['Emergenze 24/7', 'Caldaie', 'Manutenzione'],
+    ['Ristrutturazioni', 'Bagni', 'Impianti'],
+    ['Residenziale', 'Commerciale', 'Preventivi'],
+    ['Pronto Intervento', 'Impianti', 'Riparazioni'],
+    ['Caldaie', 'Riscaldamento', 'Certificazioni']
   ];
 
   const locations = ['Milano', 'Roma', 'Torino', 'Bologna', 'Firenze', 'Napoli'];
@@ -47,6 +57,16 @@ function generateProfessionals(seed: string) {
     const date = new Date();
     date.setMonth(date.getMonth() - monthsAgo);
     
+    // Generate stats
+    const rating = 4.5 + (((hash + idx * 11) % 10) / 20); // 4.5 - 4.95
+    const reviewCount = 15 + Math.abs((hash + idx * 23) % 186); // 15-200
+    const jobsCompleted = 50 + Math.abs((hash + idx * 31) % 451); // 50-500
+    const responseTime = 10 + Math.abs((hash + idx * 7) % 51); // 10-60 minutes
+    const isVerified = ((hash + idx) % 3) !== 0; // ~66% verified
+    const isTopRated = rating >= 4.8 && reviewCount > 80;
+    const hasProBadge = jobsCompleted > 200;
+    const yearsExperience = 5 + Math.abs((hash + idx * 13) % 16); // 5-20 years
+    
     return {
       id: idx,
       name: `${firstNames[nameIdx]} ${lastInitials[initialIdx]}.`,
@@ -54,7 +74,16 @@ function generateProfessionals(seed: string) {
       color: colors[colorIdx],
       location: locations[locationIdx],
       joinDate: date.toLocaleDateString('it-IT', { month: '2-digit', year: 'numeric' }),
-      description: descriptions[idx]
+      description: descriptions[idx],
+      specializations: specializations[idx],
+      rating: Math.round(rating * 10) / 10,
+      reviewCount,
+      jobsCompleted,
+      responseTime,
+      isVerified,
+      isTopRated,
+      hasProBadge,
+      yearsExperience
     };
   });
 }
@@ -74,47 +103,161 @@ export function ProfessionalsList({ cityName, serviceName, onRequestQuote }: Pro
   return (
     <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-2">
-          Trova {serviceText} {locationText}
-        </h2>
-        <p className="text-muted-foreground text-center mb-10 max-w-2xl mx-auto">
-          Professionisti verificati pronti ad aiutarti
-        </p>
+        <div className="text-center mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold mb-2">
+            Trova {serviceText} {locationText}
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto mb-4">
+            Professionisti verificati pronti ad aiutarti
+          </p>
+          
+          {/* Trust indicators */}
+          <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
+            <div className="flex items-center gap-1.5 text-green-600">
+              <Shield className="h-4 w-4" />
+              <span>Garanzia Soddisfatti</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-blue-600">
+              <CheckCircle className="h-4 w-4" />
+              <span>Professionisti Verificati</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-orange-600">
+              <Zap className="h-4 w-4" />
+              <span>Risposta Rapida</span>
+            </div>
+          </div>
+        </div>
         
         <div className="max-w-4xl mx-auto">
           {/* Professionals list */}
           <div className="space-y-4 mb-8">
-            {displayProfessionals.map((prof) => (
+            {displayProfessionals.map((prof, index) => (
               <div 
                 key={prof.id}
-                className="bg-card rounded-xl p-5 border border-border shadow-sm hover:shadow-md transition-shadow flex gap-4"
+                className="bg-card rounded-xl p-5 border border-border shadow-sm hover:shadow-lg transition-all duration-300 hover:border-primary/30"
               >
-                {/* Avatar */}
-                <div className={`${prof.color} w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0`}>
-                  <span className="text-white font-bold text-lg">{prof.initials}</span>
+                <div className="flex gap-4">
+                  {/* Avatar */}
+                  <div className="relative flex-shrink-0">
+                    <div className={`${prof.color} w-16 h-16 rounded-full flex items-center justify-center`}>
+                      <span className="text-white font-bold text-xl">{prof.initials}</span>
+                    </div>
+                    {prof.isVerified && (
+                      <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-1">
+                        <CheckCircle className="h-4 w-4 text-white" />
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="flex-1 min-w-0">
+                    {/* Header row */}
+                    <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="font-bold text-lg">{prof.name}</h3>
+                          {prof.isTopRated && (
+                            <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-300 text-xs">
+                              <Award className="h-3 w-3 mr-1" />
+                              Top Rated
+                            </Badge>
+                          )}
+                          {prof.hasProBadge && (
+                            <Badge variant="secondary" className="bg-purple-100 text-purple-800 border-purple-300 text-xs">
+                              PRO
+                            </Badge>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                          <MapPin className="h-3.5 w-3.5" />
+                          <span>{serviceText} · {prof.location}</span>
+                          <span className="mx-1">·</span>
+                          <span>{prof.yearsExperience} anni esp.</span>
+                        </div>
+                      </div>
+                      
+                      {/* Rating badge */}
+                      <div className="flex flex-col items-end">
+                        <div className="flex items-center gap-1 bg-green-50 px-2 py-1 rounded-lg">
+                          <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+                          <span className="font-bold text-green-700">{prof.rating}</span>
+                        </div>
+                        <span className="text-xs text-muted-foreground mt-0.5">
+                          {prof.reviewCount} recensioni
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Stats row */}
+                    <div className="flex flex-wrap gap-3 mb-3 text-xs">
+                      <div className="flex items-center gap-1 text-muted-foreground">
+                        <Clock className="h-3.5 w-3.5 text-green-500" />
+                        <span>Risponde in ~{prof.responseTime} min</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-muted-foreground">
+                        <ThumbsUp className="h-3.5 w-3.5 text-blue-500" />
+                        <span>{prof.jobsCompleted}+ lavori completati</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-muted-foreground">
+                        <Calendar className="h-3.5 w-3.5" />
+                        <span>Su Idraulici Subito dal {prof.joinDate}</span>
+                      </div>
+                    </div>
+                    
+                    {/* Description */}
+                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                      {prof.description}
+                    </p>
+                    
+                    {/* Specializations */}
+                    <div className="flex flex-wrap gap-1.5">
+                      {prof.specializations.map((spec, i) => (
+                        <span 
+                          key={i}
+                          className="text-xs bg-muted px-2 py-1 rounded-full"
+                        >
+                          {spec}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
                 
-                {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-2 mb-1">
-                    <h3 className="font-bold text-lg">{prof.name}</h3>
-                    <span className="text-xs text-muted-foreground flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />
-                      {prof.joinDate}
-                    </span>
+                {/* First professional has CTA */}
+                {index === 0 && onRequestQuote && (
+                  <div className="mt-4 pt-4 border-t border-border">
+                    <Button 
+                      onClick={onRequestQuote}
+                      className="w-full sm:w-auto"
+                    >
+                      Richiedi Preventivo Gratuito
+                    </Button>
                   </div>
-                  
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground mb-2">
-                    <MapPin className="h-3.5 w-3.5" />
-                    <span>{serviceText} · {prof.location}</span>
-                  </div>
-                  
-                  <p className="text-sm text-muted-foreground line-clamp-2">
-                    {prof.description}
-                  </p>
-                </div>
+                )}
               </div>
             ))}
+          </div>
+          
+          {/* Summary stats */}
+          <div className="bg-muted/50 rounded-xl p-6 mb-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+              <div>
+                <div className="text-2xl font-bold text-primary">500+</div>
+                <div className="text-sm text-muted-foreground">Professionisti attivi</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-primary">4.8</div>
+                <div className="text-sm text-muted-foreground">Valutazione media</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-primary">15 min</div>
+                <div className="text-sm text-muted-foreground">Tempo medio risposta</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-primary">98%</div>
+                <div className="text-sm text-muted-foreground">Clienti soddisfatti</div>
+              </div>
+            </div>
           </div>
           
           {/* CTA buttons */}

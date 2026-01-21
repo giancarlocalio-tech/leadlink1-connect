@@ -499,6 +499,17 @@ const App = () => (
             <Route path="/idraulico-puglia" element={<KeywordLandingPage slug="idraulico-puglia" />} />
             <Route path="/idraulico-liguria" element={<KeywordLandingPage slug="idraulico-liguria" />} />
             
+            {/* Napoli - Città e Quartieri (Google Ads) */}
+            <Route path="/idraulico-napoli" element={<KeywordLandingPage slug="idraulico-napoli" />} />
+            <Route path="/termoidraulica-napoli" element={<KeywordLandingPage slug="termoidraulica-napoli" />} />
+            <Route path="/pronto-intervento-idraulico-napoli" element={<KeywordLandingPage slug="pronto-intervento-idraulico-napoli" />} />
+            <Route path="/idraulico-napoli-centro" element={<KeywordLandingPage slug="idraulico-napoli-centro" />} />
+            <Route path="/idraulico-vomero" element={<KeywordLandingPage slug="idraulico-vomero" />} />
+            <Route path="/idraulico-fuorigrotta" element={<KeywordLandingPage slug="idraulico-fuorigrotta" />} />
+            <Route path="/idraulico-posillipo" element={<KeywordLandingPage slug="idraulico-posillipo" />} />
+            <Route path="/idraulico-chiaia" element={<KeywordLandingPage slug="idraulico-chiaia" />} />
+            <Route path="/idraulico-san-giovanni-napoli" element={<KeywordLandingPage slug="idraulico-san-giovanni-napoli" />} />
+            
             {/* Risparmio Energetico */}
             <Route path="/pompa-calore-aria-acqua" element={<KeywordLandingPage slug="pompa-calore-aria-acqua" />} />
             <Route path="/pompa-calore-aria-aria" element={<KeywordLandingPage slug="pompa-calore-aria-aria" />} />

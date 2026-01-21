@@ -30,6 +30,7 @@ import BlogPage from "./pages/BlogPage";
 import BlogArticlePage from "./pages/BlogArticlePage";
 import BlogCategoryPage from "./pages/BlogCategoryPage";
 import NotFound from "./pages/NotFound";
+import IdraulicoRedirect from "./components/IdraulicoRedirect";
 
 const queryClient = new QueryClient();
 
@@ -529,6 +530,10 @@ const App = () => (
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/categoria/:category" element={<BlogCategoryPage />} />
             <Route path="/blog/:slug" element={<BlogArticlePage />} />
+            
+            {/* 301 Redirects for /idraulico/:city and /idraulico/:city/:service patterns */}
+            <Route path="/idraulico/:city/:service" element={<IdraulicoRedirect type="city-service" />} />
+            <Route path="/idraulico/:city" element={<IdraulicoRedirect type="city" />} />
             
             {/* Dynamic city and city+service SEO pages - catches patterns like "milano" or "milano-manutenzione-caldaie" */}
             <Route path="/:slug" element={<DynamicLandingPage type="city-service" />} />

@@ -1429,6 +1429,46 @@ export const CITIES: CityData[] = [
     population: '22.000',
     neighborhoods: ['Centro', 'Stufles', 'Millan', 'Sant\'Andrea', 'Sarnes'],
     nearbyAreas: ['Varna', 'Fortezza', 'Chiusa', 'Luson', 'Naz-Sciaves']
+  },
+  // === CITTÀ AGGIUNTE PER FIX SOFT 404 ===
+  // PUGLIA - Trani e Manfredonia
+  {
+    slug: 'trani',
+    name: 'Trani',
+    province: 'BT',
+    region: 'Puglia',
+    population: '56.000',
+    neighborhoods: ['Centro Storico', 'Zona Porto', 'Cappuccini', 'Stadio', 'San Paolo'],
+    nearbyAreas: ['Barletta', 'Andria', 'Bisceglie', 'Corato', 'Molfetta']
+  },
+  {
+    slug: 'manfredonia',
+    name: 'Manfredonia',
+    province: 'FG',
+    region: 'Puglia',
+    population: '55.000',
+    neighborhoods: ['Centro', 'Monticchio', 'Siponto', 'Borgo Mezzanone', 'San Leonardo'],
+    nearbyAreas: ['Foggia', 'San Giovanni Rotondo', 'Monte Sant\'Angelo', 'Vieste', 'Mattinata']
+  },
+  // SICILIA - Trapani
+  {
+    slug: 'trapani',
+    name: 'Trapani',
+    province: 'TP',
+    region: 'Sicilia',
+    population: '68.000',
+    neighborhoods: ['Centro Storico', 'Rione Cappuccinelli', 'Fontanelle', 'Palma', 'San Giuliano'],
+    nearbyAreas: ['Erice', 'Marsala', 'Mazara del Vallo', 'Alcamo', 'Valderice', 'Paceco']
+  },
+  // LAZIO - Ciampino
+  {
+    slug: 'ciampino',
+    name: 'Ciampino',
+    province: 'RM',
+    region: 'Lazio',
+    population: '39.000',
+    neighborhoods: ['Centro', 'Mura dei Francesi', 'Morena', 'Sassone', 'Aeroporto'],
+    nearbyAreas: ['Roma', 'Marino', 'Frascati', 'Grottaferrata', 'Albano Laziale', 'Castel Gandolfo']
   }
 ];
 

@@ -47,7 +47,9 @@ export function useTrialRequests(profileOverride?: PlumberProfile | null) {
   const [claiming, setClaiming] = useState<string | null>(null);
 
   const isTrial = subscription?.is_trial === true;
-  const freeRequestsRemaining = subscription?.free_requests_remaining ?? 0;
+  // Only count free requests if user is actually in trial mode
+  // Users who purchased credits have is_trial = false and should use credits instead
+  const freeRequestsRemaining = isTrial ? (subscription?.free_requests_remaining ?? 0) : 0;
 
   const fetchAvailableRequests = useCallback(async () => {
     if (!profile) {

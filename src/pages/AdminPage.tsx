@@ -23,7 +23,8 @@ import {
   CheckCheck,
   Coins,
   Unlock,
-  Globe
+  Globe,
+  Plus
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -67,6 +68,7 @@ import {
   ACCESSIBILITY_LABELS 
 } from '@/lib/types';
 import { UrlExporter } from '@/components/admin/UrlExporter';
+import { QuickRequestForm } from '@/components/admin/QuickRequestForm';
 
 // Extended plumber type with subscription and credits info
 interface PlumberWithSubscription extends PlumberProfile {
@@ -620,8 +622,12 @@ export default function AdminPage() {
           </div>
 
           {/* Tabs */}
-          <Tabs defaultValue="plumbers" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3">
+          <Tabs defaultValue="quick" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="quick">
+                <Plus className="h-4 w-4 mr-2" />
+                Inserimento
+              </TabsTrigger>
               <TabsTrigger value="plumbers">
                 <Users className="h-4 w-4 mr-2" />
                 Idraulici
@@ -635,6 +641,11 @@ export default function AdminPage() {
                 SEO Tools
               </TabsTrigger>
             </TabsList>
+
+            {/* Quick Request Form Tab */}
+            <TabsContent value="quick" className="space-y-4">
+              <QuickRequestForm onRequestCreated={fetchRequests} />
+            </TabsContent>
 
             {/* Plumbers Tab */}
             <TabsContent value="plumbers" className="space-y-4">

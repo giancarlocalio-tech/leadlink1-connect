@@ -86,9 +86,28 @@ export function QuickRequestForm({ onRequestCreated }: QuickRequestFormProps) {
 
       if (error) throw error;
 
-      toast.success('Richiesta creata con successo!', {
-        description: `ID: ${data.id.slice(0, 8)}... - Gli idraulici della zona verranno notificati.`,
-      });
+      // Notify plumbers in the area via WhatsApp and Email
+      try {
+        const { error: notifyError } = await supabase.functions.invoke('notify-plumbers', {
+          body: { requestId: data.id },
+        });
+        
+        if (notifyError) {
+          console.error('Error notifying plumbers:', notifyError);
+          toast.warning('Richiesta creata, ma errore nell\'invio notifiche', {
+            description: notifyError.message,
+          });
+        } else {
+          toast.success('Richiesta creata con successo!', {
+            description: `ID: ${data.id.slice(0, 8)}... - Notifiche WhatsApp inviate agli idraulici.`,
+          });
+        }
+      } catch (notifyErr: any) {
+        console.error('Error calling notify-plumbers:', notifyErr);
+        toast.success('Richiesta creata con successo!', {
+          description: `ID: ${data.id.slice(0, 8)}... - Errore notifiche: ${notifyErr.message}`,
+        });
+      }
 
       // Reset form
       setFormData({

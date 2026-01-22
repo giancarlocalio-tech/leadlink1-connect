@@ -89,7 +89,7 @@ export function QuickRequestForm({ onRequestCreated }: QuickRequestFormProps) {
       // Notify plumbers in the area via WhatsApp and Email
       try {
         const { error: notifyError } = await supabase.functions.invoke('notify-plumbers', {
-          body: { requestId: data.id },
+          body: { request_id: data.id },
         });
         
         if (notifyError) {

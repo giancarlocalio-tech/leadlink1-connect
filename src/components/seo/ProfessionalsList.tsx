@@ -47,10 +47,10 @@ function generateProfessionals(seed: string) {
   });
 
   return shuffledIndices.slice(0, 5).map((idx, i) => {
-    const nameIdx = (hash + idx) % firstNames.length;
-    const initialIdx = (hash + idx * 3) % lastInitials.length;
-    const colorIdx = (hash + idx) % colors.length;
-    const locationIdx = (hash + idx * 5) % locations.length;
+    const nameIdx = Math.abs((hash + idx) % firstNames.length);
+    const initialIdx = Math.abs((hash + idx * 3) % lastInitials.length);
+    const colorIdx = Math.abs((hash + idx) % colors.length);
+    const locationIdx = Math.abs((hash + idx * 5) % locations.length);
     
     // Generate a date in the last 2 years
     const monthsAgo = Math.abs((hash + idx * 17) % 24);
@@ -58,7 +58,7 @@ function generateProfessionals(seed: string) {
     date.setMonth(date.getMonth() - monthsAgo);
     
     // Generate stats
-    const rating = 4.5 + (((hash + idx * 11) % 10) / 20); // 4.5 - 4.95
+    const rating = 4.5 + (Math.abs((hash + idx * 11) % 10) / 20); // 4.5 - 4.95
     const reviewCount = 15 + Math.abs((hash + idx * 23) % 186); // 15-200
     const jobsCompleted = 50 + Math.abs((hash + idx * 31) % 451); // 50-500
     const responseTime = 10 + Math.abs((hash + idx * 7) % 51); // 10-60 minutes

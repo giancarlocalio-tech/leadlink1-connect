@@ -9,6 +9,10 @@ interface LocalBusinessOptions {
   url: string;
   areaServed?: AreaServed[];
   serviceTypes?: string[];
+  aggregateRating?: {
+    ratingValue: string;
+    reviewCount: string;
+  };
 }
 
 interface AreaServed {
@@ -46,7 +50,7 @@ function generateService(options: LocalBusinessOptions) {
         : { "@type": "City", "name": area.name };
     }) || [{ "@type": "Country", "name": "Italia" }];
 
-  return {
+  const baseService = {
     "@type": "Service",
     "@id": `${options.url}#service`,
     "name": options.name,
@@ -66,6 +70,22 @@ function generateService(options: LocalBusinessOptions) {
       "logo": `${BASE_URL}/favicon.png`,
     },
   };
+
+  // Add aggregateRating if provided - this enables rich snippets with stars in Google
+  if (options.aggregateRating) {
+    return {
+      ...baseService,
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": options.aggregateRating.ratingValue,
+        "reviewCount": options.aggregateRating.reviewCount,
+        "bestRating": "5",
+        "worstRating": "1"
+      }
+    };
+  }
+
+  return baseService;
 }
 
 // Generate WebPage schema

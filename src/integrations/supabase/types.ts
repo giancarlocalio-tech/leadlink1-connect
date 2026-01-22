@@ -1020,6 +1020,7 @@ export type Database = {
         Args: { p_plumber_id: string; p_request_id: string }
         Returns: boolean
       }
+      expire_old_requests: { Args: never; Returns: number }
       get_current_plumber_plan: {
         Args: never
         Returns: Database["public"]["Enums"]["subscription_plan"]

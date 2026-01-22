@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
-import { Wrench, MapPin, Phone, Flame, Droplets } from 'lucide-react';
+import { MapPin, Phone, Flame, Droplets } from 'lucide-react';
 import { CITIES, SERVICES, KEYWORD_PAGES } from '@/lib/seoData';
+// Use logo from public folder for reliability
+const logo = '/logo.png';
 
 // Top cities for SEO internal linking (showing 12 major cities)
 const TOP_CITIES = CITIES.slice(0, 12);
@@ -17,9 +19,7 @@ export function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="bg-primary p-2 rounded-lg">
-                <Wrench className="h-5 w-5 text-primary-foreground" />
-              </div>
+              <img src={logo} alt="Idraulici Subito" className="h-10 w-auto object-contain" />
               <span className="text-lg font-bold text-foreground">Idraulici Subito</span>
             </div>
             <p className="text-muted-foreground text-sm mb-4">

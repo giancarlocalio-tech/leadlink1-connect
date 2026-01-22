@@ -3,7 +3,8 @@ import { User, LogOut, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { useAdmin } from '@/hooks/useAdmin';
-import logo from '@/assets/logo.png';
+// Use logo from public folder for reliability
+const logo = '/logo.png';
 
 export function Header() {
   const location = useLocation();
@@ -28,8 +29,15 @@ export function Header() {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <img src={logo} alt="Idraulici Subito" className="h-10 w-auto" />
-            <span className="text-xl font-bold text-foreground">Idraulici Subito</span>
+            <img 
+              src={logo} 
+              alt="Idraulici Subito" 
+              className="h-10 w-auto object-contain"
+              onError={(e) => {
+                console.error('Logo failed to load:', e);
+              }}
+            />
+            <span className="text-xl font-bold text-foreground hidden sm:inline">Idraulici Subito</span>
           </Link>
           
           <nav className="flex items-center gap-2 sm:gap-4">

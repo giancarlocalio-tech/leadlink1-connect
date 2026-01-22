@@ -96,7 +96,19 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
     }
   }, [cityData, navigate]);
   
-  if (!cityData) return null;
+  if (!cityData) {
+    // Show loading skeleton instead of blank page
+    return (
+      <Layout>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Caricamento...</p>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   // Generate page content based on whether it's city-only or city+service
   const serviceName = serviceData?.name || 'Idraulico';

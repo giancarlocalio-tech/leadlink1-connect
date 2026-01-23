@@ -199,7 +199,7 @@ export default function InlineWizard({ onClose, defaultCity = '' }: InlineWizard
   };
 
   const handleSubmit = async () => {
-    if (!selectedType || !city.trim() || !description.trim() || !urgency || !propertyType || !accessibility || !clientName.trim() || !clientPhone.trim() || !privacyAccepted) {
+    if (!selectedType || !selectedCity || !description.trim() || !urgency || !propertyType || !accessibility || !clientName.trim() || !clientPhone.trim() || !privacyAccepted) {
       toast.error('Compila tutti i campi obbligatori.');
       return;
     }
@@ -210,7 +210,7 @@ export default function InlineWizard({ onClose, defaultCity = '' }: InlineWizard
 
     const requestPayload = {
       intervention_type: selectedType,
-      city: city.trim(),
+      city: `${selectedCity.name} (${selectedCity.province_code})`,
       description: description.trim(),
       urgency: urgency,
       property_type: propertyType,
@@ -453,9 +453,28 @@ export default function InlineWizard({ onClose, defaultCity = '' }: InlineWizard
               value={city}
               onChange={handleCityChange}
               placeholder="Cerca città o CAP..."
-              className="mb-6"
+              className="mb-2"
               autoFocus
             />
+            
+            {city.trim() && !selectedCity && (
+              <p className="text-sm text-destructive mb-4">
+                Seleziona una città dalla lista per continuare
+              </p>
+            )}
+            
+            {!city.trim() && (
+              <p className="text-sm text-muted-foreground mb-4">
+                Inizia a digitare per cercare la tua città
+              </p>
+            )}
+            
+            {selectedCity && (
+              <p className="text-sm text-success mb-4 flex items-center gap-1">
+                <Check className="h-3 w-3" />
+                {selectedCity.name} ({selectedCity.province_code}) selezionata
+              </p>
+            )}
 
             <div className="flex gap-3">
               <Button variant="outline" onClick={handleBack} className="flex-1">
@@ -463,8 +482,15 @@ export default function InlineWizard({ onClose, defaultCity = '' }: InlineWizard
                 Indietro
               </Button>
               <Button 
-                onClick={() => { setStep('description'); analytics.leadFormStart(selectedType || '', 'inline_wizard'); }} 
-                disabled={!city.trim()} 
+                onClick={() => { 
+                  if (!selectedCity) {
+                    toast.error('Seleziona una città dalla lista');
+                    return;
+                  }
+                  setStep('description'); 
+                  analytics.leadFormStart(selectedType || '', 'inline_wizard'); 
+                }} 
+                disabled={!selectedCity} 
                 className="flex-1"
               >
                 Avanti

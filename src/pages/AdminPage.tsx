@@ -70,6 +70,7 @@ import {
 } from '@/lib/types';
 import { UrlExporter } from '@/components/admin/UrlExporter';
 import { QuickRequestForm } from '@/components/admin/QuickRequestForm';
+import { RespondIoExporter } from '@/components/admin/RespondIoExporter';
 
 // Extended plumber type with subscription and credits info
 interface PlumberWithSubscription extends PlumberProfile {
@@ -629,7 +630,7 @@ export default function AdminPage() {
 
           {/* Tabs */}
           <Tabs defaultValue="quick" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="quick">
                 <Plus className="h-4 w-4 mr-2" />
                 Inserimento
@@ -641,6 +642,10 @@ export default function AdminPage() {
               <TabsTrigger value="requests">
                 <FileText className="h-4 w-4 mr-2" />
                 Richieste
+              </TabsTrigger>
+              <TabsTrigger value="respondio">
+                <MessageCircle className="h-4 w-4 mr-2" />
+                Respond.io
               </TabsTrigger>
               <TabsTrigger value="seo">
                 <Globe className="h-4 w-4 mr-2" />
@@ -900,6 +905,11 @@ export default function AdminPage() {
                   ))}
                 </div>
               )}
+            </TabsContent>
+
+            {/* Respond.io Export Tab */}
+            <TabsContent value="respondio" className="space-y-4">
+              <RespondIoExporter />
             </TabsContent>
 
             {/* SEO Tools Tab */}

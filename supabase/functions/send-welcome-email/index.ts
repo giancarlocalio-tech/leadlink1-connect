@@ -2,6 +2,8 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+const supabaseUrl = Deno.env.get("SUPABASE_URL");
+const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -13,6 +15,7 @@ interface WelcomeEmailRequest {
   full_name: string;
   business_name: string;
   plan_type: string;
+  phone?: string;
   app_origin?: string;
 }
 
@@ -21,6 +24,42 @@ const PLAN_LABELS: Record<string, string> = {
   medium: "Medium",
   premium: "Premium",
 };
+
+// Function to create Respond.io contact
+async function createRespondIoContact(phone: string, fullName: string, email: string): Promise<void> {
+  if (!phone || !supabaseUrl || !supabaseServiceKey) {
+    console.log("Skipping Respond.io contact creation - missing phone or config");
+    return;
+  }
+  
+  try {
+    console.log(`Creating Respond.io contact for: ${fullName} (${phone})`);
+    
+    const response = await fetch(`${supabaseUrl}/functions/v1/create-respondio-contact`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${supabaseServiceKey}`,
+      },
+      body: JSON.stringify({
+        phone,
+        full_name: fullName,
+        email,
+      }),
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      console.log(`Respond.io contact created/found: ${result.message}`);
+    } else {
+      console.error(`Failed to create Respond.io contact: ${result.error}`);
+    }
+  } catch (error) {
+    console.error("Error creating Respond.io contact:", error);
+    // Don't throw - this is a non-critical operation
+  }
+}
 
 const handler = async (req: Request): Promise<Response> => {
   console.log("send-welcome-email function called");
@@ -35,10 +74,18 @@ const handler = async (req: Request): Promise<Response> => {
       full_name,
       business_name,
       plan_type,
+      phone,
       app_origin,
     }: WelcomeEmailRequest = await req.json();
 
     console.log(`Sending welcome email to ${email}`);
+
+    // Create Respond.io contact in background (don't block email sending)
+    if (phone) {
+      createRespondIoContact(phone, full_name, email).catch(err => {
+        console.error("Background Respond.io contact creation failed:", err);
+      });
+    }
 
     const planLabel = PLAN_LABELS[plan_type] || plan_type;
 

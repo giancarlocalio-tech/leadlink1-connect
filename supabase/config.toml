@@ -53,3 +53,6 @@ verify_jwt = false
 
 [functions.respond-io-webhook]
 verify_jwt = false
+
+[functions.create-respondio-contact]
+verify_jwt = false

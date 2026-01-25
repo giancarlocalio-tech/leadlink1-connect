@@ -96,17 +96,22 @@ export default function BlogArticlePage() {
       <Helmet>
         <title>{article.metaTitle}</title>
         <meta name="description" content={article.metaDescription} />
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content={article.metaTitle} />
         <meta property="og:description" content={article.metaDescription} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:image" content="https://www.idraulicisubito.com/og-image.jpg" />
         <meta property="article:published_time" content={article.publishedAt} />
         <meta property="article:modified_time" content={article.updatedAt} />
         <meta property="article:section" content={category?.name} />
         {article.tags.map(tag => (
           <meta key={tag} property="article:tag" content={tag} />
         ))}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={article.metaTitle} />
+        <meta name="twitter:description" content={article.metaDescription} />
         <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
       </Helmet>

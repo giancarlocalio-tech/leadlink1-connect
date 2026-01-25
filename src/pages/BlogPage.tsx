@@ -35,11 +35,16 @@ export default function BlogPage() {
       <Helmet>
         <title>Blog Idraulici Subito - Guide e Consigli per la Casa</title>
         <meta name="description" content="Guide pratiche, consigli di manutenzione e tutorial per gestire gli impianti idraulici di casa. Articoli scritti da professionisti del settore." />
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="Blog Idraulici Subito - Guide e Consigli per la Casa" />
         <meta property="og:description" content="Guide pratiche, consigli di manutenzione e tutorial per gestire gli impianti idraulici di casa." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:image" content="https://www.idraulicisubito.com/og-image.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Blog Idraulici Subito - Guide Idrauliche" />
+        <meta name="twitter:description" content="Guide pratiche e consigli per gestire gli impianti idraulici di casa." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 

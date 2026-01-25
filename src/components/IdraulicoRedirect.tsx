@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams, Navigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { getCityBySlug, getServiceBySlug } from '@/lib/seoData';
+import { Link } from 'react-router-dom';
 
 // Legacy service slug mappings to current slugs
 const LEGACY_SERVICE_SLUGS: Record<string, string> = {
@@ -83,7 +84,6 @@ interface IdraulicoRedirectProps {
 }
 
 export default function IdraulicoRedirect({ type }: IdraulicoRedirectProps) {
-  const navigate = useNavigate();
   const params = useParams<{ city?: string; service?: string }>();
   const [redirectPath, setRedirectPath] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
@@ -128,9 +128,44 @@ export default function IdraulicoRedirect({ type }: IdraulicoRedirectProps) {
     setRedirectPath(newPath);
   }, [params, type]);
 
-  // If city not found, navigate to 404
+  // If city not found, show 404 with proper meta tags (not a redirect!)
   if (notFound) {
-    return <Navigate to="/404" replace />;
+    const citySlug = params.city || '';
+    const serviceSlug = params.service || '';
+    
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Helmet>
+          {/* Tell crawlers this is a 404 - NOT a redirect */}
+          <meta name="prerender-status-code" content="404" />
+          <meta name="robots" content="noindex, nofollow" />
+          <title>Pagina non trovata - IdrauliciSubito</title>
+        </Helmet>
+        <div className="text-center max-w-md mx-auto px-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">404</h1>
+          <h2 className="text-xl text-muted-foreground mb-6">
+            Servizio non disponibile a {citySlug.replace(/-/g, ' ')}
+          </h2>
+          <p className="text-muted-foreground mb-8">
+            Non siamo ancora attivi in questa zona. Prova una delle nostre città principali.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link 
+              to="/" 
+              className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+            >
+              Torna alla Home
+            </Link>
+            <Link 
+              to="/richiesta" 
+              className="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-border text-foreground hover:bg-muted transition-colors"
+            >
+              Richiedi Preventivo
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   // If redirect path determined, render with proper 301 meta tags

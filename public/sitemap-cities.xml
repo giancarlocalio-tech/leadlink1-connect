@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Grandi città - URL corretti formato /{city-slug} -->
+  <!-- Grandi città - Formato URL corretto: /{city-slug} -->
   <url><loc>https://www.idraulicisubito.com/roma</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://www.idraulicisubito.com/milano</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://www.idraulicisubito.com/napoli</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
@@ -11,7 +11,6 @@
   <url><loc>https://www.idraulicisubito.com/firenze</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://www.idraulicisubito.com/bari</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://www.idraulicisubito.com/catania</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <!-- Città medie-grandi -->
   <url><loc>https://www.idraulicisubito.com/venezia</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.idraulicisubito.com/verona</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.idraulicisubito.com/messina</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -33,7 +32,6 @@
   <url><loc>https://www.idraulicisubito.com/ferrara</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.idraulicisubito.com/sassari</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.idraulicisubito.com/latina</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.idraulicisubito.com/giugliano-in-campania</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.idraulicisubito.com/monza</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.idraulicisubito.com/siracusa</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.idraulicisubito.com/pescara</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -41,207 +39,88 @@
   <url><loc>https://www.idraulicisubito.com/forli</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.idraulicisubito.com/trento</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.idraulicisubito.com/vicenza</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.idraulicisubito.com/terni</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.idraulicisubito.com/bolzano</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.idraulicisubito.com/novara</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.idraulicisubito.com/piacenza</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.idraulicisubito.com/ancona</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.idraulicisubito.com/andria</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.idraulicisubito.com/arezzo</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/udine</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/cesena</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/lecce</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/pesaro</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <!-- Città medie -->
-  <url><loc>https://www.idraulicisubito.com/idraulico/barletta</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/la-spezia</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/alessandria</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/catanzaro</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/pistoia</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/brindisi</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/pisa</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/torre-del-greco</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/como</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/busto-arsizio</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/lucca</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/grosseto</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/caserta</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/asti</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/sesto-san-giovanni</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/varese</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/cinisello-balsamo</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/ragusa</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/pavia</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/cremona</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/laquila</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/carrara</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/massa</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/trapani</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/cosenza</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/potenza</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/viterbo</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/savona</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/altamura</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/crotone</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/vigevano</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/legnano</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/matera</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/fano</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/treviso</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/cuneo</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/caltanissetta</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/benevento</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/olbia</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/sanremo</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/pordenone</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/lodi</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/mantova</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/imola</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/avellino</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/agrigento</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/teramo</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/siena</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/rovigo</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/enna</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <!-- Altre città -->
-  <url><loc>https://www.idraulicisubito.com/idraulico/gorizia</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/belluno</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/vercelli</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/biella</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/verbania</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/aosta</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/imperia</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/sondrio</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/lecco</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/parma</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/massa-carrara</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/macerata</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/fermo</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/ascoli-piceno</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/rieti</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/frosinone</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/chieti</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/campobasso</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/isernia</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/vibo-valentia</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/nuoro</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/oristano</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/sud-sardegna</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/carbonia</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/iglesias</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <!-- Comuni popolosi Lombardia -->
-  <url><loc>https://www.idraulicisubito.com/idraulico/gallarate</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/rho</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/cologno-monzese</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/paderno-dugnano</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/seregno</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/desio</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/cantù</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/saronno</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/crema</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/voghera</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/treviglio</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/san-giuliano-milanese</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/pioltello</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/corsico</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/abbiategrasso</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <!-- Comuni popolosi Piemonte -->
-  <url><loc>https://www.idraulicisubito.com/idraulico/moncalieri</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/collegno</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/rivoli</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/nichelino</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/settimo-torinese</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/grugliasco</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/chieri</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/casale-monferrato</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/alba</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/bra</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <!-- Comuni popolosi Veneto -->
-  <url><loc>https://www.idraulicisubito.com/idraulico/mestre</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/marghera</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/chioggia</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/san-dona-di-piave</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/conegliano</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/bassano-del-grappa</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/schio</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/villafranca-di-verona</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/legnago</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/cittadella</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <!-- Comuni popolosi Emilia-Romagna -->
-  <url><loc>https://www.idraulicisubito.com/idraulico/carpi</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/sassuolo</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/faenza</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/casalecchio-di-reno</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/lugo</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/riccione</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/cervia</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/correggio</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/formigine</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/cento</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <!-- Comuni popolosi Toscana -->
-  <url><loc>https://www.idraulicisubito.com/idraulico/empoli</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/scandicci</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/campi-bisenzio</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/sesto-fiorentino</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/piombino</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/viareggio</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/pontedera</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/montecatini-terme</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/follonica</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/colle-di-val-delsa</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <!-- Comuni popolosi Lazio -->
-  <url><loc>https://www.idraulicisubito.com/idraulico/guidonia-montecelio</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/fiumicino</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/pomezia</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/tivoli</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/aprilia</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/anzio</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/nettuno</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/velletri</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/civitavecchia</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/ciampino</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <!-- Comuni popolosi Campania -->
-  <url><loc>https://www.idraulicisubito.com/idraulico/castellammare-di-stabia</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/afragola</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/portici</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/ercolano</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/marano-di-napoli</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/casoria</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/pozzuoli</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/aversa</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/cava-de-tirreni</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/battipaglia</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <!-- Comuni popolosi Puglia -->
-  <url><loc>https://www.idraulicisubito.com/idraulico/molfetta</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/bitonto</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/cerignola</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/manfredonia</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/san-severo</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/trani</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/bisceglie</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/corato</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/martina-franca</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/fasano</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <!-- Comuni popolosi Sicilia -->
-  <url><loc>https://www.idraulicisubito.com/idraulico/marsala</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/gela</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/vittoria</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/modica</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/acireale</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/bagheria</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/misterbianco</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/mazara-del-vallo</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/sciacca</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/milazzo</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <!-- Altri comuni importanti -->
-  <url><loc>https://www.idraulicisubito.com/idraulico/quartu-santelena</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/lamezia-terme</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/portici</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/rovereto</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/merano</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/bressanone</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/alghero</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/termoli</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/sulmona</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.idraulicisubito.com/idraulico/ortona</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/udine</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.idraulicisubito.com/cesena</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.idraulicisubito.com/lecce</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.idraulicisubito.com/pesaro</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.idraulicisubito.com/barletta</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/la-spezia</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/alessandria</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/catanzaro</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/pistoia</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/brindisi</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/pisa</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/como</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/busto-arsizio</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/lucca</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/grosseto</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/caserta</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/asti</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/sesto-san-giovanni</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/varese</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/cinisello-balsamo</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/ragusa</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/pavia</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/cremona</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/l-aquila</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/trapani</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/cosenza</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/potenza</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/savona</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/crotone</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/legnano</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/matera</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/treviso</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/cuneo</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/caltanissetta</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/benevento</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/lodi</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/mantova</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/avellino</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/agrigento</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/teramo</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/siena</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/rovigo</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/enna</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/belluno</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/aosta</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/imperia</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/lecco</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/parma</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/macerata</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/fermo</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/ascoli-piceno</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/chieti</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/campobasso</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/vibo-valentia</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/nuoro</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/oristano</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.idraulicisubito.com/gallarate</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/rho</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/cologno-monzese</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/seregno</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/desio</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/cantu</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/saronno</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/crema</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/lissone</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/moncalieri</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/rivoli</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/trani</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/giugliano-in-campania</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/san-donato-milanese</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/corsico</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/abbiategrasso</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/segrate</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/pioltello</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/bollate</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/magenta</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/cernusco-sul-naviglio</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.idraulicisubito.com/opera</loc><lastmod>2026-01-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
 </urlset>

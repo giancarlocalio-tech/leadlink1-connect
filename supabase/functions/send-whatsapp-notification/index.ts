@@ -48,22 +48,29 @@ async function sendWhatsAppTemplate(
   templateParams: TemplateParams
 ): Promise<{ success: boolean; error?: string; messageId?: string }> {
   try {
-    // Format phone number - remove leading 0 and ensure country code
-    let formattedPhone = phone.replace(/\s+/g, '').replace(/^0+/, '');
+    // Format phone number - ensure E.164 format WITH + prefix
+    let formattedPhone = phone.replace(/[\s\-\(\)]/g, '').replace(/^0+/, '');
     
-    // If it doesn't start with a country code, assume Italy (+39)
+    // If it doesn't start with + or 39, add +39 prefix
     if (!formattedPhone.startsWith('+') && !formattedPhone.startsWith('39')) {
-      formattedPhone = '39' + formattedPhone;
+      formattedPhone = '+39' + formattedPhone;
+    } else if (formattedPhone.startsWith('39') && !formattedPhone.startsWith('+')) {
+      formattedPhone = '+' + formattedPhone;
     }
     
-    // Remove + if present for API
-    formattedPhone = formattedPhone.replace(/^\+/, '');
+    // Ensure it starts with +
+    if (!formattedPhone.startsWith('+')) {
+      formattedPhone = '+' + formattedPhone;
+    }
+    
+    // Phone without + for API identifier lookup
+    const phoneForIdentifier = formattedPhone.replace(/^\+/, '');
     
     console.log(`Sending WhatsApp template to: ${formattedPhone}`);
     console.log(`Template params:`, templateParams);
     
     // First, find or create contact
-    const contactResponse = await fetch(`https://api.respond.io/v2/contact/phone:${formattedPhone}`, {
+    const contactResponse = await fetch(`https://api.respond.io/v2/contact/phone:${phoneForIdentifier}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${respondIoApiKey}`,

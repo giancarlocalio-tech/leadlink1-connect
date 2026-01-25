@@ -91,6 +91,7 @@ export function usePlumberProfile() {
           email: profileData.email,
           full_name: profileData.full_name,
           business_name: profileData.business_name,
+          phone: profileData.phone,
           plan_type: 'basic',
           app_origin: window.location.origin,
         },

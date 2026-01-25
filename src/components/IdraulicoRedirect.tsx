@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams, Navigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { getCityBySlug, getServiceBySlug } from '@/lib/seoData';
 
 // Legacy service slug mappings to current slugs
@@ -65,6 +66,8 @@ interface IdraulicoRedirectProps {
 export default function IdraulicoRedirect({ type }: IdraulicoRedirectProps) {
   const navigate = useNavigate();
   const params = useParams<{ city?: string; service?: string }>();
+  const [redirectPath, setRedirectPath] = useState<string | null>(null);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     let citySlug = params.city || '';
@@ -83,8 +86,8 @@ export default function IdraulicoRedirect({ type }: IdraulicoRedirectProps) {
     // Validate city exists
     const cityData = getCityBySlug(citySlug);
     if (!cityData) {
-      // City not found, redirect to homepage
-      navigate('/', { replace: true });
+      // City not found - show 404 instead of redirect to homepage
+      setNotFound(true);
       return;
     }
 
@@ -103,10 +106,38 @@ export default function IdraulicoRedirect({ type }: IdraulicoRedirectProps) {
       newPath = `/${citySlug}`;
     }
 
-    // Perform 301-style redirect (replace in history)
-    navigate(newPath, { replace: true });
-  }, [params, navigate, type]);
+    setRedirectPath(newPath);
+  }, [params, type]);
 
-  // Show nothing while redirecting
+  // If city not found, navigate to 404
+  if (notFound) {
+    return <Navigate to="/404" replace />;
+  }
+
+  // If redirect path determined, render with proper 301 meta tags
+  if (redirectPath) {
+    const fullUrl = `https://www.idraulicisubito.com${redirectPath}`;
+    
+    return (
+      <>
+        <Helmet>
+          {/* Tell crawlers this is a 301 redirect */}
+          <meta name="prerender-status-code" content="301" />
+          <meta name="prerender-header" content={`Location: ${fullUrl}`} />
+          <link rel="canonical" href={fullUrl} />
+          {/* HTTP-Equiv refresh as fallback for crawlers */}
+          <meta httpEquiv="refresh" content={`0; url=${fullUrl}`} />
+          <title>Redirect...</title>
+        </Helmet>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.location.replace("${redirectPath}");`
+          }}
+        />
+      </>
+    );
+  }
+
+  // Show nothing while determining redirect
   return null;
 }

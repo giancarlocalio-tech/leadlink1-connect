@@ -1,6 +1,7 @@
 /**
  * Automated sitemap generator for SEO optimization
  * Generates correct URLs for all landing pages
+ * URL Format: /{city-slug} for cities, /{city-slug}-{service-slug} for city+service
  */
 
 import { CITIES, SERVICES, KEYWORD_PAGES, CityData, ServiceData, KeywordPageData } from './seoData';
@@ -66,7 +67,7 @@ export function generateKeywordsSitemap(): string {
 }
 
 /**
- * Generate cities sitemap
+ * Generate cities sitemap - Format: /{city-slug}
  */
 export function generateCitiesSitemap(): string {
   const cityUrls: SitemapUrl[] = CITIES.map((city, index) => ({
@@ -94,6 +95,7 @@ export function generateServicesSitemap(): string {
 
 /**
  * Generate city+service combinations sitemap (paginated)
+ * CORRECT FORMAT: /{city-slug}-{service-slug}
  * Returns an array of sitemaps, each with max 500 URLs
  */
 export function generateCityServiceSitemaps(pageSize: number = 500): string[] {
@@ -102,6 +104,7 @@ export function generateCityServiceSitemaps(pageSize: number = 500): string[] {
   for (const city of CITIES) {
     for (const service of SERVICES) {
       allCombinations.push({
+        // CORRECT FORMAT: /{city}-{service}
         loc: `${BASE_URL}/${city.slug}-${service.slug}`,
         lastmod: TODAY,
         changefreq: 'weekly',
@@ -128,7 +131,6 @@ export function generateSitemapIndex(cityServiceSitemapCount: number): string {
     'sitemap-static.xml',
     'sitemap-keywords.xml',
     'sitemap-cities.xml',
-    'sitemap-services.xml',
   ];
   
   // Add city-service sitemaps
@@ -149,6 +151,7 @@ ${sitemapEntries}
 
 /**
  * Get all URLs for export/GSC submission
+ * CORRECT FORMAT: /{city}, /{city}-{service}
  */
 export function getAllIndexableUrls(): {
   static: string[];
@@ -171,6 +174,7 @@ export function getAllIndexableUrls(): {
   const cityServiceUrls: string[] = [];
   for (const city of CITIES) {
     for (const service of SERVICES) {
+      // CORRECT FORMAT: /{city}-{service}
       cityServiceUrls.push(`${BASE_URL}/${city.slug}-${service.slug}`);
     }
   }
@@ -196,7 +200,37 @@ export function getSitemapStats() {
     totalServices: SERVICES.length,
     totalKeywordPages: KEYWORD_PAGES.length,
     totalCityServicePages: cityServiceCount,
-    totalSitemapFiles: 4 + sitemapPageCount, // static, keywords, cities, services + city-service pages
+    totalSitemapFiles: 3 + sitemapPageCount, // static, keywords, cities + city-service pages
     totalIndexablePages: 5 + KEYWORD_PAGES.length + CITIES.length + cityServiceCount,
   };
+}
+
+/**
+ * Generate all sitemaps as downloadable files
+ */
+export function generateAllSitemaps(): { filename: string; content: string }[] {
+  const files: { filename: string; content: string }[] = [];
+  
+  // Static sitemap
+  files.push({ filename: 'sitemap-static.xml', content: generateStaticSitemap() });
+  
+  // Keywords sitemap
+  files.push({ filename: 'sitemap-keywords.xml', content: generateKeywordsSitemap() });
+  
+  // Cities sitemap
+  files.push({ filename: 'sitemap-cities.xml', content: generateCitiesSitemap() });
+  
+  // City+Service sitemaps
+  const cityServiceSitemaps = generateCityServiceSitemaps();
+  cityServiceSitemaps.forEach((content, index) => {
+    files.push({ filename: `sitemap-city-services-${index + 1}.xml`, content });
+  });
+  
+  // Sitemap index
+  files.push({ 
+    filename: 'sitemap.xml', 
+    content: generateSitemapIndex(cityServiceSitemaps.length) 
+  });
+  
+  return files;
 }

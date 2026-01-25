@@ -30,9 +30,11 @@ import {
   CityData, 
   ServiceData,
   SERVICES,
-  CITIES 
+  CITIES,
+  getKeywordPageBySlug
 } from '@/lib/seoData';
 import { generateJsonLd, getCityFAQs, BASE_URL } from '@/lib/seoJsonLd';
+import KeywordLandingPage from './KeywordLandingPage';
 import { getServiceRichContent, generateCityServiceContent } from '@/lib/serviceContent';
 import InlineWizard from '@/components/InlineWizard';
 import heroBg from '@/assets/hero-bg.avif';

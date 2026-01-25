@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { HelpCircle, Clock, Shield, Users, Zap, ArrowRight, Phone, Mail, Building, User, Lock, Check, X, MapPin, Bell, UserCheck, CreditCard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -309,6 +310,12 @@ export default function LandingComeFunzionaPage() {
   };
 
   return (
+    <>
+      <Helmet>
+        <title>Come Funziona | Idraulici Subito per Professionisti</title>
+        <meta name="description" content="Scopri come funziona Idraulici Subito. Trova nuovi clienti in 4 semplici passi." />
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="bg-card border-b border-border sticky top-0 z-50">
@@ -719,5 +726,6 @@ export default function LandingComeFunzionaPage() {
         </div>
       </footer>
     </div>
+    </>
   );
 }

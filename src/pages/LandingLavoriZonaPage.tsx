@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { MapPin, Clock, Shield, Users, Zap, ArrowRight, Phone, Mail, Building, User, Lock, Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -301,6 +302,12 @@ export default function LandingLavoriZonaPage() {
   };
 
   return (
+    <>
+      <Helmet>
+        <title>Trova Lavori nella Tua Zona | Idraulici Subito</title>
+        <meta name="description" content="Ricevi richieste di lavoro nella tua zona. Nessuno spostamento inutile, solo clienti che hanno bisogno di un idraulico adesso." />
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="bg-card border-b border-border sticky top-0 z-50">
@@ -739,5 +746,6 @@ export default function LandingLavoriZonaPage() {
         </div>
       </footer>
     </div>
+    </>
   );
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
+import { Helmet } from 'react-helmet-async';
+import {
   Users, 
   FileText, 
   Shield, 
@@ -549,6 +550,11 @@ export default function AdminPage() {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Pannello Admin | Idraulici Subito</title>
+        <meta name="description" content="Pannello di amministrazione per la gestione di professionisti e richieste." />
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <div className="py-6 md:py-8">
         <div className="container mx-auto px-4">
           {/* Header */}

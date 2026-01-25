@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { ArrowLeft, Save, X, CreditCard, ArrowUpCircle, XCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -278,6 +279,11 @@ export default function ProfilePage() {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Il Mio Profilo | Dashboard Idraulici Subito</title>
+        <meta name="description" content="Gestisci il tuo profilo professionale, le aree di servizio e le impostazioni del tuo account." />
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <div className="py-6 md:py-8">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto">

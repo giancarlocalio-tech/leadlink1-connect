@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Check, Crown, Star, Zap, AlertCircle, ExternalLink, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -139,6 +140,11 @@ export default function SubscriptionPage() {
 
   return (
     <DashboardLayout title="Abbonamento" breadcrumbs={[{ label: 'Abbonamento' }]}>
+      <Helmet>
+        <title>Abbonamento | Dashboard Idraulici Subito</title>
+        <meta name="description" content="Gestisci il tuo abbonamento e scegli il piano più adatto alle tue esigenze." />
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <div className="space-y-8">
         {/* Current subscription info - only show for actual paid subscribers, not trial users */}
         {isSubscribed && currentPlan && !isTrial && (

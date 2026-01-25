@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { MapPin, Filter, Search, CheckCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -204,6 +205,11 @@ function RequestsContent() {
   const displayRequests = isTrial ? filteredTrialRequests : filteredRequests;
   return (
     <DashboardLayout title="Richieste" breadcrumbs={[{ label: 'Richieste' }]}>
+      <Helmet>
+        <title>Richieste Disponibili | Dashboard Idraulici Subito</title>
+        <meta name="description" content="Visualizza e gestisci le richieste di intervento disponibili nella tua zona." />
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <div className="space-y-6">
         {/* Trial Accepted Requests - Show client contact details */}
         {isTrial && trialAcceptedRequests.length > 0 && (

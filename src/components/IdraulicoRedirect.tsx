@@ -4,8 +4,35 @@ import { getCityBySlug, getServiceBySlug } from '@/lib/seoData';
 
 // Legacy service slug mappings to current slugs
 const LEGACY_SERVICE_SLUGS: Record<string, string> = {
+  // Exact matches to current valid slugs
+  'riparazione-perdite': 'riparazione-perdite',
+  'valvole-termostatiche': 'valvole-termostatiche',
+  'manutenzione-caldaie': 'manutenzione-caldaie',
+  'spurgo-fognature': 'spurgo-fognature',
+  'scarichi-intasati': 'scarichi-intasati',
+  'pronto-intervento': 'pronto-intervento',
+  'installazione-sanitari': 'installazione-sanitari',
+  'condizionatori': 'condizionatori',
+  'impianto-riscaldamento': 'impianto-riscaldamento',
+  'ristrutturazione-bagno': 'ristrutturazione-bagno',
+  'scaldabagno': 'scaldabagno',
+  'autoclave': 'autoclave',
+  'addolcitore-acqua': 'addolcitore-acqua',
+  'depuratore-acqua': 'depuratore-acqua',
+  'pompa-calore': 'pompa-calore',
+  'pannelli-solari-termici': 'pannelli-solari-termici',
+  'termosifoni': 'termosifoni',
+  'impianto-gas': 'impianto-gas',
+  'contatore-acqua': 'contatore-acqua',
+  'box-doccia': 'box-doccia',
+  'vasca-doccia': 'vasca-doccia',
+  'rubinetteria': 'rubinetteria',
+  'scarichi-fognature': 'scarichi-fognature',
+  'certificazione-impianti': 'certificazione-impianti',
+  'irrigazione-giardino': 'irrigazione-giardino',
+  'piscine': 'piscine',
+  // Legacy slug mappings → current valid slugs
   'spurgo-fogne': 'spurgo-fognature',
-  'riparazione-perdite': 'riparazione-perdite', // Valid service
   'spurgo': 'spurgo-fognature',
   'perdite': 'riparazione-perdite',
   'riparazione-caldaia': 'manutenzione-caldaie',
@@ -15,14 +42,15 @@ const LEGACY_SERVICE_SLUGS: Record<string, string> = {
   'disostruzione': 'scarichi-intasati',
   'disostruzione-scarichi': 'scarichi-intasati',
   'riparazione-tubazioni': 'riparazione-perdite',
-  'valvole-termostatiche': 'valvole-termostatiche', // Valid service
-  // Legacy short slugs → valid services
   'perdita-acqua': 'riparazione-perdite',
   'scarico-intasato': 'scarichi-intasati',
   'rubinetto': 'rubinetteria',
   'bagno': 'ristrutturazione-bagno',
   'caldaia': 'manutenzione-caldaie',
   'installazione-scaldabagno': 'scaldabagno',
+  // Additional legacy slugs from GSC
+  'idraulico': 'idraulico',
+  'certificazione-impianto-idraulico': 'certificazione-impianti',
 };
 
 // Legacy city slug mappings

@@ -5,6 +5,7 @@ import { getCityBySlug, getServiceBySlug } from '@/lib/seoData';
 import { Link } from 'react-router-dom';
 
 // Legacy service slug mappings to current slugs
+// Empty string means redirect to city only (no service suffix)
 const LEGACY_SERVICE_SLUGS: Record<string, string> = {
   // Exact matches to current valid slugs
   'riparazione-perdite': 'riparazione-perdite',
@@ -18,6 +19,7 @@ const LEGACY_SERVICE_SLUGS: Record<string, string> = {
   'impianto-riscaldamento': 'impianto-riscaldamento',
   'ristrutturazione-bagno': 'ristrutturazione-bagno',
   'scaldabagno': 'scaldabagno',
+  'scaldabagni': 'scaldabagno',
   'autoclave': 'autoclave',
   'addolcitore-acqua': 'addolcitore-acqua',
   'depuratore-acqua': 'depuratore-acqua',
@@ -27,13 +29,15 @@ const LEGACY_SERVICE_SLUGS: Record<string, string> = {
   'impianto-gas': 'impianto-gas',
   'contatore-acqua': 'contatore-acqua',
   'box-doccia': 'box-doccia',
-  'vasca-doccia': 'vasca-doccia',
+  'vasca-doccia': 'box-doccia',
   'rubinetteria': 'rubinetteria',
   'scarichi-fognature': 'scarichi-fognature',
   'certificazione-impianti': 'certificazione-impianti',
   'irrigazione-giardino': 'irrigazione-giardino',
   'piscine': 'piscine',
-  'idraulico': 'idraulico',
+  
+  // Generic "idraulico" → redirect to city page only
+  'idraulico': '',
   
   // Legacy slug mappings → current valid slugs (from GSC errors)
   'spurgo-fogne': 'spurgo-fognature',
@@ -54,7 +58,6 @@ const LEGACY_SERVICE_SLUGS: Record<string, string> = {
   'installazione-scaldabagno': 'scaldabagno',
   'certificazione-impianto-idraulico': 'certificazione-impianti',
   'manutenzione-caldaia': 'manutenzione-caldaie',
-  // Additional legacy variations
   'termosifone': 'termosifoni',
   'contatore': 'contatore-acqua',
   'impianti-gas': 'impianto-gas',
@@ -70,8 +73,14 @@ const LEGACY_SERVICE_SLUGS: Record<string, string> = {
   'depuratore': 'depuratore-acqua',
   'pompe-calore': 'pompa-calore',
   'certificazione': 'certificazione-impianti',
+  'certificazione-impianto': 'certificazione-impianti',
   'irrigazione': 'irrigazione-giardino',
   'piscina': 'piscine',
+  
+  // Additional variations from GSC (latest screenshots)
+  'vasca': 'box-doccia',
+  'installazione-vasca': 'box-doccia',
+  'boiler': 'scaldabagno',
 };
 
 // Legacy city slug mappings

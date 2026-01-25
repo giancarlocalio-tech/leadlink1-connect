@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { 
   MapPin, 
@@ -30,9 +30,11 @@ import {
   CityData, 
   ServiceData,
   SERVICES,
-  CITIES 
+  CITIES,
+  getKeywordPageBySlug
 } from '@/lib/seoData';
 import { generateJsonLd, getCityFAQs, BASE_URL } from '@/lib/seoJsonLd';
+import KeywordLandingPage from './KeywordLandingPage';
 import { getServiceRichContent, generateCityServiceContent } from '@/lib/serviceContent';
 import InlineWizard from '@/components/InlineWizard';
 import heroBg from '@/assets/hero-bg.avif';
@@ -64,46 +66,67 @@ interface DynamicLandingPageProps {
 
 export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
   const params = useParams<{ slug: string }>();
-  const navigate = useNavigate();
   const [showWizard, setShowWizard] = useState(false);
   
   // Parse the slug to extract city and optionally service
   const slug = params.slug || '';
+  
+  // FIRST: Check if this slug is a keyword page
+  const keywordPageData = getKeywordPageBySlug(slug);
+  
   let cityData: CityData | undefined;
   let serviceData: ServiceData | undefined;
   
-  // Try to match city-service format first: {city}-{service} e.g., "milano-manutenzione-caldaie"
-  for (const service of SERVICES) {
-    if (slug.endsWith(`-${service.slug}`)) {
-      const citySlug = slug.replace(`-${service.slug}`, '');
-      const foundCity = getCityBySlug(citySlug);
-      if (foundCity) {
-        cityData = foundCity;
-        serviceData = service;
-        break;
+  // Only try to match city/service if it's not a keyword page
+  if (!keywordPageData) {
+    // Try to match city-service format first: {city}-{service} e.g., "milano-manutenzione-caldaie"
+    for (const service of SERVICES) {
+      if (slug.endsWith(`-${service.slug}`)) {
+        const citySlug = slug.replace(`-${service.slug}`, '');
+        const foundCity = getCityBySlug(citySlug);
+        if (foundCity) {
+          cityData = foundCity;
+          serviceData = service;
+          break;
+        }
       }
     }
-  }
-  
-  // If no service match, try city-only: e.g., "milano"
-  if (!cityData) {
-    cityData = getCityBySlug(slug);
-  }
-  
-  useEffect(() => {
+    
+    // If no service match, try city-only: e.g., "milano"
     if (!cityData) {
-      navigate('/');
+      cityData = getCityBySlug(slug);
     }
-  }, [cityData, navigate]);
+  }
   
+  // If this is a keyword page, render KeywordLandingPage directly
+  if (keywordPageData) {
+    return <KeywordLandingPage slug={slug} />;
+  }
+  
+  // If no city data found, show 404 page (not redirect to homepage)
   if (!cityData) {
-    // Show loading skeleton instead of blank page
     return (
       <Layout>
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Caricamento...</p>
+        <Helmet>
+          <title>Pagina non trovata - IdrauliciSubito</title>
+          <meta name="robots" content="noindex, follow" />
+          <meta name="prerender-status-code" content="404" />
+        </Helmet>
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <div className="text-center px-4">
+            <h1 className="text-6xl font-bold text-primary mb-4">404</h1>
+            <h2 className="text-2xl font-semibold mb-4">Pagina non trovata</h2>
+            <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+              La pagina che stai cercando non esiste o è stata spostata.
+            </p>
+            <div className="flex gap-4 justify-center flex-wrap">
+              <Button asChild>
+                <Link to="/">Torna alla Home</Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link to="/richiesta">Invia una Richiesta</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </Layout>

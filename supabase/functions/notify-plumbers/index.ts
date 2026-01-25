@@ -319,22 +319,33 @@ const handler = async (req: Request): Promise<Response> => {
       const serviceAreas = plumber.service_areas || [];
       const requestCity = serviceRequest.city.toLowerCase().trim();
       
-      // Extract just the city name without province code for more flexible matching
-      // e.g. "Siena (SI)" -> "siena"
+      // Extract city name and province code
+      // e.g. "Portici (NA)" -> cityName="portici", provinceCode="NA"
       const requestCityName = requestCity.replace(/\s*\([^)]*\)\s*$/, '').trim();
+      const requestProvinceMatch = serviceRequest.city.match(/\(([A-Z]{2})\)$/);
+      const requestProvinceCode = requestProvinceMatch ? requestProvinceMatch[1] : null;
       
       const cityMatches = serviceAreas.some((area: string) => {
         const areaLower = (area || '').toLowerCase().trim();
         const areaCityName = areaLower.replace(/\s*\([^)]*\)\s*$/, '').trim();
         
-        // Match if: exact match, area contains city, or city contains area
+        // Extract province code from area (e.g., "Napoli (NA)" -> "NA")
+        const areaProvinceMatch = (area || '').match(/\(([A-Z]{2})\)$/);
+        const areaProvinceCode = areaProvinceMatch ? areaProvinceMatch[1] : null;
+        
+        // Match if:
+        // 1. Exact city match
+        // 2. City names match
+        // 3. Area contains city or vice versa
+        // 4. NEW: Province codes match (e.g., NA = NA means Napoli plumber sees Portici requests)
         return areaLower === requestCity || 
                areaCityName === requestCityName ||
                areaLower.includes(requestCityName) || 
-               requestCity.includes(areaCityName);
+               requestCity.includes(areaCityName) ||
+               (requestProvinceCode && areaProvinceCode && requestProvinceCode === areaProvinceCode);
       });
 
-      console.log(`Plumber ${plumber.email}: service_areas=${JSON.stringify(serviceAreas)}, requestCity=${requestCity}, cityMatches=${cityMatches}`);
+      console.log(`Plumber ${plumber.email}: service_areas=${JSON.stringify(serviceAreas)}, requestCity=${requestCity}, requestProvince=${requestProvinceCode}, cityMatches=${cityMatches}`);
 
       if (!cityMatches) return false;
 
@@ -553,9 +564,11 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // ====== SEND WHATSAPP TO UNREGISTERED PLUMBERS ======
-    // Fetch unregistered plumbers that match the request city
+    // Fetch unregistered plumbers that match the request city or province
     const requestCityLower = serviceRequest.city.toLowerCase().trim();
     const requestCityName = requestCityLower.replace(/\s*\([^)]*\)\s*$/, '').trim();
+    const requestProvinceMatch = serviceRequest.city.match(/\(([A-Z]{2})\)$/);
+    const requestProvinceCode = requestProvinceMatch ? requestProvinceMatch[1] : null;
     
     const { data: unregisteredPlumbers, error: unregError } = await supabase
       .from("unregistered_plumbers")
@@ -566,18 +579,24 @@ const handler = async (req: Request): Promise<Response> => {
       console.error("Error fetching unregistered plumbers:", unregError);
     }
 
-    // Filter by city (case-insensitive, flexible matching)
+    // Filter by city OR province (case-insensitive, flexible matching)
     const matchingUnregistered = (unregisteredPlumbers || []).filter((p) => {
       const pCityLower = (p.city || '').toLowerCase().trim();
       const pCityName = pCityLower.replace(/\s*\([^)]*\)\s*$/, '').trim();
       
+      // Extract province code from unregistered plumber's city
+      const pProvinceMatch = (p.city || '').match(/\(([A-Z]{2})\)$/);
+      const pProvinceCode = pProvinceMatch ? pProvinceMatch[1] : null;
+      
+      // Match by city name OR by province code
       return pCityLower === requestCityLower || 
              pCityName === requestCityName ||
              pCityLower.includes(requestCityName) || 
-             requestCityLower.includes(pCityName);
+             requestCityLower.includes(pCityName) ||
+             (requestProvinceCode && pProvinceCode && requestProvinceCode === pProvinceCode);
     });
 
-    console.log(`Found ${matchingUnregistered.length} unregistered plumbers matching city ${serviceRequest.city}`);
+    console.log(`Found ${matchingUnregistered.length} unregistered plumbers matching city/province ${serviceRequest.city}`);
 
     // Send WhatsApp to unregistered plumbers with FULL client contact info
     const respondIoApiKey = Deno.env.get("RESPOND_IO_API_KEY");

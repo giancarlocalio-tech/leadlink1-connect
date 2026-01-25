@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { useAuth } from '@/hooks/useAuth';
 import { useCredits } from '@/hooks/useCredits';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
@@ -115,6 +116,11 @@ export default function CreditsPage() {
 
   return (
     <DashboardLayout title="I tuoi Crediti">
+      <Helmet>
+        <title>I tuoi Crediti | Dashboard Idraulici Subito</title>
+        <meta name="description" content="Gestisci i tuoi crediti per sbloccare i contatti dei clienti sulla piattaforma Idraulici Subito." />
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <div className="space-y-6">
         <p className="text-muted-foreground -mt-4">Gestisci i tuoi crediti per sbloccare i contatti dei clienti</p>
 

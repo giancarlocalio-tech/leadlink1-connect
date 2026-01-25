@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { MapPin, AlertCircle, ArrowRight, Zap, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -269,6 +270,11 @@ function DashboardContent() {
 
   return (
     <DashboardLayout title={`Bentornato, ${profile.full_name}`}>
+      <Helmet>
+        <title>Dashboard | Idraulici Subito</title>
+        <meta name="description" content="Gestisci le tue richieste di lavoro e monitora le tue statistiche sulla piattaforma Idraulici Subito." />
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <div className="space-y-6">
         {/* Trial Paywall - Show when trial requests are exhausted */}
         {trialExhausted && (

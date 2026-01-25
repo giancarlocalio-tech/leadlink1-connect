@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { toast } from "sonner";
 
 import { Layout } from "@/components/Layout";
@@ -8,10 +9,6 @@ import { supabase } from "@/integrations/supabase/client";
 export default function AuthConfirmPage() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
-
-  useEffect(() => {
-    document.title = "Accesso Dashboard | IdrauliciSubito";
-  }, []);
 
   useEffect(() => {
     const token_hash = params.get("token_hash");
@@ -50,6 +47,11 @@ export default function AuthConfirmPage() {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Conferma Accesso | Idraulici Subito</title>
+        <meta name="description" content="Conferma del tuo accesso alla piattaforma Idraulici Subito." />
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <main className="container mx-auto px-4 py-16">
         <section className="max-w-lg mx-auto text-center">
           <h1 className="text-2xl font-semibold text-foreground">Accesso in corso...</h1>

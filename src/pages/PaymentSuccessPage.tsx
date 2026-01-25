@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { CheckCircle, ArrowRight, Crown, Star, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -171,6 +172,11 @@ export default function PaymentSuccessPage() {
 
   return (
     <DashboardLayout title="Pagamento Completato" breadcrumbs={[{ label: 'Pagamento completato' }]}>
+      <Helmet>
+        <title>Pagamento Completato | Idraulici Subito</title>
+        <meta name="description" content="Il tuo pagamento è stato completato con successo." />
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <div className="max-w-2xl mx-auto py-8">
         <Card className="overflow-hidden">
           <div className={`bg-gradient-to-r ${getPlanGradient(currentPlan)} p-8 text-white text-center`}>

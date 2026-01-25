@@ -32,10 +32,13 @@ const LEGACY_SERVICE_SLUGS: Record<string, string> = {
   'certificazione-impianti': 'certificazione-impianti',
   'irrigazione-giardino': 'irrigazione-giardino',
   'piscine': 'piscine',
-  // Legacy slug mappings → current valid slugs
+  'idraulico': 'idraulico',
+  
+  // Legacy slug mappings → current valid slugs (from GSC errors)
   'spurgo-fogne': 'spurgo-fognature',
   'spurgo': 'spurgo-fognature',
   'perdite': 'riparazione-perdite',
+  'perdita-acqua': 'riparazione-perdite',
   'riparazione-caldaia': 'manutenzione-caldaie',
   'riparazione-caldaie': 'manutenzione-caldaie',
   'sostituzione-sanitari': 'installazione-sanitari',
@@ -43,15 +46,31 @@ const LEGACY_SERVICE_SLUGS: Record<string, string> = {
   'disostruzione': 'scarichi-intasati',
   'disostruzione-scarichi': 'scarichi-intasati',
   'riparazione-tubazioni': 'riparazione-perdite',
-  'perdita-acqua': 'riparazione-perdite',
   'scarico-intasato': 'scarichi-intasati',
   'rubinetto': 'rubinetteria',
   'bagno': 'ristrutturazione-bagno',
   'caldaia': 'manutenzione-caldaie',
   'installazione-scaldabagno': 'scaldabagno',
-  // Additional legacy slugs from GSC
-  'idraulico': 'idraulico',
   'certificazione-impianto-idraulico': 'certificazione-impianti',
+  'manutenzione-caldaia': 'manutenzione-caldaie',
+  // Additional legacy variations
+  'termosifone': 'termosifoni',
+  'contatore': 'contatore-acqua',
+  'impianti-gas': 'impianto-gas',
+  'riscaldamento': 'impianto-riscaldamento',
+  'doccia': 'box-doccia',
+  'sanitari': 'installazione-sanitari',
+  'clima': 'condizionatori',
+  'climatizzatori': 'condizionatori',
+  'climatizzazione': 'condizionatori',
+  'pannelli-solari': 'pannelli-solari-termici',
+  'solare-termico': 'pannelli-solari-termici',
+  'addolcitore': 'addolcitore-acqua',
+  'depuratore': 'depuratore-acqua',
+  'pompe-calore': 'pompa-calore',
+  'certificazione': 'certificazione-impianti',
+  'irrigazione': 'irrigazione-giardino',
+  'piscina': 'piscine',
 };
 
 // Legacy city slug mappings

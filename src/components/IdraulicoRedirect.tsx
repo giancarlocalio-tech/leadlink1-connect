@@ -182,25 +182,44 @@ export default function IdraulicoRedirect({ type }: IdraulicoRedirectProps) {
     const fullUrl = `https://www.idraulicisubito.com${redirectPath}`;
     
     return (
-      <>
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <Helmet>
           {/* Tell crawlers this is a 301 redirect */}
           <meta name="prerender-status-code" content="301" />
           <meta name="prerender-header" content={`Location: ${fullUrl}`} />
           <link rel="canonical" href={fullUrl} />
+          {/* Don't index the redirect page itself */}
+          <meta name="robots" content="noindex, follow" />
           {/* HTTP-Equiv refresh as fallback for crawlers */}
           <meta httpEquiv="refresh" content={`0; url=${fullUrl}`} />
-          <title>Redirect...</title>
+          <title>Reindirizzamento a {redirectPath} - IdrauliciSubito</title>
         </Helmet>
+        
+        {/* Visible content for crawlers - helps avoid soft 404 */}
+        <div className="text-center max-w-md mx-auto px-4">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <h1 className="text-xl font-semibold text-foreground mb-2">Reindirizzamento in corso...</h1>
+          <p className="text-muted-foreground mb-4">
+            Questa pagina è stata spostata. Verrai reindirizzato automaticamente.
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Se non vieni reindirizzato, <a href={fullUrl} className="text-primary hover:underline">clicca qui</a>.
+          </p>
+        </div>
+        
         <script
           dangerouslySetInnerHTML={{
             __html: `window.location.replace("${redirectPath}");`
           }}
         />
-      </>
+      </div>
     );
   }
 
-  // Show nothing while determining redirect
-  return null;
+  // Show loading while determining redirect
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    </div>
+  );
 }

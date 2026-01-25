@@ -97,6 +97,8 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
           <meta property="og:description" content={pageData.description} />
           <meta property="og:url" content={canonicalUrl} />
           <meta property="og:type" content="website" />
+          <meta property="og:image" content="https://www.idraulicisubito.com/og-image.jpg" />
+          <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content={pageData.title} />
           <meta name="twitter:description" content={pageData.description} />
           <script type="application/ld+json" key="structured-data">
@@ -123,6 +125,8 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
         <meta property="og:description" content={pageData.description} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://www.idraulicisubito.com/og-image.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageData.title} />
         <meta name="twitter:description" content={pageData.description} />
         <script type="application/ld+json" key="structured-data">

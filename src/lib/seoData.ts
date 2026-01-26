@@ -1780,6 +1780,1304 @@ export const CITIES: CityData[] = [
     population: '14.000',
     neighborhoods: ['Centro', 'Noverasco'],
     nearbyAreas: ['Milano', 'Rozzano', 'Pieve Emanuele', 'Locate di Triulzi', 'San Donato Milanese']
+  },
+  // === CITTÀ MANCANTI DA GSC - LOMBARDIA ===
+  {
+    slug: 'sulbiate',
+    name: 'Sulbiate',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '4.500',
+    neighborhoods: ['Centro', 'Sulbiate Superiore', 'Sulbiate Inferiore'],
+    nearbyAreas: ['Bernareggio', 'Mezzago', 'Aicurzio', 'Bellusco', 'Ornago']
+  },
+  {
+    slug: 'burago-di-molgora',
+    name: 'Burago di Molgora',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '4.500',
+    neighborhoods: ['Centro', 'Cascina Salette'],
+    nearbyAreas: ['Agrate Brianza', 'Vimercate', 'Caponago', 'Carnate', 'Ornago']
+  },
+  {
+    slug: 'basiano',
+    name: 'Basiano',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '4.000',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Masate', 'Trezzano Rosa', 'Pozzo d\'Adda', 'Grezzago', 'Inzago']
+  },
+  {
+    slug: 'arcore',
+    name: 'Arcore',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '18.000',
+    neighborhoods: ['Centro', 'Cascina del Bruno', 'Bernate'],
+    nearbyAreas: ['Vimercate', 'Villasanta', 'Usmate Velate', 'Lesmo', 'Concorezzo']
+  },
+  {
+    slug: 'bernareggio',
+    name: 'Bernareggio',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '11.000',
+    neighborhoods: ['Centro', 'Villanova'],
+    nearbyAreas: ['Carnate', 'Sulbiate', 'Ronco Briantino', 'Aicurzio', 'Vimercate']
+  },
+  {
+    slug: 'carnate',
+    name: 'Carnate',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '7.500',
+    neighborhoods: ['Centro', 'Passirano'],
+    nearbyAreas: ['Bernareggio', 'Usmate Velate', 'Vimercate', 'Burago di Molgora', 'Ronco Briantino']
+  },
+  {
+    slug: 'bellusco',
+    name: 'Bellusco',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '7.500',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Mezzago', 'Ornago', 'Cavenago di Brianza', 'Sulbiate', 'Vimercate']
+  },
+  {
+    slug: 'ornago',
+    name: 'Ornago',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '5.000',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Bellusco', 'Cavenago di Brianza', 'Burago di Molgora', 'Vimercate', 'Cambiago']
+  },
+  {
+    slug: 'mezzago',
+    name: 'Mezzago',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '4.500',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Bellusco', 'Sulbiate', 'Cornate d\'Adda', 'Cavenago di Brianza', 'Busnago']
+  },
+  {
+    slug: 'busnago',
+    name: 'Busnago',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '6.000',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Roncello', 'Cornate d\'Adda', 'Mezzago', 'Grezzago', 'Trezzo sull\'Adda']
+  },
+  {
+    slug: 'cornate-d-adda',
+    name: 'Cornate d\'Adda',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '10.500',
+    neighborhoods: ['Centro', 'Porto d\'Adda', 'Colnago'],
+    nearbyAreas: ['Trezzo sull\'Adda', 'Busnago', 'Mezzago', 'Bottanuco', 'Vaprio d\'Adda']
+  },
+  {
+    slug: 'usmate-velate',
+    name: 'Usmate Velate',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '10.000',
+    neighborhoods: ['Centro', 'Velate'],
+    nearbyAreas: ['Arcore', 'Carnate', 'Vimercate', 'Lesmo', 'Camparada']
+  },
+  {
+    slug: 'lesmo',
+    name: 'Lesmo',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '8.500',
+    neighborhoods: ['Centro', 'Peregallo'],
+    nearbyAreas: ['Arcore', 'Correzzana', 'Camparada', 'Usmate Velate', 'Villasanta']
+  },
+  {
+    slug: 'villasanta',
+    name: 'Villasanta',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '14.000',
+    neighborhoods: ['Centro', 'San Fiorano'],
+    nearbyAreas: ['Monza', 'Arcore', 'Lesmo', 'Concorezzo', 'Vimercate']
+  },
+  {
+    slug: 'concorezzo',
+    name: 'Concorezzo',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '16.000',
+    neighborhoods: ['Centro', 'San Albino'],
+    nearbyAreas: ['Vimercate', 'Agrate Brianza', 'Monza', 'Villasanta', 'Brugherio']
+  },
+  {
+    slug: 'cavenago-di-brianza',
+    name: 'Cavenago di Brianza',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '7.500',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Ornago', 'Cambiago', 'Bellusco', 'Agrate Brianza', 'Burago di Molgora']
+  },
+  {
+    slug: 'caponago',
+    name: 'Caponago',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '5.500',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Agrate Brianza', 'Burago di Molgora', 'Pessano con Bornago', 'Cambiago', 'Carugate']
+  },
+  {
+    slug: 'pessano-con-bornago',
+    name: 'Pessano con Bornago',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '9.500',
+    neighborhoods: ['Centro', 'Bornago'],
+    nearbyAreas: ['Caponago', 'Bussero', 'Gorgonzola', 'Cambiago', 'Cassina de\' Pecchi']
+  },
+  {
+    slug: 'bussero',
+    name: 'Bussero',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '8.500',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Cassina de\' Pecchi', 'Gorgonzola', 'Pessano con Bornago', 'Cernusco sul Naviglio', 'Carugate']
+  },
+  {
+    slug: 'gorgonzola',
+    name: 'Gorgonzola',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '21.000',
+    neighborhoods: ['Centro', 'Villa Pompea'],
+    nearbyAreas: ['Melzo', 'Bussero', 'Pessano con Bornago', 'Cassano d\'Adda', 'Cernusco sul Naviglio']
+  },
+  {
+    slug: 'melzo',
+    name: 'Melzo',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '18.500',
+    neighborhoods: ['Centro', 'Cascine San Pietro'],
+    nearbyAreas: ['Gorgonzola', 'Vignate', 'Pozzuolo Martesana', 'Liscate', 'Inzago']
+  },
+  {
+    slug: 'vignate',
+    name: 'Vignate',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '9.500',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Melzo', 'Cassina de\' Pecchi', 'Rodano', 'Liscate', 'Settala']
+  },
+  {
+    slug: 'liscate',
+    name: 'Liscate',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '4.500',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Pozzuolo Martesana', 'Melzo', 'Vignate', 'Settala', 'Pantigliate']
+  },
+  {
+    slug: 'pozzuolo-martesana',
+    name: 'Pozzuolo Martesana',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '8.500',
+    neighborhoods: ['Centro', 'Trecella', 'Pobbiano'],
+    nearbyAreas: ['Melzo', 'Inzago', 'Liscate', 'Gessate', 'Bellinzago Lombardo']
+  },
+  {
+    slug: 'gessate',
+    name: 'Gessate',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '9.000',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Inzago', 'Cambiago', 'Pozzuolo Martesana', 'Bellinzago Lombardo', 'Pessano con Bornago']
+  },
+  {
+    slug: 'cassano-d-adda',
+    name: 'Cassano d\'Adda',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '19.000',
+    neighborhoods: ['Centro', 'Groppello'],
+    nearbyAreas: ['Inzago', 'Treviglio', 'Vaprio d\'Adda', 'Melzo', 'Rivolta d\'Adda']
+  },
+  {
+    slug: 'vaprio-d-adda',
+    name: 'Vaprio d\'Adda',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '9.000',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Trezzo sull\'Adda', 'Cassano d\'Adda', 'Canonica d\'Adda', 'Pozzo d\'Adda', 'Cornate d\'Adda']
+  },
+  {
+    slug: 'pozzo-d-adda',
+    name: 'Pozzo d\'Adda',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '6.000',
+    neighborhoods: ['Centro', 'Bettola'],
+    nearbyAreas: ['Trezzano Rosa', 'Vaprio d\'Adda', 'Basiano', 'Trezzo sull\'Adda', 'Grezzago']
+  },
+  {
+    slug: 'grezzago',
+    name: 'Grezzago',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '3.000',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Trezzano Rosa', 'Pozzo d\'Adda', 'Busnago', 'Trezzo sull\'Adda', 'Basiano']
+  },
+  {
+    slug: 'masate',
+    name: 'Masate',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '3.500',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Basiano', 'Gessate', 'Inzago', 'Cambiago', 'Trezzano Rosa']
+  },
+  {
+    slug: 'cernusco-sul-naviglio',
+    name: 'Cernusco sul Naviglio',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '35.000',
+    neighborhoods: ['Centro', 'Ronco'],
+    nearbyAreas: ['Cassina de\' Pecchi', 'Pioltello', 'Vimodrone', 'Bussero', 'Carugate']
+  },
+  {
+    slug: 'pioltello',
+    name: 'Pioltello',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '37.000',
+    neighborhoods: ['Centro', 'Limito', 'Seggiano'],
+    nearbyAreas: ['Cernusco sul Naviglio', 'Rodano', 'Segrate', 'Cassina de\' Pecchi', 'Pantigliate']
+  },
+  {
+    slug: 'segrate',
+    name: 'Segrate',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '36.000',
+    neighborhoods: ['Centro', 'San Felice', 'Milano 2', 'Redecesio', 'Novegro'],
+    nearbyAreas: ['Milano', 'Pioltello', 'Vimodrone', 'Peschiera Borromeo', 'Cernusco sul Naviglio']
+  },
+  {
+    slug: 'vimodrone',
+    name: 'Vimodrone',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '17.500',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Cologno Monzese', 'Cernusco sul Naviglio', 'Segrate', 'Pioltello', 'Milano']
+  },
+  {
+    slug: 'cologno-monzese',
+    name: 'Cologno Monzese',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '48.000',
+    neighborhoods: ['Centro', 'San Maurizio al Lambro', 'Cologno Nord'],
+    nearbyAreas: ['Milano', 'Brugherio', 'Sesto San Giovanni', 'Vimodrone', 'Carugate']
+  },
+  {
+    slug: 'sesto-san-giovanni',
+    name: 'Sesto San Giovanni',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '82.000',
+    neighborhoods: ['Centro', 'Cascina Gatti', 'Rondò', 'Pelucca'],
+    nearbyAreas: ['Milano', 'Cologno Monzese', 'Cinisello Balsamo', 'Bresso', 'Brugherio']
+  },
+  {
+    slug: 'cinisello-balsamo',
+    name: 'Cinisello Balsamo',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '76.000',
+    neighborhoods: ['Centro', 'Sant\'Eusebio', 'Balsamo', 'Crocetta'],
+    nearbyAreas: ['Sesto San Giovanni', 'Cusano Milanino', 'Bresso', 'Muggiò', 'Monza']
+  },
+  {
+    slug: 'cusano-milanino',
+    name: 'Cusano Milanino',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '19.500',
+    neighborhoods: ['Centro', 'Milanino'],
+    nearbyAreas: ['Cinisello Balsamo', 'Paderno Dugnano', 'Bresso', 'Cormano', 'Nova Milanese']
+  },
+  {
+    slug: 'bresso',
+    name: 'Bresso',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '26.500',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Sesto San Giovanni', 'Cinisello Balsamo', 'Cormano', 'Cusano Milanino', 'Milano']
+  },
+  {
+    slug: 'cormano',
+    name: 'Cormano',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '20.500',
+    neighborhoods: ['Centro', 'Ospitaletto'],
+    nearbyAreas: ['Bresso', 'Cusano Milanino', 'Paderno Dugnano', 'Novate Milanese', 'Bollate']
+  },
+  {
+    slug: 'paderno-dugnano',
+    name: 'Paderno Dugnano',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '47.000',
+    neighborhoods: ['Centro', 'Palazzolo Milanese', 'Incirano', 'Villaggio Ambrosiano'],
+    nearbyAreas: ['Cusano Milanino', 'Cormano', 'Nova Milanese', 'Senago', 'Varedo']
+  },
+  {
+    slug: 'senago',
+    name: 'Senago',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '21.500',
+    neighborhoods: ['Centro', 'Senaghino'],
+    nearbyAreas: ['Paderno Dugnano', 'Bollate', 'Garbagnate Milanese', 'Cesate', 'Cormano']
+  },
+  {
+    slug: 'garbagnate-milanese',
+    name: 'Garbagnate Milanese',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '27.500',
+    neighborhoods: ['Centro', 'Santa Maria Rossa'],
+    nearbyAreas: ['Bollate', 'Senago', 'Arese', 'Cesate', 'Lainate']
+  },
+  {
+    slug: 'arese',
+    name: 'Arese',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '19.500',
+    neighborhoods: ['Centro', 'Valera'],
+    nearbyAreas: ['Rho', 'Garbagnate Milanese', 'Lainate', 'Bollate', 'Baranzate']
+  },
+  {
+    slug: 'lainate',
+    name: 'Lainate',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '26.000',
+    neighborhoods: ['Centro', 'Pagliera', 'Barbaiana', 'Grancia'],
+    nearbyAreas: ['Arese', 'Rho', 'Nerviano', 'Garbagnate Milanese', 'Pogliano Milanese']
+  },
+  {
+    slug: 'nerviano',
+    name: 'Nerviano',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '17.500',
+    neighborhoods: ['Centro', 'Sant\'Ilario'],
+    nearbyAreas: ['Lainate', 'Parabiago', 'Pogliano Milanese', 'Vanzago', 'Rho']
+  },
+  {
+    slug: 'parabiago',
+    name: 'Parabiago',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '28.000',
+    neighborhoods: ['Centro', 'Villastanza', 'Ravello'],
+    nearbyAreas: ['Legnano', 'Nerviano', 'Canegrate', 'San Vittore Olona', 'Villa Cortese']
+  },
+  {
+    slug: 'canegrate',
+    name: 'Canegrate',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '13.000',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Parabiago', 'Legnano', 'San Giorgio su Legnano', 'Villa Cortese', 'Cerro Maggiore']
+  },
+  {
+    slug: 'san-giorgio-su-legnano',
+    name: 'San Giorgio su Legnano',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '7.000',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Legnano', 'Canegrate', 'Villa Cortese', 'Dairago', 'Cerro Maggiore']
+  },
+  {
+    slug: 'cerro-maggiore',
+    name: 'Cerro Maggiore',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '15.500',
+    neighborhoods: ['Centro', 'Cantalupo'],
+    nearbyAreas: ['Legnano', 'Rescaldina', 'San Vittore Olona', 'Canegrate', 'Uboldo']
+  },
+  {
+    slug: 'rescaldina',
+    name: 'Rescaldina',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '14.500',
+    neighborhoods: ['Centro', 'Rescalda'],
+    nearbyAreas: ['Cerro Maggiore', 'Castellanza', 'Uboldo', 'Cislago', 'Legnano']
+  },
+  {
+    slug: 'castellanza',
+    name: 'Castellanza',
+    province: 'VA',
+    region: 'Lombardia',
+    population: '14.500',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Busto Arsizio', 'Legnano', 'Olgiate Olona', 'Gorla Minore', 'Marnate']
+  },
+  {
+    slug: 'olgiate-olona',
+    name: 'Olgiate Olona',
+    province: 'VA',
+    region: 'Lombardia',
+    population: '12.500',
+    neighborhoods: ['Centro', 'Gerbone'],
+    nearbyAreas: ['Busto Arsizio', 'Castellanza', 'Gorla Minore', 'Marnate', 'Fagnano Olona']
+  },
+  {
+    slug: 'solaro',
+    name: 'Solaro',
+    province: 'MI',
+    region: 'Lombardia',
+    population: '14.500',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Saronno', 'Ceriano Laghetto', 'Cesate', 'Limbiate', 'Garbagnate Milanese']
+  },
+  {
+    slug: 'limbiate',
+    name: 'Limbiate',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '36.000',
+    neighborhoods: ['Centro', 'Mombello', 'Pinzano', 'Villaggio Giovi'],
+    nearbyAreas: ['Cesano Maderno', 'Bovisio-Masciago', 'Varedo', 'Senago', 'Solaro']
+  },
+  {
+    slug: 'varedo',
+    name: 'Varedo',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '13.000',
+    neighborhoods: ['Centro', 'Valera'],
+    nearbyAreas: ['Cesano Maderno', 'Bovisio-Masciago', 'Paderno Dugnano', 'Limbiate', 'Nova Milanese']
+  },
+  {
+    slug: 'bovisio-masciago',
+    name: 'Bovisio-Masciago',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '17.000',
+    neighborhoods: ['Centro', 'Masciago'],
+    nearbyAreas: ['Cesano Maderno', 'Varedo', 'Nova Milanese', 'Desio', 'Limbiate']
+  },
+  {
+    slug: 'muggio',
+    name: 'Muggiò',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '24.000',
+    neighborhoods: ['Centro', 'San Carlo'],
+    nearbyAreas: ['Monza', 'Nova Milanese', 'Desio', 'Cinisello Balsamo', 'Lissone']
+  },
+  {
+    slug: 'giussano',
+    name: 'Giussano',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '25.500',
+    neighborhoods: ['Centro', 'Paina', 'Birone', 'Robbiano'],
+    nearbyAreas: ['Seregno', 'Carate Brianza', 'Verano Brianza', 'Mariano Comense', 'Briosco']
+  },
+  {
+    slug: 'carate-brianza',
+    name: 'Carate Brianza',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '18.500',
+    neighborhoods: ['Centro', 'Agliate', 'Costa Lambro', 'Realdino'],
+    nearbyAreas: ['Giussano', 'Verano Brianza', 'Albiate', 'Besana in Brianza', 'Seregno']
+  },
+  {
+    slug: 'verano-brianza',
+    name: 'Verano Brianza',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '9.500',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Giussano', 'Carate Brianza', 'Seregno', 'Desio', 'Lissone']
+  },
+  {
+    slug: 'besana-in-brianza',
+    name: 'Besana in Brianza',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '16.000',
+    neighborhoods: ['Centro', 'Villa Raverio', 'Vergo Zoccorino', 'Calò'],
+    nearbyAreas: ['Carate Brianza', 'Triuggio', 'Renate', 'Veduggio con Colzano', 'Briosco']
+  },
+  {
+    slug: 'meda',
+    name: 'Meda',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '24.000',
+    neighborhoods: ['Centro', 'Polo'],
+    nearbyAreas: ['Seregno', 'Seveso', 'Cabiate', 'Lentate sul Seveso', 'Barlassina']
+  },
+  {
+    slug: 'seveso',
+    name: 'Seveso',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '23.500',
+    neighborhoods: ['Centro', 'Baruccana', 'Altopiano', 'San Pietro Martire'],
+    nearbyAreas: ['Cesano Maderno', 'Meda', 'Barlassina', 'Lentate sul Seveso', 'Seregno']
+  },
+  {
+    slug: 'lentate-sul-seveso',
+    name: 'Lentate sul Seveso',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '16.000',
+    neighborhoods: ['Centro', 'Birago', 'Cimnago', 'Copreno'],
+    nearbyAreas: ['Meda', 'Seveso', 'Barlassina', 'Mariano Comense', 'Cabiate']
+  },
+  {
+    slug: 'barlassina',
+    name: 'Barlassina',
+    province: 'MB',
+    region: 'Lombardia',
+    population: '7.000',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Seveso', 'Meda', 'Lentate sul Seveso', 'Seregno', 'Cesano Maderno']
+  },
+  {
+    slug: 'cabiate',
+    name: 'Cabiate',
+    province: 'CO',
+    region: 'Lombardia',
+    population: '7.500',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Mariano Comense', 'Meda', 'Seregno', 'Carugo', 'Lentate sul Seveso']
+  },
+  {
+    slug: 'carugo',
+    name: 'Carugo',
+    province: 'CO',
+    region: 'Lombardia',
+    population: '6.500',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Mariano Comense', 'Giussano', 'Arosio', 'Inverigo', 'Cabiate']
+  },
+  {
+    slug: 'inverigo',
+    name: 'Inverigo',
+    province: 'CO',
+    region: 'Lombardia',
+    population: '9.000',
+    neighborhoods: ['Centro', 'Cremnago', 'Romanò', 'Villa Romano'],
+    nearbyAreas: ['Lurago d\'Erba', 'Carugo', 'Lambrugo', 'Nibionno', 'Anzano del Parco']
+  },
+  {
+    slug: 'canzo',
+    name: 'Canzo',
+    province: 'CO',
+    region: 'Lombardia',
+    population: '5.000',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Asso', 'Castelmarte', 'Eupilio', 'Valbrona', 'Erba']
+  },
+  {
+    slug: 'asso',
+    name: 'Asso',
+    province: 'CO',
+    region: 'Lombardia',
+    population: '3.500',
+    neighborhoods: ['Centro', 'Scarenna'],
+    nearbyAreas: ['Canzo', 'Eupilio', 'Sormano', 'Valbrona', 'Lasnigo']
+  },
+  {
+    slug: 'oggiono',
+    name: 'Oggiono',
+    province: 'LC',
+    region: 'Lombardia',
+    population: '9.000',
+    neighborhoods: ['Centro', 'Imberido'],
+    nearbyAreas: ['Annone di Brianza', 'Molteno', 'Sirone', 'Dolzago', 'Ello']
+  },
+  {
+    slug: 'calolziocorte',
+    name: 'Calolziocorte',
+    province: 'LC',
+    region: 'Lombardia',
+    population: '14.000',
+    neighborhoods: ['Centro', 'Rossino', 'Foppenico', 'Sala'],
+    nearbyAreas: ['Lecco', 'Vercurago', 'Erve', 'Monte Marenzo', 'Carenno']
+  },
+  {
+    slug: 'valmadrera',
+    name: 'Valmadrera',
+    province: 'LC',
+    region: 'Lombardia',
+    population: '12.000',
+    neighborhoods: ['Centro', 'Bellagio', 'Paré'],
+    nearbyAreas: ['Lecco', 'Malgrate', 'Civate', 'Galbiate', 'Mandello del Lario']
+  },
+  {
+    slug: 'malgrate',
+    name: 'Malgrate',
+    province: 'LC',
+    region: 'Lombardia',
+    population: '4.500',
+    neighborhoods: ['Centro'],
+    nearbyAreas: ['Lecco', 'Valmadrera', 'Pescate', 'Garlate', 'Olginate']
+  },
+  {
+    slug: 'mandello-del-lario',
+    name: 'Mandello del Lario',
+    province: 'LC',
+    region: 'Lombardia',
+    population: '10.500',
+    neighborhoods: ['Centro', 'Molina', 'Somana', 'Tonzanico'],
+    nearbyAreas: ['Lecco', 'Abbadia Lariana', 'Lierna', 'Varenna', 'Bellano']
+  },
+  {
+    slug: 'casatenovo',
+    name: 'Casatenovo',
+    province: 'LC',
+    region: 'Lombardia',
+    population: '13.000',
+    neighborhoods: ['Centro', 'Cascina Bracchi', 'Campofiorenzo', 'Galgiana'],
+    nearbyAreas: ['Besana in Brianza', 'Monticello Brianza', 'Missaglia', 'Correzzana', 'Lomagna']
+  },
+  {
+    slug: 'merate',
+    name: 'Merate',
+    province: 'LC',
+    region: 'Lombardia',
+    population: '15.500',
+    neighborhoods: ['Centro', 'Sartirana', 'Pagnano', 'Brugarolo'],
+    nearbyAreas: ['Olgiate Molgora', 'Cernusco Lombardone', 'Robbiate', 'Osnago', 'Montevecchia']
+  },
+  {
+    slug: 'missaglia',
+    name: 'Missaglia',
+    province: 'LC',
+    region: 'Lombardia',
+    population: '9.000',
+    neighborhoods: ['Centro', 'Maresso', 'Lomaniga'],
+    nearbyAreas: ['Casatenovo', 'Monticello Brianza', 'Castello di Brianza', 'Cremella', 'Barzanò']
+  },
+  {
+    slug: 'olgiate-molgora',
+    name: 'Olgiate Molgora',
+    province: 'LC',
+    region: 'Lombardia',
+    population: '6.500',
+    neighborhoods: ['Centro', 'Regondello'],
+    nearbyAreas: ['Merate', 'Calco', 'Brivio', 'Imbersago', 'Cernusco Lombardone']
+  },
+  // === CITTÀ MANCANTI DA GSC - ALTRE REGIONI ===
+  {
+    slug: 'afragola',
+    name: 'Afragola',
+    province: 'NA',
+    region: 'Campania',
+    population: '65.000',
+    neighborhoods: ['Centro', 'Salicelle', 'Zona Industriale'],
+    nearbyAreas: ['Napoli', 'Casoria', 'Acerra', 'Cardito', 'Caivano']
+  },
+  {
+    slug: 'casoria',
+    name: 'Casoria',
+    province: 'NA',
+    region: 'Campania',
+    population: '78.000',
+    neighborhoods: ['Centro', 'Arpino', 'Cittadella'],
+    nearbyAreas: ['Napoli', 'Afragola', 'Arzano', 'Casavatore', 'Cardito']
+  },
+  {
+    slug: 'giugliano-in-campania',
+    name: 'Giugliano in Campania',
+    province: 'NA',
+    region: 'Campania',
+    population: '125.000',
+    neighborhoods: ['Centro', 'Lago Patria', 'Varcaturo', 'Licola'],
+    nearbyAreas: ['Napoli', 'Marano', 'Qualiano', 'Villaricca', 'Aversa']
+  },
+  {
+    slug: 'marano-di-napoli',
+    name: 'Marano di Napoli',
+    province: 'NA',
+    region: 'Campania',
+    population: '60.000',
+    neighborhoods: ['Centro', 'San Rocco', 'Quarto'],
+    nearbyAreas: ['Napoli', 'Giugliano', 'Qualiano', 'Mugnano', 'Villaricca']
+  },
+  {
+    slug: 'portici',
+    name: 'Portici',
+    province: 'NA',
+    region: 'Campania',
+    population: '55.000',
+    neighborhoods: ['Centro', 'Granatello', 'Bellavista', 'Via Libertà'],
+    nearbyAreas: ['Napoli', 'Ercolano', 'San Giorgio a Cremano', 'Torre del Greco', 'San Sebastiano al Vesuvio']
+  },
+  {
+    slug: 'ercolano',
+    name: 'Ercolano',
+    province: 'NA',
+    region: 'Campania',
+    population: '53.000',
+    neighborhoods: ['Centro', 'Pugliano', 'Miglio d\'Oro', 'Scavi'],
+    nearbyAreas: ['Portici', 'Torre del Greco', 'San Giorgio a Cremano', 'Napoli', 'San Sebastiano al Vesuvio']
+  },
+  {
+    slug: 'san-giorgio-a-cremano',
+    name: 'San Giorgio a Cremano',
+    province: 'NA',
+    region: 'Campania',
+    population: '46.000',
+    neighborhoods: ['Centro', 'Arenaccia', 'San Leonardo'],
+    nearbyAreas: ['Napoli', 'Portici', 'Ercolano', 'Cercola', 'San Sebastiano al Vesuvio']
+  },
+  {
+    slug: 'pozzuoli',
+    name: 'Pozzuoli',
+    province: 'NA',
+    region: 'Campania',
+    population: '80.000',
+    neighborhoods: ['Centro', 'Arco Felice', 'Lucrino', 'Monteruscello', 'Toiano'],
+    nearbyAreas: ['Napoli', 'Bacoli', 'Quarto', 'Monte di Procida', 'Baia']
+  },
+  {
+    slug: 'torre-annunziata',
+    name: 'Torre Annunziata',
+    province: 'NA',
+    region: 'Campania',
+    population: '42.000',
+    neighborhoods: ['Centro', 'Leopardi', 'Rovigliano', 'Cappella Bianchini'],
+    nearbyAreas: ['Torre del Greco', 'Boscoreale', 'Boscotrecase', 'Pompei', 'Castellammare di Stabia']
+  },
+  {
+    slug: 'castellammare-di-stabia',
+    name: 'Castellammare di Stabia',
+    province: 'NA',
+    region: 'Campania',
+    population: '66.000',
+    neighborhoods: ['Centro', 'Quisisana', 'Scanzano', 'Santa Maria delle Grazie'],
+    nearbyAreas: ['Pompei', 'Torre Annunziata', 'Gragnano', 'Vico Equense', 'Sorrento']
+  },
+  {
+    slug: 'acerra',
+    name: 'Acerra',
+    province: 'NA',
+    region: 'Campania',
+    population: '60.000',
+    neighborhoods: ['Centro', 'Madonnella', 'Parco Primavera'],
+    nearbyAreas: ['Afragola', 'Pomigliano d\'Arco', 'Casalnuovo', 'Caivano', 'Marigliano']
+  },
+  {
+    slug: 'pomigliano-d-arco',
+    name: 'Pomigliano d\'Arco',
+    province: 'NA',
+    region: 'Campania',
+    population: '40.000',
+    neighborhoods: ['Centro', 'Pratola', 'Madonna delle Grazie'],
+    nearbyAreas: ['Acerra', 'Casalnuovo', 'Sant\'Anastasia', 'Marigliano', 'Brusciano']
+  },
+  {
+    slug: 'nocera-inferiore',
+    name: 'Nocera Inferiore',
+    province: 'SA',
+    region: 'Campania',
+    population: '45.000',
+    neighborhoods: ['Centro', 'Piedimonte', 'Montevescovado', 'Pareti'],
+    nearbyAreas: ['Nocera Superiore', 'Sarno', 'Pagani', 'Angri', 'Cava de\' Tirreni']
+  },
+  {
+    slug: 'pagani',
+    name: 'Pagani',
+    province: 'SA',
+    region: 'Campania',
+    population: '36.000',
+    neighborhoods: ['Centro', 'Barbazzano'],
+    nearbyAreas: ['Nocera Inferiore', 'Angri', 'Sant\'Egidio del Monte Albino', 'San Marzano sul Sarno', 'Sarno']
+  },
+  {
+    slug: 'angri',
+    name: 'Angri',
+    province: 'SA',
+    region: 'Campania',
+    population: '34.000',
+    neighborhoods: ['Centro', 'Rione Croce'],
+    nearbyAreas: ['Pagani', 'Sant\'Antonio Abate', 'San Marzano sul Sarno', 'Scafati', 'Nocera Inferiore']
+  },
+  {
+    slug: 'scafati',
+    name: 'Scafati',
+    province: 'SA',
+    region: 'Campania',
+    population: '51.000',
+    neighborhoods: ['Centro', 'Bagni', 'San Pietro'],
+    nearbyAreas: ['Pompei', 'Angri', 'Poggiomarino', 'Sant\'Antonio Abate', 'Boscoreale']
+  },
+  {
+    slug: 'barletta',
+    name: 'Barletta',
+    province: 'BT',
+    region: 'Puglia',
+    population: '94.000',
+    neighborhoods: ['Centro', 'Borgovilla', 'Patalini', 'Settefrati'],
+    nearbyAreas: ['Trani', 'Andria', 'Bisceglie', 'Margherita di Savoia', 'Canosa di Puglia']
+  },
+  {
+    slug: 'bisceglie',
+    name: 'Bisceglie',
+    province: 'BT',
+    region: 'Puglia',
+    population: '55.000',
+    neighborhoods: ['Centro', 'Salnitro', 'San Domenico', 'Seminario'],
+    nearbyAreas: ['Molfetta', 'Trani', 'Corato', 'Giovinazzo', 'Barletta']
+  },
+  {
+    slug: 'molfetta',
+    name: 'Molfetta',
+    province: 'BA',
+    region: 'Puglia',
+    population: '60.000',
+    neighborhoods: ['Centro', 'Sant\'Andrea', 'Immacolata', 'Maddalena'],
+    nearbyAreas: ['Bisceglie', 'Terlizzi', 'Giovinazzo', 'Corato', 'Bari']
+  },
+  {
+    slug: 'giovinazzo',
+    name: 'Giovinazzo',
+    province: 'BA',
+    region: 'Puglia',
+    population: '20.500',
+    neighborhoods: ['Centro', 'Centro Storico'],
+    nearbyAreas: ['Molfetta', 'Bari', 'Terlizzi', 'Bitonto', 'Bisceglie']
+  },
+  {
+    slug: 'modugno',
+    name: 'Modugno',
+    province: 'BA',
+    region: 'Puglia',
+    population: '38.000',
+    neighborhoods: ['Centro', 'San Paolo', 'Zona Industriale'],
+    nearbyAreas: ['Bari', 'Bitonto', 'Palo del Colle', 'Bitetto', 'Bitritto']
+  },
+  {
+    slug: 'bitonto',
+    name: 'Bitonto',
+    province: 'BA',
+    region: 'Puglia',
+    population: '56.000',
+    neighborhoods: ['Centro', 'Palombaio', 'Mariotto'],
+    nearbyAreas: ['Bari', 'Modugno', 'Palo del Colle', 'Terlizzi', 'Giovinazzo']
+  },
+  {
+    slug: 'corato',
+    name: 'Corato',
+    province: 'BA',
+    region: 'Puglia',
+    population: '48.000',
+    neighborhoods: ['Centro', 'Sant\'Elia'],
+    nearbyAreas: ['Ruvo di Puglia', 'Andria', 'Terlizzi', 'Molfetta', 'Bisceglie']
+  },
+  {
+    slug: 'monopoli',
+    name: 'Monopoli',
+    province: 'BA',
+    region: 'Puglia',
+    population: '49.000',
+    neighborhoods: ['Centro', 'Centro Storico', 'Cala Corvino'],
+    nearbyAreas: ['Polignano a Mare', 'Conversano', 'Fasano', 'Alberobello', 'Castellana Grotte']
+  },
+  {
+    slug: 'polignano-a-mare',
+    name: 'Polignano a Mare',
+    province: 'BA',
+    region: 'Puglia',
+    population: '18.000',
+    neighborhoods: ['Centro', 'San Vito'],
+    nearbyAreas: ['Monopoli', 'Conversano', 'Mola di Bari', 'Castellana Grotte', 'Bari']
+  },
+  {
+    slug: 'conversano',
+    name: 'Conversano',
+    province: 'BA',
+    region: 'Puglia',
+    population: '26.000',
+    neighborhoods: ['Centro', 'Marchione'],
+    nearbyAreas: ['Polignano a Mare', 'Monopoli', 'Mola di Bari', 'Castellana Grotte', 'Turi']
+  },
+  {
+    slug: 'triggiano',
+    name: 'Triggiano',
+    province: 'BA',
+    region: 'Puglia',
+    population: '28.000',
+    neighborhoods: ['Centro', 'Ferrovieri'],
+    nearbyAreas: ['Bari', 'Noicattaro', 'Capurso', 'Valenzano', 'Mola di Bari']
+  },
+  {
+    slug: 'mola-di-bari',
+    name: 'Mola di Bari',
+    province: 'BA',
+    region: 'Puglia',
+    population: '26.000',
+    neighborhoods: ['Centro', 'San Materno'],
+    nearbyAreas: ['Polignano a Mare', 'Rutigliano', 'Conversano', 'Noicattaro', 'Triggiano']
+  },
+  {
+    slug: 'fasano',
+    name: 'Fasano',
+    province: 'BR',
+    region: 'Puglia',
+    population: '40.000',
+    neighborhoods: ['Centro', 'Savelletri', 'Torre Canne', 'Selva di Fasano'],
+    nearbyAreas: ['Ostuni', 'Monopoli', 'Cisternino', 'Alberobello', 'Locorotondo']
+  },
+  {
+    slug: 'ostuni',
+    name: 'Ostuni',
+    province: 'BR',
+    region: 'Puglia',
+    population: '32.000',
+    neighborhoods: ['Centro', 'Rosa Marina', 'Villanova'],
+    nearbyAreas: ['Fasano', 'Cisternino', 'Carovigno', 'San Vito dei Normanni', 'Ceglie Messapica']
+  },
+  {
+    slug: 'mesagne',
+    name: 'Mesagne',
+    province: 'BR',
+    region: 'Puglia',
+    population: '27.000',
+    neighborhoods: ['Centro', 'Muro Tenente'],
+    nearbyAreas: ['Brindisi', 'Latiano', 'San Pietro Vernotico', 'Cellino San Marco', 'Torchiarolo']
+  },
+  {
+    slug: 'francavilla-fontana',
+    name: 'Francavilla Fontana',
+    province: 'BR',
+    region: 'Puglia',
+    population: '37.000',
+    neighborhoods: ['Centro', 'San Lorenzo', 'Cimitero'],
+    nearbyAreas: ['Oria', 'Ceglie Messapica', 'Villa Castelli', 'Latiano', 'Grottaglie']
+  },
+  {
+    slug: 'grottaglie',
+    name: 'Grottaglie',
+    province: 'TA',
+    region: 'Puglia',
+    population: '32.000',
+    neighborhoods: ['Centro', 'Quartiere delle Ceramiche'],
+    nearbyAreas: ['Taranto', 'Francavilla Fontana', 'Monteiasi', 'Montemesola', 'San Giorgio Ionico']
+  },
+  {
+    slug: 'massafra',
+    name: 'Massafra',
+    province: 'TA',
+    region: 'Puglia',
+    population: '33.000',
+    neighborhoods: ['Centro', 'Marina di Ferrara', 'Chiatona'],
+    nearbyAreas: ['Taranto', 'Mottola', 'Crispiano', 'Palagiano', 'Statte']
+  },
+  {
+    slug: 'manduria',
+    name: 'Manduria',
+    province: 'TA',
+    region: 'Puglia',
+    population: '31.000',
+    neighborhoods: ['Centro', 'San Pietro in Bevagna'],
+    nearbyAreas: ['Sava', 'Avetrana', 'Maruggio', 'Francavilla Fontana', 'Oria']
+  },
+  {
+    slug: 'nardo',
+    name: 'Nardò',
+    province: 'LE',
+    region: 'Puglia',
+    population: '31.000',
+    neighborhoods: ['Centro', 'Santa Maria al Bagno', 'Santa Caterina', 'Sant\'Isidoro'],
+    nearbyAreas: ['Gallipoli', 'Galatone', 'Copertino', 'Avetrana', 'Porto Cesareo']
+  },
+  {
+    slug: 'gallipoli',
+    name: 'Gallipoli',
+    province: 'LE',
+    region: 'Puglia',
+    population: '20.000',
+    neighborhoods: ['Centro', 'Città Vecchia', 'Baia Verde'],
+    nearbyAreas: ['Nardò', 'Galatone', 'Taviano', 'Alezio', 'Tuglie']
+  },
+  {
+    slug: 'galatina',
+    name: 'Galatina',
+    province: 'LE',
+    region: 'Puglia',
+    population: '27.000',
+    neighborhoods: ['Centro', 'Noha', 'Collemeto'],
+    nearbyAreas: ['Galatone', 'Cutrofiano', 'Sternatia', 'Soleto', 'Copertino']
+  },
+  {
+    slug: 'nola',
+    name: 'Nola',
+    province: 'NA',
+    region: 'Campania',
+    population: '34.000',
+    neighborhoods: ['Centro', 'Cinquevie', 'Piazzolla'],
+    nearbyAreas: ['Marigliano', 'Saviano', 'Cimitile', 'San Paolo Bel Sito', 'Cicciano']
+  },
+  {
+    slug: 'pompei',
+    name: 'Pompei',
+    province: 'NA',
+    region: 'Campania',
+    population: '25.000',
+    neighborhoods: ['Centro', 'Scavi'],
+    nearbyAreas: ['Castellammare di Stabia', 'Torre Annunziata', 'Scafati', 'Boscoreale', 'Boscotrecase']
+  },
+  {
+    slug: 'giarre',
+    name: 'Giarre',
+    province: 'CT',
+    region: 'Sicilia',
+    population: '27.000',
+    neighborhoods: ['Centro', 'Macchia', 'Trepunti'],
+    nearbyAreas: ['Acireale', 'Riposto', 'Mascali', 'Sant\'Alfio', 'Zafferana Etnea']
+  },
+  {
+    slug: 'gela',
+    name: 'Gela',
+    province: 'CL',
+    region: 'Sicilia',
+    population: '75.000',
+    neighborhoods: ['Centro', 'Macchitella', 'Settefarine', 'Caposoprano'],
+    nearbyAreas: ['Vittoria', 'Niscemi', 'Butera', 'Licata', 'Riesi']
+  },
+  {
+    slug: 'alcamo',
+    name: 'Alcamo',
+    province: 'TP',
+    region: 'Sicilia',
+    population: '46.000',
+    neighborhoods: ['Centro', 'Alcamo Marina'],
+    nearbyAreas: ['Trapani', 'Castellammare del Golfo', 'Calatafimi-Segesta', 'Partinico', 'Camporeale']
+  },
+  {
+    slug: 'mazara-del-vallo',
+    name: 'Mazara del Vallo',
+    province: 'TP',
+    region: 'Sicilia',
+    population: '52.000',
+    neighborhoods: ['Centro', 'Tonnarella', 'Mazara Due'],
+    nearbyAreas: ['Marsala', 'Campobello di Mazara', 'Castelvetrano', 'Petrosino', 'Salemi']
+  },
+  {
+    slug: 'castelvetrano',
+    name: 'Castelvetrano',
+    province: 'TP',
+    region: 'Sicilia',
+    population: '31.000',
+    neighborhoods: ['Centro', 'Triscina', 'Marinella di Selinunte'],
+    nearbyAreas: ['Mazara del Vallo', 'Campobello di Mazara', 'Partanna', 'Santa Ninfa', 'Gibellina']
+  },
+  {
+    slug: 'scicli',
+    name: 'Scicli',
+    province: 'RG',
+    region: 'Sicilia',
+    population: '27.000',
+    neighborhoods: ['Centro', 'Sampieri', 'Donnalucata', 'Cava d\'Aliga'],
+    nearbyAreas: ['Modica', 'Ragusa', 'Ispica', 'Santa Croce Camerina', 'Pozzallo']
+  },
+  {
+    slug: 'imola',
+    name: 'Imola',
+    province: 'BO',
+    region: 'Emilia-Romagna',
+    population: '70.000',
+    neighborhoods: ['Centro', 'Pedagna', 'Zolino', 'Cappuccini'],
+    nearbyAreas: ['Castel San Pietro Terme', 'Dozza', 'Casalfiumanese', 'Mordano', 'Faenza']
+  },
+  {
+    slug: 'carpi',
+    name: 'Carpi',
+    province: 'MO',
+    region: 'Emilia-Romagna',
+    population: '72.000',
+    neighborhoods: ['Centro', 'Cibeno', 'Santa Croce', 'Quartirolo'],
+    nearbyAreas: ['Modena', 'Soliera', 'Novi di Modena', 'Correggio', 'Campogalliano']
+  },
+  {
+    slug: 'sassuolo',
+    name: 'Sassuolo',
+    province: 'MO',
+    region: 'Emilia-Romagna',
+    population: '41.000',
+    neighborhoods: ['Centro', 'Braida', 'San Michele dei Mucchietti'],
+    nearbyAreas: ['Modena', 'Formigine', 'Fiorano Modenese', 'Maranello', 'Casalgrande']
+  },
+  {
+    slug: 'faenza',
+    name: 'Faenza',
+    province: 'RA',
+    region: 'Emilia-Romagna',
+    population: '58.000',
+    neighborhoods: ['Centro', 'Borgo Durbecco', 'San Rocco'],
+    nearbyAreas: ['Ravenna', 'Imola', 'Brisighella', 'Castel Bolognese', 'Forlì']
+  },
+  {
+    slug: 'lugo',
+    name: 'Lugo',
+    province: 'RA',
+    region: 'Emilia-Romagna',
+    population: '33.000',
+    neighborhoods: ['Centro', 'Voltana', 'Belricetto'],
+    nearbyAreas: ['Ravenna', 'Alfonsine', 'Bagnacavallo', 'Cotignola', 'Massa Lombarda']
+  },
+  {
+    slug: 'cervia',
+    name: 'Cervia',
+    province: 'RA',
+    region: 'Emilia-Romagna',
+    population: '29.000',
+    neighborhoods: ['Centro', 'Milano Marittima', 'Pinarella', 'Tagliata'],
+    nearbyAreas: ['Ravenna', 'Cesenatico', 'Russi', 'Bertinoro', 'Classe']
+  },
+  {
+    slug: 'cesenatico',
+    name: 'Cesenatico',
+    province: 'FC',
+    region: 'Emilia-Romagna',
+    population: '26.000',
+    neighborhoods: ['Centro', 'Valverde', 'Villamarina', 'Zadina'],
+    nearbyAreas: ['Cervia', 'Cesena', 'Gatteo', 'Savignano sul Rubicone', 'Gambettola']
+  },
+  {
+    slug: 'fidenza',
+    name: 'Fidenza',
+    province: 'PR',
+    region: 'Emilia-Romagna',
+    population: '27.000',
+    neighborhoods: ['Centro', 'Cabriolo', 'Sant\'Andrea'],
+    nearbyAreas: ['Parma', 'Salsomaggiore Terme', 'Fontanellato', 'Noceto', 'Busseto']
+  },
+  {
+    slug: 'correggio',
+    name: 'Correggio',
+    province: 'RE',
+    region: 'Emilia-Romagna',
+    population: '26.000',
+    neighborhoods: ['Centro', 'Mandrio', 'Budrio'],
+    nearbyAreas: ['Reggio Emilia', 'Carpi', 'Rio Saliceto', 'Campagnola Emilia', 'San Martino in Rio']
+  },
+  {
+    slug: 'scandiano',
+    name: 'Scandiano',
+    province: 'RE',
+    region: 'Emilia-Romagna',
+    population: '26.000',
+    neighborhoods: ['Centro', 'Arceto', 'Rondinara'],
+    nearbyAreas: ['Reggio Emilia', 'Casalgrande', 'Rubiera', 'Albinea', 'Castellarano']
+  },
+  {
+    slug: 'guastalla',
+    name: 'Guastalla',
+    province: 'RE',
+    region: 'Emilia-Romagna',
+    population: '15.500',
+    neighborhoods: ['Centro', 'San Girolamo'],
+    nearbyAreas: ['Reggiolo', 'Luzzara', 'Novellara', 'Gualtieri', 'Suzzara']
+  },
+  {
+    slug: 'cento',
+    name: 'Cento',
+    province: 'FE',
+    region: 'Emilia-Romagna',
+    population: '36.000',
+    neighborhoods: ['Centro', 'Renazzo', 'Casumaro'],
+    nearbyAreas: ['Ferrara', 'San Giovanni in Persiceto', 'Crevalcore', 'Sant\'Agostino', 'Bondeno']
+  },
+  {
+    slug: 'comacchio',
+    name: 'Comacchio',
+    province: 'FE',
+    region: 'Emilia-Romagna',
+    population: '22.000',
+    neighborhoods: ['Centro', 'Lido degli Estensi', 'Porto Garibaldi', 'Lido delle Nazioni'],
+    nearbyAreas: ['Ravenna', 'Ferrara', 'Argenta', 'Ostellato', 'Lagosanto']
+  },
+  {
+    slug: 'argenta',
+    name: 'Argenta',
+    province: 'FE',
+    region: 'Emilia-Romagna',
+    population: '22.000',
+    neighborhoods: ['Centro', 'San Biagio', 'Boccaleone'],
+    nearbyAreas: ['Ferrara', 'Comacchio', 'Alfonsine', 'Molinella', 'Portomaggiore']
+  },
+  {
+    slug: 'sanremo',
+    name: 'Sanremo',
+    province: 'IM',
+    region: 'Liguria',
+    population: '55.000',
+    neighborhoods: ['Centro', 'La Pigna', 'Foce', 'Coldirodi', 'Poggio'],
+    nearbyAreas: ['Imperia', 'Ventimiglia', 'Bordighera', 'Taggia', 'Ospedaletti']
+  },
+  {
+    slug: 'ventimiglia',
+    name: 'Ventimiglia',
+    province: 'IM',
+    region: 'Liguria',
+    population: '24.000',
+    neighborhoods: ['Centro', 'Latte', 'Grimaldi', 'Bevera'],
+    nearbyAreas: ['Bordighera', 'Sanremo', 'Dolceacqua', 'Mentone', 'Camporosso']
+  },
+  {
+    slug: 'chiavari',
+    name: 'Chiavari',
+    province: 'GE',
+    region: 'Liguria',
+    population: '28.000',
+    neighborhoods: ['Centro', 'Preli', 'Caperana', 'Ri'],
+    nearbyAreas: ['Lavagna', 'Rapallo', 'Sestri Levante', 'Leivi', 'Cogorno']
+  },
+  {
+    slug: 'rapallo',
+    name: 'Rapallo',
+    province: 'GE',
+    region: 'Liguria',
+    population: '30.000',
+    neighborhoods: ['Centro', 'San Michele di Pagana', 'Sant\'Anna', 'San Massimo'],
+    nearbyAreas: ['Genova', 'Santa Margherita Ligure', 'Chiavari', 'Zoagli', 'Portofino']
   }
 ];
 

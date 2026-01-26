@@ -56,6 +56,7 @@ function DashboardContent() {
     claiming: claimingTrialRequestId,
     freeRequestsRemaining: trialFreeRequestsRemaining,
     claimRequest: claimTrialRequest,
+    refreshRequests: refreshTrialRequests,
   } = useTrialRequests(profile);
   
   const [requests, setRequests] = useState<ServiceRequest[]>([]);
@@ -203,8 +204,12 @@ function DashboardContent() {
     if (data && data.length > 0) {
       const result = data[0];
       if (result.success) {
-        // Refresh credits balance and transactions
-        await Promise.all([refreshCredits(), refreshTransactions()]);
+        // Refresh credits balance, transactions, AND trial accepted requests list
+        await Promise.all([
+          refreshCredits(), 
+          refreshTransactions(),
+          refreshTrialRequests(), // This ensures the unlocked request appears in "Richieste accettate"
+        ]);
         return {
           success: true,
           message: result.message,

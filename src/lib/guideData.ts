@@ -794,6 +794,131 @@ export const GUIDES: Guide[] = [
         `
       }
     }
+  },
+  {
+    slug: 'perdita-acqua-sotto-lavello',
+    title: 'Perdita Acqua Sotto il Lavello: Cosa Fare Subito',
+    metaTitle: 'Perdita Acqua Sotto Lavello: Guida Completa | Cosa Fare e Quando Chiamare',
+    metaDescription: 'Hai trovato acqua sotto il lavello? Scopri le cause più comuni, cosa fare subito per limitare i danni e quando chiamare un idraulico professionista.',
+    h1: 'Perdita Acqua Sotto il Lavello: Cosa Fare Subito',
+    excerpt: 'Se trovi acqua sotto il lavello della cucina o del bagno, non ignorarla. Anche una piccola perdita può trasformarsi in un danno serio a mobili e pavimenti.',
+    category: 'perdite',
+    tags: ['perdita lavello', 'sifone', 'guarnizioni', 'tubo scarico', 'flessibili'],
+    publishedAt: '2026-01-27',
+    updatedAt: '2026-01-27',
+    readingTime: 6,
+    relatedServices: ['riparazione-perdite', 'pronto-intervento'],
+    sections: {
+      gravity: {
+        id: 'quanto-grave',
+        title: 'Perché Sta Uscendo Acqua da Sotto il Lavello',
+        content: `
+          <p>Se trovi acqua sotto il lavello della cucina o del bagno, <strong>non ignorarla</strong>. Anche una piccola perdita può trasformarsi in un danno serio a mobili, pavimento o pareti nel giro di poche ore.</p>
+          
+          <h3>🔍 Le Cause Più Comuni</h3>
+          <ul>
+            <li><strong>Guarnizioni usurate</strong> nei raccordi</li>
+            <li><strong>Sifone allentato o crepato</strong></li>
+            <li><strong>Tubo di scarico lesionato</strong></li>
+            <li><strong>Flessibili dell'acqua rovinati</strong></li>
+            <li><strong>Rubinetto che perde</strong> dall'attacco inferiore</li>
+          </ul>
+          <p>Capire da dove viene l'acqua è il primo passo per evitare danni maggiori.</p>
+          
+          <h3>🚨 È un'Emergenza o Posso Aspettare?</h3>
+          <p>Dipende dalla quantità d'acqua:</p>
+          <ul>
+            <li><strong>🔹 Poche gocce lente</strong> → puoi fare un controllo veloce</li>
+            <li><strong>🔹 Acqua che cola continuamente</strong> → serve intervento rapido</li>
+            <li><strong>🔹 Acqua che sgorga o mobile allagato</strong> → è un'urgenza</li>
+          </ul>
+          <p><strong>⚠️ Se il legno del mobile si bagna a lungo, può gonfiarsi e rovinarsi in modo permanente.</strong></p>
+        `
+      },
+      immediateActions: {
+        id: 'cosa-fare-subito',
+        title: 'Cosa Puoi Fare SUBITO (Prima dell\'Idraulico)',
+        content: `
+          <p>Ecco le azioni immediate per limitare i danni:</p>
+          
+          <h3>1. Chiudi il Rubinetto Generale</h3>
+          <p>Cerca il rubinetto di arresto sotto il lavello e chiudilo. Se non c'è, chiudi quello generale dell'appartamento.</p>
+          
+          <h3>2. Asciuga Bene Tutta l'Acqua</h3>
+          <p>Usa stracci o carta assorbente per rimuovere tutta l'acqua presente nel mobile.</p>
+          
+          <h3>3. Metti un Secchio Sotto la Perdita</h3>
+          <p>Posiziona un contenitore sotto il punto esatto della perdita per raccogliere l'acqua.</p>
+          
+          <h3>4. Controlla se il Sifone è Solo Allentato</h3>
+          <p>A volte il problema è semplicemente un raccordo che si è allentato nel tempo. Verifica (senza forzare) se il sifone è stabile.</p>
+          
+          <h3>5. Non Forzare le Guarnizioni</h3>
+          <p>Se vedi una guarnizione fuori sede, <strong>non forzarla</strong>. Potresti peggiorare la situazione.</p>
+          
+          <p><em>Questi passaggi servono solo a limitare i danni, non a risolvere definitivamente il problema.</em></p>
+        `
+      },
+      whatNotToDo: {
+        id: 'cosa-non-fare',
+        title: 'Cosa NON Devi Fare',
+        content: `
+          <p>Molti tentativi "fai da te" peggiorano la situazione e aumentano il costo della riparazione:</p>
+          
+          <h3>❌ Non Usare Nastro Adesivo o Silicone</h3>
+          <p>Non sono soluzioni definitive. Il nastro adesivo non regge l'umidità e il silicone applicato male peggiora solo le cose.</p>
+          
+          <h3>❌ Non Stringere Troppo i Raccordi in Plastica</h3>
+          <p>I raccordi in PVC sono fragili. Se stringi troppo, si rompono e dovrai sostituire tutto il pezzo.</p>
+          
+          <h3>❌ Non Ignorare la Perdita</h3>
+          <p>Sperare che smetta da sola è un errore. L'acqua continuerà a danneggiare il mobile e potrebbe arrivare al pavimento.</p>
+          
+          <h3>❌ Non Usare Prodotti Chimici</h3>
+          <p>Se lo scarico perde, i prodotti chimici disgorganti non servono a nulla e sono solo pericolosi da maneggiare.</p>
+        `
+      },
+      whenToCall: {
+        id: 'quando-chiamare',
+        title: 'Quando Serve un Idraulico',
+        content: `
+          <h3>📞 Chiama un Idraulico Se:</h3>
+          <ul>
+            <li>La perdita continua dopo aver stretto i raccordi</li>
+            <li>Il tubo è crepato o bucato</li>
+            <li>Il sifone perde dalla giunzione</li>
+            <li>L'acqua arriva dal muro</li>
+            <li>Il mobile si sta allagando</li>
+          </ul>
+          
+          <h3>🔧 Cosa Può Fare un Tecnico</h3>
+          <ul>
+            <li>✔ Sostituire tubi e guarnizioni</li>
+            <li>✔ Riparare il sifone</li>
+            <li>✔ Sistemare collegamenti difettosi</li>
+            <li>✔ Evitare danni a pareti e pavimento</li>
+          </ul>
+          
+          <h3>💰 Costi Indicativi</h3>
+          <ul>
+            <li><strong>Sostituzione guarnizione o serraggio</strong>: 50-90€</li>
+            <li><strong>Sostituzione sifone</strong>: 80-150€</li>
+            <li><strong>Riparazione tubo danneggiato</strong>: 100-200€</li>
+          </ul>
+          <p><em>I costi dipendono da accessibilità e gravità del danno.</em></p>
+          
+          <h3>❓ Domande Frequenti</h3>
+          <p><strong>Posso usare il lavello se perde acqua sotto?</strong><br/>
+          Meglio evitarlo: ogni utilizzo aumenta la perdita.</p>
+          
+          <p><strong>La perdita può venire dal muro?</strong><br/>
+          Sì, in quel caso il problema è più serio e va visto subito da un professionista.</p>
+          
+          <p><strong>Una piccola perdita può diventare grave?</strong><br/>
+          Sì, nel tempo rovina mobili e pavimenti. Un intervento rapido può evitarti centinaia di euro di danni.</p>
+        `
+      }
+    }
   }
 ];
 

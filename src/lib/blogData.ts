@@ -645,6 +645,458 @@ export const BLOG_ARTICLES: BlogArticle[] = [
         <li><strong>DiRi</strong>: 200-500€ a seconda della complessità</li>
       </ul>
     `
+  },
+  // === NUOVI ARTICOLI RICHIESTI ===
+  {
+    slug: 'perdita-acqua-cosa-fare',
+    title: "Perdita d'Acqua Improvvisa: Cosa Fare Subito",
+    metaTitle: 'Perdita Acqua Improvvisa: Guida Emergenza 2026',
+    metaDescription: "Hai una perdita d'acqua improvvisa in casa? Scopri cosa fare immediatamente per limitare i danni, chiudere l'acqua e quando chiamare l'idraulico.",
+    h1: "Perdita d'Acqua Improvvisa: Cosa Fare Subito",
+    excerpt: "Una perdita d'acqua può causare danni gravi in pochi minuti. Ecco le azioni immediate da compiere e come limitare i danni.",
+    category: 'emergenze',
+    tags: ['perdita acqua', 'emergenza idraulica', 'allagamento', 'pronto intervento', 'chiudere acqua'],
+    publishedAt: '2026-01-15',
+    updatedAt: '2026-01-15',
+    readingTime: 6,
+    content: `
+      <h2 id="indice">Indice della guida</h2>
+      <ul class="toc">
+        <li><a href="#primi-passi">I primi passi fondamentali</a></li>
+        <li><a href="#dove-chiudere">Dove si chiude l'acqua</a></li>
+        <li><a href="#tipi-perdite">Tipi di perdite e gravità</a></li>
+        <li><a href="#danni">Come limitare i danni</a></li>
+        <li><a href="#quando-chiamare">Quando chiamare l'idraulico</a></li>
+        <li><a href="#faq">Domande frequenti</a></li>
+      </ul>
+
+      <h2 id="primi-passi">I primi passi fondamentali</h2>
+      <p>Quando scopri una perdita d'acqua improvvisa, il panico è comprensibile ma la rapidità d'azione è fondamentale. Ogni minuto conta per limitare i danni. Ecco cosa fare <strong>nei primi 60 secondi</strong>:</p>
+      <ol>
+        <li><strong>Chiudi immediatamente l'acqua</strong> — È la priorità assoluta. Cerca la valvola di arresto più vicina al punto della perdita o, se non la trovi, quella generale</li>
+        <li><strong>Stacca la corrente elettrica</strong> — Se l'acqua ha raggiunto o può raggiungere prese elettriche, quadri o elettrodomestici, disattiva l'interruttore generale</li>
+        <li><strong>Raccogli l'acqua</strong> — Usa bacinelle, stracci, asciugamani: tutto ciò che può assorbire o contenere l'acqua</li>
+        <li><strong>Sposta oggetti di valore</strong> — Allontana mobili, tappeti, documenti e apparecchi elettronici dalla zona allagata</li>
+      </ol>
+
+      <h2 id="dove-chiudere">Dove si chiude l'acqua</h2>
+      <p>Conoscere la posizione delle valvole di arresto <em>prima</em> di un'emergenza può salvarti da danni enormi:</p>
+      
+      <h3>Valvole locali (rubinetti d'arresto)</h3>
+      <ul>
+        <li><strong>Sotto il lavandino</strong> — Valvole cromate collegate ai flessibili del rubinetto</li>
+        <li><strong>Dietro il WC</strong> — Valvola sulla tubatura di alimentazione della cassetta</li>
+        <li><strong>Dietro lavatrice/lavastoviglie</strong> — Rubinetti a sfera sulla parete</li>
+      </ul>
+
+      <h3>Valvola generale dell'appartamento</h3>
+      <p>Solitamente si trova in uno di questi punti:</p>
+      <ul>
+        <li>Nel vano contatori sul pianerottolo</li>
+        <li>Sotto il lavello della cucina</li>
+        <li>Nel bagno, vicino alla colonna montante</li>
+        <li>In cantina o garage (case indipendenti)</li>
+      </ul>
+
+      <h2 id="tipi-perdite">Tipi di perdite e gravità</h2>
+      <h3>Emergenza grave — Chiama subito</h3>
+      <ul>
+        <li>Tubo scoppiato con getto d'acqua</li>
+        <li>Perdita dal soffitto o dalle pareti</li>
+        <li>Allagamento rapido del pavimento</li>
+      </ul>
+
+      <h3>Urgenza media — Intervento entro 24h</h3>
+      <ul>
+        <li>Perdita lenta ma costante da tubi visibili</li>
+        <li>Gocciolamento da raccordi o giunzioni</li>
+      </ul>
+
+      <h2 id="danni">Come limitare i danni</h2>
+      <ol>
+        <li><strong>Documenta tutto</strong> — Scatta foto e video per l'assicurazione</li>
+        <li><strong>Ventila l'ambiente</strong> — Apri finestre per accelerare l'asciugatura</li>
+        <li><strong>Solleva i mobili</strong> — Metti tasselli sotto i piedi dei mobili bagnati</li>
+        <li><strong>Usa un deumidificatore</strong> — Per prevenire muffe nelle pareti</li>
+      </ol>
+
+      <h2 id="quando-chiamare">Quando chiamare l'idraulico</h2>
+      <ul>
+        <li>La valvola generale non chiude completamente</li>
+        <li>La perdita è dentro un muro o sotto il pavimento</li>
+        <li>Non riesci a identificare l'origine della perdita</li>
+      </ul>
+
+      <h2 id="faq">Domande frequenti</h2>
+      <h3>Quanto costa un pronto intervento per perdita d'acqua?</h3>
+      <p>Il costo varia da 80€ a 200€ per la chiamata urgente, più il costo della riparazione.</p>
+
+      <h3>L'assicurazione copre i danni da perdita d'acqua?</h3>
+      <p>Dipende dalla polizza. La maggior parte delle assicurazioni casa copre i danni da "acqua condotta".</p>
+    `
+  },
+  {
+    slug: 'scarico-otturato-rimedi',
+    title: "Scarico Otturato: Rimedi Prima di Chiamare l'Idraulico",
+    metaTitle: 'Scarico Otturato: 7 Rimedi Fai Da Te Efficaci 2026',
+    metaDescription: "Lo scarico è otturato? Scopri 7 rimedi efficaci da provare prima di chiamare l'idraulico. Dal bicarbonato alla ventosa, tutti i metodi spiegati.",
+    h1: "Scarico Otturato: Rimedi Prima di Chiamare l'Idraulico",
+    excerpt: "Lavandino, doccia o WC intasato? Prima di chiamare l'idraulico prova questi rimedi casalinghi: spesso risolvono il problema in pochi minuti.",
+    category: 'guide-pratiche',
+    tags: ['scarico otturato', 'lavandino intasato', 'rimedi naturali', 'fai da te', 'sturare scarico'],
+    publishedAt: '2026-01-14',
+    updatedAt: '2026-01-14',
+    readingTime: 7,
+    content: `
+      <h2 id="indice">Indice della guida</h2>
+      <ul class="toc">
+        <li><a href="#cause">Perché lo scarico si intasa</a></li>
+        <li><a href="#rimedi">I 7 rimedi più efficaci</a></li>
+        <li><a href="#quando-chiamare">Quando chiamare l'idraulico</a></li>
+        <li><a href="#faq">Domande frequenti</a></li>
+      </ul>
+
+      <h2 id="cause">Perché lo scarico si intasa</h2>
+      <ul>
+        <li><strong>Lavandino cucina:</strong> Grasso, olio, residui di cibo</li>
+        <li><strong>Lavandino bagno:</strong> Capelli, sapone, dentifricio</li>
+        <li><strong>Doccia:</strong> Capelli, balsamo, schiuma</li>
+        <li><strong>WC:</strong> Carta igienica eccessiva, oggetti caduti</li>
+      </ul>
+
+      <h2 id="rimedi">I 7 rimedi più efficaci</h2>
+      
+      <h3>1. Acqua bollente</h3>
+      <p>Il metodo più semplice, efficace per ostruzioni leggere causate da grasso o sapone. Versa 2 litri d'acqua bollente lentamente nello scarico.</p>
+
+      <h3>2. Bicarbonato e aceto</h3>
+      <ol>
+        <li>Versa 100g di bicarbonato nello scarico</li>
+        <li>Aggiungi 100ml di aceto bianco</li>
+        <li>Copri lo scarico e attendi 30 minuti</li>
+        <li>Risciacqua con acqua bollente</li>
+      </ol>
+
+      <h3>3. La ventosa</h3>
+      <p>Lo strumento classico. Riempi il lavandino con 5cm d'acqua, posiziona la ventosa e pompa con forza 15-20 volte.</p>
+
+      <h3>4. Pulizia sifone</h3>
+      <p>Metti una bacinella sotto il sifone, svitalo, puliscilo e rimontalo.</p>
+
+      <h3>5. Sonda flessibile</h3>
+      <p>Per ostruzioni profonde. Costa 10-30€ in ferramenta.</p>
+
+      <h3>6. Sale grosso e bicarbonato</h3>
+      <p>Mescola 100g di sale con 100g di bicarbonato, versa nello scarico la sera e risciacqua la mattina.</p>
+
+      <h3>7. Disgorgante chimico (ultimo ricorso)</h3>
+      <p>Efficace ma da usare con cautela. Non mescolare MAI prodotti diversi.</p>
+
+      <h2 id="quando-chiamare">Quando chiamare l'idraulico</h2>
+      <ul>
+        <li>Hai provato 2-3 metodi senza risultato</li>
+        <li>Più scarichi sono bloccati contemporaneamente</li>
+        <li>Senti cattivo odore persistente</li>
+      </ul>
+
+      <h2 id="faq">Domande frequenti</h2>
+      <h3>Quanto costa far sturare uno scarico dall'idraulico?</h3>
+      <p>Per uno scarico singolo: 60-120€. Per disostruzione con idrogetto: 150-300€.</p>
+
+      <h3>Ogni quanto fare manutenzione preventiva?</h3>
+      <p>Una volta al mese: versa acqua bollente e bicarbonato. Previene il 90% degli intasamenti.</p>
+    `
+  },
+  {
+    slug: 'quanto-costa-idraulico',
+    title: 'Quanto Costa un Idraulico nel 2026? Prezzi Reali e Tariffe',
+    metaTitle: 'Costo Idraulico 2026: Listino Prezzi Completo',
+    metaDescription: "Quanto costa chiamare un idraulico nel 2026? Prezzi reali per pronto intervento, riparazioni, installazioni e manutenzione. Guida ai costi aggiornata.",
+    h1: 'Quanto Costa un Idraulico nel 2026? Prezzi Reali',
+    excerpt: "Hai bisogno di un idraulico ma non sai quanto aspettarti di pagare? Ecco il listino prezzi aggiornato con costi reali per ogni tipo di intervento.",
+    category: 'risparmio',
+    tags: ['costo idraulico', 'prezzi idraulico', 'tariffa oraria', 'preventivo', 'risparmio'],
+    publishedAt: '2026-01-20',
+    updatedAt: '2026-01-20',
+    readingTime: 8,
+    content: `
+      <h2 id="indice">Indice della guida</h2>
+      <ul class="toc">
+        <li><a href="#tariffa-base">Tariffa base e chiamata</a></li>
+        <li><a href="#riparazioni">Costi riparazioni comuni</a></li>
+        <li><a href="#installazioni">Costi installazioni</a></li>
+        <li><a href="#emergenze">Maggiorazioni emergenza</a></li>
+        <li><a href="#risparmiare">Come risparmiare</a></li>
+        <li><a href="#faq">Domande frequenti</a></li>
+      </ul>
+
+      <h2 id="tariffa-base">Tariffa base e costo chiamata</h2>
+      <ul>
+        <li><strong>Costo di chiamata/uscita:</strong> 30-60€</li>
+        <li><strong>Tariffa oraria:</strong> 35-50€/ora</li>
+        <li><strong>Materiali:</strong> A parte, con markup del 15-30%</li>
+      </ul>
+      <p>In media, un intervento semplice costa <strong>tra 80€ e 150€</strong> tutto compreso.</p>
+
+      <h2 id="riparazioni">Costi riparazioni comuni</h2>
+      <ul>
+        <li>Riparazione rubinetto che gocciola: 50-90€</li>
+        <li>Sturare lavandino/WC: 60-120€</li>
+        <li>Riparazione perdita tubo visibile: 80-150€</li>
+        <li>Riparazione perdita sotto traccia: 200-500€</li>
+        <li>Sostituzione sifone: 40-80€</li>
+        <li>Riparazione cassetta WC: 70-120€</li>
+      </ul>
+
+      <h2 id="installazioni">Costi installazioni</h2>
+      <ul>
+        <li>Rubinetto cucina/bagno: 50-100€</li>
+        <li>WC completo: 100-200€</li>
+        <li>Piatto doccia: 150-300€</li>
+        <li>Lavatrice/Lavastoviglie: 50-100€</li>
+        <li>Scaldabagno elettrico: 80-150€</li>
+      </ul>
+
+      <h2 id="emergenze">Maggiorazioni per emergenza</h2>
+      <ul>
+        <li><strong>Pronto intervento:</strong> +30-50%</li>
+        <li><strong>Sera/notte:</strong> +30-50%</li>
+        <li><strong>Weekend:</strong> +25-40%</li>
+        <li><strong>Festivi:</strong> +50-100%</li>
+      </ul>
+
+      <h2 id="risparmiare">Come risparmiare sull'idraulico</h2>
+      <ol>
+        <li>Chiedi sempre un preventivo</li>
+        <li>Confronta almeno 3 preventivi</li>
+        <li>Raggruppa più lavori</li>
+        <li>Evita l'emergenza quando possibile</li>
+        <li>Manutenzione preventiva</li>
+      </ol>
+
+      <h2 id="faq">Domande frequenti</h2>
+      <h3>Perché i prezzi variano così tanto tra idraulici?</h3>
+      <p>Esperienza, zona geografica, copertura assicurativa e specializzazione influenzano i prezzi.</p>
+
+      <h3>È normale pagare la chiamata anche per un preventivo?</h3>
+      <p>Per sopralluoghi complessi sì (30-50€). Molti idraulici offrono preventivo gratuito se poi accetti il lavoro.</p>
+    `
+  },
+  {
+    slug: 'caldaia-in-blocco-cause',
+    title: 'Caldaia in Blocco: Cause Comuni e Cosa Controllare',
+    metaTitle: 'Caldaia in Blocco: 8 Cause e Soluzioni 2026',
+    metaDescription: "La caldaia è andata in blocco? Scopri le 8 cause più comuni e cosa puoi controllare prima di chiamare il tecnico.",
+    h1: 'Caldaia in Blocco: Cause Comuni e Cosa Controllare',
+    excerpt: "La caldaia si è bloccata e non parte? Prima di chiamare il tecnico, scopri le cause più frequenti e i controlli che puoi fare da solo.",
+    category: 'emergenze',
+    tags: ['caldaia in blocco', 'caldaia non parte', 'guasto caldaia', 'reset caldaia', 'manutenzione'],
+    publishedAt: '2026-01-18',
+    updatedAt: '2026-01-18',
+    readingTime: 7,
+    content: `
+      <h2 id="indice">Indice della guida</h2>
+      <ul class="toc">
+        <li><a href="#cosa-significa">Cosa significa "caldaia in blocco"</a></li>
+        <li><a href="#cause">Le cause più comuni</a></li>
+        <li><a href="#reset">Come fare il reset</a></li>
+        <li><a href="#controlli">Controlli da fare prima di chiamare</a></li>
+        <li><a href="#faq">Domande frequenti</a></li>
+      </ul>
+
+      <h2 id="cosa-significa">Cosa significa "caldaia in blocco"</h2>
+      <p>Quando una caldaia "va in blocco", un sistema di sicurezza ha rilevato un'anomalia e ha fermato il funzionamento. Sul display appare un <strong>codice di errore</strong> (es. E01, E10, F28).</p>
+
+      <h2 id="cause">Le cause più comuni di blocco caldaia</h2>
+
+      <h3>1. Pressione acqua troppo bassa</h3>
+      <p>Controlla il manometro: deve essere tra 1 e 1,5 bar. Se è sotto 1, ricarica l'impianto.</p>
+
+      <h3>2. Mancata accensione del bruciatore</h3>
+      <p>Verifica che il gas arrivi (prova un fornello). Se sì, prova un reset.</p>
+
+      <h3>3. Problema al tiraggio fumi</h3>
+      <p>Controlla che le bocchette esterne non siano ostruite.</p>
+
+      <h3>4. Surriscaldamento</h3>
+      <p>Attendi 20-30 minuti che si raffreddi, poi prova il reset.</p>
+
+      <h3>5. Pressione troppo alta</h3>
+      <p>Sfiata qualche termosifone per abbassare la pressione.</p>
+
+      <h3>6. Assenza di corrente elettrica</h3>
+      <p>Controlla l'interruttore della caldaia e il quadro elettrico.</p>
+
+      <h2 id="reset">Come fare il reset della caldaia</h2>
+      <ol>
+        <li>Individua il pulsante di reset (simbolo fiamma o R)</li>
+        <li>Tieni premuto per 3-5 secondi</li>
+        <li>Attendi 30 secondi</li>
+        <li>Se continua a bloccarsi, c'è un problema da risolvere</li>
+      </ol>
+      <p><strong>Non fare più di 3 reset consecutivi.</strong></p>
+
+      <h2 id="controlli">Controlli da fare prima di chiamare</h2>
+      <ol>
+        <li>Leggi il codice errore sul display</li>
+        <li>Controlla la pressione (1-1,5 bar)</li>
+        <li>Verifica il gas (prova un fornello)</li>
+        <li>Controlla alimentazione e fusibili</li>
+        <li>Guarda le bocchette esterne</li>
+      </ol>
+
+      <h2 id="faq">Domande frequenti</h2>
+      <h3>Quanto costa far riparare una caldaia in blocco?</h3>
+      <p>Manutenzione semplice: 80-120€. Sostituzione componenti: 100-400€.</p>
+
+      <h3>Ogni quanto fare la manutenzione per evitare blocchi?</h3>
+      <p>Manutenzione annuale obbligatoria previene la maggior parte dei blocchi.</p>
+    `
+  },
+  {
+    slug: 'tubo-che-perde-muro-urgente',
+    title: "Tubo che Perde dal Muro: È Urgente? Cosa Fare",
+    metaTitle: 'Tubo Perde dal Muro: Urgenza e Soluzioni 2026',
+    metaDescription: "Hai notato una perdita d'acqua dal muro? Scopri se è urgente, cosa fare subito e quando è necessario l'intervento dell'idraulico.",
+    h1: "Tubo che Perde dal Muro: È Urgente?",
+    excerpt: "Una macchia di umidità sul muro potrebbe indicare una perdita nascosta. Ecco come valutare l'urgenza e cosa fare.",
+    category: 'emergenze',
+    tags: ['tubo che perde', 'perdita muro', 'umidità muro', 'tracciamento perdite', 'urgenza idraulica'],
+    publishedAt: '2026-01-16',
+    updatedAt: '2026-01-16',
+    readingTime: 6,
+    content: `
+      <h2 id="indice">Indice della guida</h2>
+      <ul class="toc">
+        <li><a href="#segnali">Segnali di una perdita nel muro</a></li>
+        <li><a href="#urgenza">Come valutare l'urgenza</a></li>
+        <li><a href="#cosa-fare">Cosa fare subito</a></li>
+        <li><a href="#diagnosi">Come si trova la perdita</a></li>
+        <li><a href="#faq">Domande frequenti</a></li>
+      </ul>
+
+      <h2 id="segnali">Segnali di una perdita nel muro</h2>
+      <ul>
+        <li><strong>Macchie di umidità</strong> — Zone più scure sul muro o soffitto</li>
+        <li><strong>Vernice che si gonfia o sfalda</strong></li>
+        <li><strong>Muffa localizzata</strong></li>
+        <li><strong>Odore di umido persistente</strong></li>
+        <li><strong>Suono di gocciolio</strong> dentro la parete</li>
+        <li><strong>Contatore che gira da solo</strong></li>
+      </ul>
+
+      <h2 id="urgenza">Come valutare l'urgenza</h2>
+      <h3>Alta urgenza — Chiama subito</h3>
+      <ul>
+        <li>Acqua che fuoriesce visibilmente dal muro</li>
+        <li>Macchia che cresce rapidamente</li>
+        <li>Vicinanza a quadri elettrici</li>
+      </ul>
+
+      <h3>Media urgenza — Intervento entro 24-48h</h3>
+      <ul>
+        <li>Macchia stabile ma significativa</li>
+        <li>Gocciolio udibile ma non visibile</li>
+      </ul>
+
+      <h2 id="cosa-fare">Cosa fare subito</h2>
+      <ol>
+        <li>Chiudi tutti i rubinetti e controlla se il contatore gira</li>
+        <li>Localizza approssimativamente l'origine</li>
+        <li>Se grave, chiudi l'acqua generale</li>
+        <li>Documenta con foto</li>
+        <li>Chiama un idraulico specializzato</li>
+      </ol>
+
+      <h2 id="diagnosi">Come si trova la perdita nascosta</h2>
+      <ul>
+        <li><strong>Termocamera</strong> — Rileva differenze di temperatura</li>
+        <li><strong>Geofono</strong> — Ascolta il suono dell'acqua</li>
+        <li><strong>Gas tracciante</strong> — Localizza il punto esatto</li>
+        <li><strong>Igrometro</strong> — Misura l'umidità nelle pareti</li>
+      </ul>
+
+      <h2 id="faq">Domande frequenti</h2>
+      <h3>Quanto costa riparare una perdita sotto traccia?</h3>
+      <p>Ricerca perdita: 100-200€. Riparazione con apertura muro: 200-800€.</p>
+
+      <h3>L'assicurazione copre la riparazione?</h3>
+      <p>Molte polizze coprono i danni ma spesso NON la ricerca della perdita. Verifica la tua polizza.</p>
+    `
+  },
+  {
+    slug: 'water-che-perde-acqua',
+    title: "Water che Perde Acqua: È Guasto o Condensa?",
+    metaTitle: 'Water Perde Acqua: Cause e Soluzioni 2026',
+    metaDescription: "Il tuo WC perde acqua dalla base o dalla cassetta? Scopri se è un guasto o semplice condensa e come risolvere il problema.",
+    h1: "Water che Perde Acqua: Guasto o Condensa?",
+    excerpt: "Hai notato acqua intorno al WC? Potrebbe essere una perdita seria o semplice condensa. Ecco come distinguere le cause.",
+    category: 'guide-pratiche',
+    tags: ['water che perde', 'wc perde acqua', 'cassetta wc', 'condensa wc', 'riparazione wc'],
+    publishedAt: '2026-01-12',
+    updatedAt: '2026-01-12',
+    readingTime: 6,
+    content: `
+      <h2 id="indice">Indice della guida</h2>
+      <ul class="toc">
+        <li><a href="#dove-perde">Da dove perde il WC?</a></li>
+        <li><a href="#condensa">È condensa? Come riconoscerla</a></li>
+        <li><a href="#cassetta">Perdita dalla cassetta</a></li>
+        <li><a href="#base">Perdita dalla base</a></li>
+        <li><a href="#faq">Domande frequenti</a></li>
+      </ul>
+
+      <h2 id="dove-perde">Da dove perde il WC?</h2>
+      <ul>
+        <li><strong>Dalla cassetta di scarico</strong> — Sotto o intorno alla cassetta</li>
+        <li><strong>Dalla base del WC</strong> — Tra water e pavimento</li>
+        <li><strong>All'interno del WC</strong> — Acqua che scorre nella tazza</li>
+        <li><strong>Sulla superficie esterna</strong> — Condensa</li>
+      </ul>
+
+      <h2 id="condensa">È condensa? Come riconoscerla</h2>
+      <p>La condensa si forma quando l'acqua fredda incontra l'aria umida del bagno. È <strong>normale</strong> in certi periodi dell'anno.</p>
+      <h3>Segnali che è condensa:</h3>
+      <ul>
+        <li>Goccioline uniformi su tutta la superficie</li>
+        <li>Succede dopo docce calde o in estate</li>
+        <li>L'acqua sul pavimento è pochissima</li>
+      </ul>
+      <h3>Soluzioni per la condensa:</h3>
+      <ul>
+        <li>Usa la ventola del bagno</li>
+        <li>Installa un kit anti-condensa per cassette WC</li>
+      </ul>
+
+      <h2 id="cassetta">Perdita dalla cassetta</h2>
+      <h3>Cause comuni:</h3>
+      <ul>
+        <li>Guarnizione tubo di carico</li>
+        <li>Guarnizione base cassetta</li>
+        <li>Cassetta incrinata (raro)</li>
+      </ul>
+      <h3>Cosa fare:</h3>
+      <ol>
+        <li>Chiudi la valvola dietro il WC</li>
+        <li>Svuota la cassetta</li>
+        <li>Individua da dove esce l'acqua</li>
+        <li>Sostituisci la guarnizione se necessario (5-15€)</li>
+      </ol>
+
+      <h2 id="base">Perdita dalla base del WC</h2>
+      <p>Acqua intorno alla base è più preoccupante: potrebbe indicare un problema con la guarnizione di scarico.</p>
+      <p>Questo richiede di <strong>smontare e rimontare il WC</strong>. Costo indicativo: 80-150€.</p>
+
+      <h2 id="faq">Domande frequenti</h2>
+      <h3>Quanta acqua spreca un WC che "fila"?</h3>
+      <p>Da 100 a 500 litri al giorno! Riparalo subito.</p>
+
+      <h3>Quanto costa far riparare un WC che perde?</h3>
+      <ul>
+        <li>Sostituzione galleggiante/batteria: 50-100€</li>
+        <li>Sostituzione guarnizione base: 80-150€</li>
+      </ul>
+    `
   }
 ];
 
@@ -682,4 +1134,19 @@ export const getAllTags = (): string[] => {
     article.tags.forEach(tag => tags.add(tag));
   });
   return Array.from(tags).sort();
+};
+
+// Get blog articles suitable for linking from city pages
+export const getArticlesForCityPage = (): BlogArticle[] => {
+  // Return the most relevant articles for city landing pages
+  const prioritySlugs = [
+    'perdita-acqua-cosa-fare',
+    'scarico-otturato-rimedi',
+    'quanto-costa-idraulico',
+    'caldaia-in-blocco-cause'
+  ];
+  
+  return prioritySlugs
+    .map(slug => getArticleBySlug(slug))
+    .filter((article): article is BlogArticle => article !== undefined);
 };

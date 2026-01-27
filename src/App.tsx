@@ -32,6 +32,7 @@ import BlogCategoryPage from "./pages/BlogCategoryPage";
 import GuideIndexPage from "./pages/GuideIndexPage";
 import GuidePage from "./pages/GuidePage";
 import ServiceNationalPage from "./pages/ServiceNationalPage";
+import PricingPage from "./pages/PricingPage";
 import NotFound from "./pages/NotFound";
 import IdraulicoRedirect from "./components/IdraulicoRedirect";
 import ServiziRedirect from "./components/ServiziRedirect";
@@ -583,6 +584,18 @@ const App = () => (
             <Route path="/servizi/disostruzione-scarichi" element={<ServiceNationalPage />} />
             <Route path="/servizi/manutenzione-caldaie" element={<ServiceNationalPage />} />
             <Route path="/servizi/installazione-sanitari" element={<ServiceNationalPage />} />
+            
+            {/* Pricing Pages - SEO */}
+            <Route path="/costi-idraulico" element={<PricingPage />} />
+            <Route path="/costo-riparazione-perdita-acqua" element={<PricingPage />} />
+            <Route path="/prezzo-spurgo-scarichi" element={<PricingPage />} />
+            <Route path="/costo-wc-intasato" element={<PricingPage />} />
+            <Route path="/costo-sostituzione-sifone" element={<PricingPage />} />
+            <Route path="/costo-manutenzione-caldaia" element={<PricingPage />} />
+            <Route path="/costo-idraulico-urgente" element={<PricingPage />} />
+            <Route path="/costo-riparazione-tubo-perdita" element={<PricingPage />} />
+            <Route path="/costo-installazione-sanitari" element={<PricingPage />} />
+            <Route path="/costo-sostituzione-rubinetto" element={<PricingPage />} />
             
             {/* 301 Redirects for legacy URL patterns */}
             <Route path="/idraulico/:city/:service" element={<IdraulicoRedirect type="city-service" />} />

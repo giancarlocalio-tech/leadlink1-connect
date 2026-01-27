@@ -2,23 +2,29 @@ import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Layout } from '@/components/Layout';
 import { getPricingPageBySlug } from '@/lib/pricingPagesData';
-import { TOP_50_CITIES } from '@/lib/seoConfig';
+import { generateServiceWithOffer } from '@/lib/seoJsonLd';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { 
   Euro, 
-  MapPin, 
   AlertTriangle, 
   CheckCircle, 
   Clock, 
-  ArrowRight,
   HelpCircle,
   ChevronDown,
-  Wrench
+  Wrench,
+  ArrowRight
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+
+// Import new pricing components
+import { CityPricingSection } from '@/components/pricing/CityPricingSection';
+import { HowItWorksSection } from '@/components/pricing/HowItWorksSection';
+import { WaitingCostsSection } from '@/components/pricing/WaitingCostsSection';
+import { RelatedGuidesSection } from '@/components/pricing/RelatedGuidesSection';
+import { PricingCTA } from '@/components/pricing/PricingCTA';
 
 export default function PricingPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -43,9 +49,6 @@ export default function PricingPage() {
   }
 
   const canonicalUrl = `https://www.idraulicisubito.com/${page.slug}`;
-
-  // Top 15 cities for CTA
-  const topCities = TOP_50_CITIES.slice(0, 15);
 
   // JSON-LD Article Schema
   const articleJsonLd = {
@@ -96,6 +99,14 @@ export default function PricingPage() {
     ]
   };
 
+  // Service schema with price range
+  const serviceJsonLd = generateServiceWithOffer({
+    name: page.serviceName,
+    description: page.metaDescription,
+    url: canonicalUrl,
+    priceRange: page.priceRange
+  });
+
   return (
     <Layout>
       <Helmet>
@@ -110,6 +121,7 @@ export default function PricingPage() {
         <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(serviceJsonLd)}</script>
       </Helmet>
 
       {/* Breadcrumb */}
@@ -175,6 +187,9 @@ export default function PricingPage() {
             <p className="text-sm text-muted-foreground mt-4 text-center">
               I prezzi possono aumentare in caso di interventi complessi o difficili da raggiungere.
             </p>
+
+            {/* CTA after price table */}
+            <PricingCTA variant="urgent" />
           </div>
         </div>
       </section>
@@ -221,42 +236,22 @@ export default function PricingPage() {
                   <strong>💡</strong> {page.urgencyNote}
                 </p>
               )}
+
+              {/* CTA after urgency section */}
+              <PricingCTA />
             </div>
           </div>
         </section>
       )}
 
-      {/* City Prices Section */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="bg-primary/10 p-3 rounded-full">
-                <MapPin className="h-6 w-6 text-primary" />
-              </div>
-              <h2 className="text-2xl font-bold">Il Prezzo Cambia in Base alla Città?</h2>
-            </div>
-            
-            <p className="text-muted-foreground mb-6">{page.cityNote}</p>
-            
-            <Card>
-              <CardContent className="p-6">
-                <ul className="space-y-3">
-                  {page.cityExamples.map((example, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <MapPin className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                      <span>{example}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
+      {/* City Pricing Section - PHASE 1 */}
+      <CityPricingSection serviceType={page.serviceName} />
+
+      {/* Waiting Costs Section - PHASE 5 */}
+      <WaitingCostsSection />
 
       {/* Factors Section */}
-      <section className="py-12 bg-muted/30">
+      <section className="py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
             <div className="flex items-center gap-3 mb-6">
@@ -291,7 +286,7 @@ export default function PricingPage() {
       </section>
 
       {/* When Price Increases */}
-      <section className="py-12">
+      <section className="py-12 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
             <div className="flex items-center gap-3 mb-6">
@@ -325,44 +320,11 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* CTA: Find Plumber */}
-      <section className="py-16 bg-primary/5">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <MapPin className="h-12 w-12 mx-auto mb-4 text-primary" />
-            <h2 className="text-2xl md:text-3xl font-bold mb-4">
-              Come Trovare un Idraulico al Giusto Prezzo
-            </h2>
-            <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Il modo migliore per evitare sorprese è ricevere un contatto rapido e spiegare bene il problema. 
-              Trova un idraulico nella tua città e chiedi un preventivo gratuito.
-            </p>
-            
-            <div className="flex flex-wrap justify-center gap-3 mb-8">
-              {topCities.map((citySlug) => {
-                const cityName = citySlug.charAt(0).toUpperCase() + citySlug.slice(1).replace(/-/g, ' ');
-                return (
-                  <Link
-                    key={citySlug}
-                    to={`/${citySlug}`}
-                    className="inline-flex items-center gap-2 bg-card hover:bg-primary/10 border border-border rounded-full px-4 py-2 text-sm transition-colors"
-                  >
-                    <MapPin className="h-3 w-3 text-primary" />
-                    <span>Idraulico {cityName}</span>
-                  </Link>
-                );
-              })}
-            </div>
+      {/* How It Works Section - PHASE 7 */}
+      <HowItWorksSection />
 
-            <Link to="/richiesta">
-              <Button size="lg">
-                Richiedi Preventivo Gratuito
-                <ArrowRight className="h-5 w-5 ml-2" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* Related Guides Section - PHASE 6 */}
+      <RelatedGuidesSection guides={page.relatedGuides} />
 
       {/* FAQ Section */}
       <section className="py-16 bg-muted/30">
@@ -412,6 +374,32 @@ export default function PricingPage() {
                 </div>
               ))}
             </div>
+
+            {/* CTA after FAQs */}
+            <div className="mt-10">
+              <PricingCTA variant="urgent" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA Section */}
+      <section className="py-16 bg-primary/5">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">
+              Pronto a Risolvere il Problema?
+            </h2>
+            <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Richiedi un preventivo gratuito e ricevi risposte da idraulici verificati nella tua zona. 
+              Nessun obbligo, solo professionisti affidabili.
+            </p>
+            <Link to="/richiesta">
+              <Button size="lg">
+                Richiedi Preventivo Gratuito
+                <ArrowRight className="h-5 w-5 ml-2" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

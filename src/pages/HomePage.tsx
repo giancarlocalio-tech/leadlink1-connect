@@ -37,6 +37,13 @@ import { CityAutocomplete, type ItalianCity } from '@/components/CityAutocomplet
 import analytics from '@/lib/analytics';
 import { generateJsonLd, BASE_URL } from '@/lib/seoJsonLd';
 import heroBg from '@/assets/hero-bg.avif';
+import { TOP_50_CITIES } from '@/lib/seoConfig';
+import { CITIES } from '@/lib/seoData';
+
+// Get Top 50 cities data for internal linking
+const TOP_50_CITY_LINKS = CITIES.filter(city => 
+  TOP_50_CITIES.includes(city.slug as any)
+).slice(0, 25);
 
 // All intervention types for the first selection
 const ALL_INTERVENTION_TYPES: InterventionType[] = [
@@ -702,6 +709,45 @@ export default function HomePage() {
                   </p>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Cities Section - Internal Linking for SEO */}
+      <section className="py-16 bg-muted/50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground text-center mb-4">
+              Idraulici nelle Principali Città Italiane
+            </h2>
+            <p className="text-muted-foreground text-center mb-10 max-w-2xl mx-auto">
+              Trova professionisti verificati in tutta Italia. Seleziona la tua città per trovare idraulici disponibili nella tua zona.
+            </p>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+              {TOP_50_CITY_LINKS.map((city) => (
+                <a
+                  key={city.slug}
+                  href={`/${city.slug}`}
+                  className="flex items-center gap-2 bg-card hover:bg-primary/10 border border-border rounded-lg px-4 py-3 transition-colors group"
+                >
+                  <MapPin className="h-4 w-4 text-primary shrink-0" />
+                  <span className="text-sm font-medium text-foreground group-hover:text-primary truncate">
+                    {city.name}
+                  </span>
+                </a>
+              ))}
+            </div>
+
+            <div className="text-center mt-8">
+              <a 
+                href="/idraulico-vicino-a-me"
+                className="inline-flex items-center gap-2 text-primary hover:underline font-medium"
+              >
+                Vedi tutte le città
+                <ArrowRight className="h-4 w-4" />
+              </a>
             </div>
           </div>
         </div>

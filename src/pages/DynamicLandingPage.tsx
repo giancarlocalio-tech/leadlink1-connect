@@ -21,7 +21,8 @@ import {
   AlertTriangle,
   Lightbulb,
   Euro,
-  HelpCircle
+  HelpCircle,
+  Users
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/Layout';
@@ -38,6 +39,10 @@ import KeywordLandingPage from './KeywordLandingPage';
 import { getServiceRichContent, generateCityServiceContent } from '@/lib/serviceContent';
 import InlineWizard from '@/components/InlineWizard';
 import heroBg from '@/assets/hero-bg.avif';
+
+// SEO Config & Rich Content
+import { getIndexingDecision, isTop50City, isCoreService } from '@/lib/seoConfig';
+import { getCityRichContent, getCityIntroText } from '@/lib/cityRichContent';
 
 // SEO Components
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
@@ -144,10 +149,23 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
   const pageDescription = serviceData
     ? `Cerchi ${serviceData.name.toLowerCase()} a ${cityData.name}? ✓ Professionisti verificati ✓ Risposta in 15 min ✓ Preventivi gratuiti. Servizio in tutta ${cityData.name} e provincia.`
     : `Cerchi un idraulico a ${cityData.name}? ✓ Professionisti verificati ✓ Risposta in 15 min ✓ Preventivi gratuiti. Riparazioni, installazioni e emergenze idrauliche in tutta ${cityData.name} e provincia.`;
-    
-  const canonicalUrl = serviceData 
+
+  // SEO INDEXING DECISION
+  const indexingDecision = getIndexingDecision(
+    cityData.slug,
+    serviceData?.slug,
+    undefined
+  );
+  
+  // Determine canonical URL based on indexing decision
+  const canonicalUrl = indexingDecision.canonicalUrl || (serviceData 
     ? `${BASE_URL}/${cityData.slug}-${serviceData.slug}`
-    : `${BASE_URL}/${cityData.slug}`;
+    : `${BASE_URL}/${cityData.slug}`);
+
+  // Robots meta based on indexing decision
+  const robotsMeta = indexingDecision.shouldIndex 
+    ? "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    : "noindex, follow";
 
   const h1Text = serviceData
     ? `${serviceData.name} a ${cityData.name}`
@@ -163,9 +181,9 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
   const breadcrumbItems = serviceData
     ? [
         { name: cityData.name, url: `${BASE_URL}/${cityData.slug}` },
-        { name: serviceData.name, url: canonicalUrl }
+        { name: serviceData.name, url: `${BASE_URL}/${cityData.slug}-${serviceData.slug}` }
       ]
-    : [{ name: `Idraulico ${cityData.name}`, url: canonicalUrl }];
+    : [{ name: `Idraulico ${cityData.name}`, url: `${BASE_URL}/${cityData.slug}` }];
 
   // Generate consistent rating based on city/service for AggregateRating schema
   // This enables Google rich snippets with stars (like ProntoPro)
@@ -185,7 +203,11 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
   
   const rating = generateConsistentRating(`${cityData.slug}-${serviceData?.slug || 'idraulico'}`);
 
-  // Generate structured data using utility
+  // Get rich city content for Top 50 cities
+  const cityRichContent = isTop50City(cityData.slug) ? getCityRichContent(cityData) : null;
+  const cityIntroText = isTop50City(cityData.slug) ? getCityIntroText(cityData) : null;
+
+  // Generate structured data using utility (only include aggregateRating for indexed pages)
   const jsonLd = generateJsonLd(
     {
       name: `Idraulici Subito - ${serviceName} ${cityData.name}`,
@@ -201,7 +223,7 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
             "Manutenzione caldaie",
             "Spurgo scarichi"
           ],
-      aggregateRating: rating
+      aggregateRating: indexingDecision.shouldIndex ? rating : undefined
     },
     getCityFAQs(serviceShortName, cityData.name),
     breadcrumbItems
@@ -219,7 +241,7 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
         <Helmet>
           <title>{pageTitle}</title>
           <meta name="description" content={pageDescription} />
-          <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+          <meta name="robots" content={robotsMeta} />
           <link rel="canonical" href={canonicalUrl} />
           <meta property="og:title" content={pageTitle} />
           <meta property="og:description" content={pageDescription} />
@@ -229,9 +251,11 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content={pageTitle} />
           <meta name="twitter:description" content={pageDescription} />
-          <script type="application/ld+json" key="structured-data">
-            {JSON.stringify(jsonLd)}
-          </script>
+          {indexingDecision.shouldIndex && (
+            <script type="application/ld+json" key="structured-data">
+              {JSON.stringify(jsonLd)}
+            </script>
+          )}
         </Helmet>
         <div className="py-8 md:py-12">
           <div className="container mx-auto px-4">
@@ -247,7 +271,7 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
-        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="robots" content={robotsMeta} />
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
@@ -257,9 +281,11 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
-        <script type="application/ld+json" key="structured-data">
-          {JSON.stringify(jsonLd)}
-        </script>
+        {indexingDecision.shouldIndex && (
+          <script type="application/ld+json" key="structured-data">
+            {JSON.stringify(jsonLd)}
+          </script>
+        )}
       </Helmet>
 
       {/* Breadcrumb Navigation */}
@@ -375,6 +401,95 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
           )}
         </div>
       </section>
+
+      {/* RICH CONTENT SECTION - Only for Top 50 cities (city-only pages) */}
+      {cityRichContent && !serviceData && (
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            {/* City Introduction */}
+            {cityIntroText && (
+              <div className="max-w-4xl mx-auto mb-16">
+                <p className="text-lg text-muted-foreground leading-relaxed text-center">
+                  {cityIntroText}
+                </p>
+              </div>
+            )}
+
+            {/* Common Problems Section */}
+            <div className="max-w-5xl mx-auto mb-16">
+              <h2 className="text-2xl md:text-3xl font-bold text-center mb-4 flex items-center justify-center gap-3">
+                <AlertTriangle className="h-7 w-7 text-amber-500" />
+                {cityRichContent.problemsSection.title}
+              </h2>
+              <p className="text-muted-foreground text-center mb-10 max-w-2xl mx-auto">
+                {cityRichContent.problemsSection.content}
+              </p>
+              
+              <div className="grid md:grid-cols-1 gap-6">
+                {cityRichContent.problemsSection.problems.map((problem, index) => (
+                  <div key={index} className="bg-card rounded-xl p-6 border border-border shadow-sm">
+                    <p className="text-muted-foreground leading-relaxed">{problem}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Neighborhoods Section */}
+            <div className="max-w-4xl mx-auto mb-16">
+              <h2 className="text-2xl md:text-3xl font-bold text-center mb-4 flex items-center justify-center gap-3">
+                <MapPin className="h-7 w-7 text-primary" />
+                {cityRichContent.neighborhoodsSection.title}
+              </h2>
+              <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
+                {cityRichContent.neighborhoodsSection.content}
+              </p>
+              
+              <div className="flex flex-wrap justify-center gap-2">
+                {cityRichContent.neighborhoodsSection.list.map((neighborhood, index) => (
+                  <span 
+                    key={index} 
+                    className="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium"
+                  >
+                    {neighborhood}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Response Time Section */}
+            <div className="max-w-4xl mx-auto mb-16">
+              <h2 className="text-2xl md:text-3xl font-bold text-center mb-4 flex items-center justify-center gap-3">
+                <Clock className="h-7 w-7 text-primary" />
+                {cityRichContent.responseTimeSection.title}
+              </h2>
+              
+              <div className="bg-primary/5 rounded-2xl p-8 text-center">
+                <div className="inline-flex items-center gap-3 bg-primary text-primary-foreground px-6 py-3 rounded-full mb-6">
+                  <Clock className="h-5 w-5" />
+                  <span className="font-bold text-lg">Tempo medio: {cityRichContent.responseTimeSection.avgTime}</span>
+                </div>
+                <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+                  {cityRichContent.responseTimeSection.content}
+                </p>
+              </div>
+            </div>
+
+            {/* Pricing Section */}
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-2xl md:text-3xl font-bold text-center mb-4 flex items-center justify-center gap-3">
+                <Euro className="h-7 w-7 text-primary" />
+                {cityRichContent.pricingSection.title}
+              </h2>
+              
+              <div className="bg-card rounded-2xl p-8 border border-border shadow-sm">
+                <p className="text-muted-foreground leading-relaxed">
+                  {cityRichContent.pricingSection.content}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Rich Content Section - Only for service pages */}
       {serviceData && (() => {

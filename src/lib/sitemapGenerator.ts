@@ -1,10 +1,17 @@
 /**
- * Automated sitemap generator for SEO optimization
- * Generates correct URLs for all landing pages
- * URL Format: /{city-slug} for cities, /{city-slug}-{service-slug} for city+service
+ * Consolidated Sitemap Generator for SEO
+ * 
+ * Only includes indexable pages:
+ * - Homepage
+ * - 20 core keyword pages
+ * - Top 50 cities
+ * - Top 50 cities × 5 core services = 250 combinations
+ * 
+ * Total: ~320 pages (down from 3300+)
  */
 
-import { CITIES, SERVICES, KEYWORD_PAGES, CityData, ServiceData, KeywordPageData } from './seoData';
+import { CITIES, KEYWORD_PAGES } from './seoData';
+import { TOP_50_CITIES, CORE_SERVICES, CORE_KEYWORD_PAGES, getIndexablePageCounts } from './seoConfig';
 
 const BASE_URL = 'https://www.idraulicisubito.com';
 const TODAY = new Date().toISOString().split('T')[0];
@@ -45,7 +52,7 @@ ${urlsXml}
 export function generateStaticSitemap(): string {
   const staticUrls: SitemapUrl[] = [
     { loc: `${BASE_URL}/`, lastmod: TODAY, changefreq: 'daily', priority: 1.0 },
-    { loc: `${BASE_URL}/per-idraulici`, lastmod: TODAY, changefreq: 'weekly', priority: 0.9 },
+    { loc: `${BASE_URL}/per-idraulici`, lastmod: TODAY, changefreq: 'weekly', priority: 0.8 },
     { loc: `${BASE_URL}/blog`, lastmod: TODAY, changefreq: 'weekly', priority: 0.7 },
     { loc: `${BASE_URL}/privacy`, lastmod: TODAY, changefreq: 'yearly', priority: 0.3 },
     { loc: `${BASE_URL}/termini`, lastmod: TODAY, changefreq: 'yearly', priority: 0.3 },
@@ -54,73 +61,64 @@ export function generateStaticSitemap(): string {
 }
 
 /**
- * Generate keyword pages sitemap
+ * Generate CORE keyword pages sitemap only (max 20)
  */
 export function generateKeywordsSitemap(): string {
-  const keywordUrls: SitemapUrl[] = KEYWORD_PAGES.map(page => ({
+  const coreKeywords = KEYWORD_PAGES.filter(page => 
+    CORE_KEYWORD_PAGES.includes(page.slug as any)
+  );
+  
+  const keywordUrls: SitemapUrl[] = coreKeywords.map(page => ({
     loc: `${BASE_URL}/${page.slug}`,
     lastmod: TODAY,
     changefreq: 'weekly' as const,
-    priority: 0.8,
+    priority: 0.9,
   }));
+  
   return generateSitemapXml(keywordUrls);
 }
 
 /**
- * Generate cities sitemap - Format: /{city-slug}
+ * Generate TOP 50 cities sitemap only
  */
 export function generateCitiesSitemap(): string {
-  const cityUrls: SitemapUrl[] = CITIES.map((city, index) => ({
+  const top50Cities = CITIES.filter(city => 
+    TOP_50_CITIES.includes(city.slug as any)
+  );
+  
+  const cityUrls: SitemapUrl[] = top50Cities.map((city, index) => ({
     loc: `${BASE_URL}/${city.slug}`,
     lastmod: TODAY,
     changefreq: 'weekly' as const,
-    // Higher priority for major cities (first 20)
-    priority: index < 20 ? 0.9 : 0.8,
+    priority: index < 10 ? 0.95 : 0.9, // Top 10 cities get slightly higher priority
   }));
+  
   return generateSitemapXml(cityUrls);
 }
 
 /**
- * Generate services sitemap
+ * Generate city+service sitemap (only Top 50 × 5 core services)
  */
-export function generateServicesSitemap(): string {
-  const serviceUrls: SitemapUrl[] = SERVICES.map(service => ({
-    loc: `${BASE_URL}/${service.slug}`,
-    lastmod: TODAY,
-    changefreq: 'weekly' as const,
-    priority: 0.8,
-  }));
-  return generateSitemapXml(serviceUrls);
-}
-
-/**
- * Generate city+service combinations sitemap (paginated)
- * CORRECT FORMAT: /{city-slug}-{service-slug}
- * Returns an array of sitemaps, each with max 500 URLs
- */
-export function generateCityServiceSitemaps(pageSize: number = 500): string[] {
+export function generateCityServiceSitemaps(): string[] {
+  const top50Cities = CITIES.filter(city => 
+    TOP_50_CITIES.includes(city.slug as any)
+  );
+  
   const allCombinations: SitemapUrl[] = [];
   
-  for (const city of CITIES) {
-    for (const service of SERVICES) {
+  for (const city of top50Cities) {
+    for (const serviceSlug of CORE_SERVICES) {
       allCombinations.push({
-        // CORRECT FORMAT: /{city}-{service}
-        loc: `${BASE_URL}/${city.slug}-${service.slug}`,
+        loc: `${BASE_URL}/${city.slug}-${serviceSlug}`,
         lastmod: TODAY,
         changefreq: 'weekly',
-        priority: 0.7,
+        priority: 0.85,
       });
     }
   }
   
-  // Split into pages
-  const sitemaps: string[] = [];
-  for (let i = 0; i < allCombinations.length; i += pageSize) {
-    const pageUrls = allCombinations.slice(i, i + pageSize);
-    sitemaps.push(generateSitemapXml(pageUrls));
-  }
-  
-  return sitemaps;
+  // All fit in one sitemap (250 URLs)
+  return [generateSitemapXml(allCombinations)];
 }
 
 /**
@@ -150,8 +148,8 @@ ${sitemapEntries}
 }
 
 /**
- * Get all URLs for export/GSC submission
- * CORRECT FORMAT: /{city}, /{city}-{service}
+ * Get all INDEXABLE URLs for export/GSC submission
+ * Only includes core pages that should be indexed
  */
 export function getAllIndexableUrls(): {
   static: string[];
@@ -168,14 +166,23 @@ export function getAllIndexableUrls(): {
     `${BASE_URL}/termini`,
   ];
   
-  const keywordUrls = KEYWORD_PAGES.map(page => `${BASE_URL}/${page.slug}`);
-  const cityUrls = CITIES.map(city => `${BASE_URL}/${city.slug}`);
+  // Only core keyword pages
+  const coreKeywords = KEYWORD_PAGES.filter(page => 
+    CORE_KEYWORD_PAGES.includes(page.slug as any)
+  );
+  const keywordUrls = coreKeywords.map(page => `${BASE_URL}/${page.slug}`);
   
+  // Only top 50 cities
+  const top50Cities = CITIES.filter(city => 
+    TOP_50_CITIES.includes(city.slug as any)
+  );
+  const cityUrls = top50Cities.map(city => `${BASE_URL}/${city.slug}`);
+  
+  // Only top 50 × 5 core services
   const cityServiceUrls: string[] = [];
-  for (const city of CITIES) {
-    for (const service of SERVICES) {
-      // CORRECT FORMAT: /{city}-{service}
-      cityServiceUrls.push(`${BASE_URL}/${city.slug}-${service.slug}`);
+  for (const city of top50Cities) {
+    for (const serviceSlug of CORE_SERVICES) {
+      cityServiceUrls.push(`${BASE_URL}/${city.slug}-${serviceSlug}`);
     }
   }
   
@@ -192,16 +199,18 @@ export function getAllIndexableUrls(): {
  * Get SEO statistics
  */
 export function getSitemapStats() {
-  const cityServiceCount = CITIES.length * SERVICES.length;
-  const sitemapPageCount = Math.ceil(cityServiceCount / 500);
+  const counts = getIndexablePageCounts();
   
   return {
-    totalCities: CITIES.length,
-    totalServices: SERVICES.length,
-    totalKeywordPages: KEYWORD_PAGES.length,
-    totalCityServicePages: cityServiceCount,
-    totalSitemapFiles: 3 + sitemapPageCount, // static, keywords, cities + city-service pages
-    totalIndexablePages: 5 + KEYWORD_PAGES.length + CITIES.length + cityServiceCount,
+    totalCities: TOP_50_CITIES.length,
+    totalServices: CORE_SERVICES.length,
+    totalKeywordPages: CORE_KEYWORD_PAGES.length,
+    totalCityServicePages: TOP_50_CITIES.length * CORE_SERVICES.length,
+    totalSitemapFiles: 4, // static, keywords, cities, city-services
+    totalIndexablePages: counts.total,
+    // For comparison
+    previousTotalPages: CITIES.length * 15 + KEYWORD_PAGES.length + 5, // Approximate old count
+    reductionPercent: Math.round((1 - counts.total / (CITIES.length * 15)) * 100)
   };
 }
 
@@ -214,13 +223,13 @@ export function generateAllSitemaps(): { filename: string; content: string }[] {
   // Static sitemap
   files.push({ filename: 'sitemap-static.xml', content: generateStaticSitemap() });
   
-  // Keywords sitemap
+  // Core keywords sitemap
   files.push({ filename: 'sitemap-keywords.xml', content: generateKeywordsSitemap() });
   
-  // Cities sitemap
+  // Top 50 cities sitemap
   files.push({ filename: 'sitemap-cities.xml', content: generateCitiesSitemap() });
   
-  // City+Service sitemaps
+  // City+Service sitemaps (Top 50 × 5)
   const cityServiceSitemaps = generateCityServiceSitemaps();
   cityServiceSitemaps.forEach((content, index) => {
     files.push({ filename: `sitemap-city-services-${index + 1}.xml`, content });

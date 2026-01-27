@@ -50,6 +50,8 @@ import { LocalStats } from '@/components/seo/LocalStats';
 import { ProfessionalsList } from '@/components/seo/ProfessionalsList';
 import { RelatedServices } from '@/components/seo/RelatedServices';
 import { CustomerReviews } from '@/components/seo/CustomerReviews';
+import { CityServicesLinks } from '@/components/seo/CityServicesLinks';
+import { FAQSection } from '@/components/seo/FAQSection';
 
 // Icon mapping
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -768,6 +770,20 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
 
       {/* Related Services Grid - Like ProntoPro */}
       <RelatedServices cityData={cityData} currentServiceSlug={serviceData?.slug} />
+
+      {/* City Services & Nearby Cities - Internal Linking (Top 50 only) */}
+      {isTop50City(cityData.slug) && (
+        <CityServicesLinks cityData={cityData} />
+      )}
+
+      {/* FAQ Section with visible HTML (complements JSON-LD schema) */}
+      {isTop50City(cityData.slug) && (
+        <FAQSection 
+          cityName={cityData.name}
+          serviceName={serviceData?.name}
+          faqs={getCityFAQs(serviceShortName, cityData.name)}
+        />
+      )}
 
       {/* CTA Section */}
       <section className="py-16 bg-primary text-primary-foreground">

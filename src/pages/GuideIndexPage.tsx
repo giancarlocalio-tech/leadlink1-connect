@@ -137,6 +137,51 @@ export default function GuideIndexPage() {
         );
       })}
 
+      {/* Linkbait Resources Section */}
+      <section className="py-12 border-t">
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl font-bold mb-4 text-center">Risorse Tecniche</h2>
+          <p className="text-muted-foreground text-center mb-8 max-w-xl mx-auto">
+            Approfondimenti tecnici, statistiche e checklist per chi vuole capire meglio il proprio impianto idraulico.
+          </p>
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <Link to="/guide/approfondimenti">
+              <Card className="h-full hover:shadow-md transition-shadow text-center">
+                <CardContent className="pt-6">
+                  <div className="text-3xl mb-3">📚</div>
+                  <h3 className="font-semibold mb-2">Approfondimenti Tecnici</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Guide dettagliate su materiali, impianti e prevenzione.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+            <Link to="/statistiche-problemi-idraulici-italia">
+              <Card className="h-full hover:shadow-md transition-shadow text-center">
+                <CardContent className="pt-6">
+                  <div className="text-3xl mb-3">📊</div>
+                  <h3 className="font-semibold mb-2">Statistiche Italia</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Dati e numeri sui problemi idraulici più comuni.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+            <Link to="/checklist-manutenzione-impianto-idraulico">
+              <Card className="h-full hover:shadow-md transition-shadow text-center">
+                <CardContent className="pt-6">
+                  <div className="text-3xl mb-3">✅</div>
+                  <h3 className="font-semibold mb-2">Checklist Manutenzione</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Lista controlli periodici per prevenire guasti.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-16 bg-primary/5">
         <div className="container mx-auto px-4 text-center">

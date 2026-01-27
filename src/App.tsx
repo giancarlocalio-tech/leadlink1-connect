@@ -31,6 +31,10 @@ import BlogArticlePage from "./pages/BlogArticlePage";
 import BlogCategoryPage from "./pages/BlogCategoryPage";
 import GuideIndexPage from "./pages/GuideIndexPage";
 import GuidePage from "./pages/GuidePage";
+import ApprofondimentoPage from "./pages/ApprofondimentoPage";
+import ApprofondimentiIndexPage from "./pages/ApprofondimentiIndexPage";
+import StatisticsPage from "./pages/StatisticsPage";
+import ChecklistPage from "./pages/ChecklistPage";
 import ServiceNationalPage from "./pages/ServiceNationalPage";
 import PricingPage from "./pages/PricingPage";
 import NotFound from "./pages/NotFound";
@@ -576,7 +580,13 @@ const App = () => (
             
             {/* Guide SEO Routes - FASE 9 */}
             <Route path="/guide" element={<GuideIndexPage />} />
+            <Route path="/guide/approfondimenti" element={<ApprofondimentiIndexPage />} />
+            <Route path="/guide/approfondimenti/:slug" element={<ApprofondimentoPage />} />
             <Route path="/guide/:slug" element={<GuidePage />} />
+            
+            {/* Linkbait Content Pages */}
+            <Route path="/statistiche-problemi-idraulici-italia" element={<StatisticsPage />} />
+            <Route path="/checklist-manutenzione-impianto-idraulico" element={<ChecklistPage />} />
             
             {/* National Service Pages - FASE 10 */}
             <Route path="/servizi/pronto-intervento-idraulico" element={<ServiceNationalPage />} />

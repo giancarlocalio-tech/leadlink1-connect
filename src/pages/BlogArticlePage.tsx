@@ -188,6 +188,28 @@ export default function BlogArticlePage() {
       <section className="py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
+            {/* Add TOC styling */}
+            <style>{`
+              .toc {
+                background: hsl(var(--muted));
+                border-radius: 0.5rem;
+                padding: 1rem 1.5rem;
+                margin-bottom: 2rem;
+              }
+              .toc li {
+                margin: 0.5rem 0;
+              }
+              .toc a {
+                color: hsl(var(--primary));
+                text-decoration: none;
+              }
+              .toc a:hover {
+                text-decoration: underline;
+              }
+              article h2[id], article h3[id] {
+                scroll-margin-top: 100px;
+              }
+            `}</style>
             <article 
               className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:marker:text-primary"
               dangerouslySetInnerHTML={{ __html: article.content }}

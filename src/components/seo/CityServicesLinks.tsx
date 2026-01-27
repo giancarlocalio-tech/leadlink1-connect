@@ -4,14 +4,16 @@
  * Displays:
  * 1. Links to 5 CORE_SERVICES for the current city
  * 2. Links to nearby cities (from nearbyAreas)
+ * 3. Links to relevant blog articles
  * 
  * SEO Purpose: Strong internal linking structure
  */
 
 import { Link } from 'react-router-dom';
-import { Wrench, Flame, Trash2, Droplets, ShowerHead, MapPin, ArrowRight } from 'lucide-react';
-import { CityData, CITIES, getCityBySlug } from '@/lib/seoData';
+import { Wrench, Flame, Trash2, Droplets, ShowerHead, MapPin, ArrowRight, BookOpen } from 'lucide-react';
+import { CityData, CITIES } from '@/lib/seoData';
 import { CORE_SERVICES } from '@/lib/seoConfig';
+import { getArticlesForCityPage } from '@/lib/blogData';
 
 interface CityServicesLinksProps {
   cityData: CityData;
@@ -59,6 +61,9 @@ export function CityServicesLinks({ cityData }: CityServicesLinksProps) {
     .filter((city): city is CityData => city !== undefined)
     .slice(0, 8);
 
+  // Get relevant blog articles
+  const blogArticles = getArticlesForCityPage();
+
   return (
     <section className="py-16 bg-muted/30">
       <div className="container mx-auto px-4">
@@ -102,6 +107,51 @@ export function CityServicesLinks({ cityData }: CityServicesLinksProps) {
               })}
             </div>
           </div>
+
+          {/* Block C: Blog Articles / Guides */}
+          {blogArticles.length > 0 && (
+            <div className="mb-12">
+              <h2 className="text-xl md:text-2xl font-bold text-center mb-4">
+                Guide Utili per Problemi Idraulici a {cityData.name}
+              </h2>
+              <p className="text-muted-foreground text-center mb-8">
+                Articoli e consigli pratici per affrontare le emergenze idrauliche più comuni
+              </p>
+              
+              <div className="grid sm:grid-cols-2 gap-4">
+                {blogArticles.slice(0, 4).map((article) => (
+                  <Link
+                    key={article.slug}
+                    to={`/blog/${article.slug}`}
+                    className="flex items-start gap-4 bg-card hover:bg-primary/5 border border-border rounded-xl p-5 transition-colors group"
+                  >
+                    <div className="bg-secondary/50 rounded-lg p-3 shrink-0">
+                      <BookOpen className="h-5 w-5 text-foreground" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-foreground group-hover:text-primary transition-colors line-clamp-2">
+                        {article.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground mt-1 line-clamp-1">
+                        {article.readingTime} min di lettura
+                      </p>
+                    </div>
+                    <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-primary shrink-0 mt-1" />
+                  </Link>
+                ))}
+              </div>
+              
+              <div className="text-center mt-6">
+                <Link 
+                  to="/blog" 
+                  className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium"
+                >
+                  Vedi tutte le guide
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          )}
           
           {/* Block B: Nearby Cities */}
           {nearbyCitiesWithPages.length > 0 && (

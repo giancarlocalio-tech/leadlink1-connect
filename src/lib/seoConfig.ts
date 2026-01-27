@@ -136,22 +136,40 @@ export function isCoreKeywordPage(slug: string): boolean {
  * Determine if a page should be indexed
  * Returns: { shouldIndex: boolean, canonicalUrl?: string }
  */
+/**
+ * Determine if a page should be indexed
+ * Returns: { shouldIndex: boolean, canonicalUrl: string }
+ * 
+ * IMPORTANT: noindex pages use SELF-CANONICAL to avoid
+ * soft-404/doorway signals. Only strict duplicates would
+ * use canonical to another page.
+ */
 export function getIndexingDecision(
   citySlug?: string,
   serviceSlug?: string,
   keywordSlug?: string
-): { shouldIndex: boolean; canonicalUrl?: string } {
+): { shouldIndex: boolean; canonicalUrl: string } {
   const BASE_URL = 'https://www.idraulicisubito.com';
+  
+  // Build the self-canonical URL based on parameters
+  const buildSelfCanonical = (): string => {
+    if (keywordSlug) {
+      return `${BASE_URL}/${keywordSlug}`;
+    }
+    if (citySlug && serviceSlug) {
+      return `${BASE_URL}/${citySlug}-${serviceSlug}`;
+    }
+    if (citySlug) {
+      return `${BASE_URL}/${citySlug}`;
+    }
+    return `${BASE_URL}/`;
+  };
   
   // Keyword page logic
   if (keywordSlug) {
-    if (isCoreKeywordPage(keywordSlug)) {
-      return { shouldIndex: true };
-    }
-    // Noindex non-core keyword pages, canonical to closest core keyword
     return { 
-      shouldIndex: false,
-      canonicalUrl: `${BASE_URL}/pronto-intervento-idraulico`
+      shouldIndex: isCoreKeywordPage(keywordSlug),
+      canonicalUrl: buildSelfCanonical()
     };
   }
   
@@ -160,31 +178,25 @@ export function getIndexingDecision(
     const isTopCity = isTop50City(citySlug);
     const isCoreServ = isCoreService(serviceSlug);
     
-    if (isTopCity && isCoreServ) {
-      return { shouldIndex: true };
-    }
-    
-    // Noindex, canonical to city-only page
     return {
-      shouldIndex: false,
-      canonicalUrl: `${BASE_URL}/${citySlug}`
+      shouldIndex: isTopCity && isCoreServ,
+      canonicalUrl: buildSelfCanonical()
     };
   }
   
   // City-only page logic
   if (citySlug) {
-    if (isTop50City(citySlug)) {
-      return { shouldIndex: true };
-    }
-    // Noindex non-top50 cities, canonical to homepage
     return {
-      shouldIndex: false,
-      canonicalUrl: `${BASE_URL}/`
+      shouldIndex: isTop50City(citySlug),
+      canonicalUrl: buildSelfCanonical()
     };
   }
   
-  // Default: homepage is always indexed
-  return { shouldIndex: true };
+  // Default: homepage
+  return { 
+    shouldIndex: true,
+    canonicalUrl: `${BASE_URL}/`
+  };
 }
 
 /**

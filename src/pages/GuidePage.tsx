@@ -2,13 +2,21 @@ import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Layout } from '@/components/Layout';
 import { getGuideBySlug, getRelatedGuides, GUIDE_CATEGORIES } from '@/lib/guideData';
-import { getGuideFAQs, hasGuideFAQs } from '@/lib/guideFAQs';
-import { TOP_50_CITIES } from '@/lib/seoConfig';
+import { getGuideFAQs } from '@/lib/guideFAQs';
+import { getGuideCosts, getRelatedPricingPage } from '@/lib/guideCosts';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, ArrowLeft, ArrowRight, AlertTriangle, CheckCircle, XCircle, Phone, MapPin, MessageCircleQuestion } from 'lucide-react';
+import { Calendar, Clock, ArrowLeft, AlertTriangle, CheckCircle, XCircle, Phone } from 'lucide-react';
+
+// Guide components
 import { GuideFAQSection } from '@/components/guide/GuideFAQSection';
+import { GuideCTABox } from '@/components/guide/GuideCTABox';
+import { GuideStickyMobileCTA } from '@/components/guide/GuideStickyMobileCTA';
+import { GuideTableOfContents, DEFAULT_TOC_ITEMS } from '@/components/guide/GuideTableOfContents';
+import { GuideSection } from '@/components/guide/GuideSection';
+import { GuideCostsSection } from '@/components/guide/GuideCostsSection';
+import { GuideCityLinks } from '@/components/guide/GuideCityLinks';
+import { GuideRelatedContent } from '@/components/guide/GuideRelatedContent';
 
 export default function GuidePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -16,6 +24,8 @@ export default function GuidePage() {
   const relatedGuides = slug ? getRelatedGuides(slug, 3) : [];
   const category = guide ? GUIDE_CATEGORIES.find(c => c.slug === guide.category) : undefined;
   const guideFAQs = slug ? getGuideFAQs(slug) : [];
+  const guideCosts = slug ? getGuideCosts(slug) : [];
+  const relatedPricing = slug ? getRelatedPricingPage(slug) : undefined;
 
   if (!guide) {
     return (
@@ -58,6 +68,10 @@ export default function GuidePage() {
         url: 'https://www.idraulicisubito.com/logo.png'
       }
     },
+    about: {
+      '@type': 'Thing',
+      name: guide.tags[0] || guide.title
+    },
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': canonicalUrl
@@ -88,9 +102,6 @@ export default function GuidePage() {
     }))
   } : null;
 
-  // Top 15 cities for CTA section
-  const topCities = TOP_50_CITIES.slice(0, 15);
-
   return (
     <Layout>
       <Helmet>
@@ -110,6 +121,9 @@ export default function GuidePage() {
           <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
         )}
       </Helmet>
+
+      {/* Sticky Mobile CTA */}
+      <GuideStickyMobileCTA />
 
       {/* Breadcrumb */}
       <section className="bg-muted/30 py-4">
@@ -135,11 +149,11 @@ export default function GuidePage() {
 
             <Badge variant="secondary" className="mb-4">{category?.name}</Badge>
 
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            <h1 className="text-2xl md:text-4xl font-bold text-foreground mb-4">
               {guide.h1}
             </h1>
 
-            <p className="text-lg text-muted-foreground mb-6">{guide.excerpt}</p>
+            <p className="text-base md:text-lg text-muted-foreground mb-6">{guide.excerpt}</p>
 
             <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
               <span className="flex items-center gap-1">
@@ -159,45 +173,10 @@ export default function GuidePage() {
       <section className="py-6">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <Card className="bg-muted/50">
-              <CardContent className="p-6">
-                <h2 className="font-semibold mb-4">📋 Indice della Guida</h2>
-                <ul className="space-y-2">
-                  <li>
-                    <a href={`#${guide.sections.gravity.id}`} className="text-primary hover:underline flex items-center gap-2">
-                      <AlertTriangle className="h-4 w-4" />
-                      {guide.sections.gravity.title}
-                    </a>
-                  </li>
-                  <li>
-                    <a href={`#${guide.sections.immediateActions.id}`} className="text-primary hover:underline flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4" />
-                      {guide.sections.immediateActions.title}
-                    </a>
-                  </li>
-                  <li>
-                    <a href={`#${guide.sections.whatNotToDo.id}`} className="text-primary hover:underline flex items-center gap-2">
-                      <XCircle className="h-4 w-4" />
-                      {guide.sections.whatNotToDo.title}
-                    </a>
-                  </li>
-                  <li>
-                    <a href={`#${guide.sections.whenToCall.id}`} className="text-primary hover:underline flex items-center gap-2">
-                      <Phone className="h-4 w-4" />
-                      {guide.sections.whenToCall.title}
-                    </a>
-                  </li>
-                  {guideFAQs.length > 0 && (
-                    <li>
-                      <a href="#faq-ai" className="text-primary hover:underline flex items-center gap-2">
-                        <MessageCircleQuestion className="h-4 w-4" />
-                        Domande Frequenti
-                      </a>
-                    </li>
-                  )}
-                </ul>
-              </CardContent>
-            </Card>
+            <GuideTableOfContents 
+              items={DEFAULT_TOC_ITEMS} 
+              showFAQ={guideFAQs.length > 0} 
+            />
           </div>
         </div>
       </section>
@@ -207,133 +186,88 @@ export default function GuidePage() {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto space-y-12">
             
-            {/* Section 1: Gravity */}
-            <section id={guide.sections.gravity.id} className="scroll-mt-24">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="bg-primary/20 text-primary p-3 rounded-full">
-                  <AlertTriangle className="h-6 w-6" />
-                </div>
-                <h2 className="text-2xl font-bold">{guide.sections.gravity.title}</h2>
-              </div>
-              <div 
-                className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground"
-                dangerouslySetInnerHTML={{ __html: guide.sections.gravity.content }}
-              />
-            </section>
+            {/* Section 1: Gravity / Emergency */}
+            <GuideSection
+              id={guide.sections.gravity.id}
+              title={guide.sections.gravity.title}
+              icon={AlertTriangle}
+              iconBgColor="bg-primary/20"
+              iconTextColor="text-primary"
+              content={guide.sections.gravity.content}
+            />
+
+            {/* CTA after emergency section */}
+            <GuideCTABox variant="urgent" />
 
             {/* Section 2: Immediate Actions */}
-            <section id={guide.sections.immediateActions.id} className="scroll-mt-24">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="bg-secondary text-secondary-foreground p-3 rounded-full">
-                  <CheckCircle className="h-6 w-6" />
-                </div>
-                <h2 className="text-2xl font-bold">{guide.sections.immediateActions.title}</h2>
-              </div>
-              <div 
-                className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground"
-                dangerouslySetInnerHTML={{ __html: guide.sections.immediateActions.content }}
-              />
-            </section>
+            <GuideSection
+              id={guide.sections.immediateActions.id}
+              title={guide.sections.immediateActions.title}
+              icon={CheckCircle}
+              iconBgColor="bg-secondary"
+              iconTextColor="text-secondary-foreground"
+              content={guide.sections.immediateActions.content}
+            />
+
+            {/* Minimal CTA */}
+            <GuideCTABox variant="minimal" />
 
             {/* Section 3: What NOT to do */}
-            <section id={guide.sections.whatNotToDo.id} className="scroll-mt-24">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="bg-destructive/20 text-destructive p-3 rounded-full">
-                  <XCircle className="h-6 w-6" />
-                </div>
-                <h2 className="text-2xl font-bold">{guide.sections.whatNotToDo.title}</h2>
-              </div>
-              <div 
-                className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground"
-                dangerouslySetInnerHTML={{ __html: guide.sections.whatNotToDo.content }}
-              />
-            </section>
+            <GuideSection
+              id={guide.sections.whatNotToDo.id}
+              title={guide.sections.whatNotToDo.title}
+              icon={XCircle}
+              iconBgColor="bg-destructive/20"
+              iconTextColor="text-destructive"
+              content={guide.sections.whatNotToDo.content}
+            />
 
             {/* Section 4: When to Call */}
-            <section id={guide.sections.whenToCall.id} className="scroll-mt-24">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="bg-primary/20 text-primary p-3 rounded-full">
-                  <Phone className="h-6 w-6" />
-                </div>
-                <h2 className="text-2xl font-bold">{guide.sections.whenToCall.title}</h2>
-              </div>
-              <div 
-                className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground"
-                dangerouslySetInnerHTML={{ __html: guide.sections.whenToCall.content }}
+            <GuideSection
+              id={guide.sections.whenToCall.id}
+              title={guide.sections.whenToCall.title}
+              icon={Phone}
+              iconBgColor="bg-primary/20"
+              iconTextColor="text-primary"
+              content={guide.sections.whenToCall.content}
+            />
+
+            {/* Section 5: Costs */}
+            {guideCosts.length > 0 && (
+              <GuideCostsSection 
+                costs={guideCosts}
+                relatedPricingPage={relatedPricing?.slug}
+                relatedPricingTitle={relatedPricing?.title}
               />
-            </section>
+            )}
+
+            {/* CTA after costs section */}
+            <GuideCTABox variant="default" />
 
             {/* AI-Optimized FAQ Section */}
             {guideFAQs.length > 0 && (
               <GuideFAQSection faqs={guideFAQs} guideTitle={guide.h1} />
             )}
 
+            {/* Section 6: Find a Plumber in Your City */}
+            <GuideCityLinks maxCities={15} />
+
           </div>
         </div>
       </article>
 
-      {/* CTA: Find a Plumber in Your City */}
-      <section className="py-16 bg-primary/5">
+      {/* Related Content */}
+      <section className="py-8">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <MapPin className="h-12 w-12 mx-auto mb-4 text-primary" />
-            <h2 className="text-2xl md:text-3xl font-bold mb-4">
-              Trova un Idraulico per Questo Problema nella Tua Città
-            </h2>
-            <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Hai bisogno di un professionista? Trova un idraulico qualificato nella tua zona per risolvere il problema rapidamente.
-            </p>
-            
-            <div className="flex flex-wrap justify-center gap-3 mb-8">
-              {topCities.map((citySlug) => {
-                const cityName = citySlug.charAt(0).toUpperCase() + citySlug.slice(1).replace(/-/g, ' ');
-                return (
-                  <Link
-                    key={citySlug}
-                    to={`/${citySlug}`}
-                    className="inline-flex items-center gap-2 bg-card hover:bg-primary/10 border border-border rounded-full px-4 py-2 text-sm transition-colors"
-                  >
-                    <MapPin className="h-3 w-3 text-primary" />
-                    <span>Idraulico {cityName}</span>
-                  </Link>
-                );
-              })}
-            </div>
-
-            <Link to="/richiesta">
-              <Button size="lg" className="w-full sm:w-auto">
-                Richiedi Preventivo Gratuito
-                <ArrowRight className="h-5 w-5 ml-2" />
-              </Button>
-            </Link>
+          <div className="max-w-4xl mx-auto">
+            <GuideRelatedContent 
+              relatedGuides={relatedGuides}
+              relatedPricingPage={relatedPricing}
+              categoryName={category?.name}
+            />
           </div>
         </div>
       </section>
-
-      {/* Related Guides */}
-      {relatedGuides.length > 0 && (
-        <section className="py-16 bg-muted/30">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-2xl font-bold mb-8 text-center">Guide Correlate</h2>
-              <div className="grid md:grid-cols-3 gap-6">
-                {relatedGuides.map((related) => (
-                  <Link key={related.slug} to={`/guide/${related.slug}`}>
-                    <Card className="h-full hover:shadow-lg transition-shadow">
-                      <CardContent className="p-6">
-                        <Badge variant="outline" className="mb-3">{category?.name}</Badge>
-                        <h3 className="font-semibold mb-2 line-clamp-2">{related.title}</h3>
-                        <p className="text-sm text-muted-foreground line-clamp-2">{related.excerpt}</p>
-                        <p className="text-xs text-muted-foreground mt-3">{related.readingTime} min</p>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Tags */}
       <section className="py-8">
@@ -348,6 +282,9 @@ export default function GuidePage() {
           </div>
         </div>
       </section>
+
+      {/* Bottom padding for sticky CTA on mobile */}
+      <div className="h-20 md:h-0" />
     </Layout>
   );
 }

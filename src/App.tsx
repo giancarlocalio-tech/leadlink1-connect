@@ -29,6 +29,9 @@ import KeywordLandingPage from "./pages/KeywordLandingPage";
 import BlogPage from "./pages/BlogPage";
 import BlogArticlePage from "./pages/BlogArticlePage";
 import BlogCategoryPage from "./pages/BlogCategoryPage";
+import GuideIndexPage from "./pages/GuideIndexPage";
+import GuidePage from "./pages/GuidePage";
+import ServiceNationalPage from "./pages/ServiceNationalPage";
 import NotFound from "./pages/NotFound";
 import IdraulicoRedirect from "./components/IdraulicoRedirect";
 import ServiziRedirect from "./components/ServiziRedirect";
@@ -569,6 +572,17 @@ const App = () => (
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/categoria/:category" element={<BlogCategoryPage />} />
             <Route path="/blog/:slug" element={<BlogArticlePage />} />
+            
+            {/* Guide SEO Routes - FASE 9 */}
+            <Route path="/guide" element={<GuideIndexPage />} />
+            <Route path="/guide/:slug" element={<GuidePage />} />
+            
+            {/* National Service Pages - FASE 10 */}
+            <Route path="/servizi/pronto-intervento-idraulico" element={<ServiceNationalPage />} />
+            <Route path="/servizi/riparazione-perdite-acqua" element={<ServiceNationalPage />} />
+            <Route path="/servizi/disostruzione-scarichi" element={<ServiceNationalPage />} />
+            <Route path="/servizi/manutenzione-caldaie" element={<ServiceNationalPage />} />
+            <Route path="/servizi/installazione-sanitari" element={<ServiceNationalPage />} />
             
             {/* 301 Redirects for legacy URL patterns */}
             <Route path="/idraulico/:city/:service" element={<IdraulicoRedirect type="city-service" />} />

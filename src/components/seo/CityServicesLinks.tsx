@@ -14,6 +14,7 @@ import { Wrench, Flame, Trash2, Droplets, ShowerHead, MapPin, ArrowRight, BookOp
 import { CityData, CITIES } from '@/lib/seoData';
 import { CORE_SERVICES } from '@/lib/seoConfig';
 import { getArticlesForCityPage } from '@/lib/blogData';
+import { getGuidesForCityPage } from '@/lib/guideData';
 
 interface CityServicesLinksProps {
   cityData: CityData;

@@ -2,17 +2,20 @@ import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Layout } from '@/components/Layout';
 import { getGuideBySlug, getRelatedGuides, GUIDE_CATEGORIES } from '@/lib/guideData';
+import { getGuideFAQs, hasGuideFAQs } from '@/lib/guideFAQs';
 import { TOP_50_CITIES } from '@/lib/seoConfig';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, ArrowLeft, ArrowRight, AlertTriangle, CheckCircle, XCircle, Phone, MapPin } from 'lucide-react';
+import { Calendar, Clock, ArrowLeft, ArrowRight, AlertTriangle, CheckCircle, XCircle, Phone, MapPin, MessageCircleQuestion } from 'lucide-react';
+import { GuideFAQSection } from '@/components/guide/GuideFAQSection';
 
 export default function GuidePage() {
   const { slug } = useParams<{ slug: string }>();
   const guide = slug ? getGuideBySlug(slug) : undefined;
   const relatedGuides = slug ? getRelatedGuides(slug, 3) : [];
   const category = guide ? GUIDE_CATEGORIES.find(c => c.slug === guide.category) : undefined;
+  const guideFAQs = slug ? getGuideFAQs(slug) : [];
 
   if (!guide) {
     return (
@@ -71,6 +74,20 @@ export default function GuidePage() {
     ]
   };
 
+  // FAQPage JSON-LD for AI-optimized questions
+  const faqJsonLd = guideFAQs.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: guideFAQs.map(faq => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `${faq.shortAnswer} ${faq.fullAnswer}`
+      }
+    }))
+  } : null;
+
   // Top 15 cities for CTA section
   const topCities = TOP_50_CITIES.slice(0, 15);
 
@@ -89,6 +106,9 @@ export default function GuidePage() {
         <meta property="article:modified_time" content={guide.updatedAt} />
         <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
+        {faqJsonLd && (
+          <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
+        )}
       </Helmet>
 
       {/* Breadcrumb */}
@@ -167,6 +187,14 @@ export default function GuidePage() {
                       {guide.sections.whenToCall.title}
                     </a>
                   </li>
+                  {guideFAQs.length > 0 && (
+                    <li>
+                      <a href="#faq-ai" className="text-primary hover:underline flex items-center gap-2">
+                        <MessageCircleQuestion className="h-4 w-4" />
+                        Domande Frequenti
+                      </a>
+                    </li>
+                  )}
                 </ul>
               </CardContent>
             </Card>
@@ -234,6 +262,11 @@ export default function GuidePage() {
                 dangerouslySetInnerHTML={{ __html: guide.sections.whenToCall.content }}
               />
             </section>
+
+            {/* AI-Optimized FAQ Section */}
+            {guideFAQs.length > 0 && (
+              <GuideFAQSection faqs={guideFAQs} guideTitle={guide.h1} />
+            )}
 
           </div>
         </div>

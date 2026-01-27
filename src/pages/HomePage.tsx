@@ -40,10 +40,15 @@ import heroBg from '@/assets/hero-bg.avif';
 import { TOP_50_CITIES } from '@/lib/seoConfig';
 import { CITIES } from '@/lib/seoData';
 
-// Get Top 50 cities data for internal linking
+// Get ALL Top 50 cities data for internal linking (SEO critical)
 const TOP_50_CITY_LINKS = CITIES.filter(city => 
   TOP_50_CITIES.includes(city.slug as any)
-).slice(0, 25);
+).sort((a, b) => {
+  // Sort by population (largest first)
+  const popA = parseInt(a.population.replace(/\./g, ''));
+  const popB = parseInt(b.population.replace(/\./g, ''));
+  return popB - popA;
+});
 
 // All intervention types for the first selection
 const ALL_INTERVENTION_TYPES: InterventionType[] = [
@@ -714,19 +719,20 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Cities Section - Internal Linking for SEO */}
+      {/* Cities Section - Internal Linking for SEO (ALL 50 Cities visible) */}
       <section className="py-16 bg-muted/50">
         <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold text-foreground text-center mb-4">
-              Idraulici nelle Principali Città Italiane
+              Trova un Idraulico nelle Principali Città Italiane
             </h2>
             <p className="text-muted-foreground text-center mb-10 max-w-2xl mx-auto">
-              Trova professionisti verificati in tutta Italia. Seleziona la tua città per trovare idraulici disponibili nella tua zona.
+              Professionisti verificati in oltre 50 città italiane. Seleziona la tua città per trovare idraulici disponibili nella tua zona con risposta in 15 minuti.
             </p>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-              {TOP_50_CITY_LINKS.map((city) => (
+            {/* First 15 cities - Most visible */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-6">
+              {TOP_50_CITY_LINKS.slice(0, 15).map((city) => (
                 <a
                   key={city.slug}
                   href={`/${city.slug}`}
@@ -740,12 +746,28 @@ export default function HomePage() {
               ))}
             </div>
 
+            {/* Remaining 35 cities */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2">
+              {TOP_50_CITY_LINKS.slice(15).map((city) => (
+                <a
+                  key={city.slug}
+                  href={`/${city.slug}`}
+                  className="flex items-center justify-center gap-1.5 bg-muted/50 hover:bg-primary/10 border border-border/50 rounded-md px-3 py-2 transition-colors group"
+                >
+                  <MapPin className="h-3 w-3 text-primary/70 shrink-0" />
+                  <span className="text-xs font-medium text-muted-foreground group-hover:text-primary truncate">
+                    {city.name}
+                  </span>
+                </a>
+              ))}
+            </div>
+
             <div className="text-center mt-8">
               <a 
                 href="/idraulico-vicino-a-me"
                 className="inline-flex items-center gap-2 text-primary hover:underline font-medium"
               >
-                Vedi tutte le città
+                Non trovi la tua città? Cerca idraulici vicino a te
                 <ArrowRight className="h-4 w-4" />
               </a>
             </div>

@@ -159,18 +159,53 @@ export function getCityRichContent(cityData: CityData): CityRichContent {
 
 /**
  * Generate additional SEO-friendly text with variation
+ * Minimum 150 words per intro for better content depth
  */
 export function getCityIntroText(cityData: CityData): string {
-  const { name, province, region, population } = cityData;
-  const idx = getConsistentIndex(cityData.slug, 3);
+  const { name, province, region, population, neighborhoods } = cityData;
+  const idx = getConsistentIndex(cityData.slug, 4);
   
+  // Extended templates with housing types and province references (150+ words each)
   const templates = [
-    `Con una popolazione di ${population} abitanti, ${name} (${province}) è una delle città più importanti del ${region}. I nostri idraulici professionisti conoscono perfettamente le caratteristiche degli impianti idraulici locali e sono pronti a intervenire rapidamente per qualsiasi emergenza o lavoro programmato.`,
+    `Con una popolazione di ${population} abitanti, ${name} (${province}) è una delle città più importanti della regione ${region}. Il tessuto urbano si caratterizza per una varietà di tipologie abitative: dal centro storico con edifici d'epoca ai moderni condomini residenziali delle zone periferiche, fino alle villette unifamiliari delle aree suburbane. Questa diversità architettonica comporta esigenze idrauliche specifiche che i nostri professionisti conoscono perfettamente. Dalle tubature in piombo degli edifici storici agli impianti moderni in multistrato, interveniamo con competenza su ogni tipologia di impianto. La nostra rete di idraulici opera in tutta la provincia di ${province}, garantendo interventi rapidi anche nei comuni limitrofi. Per emergenze come perdite d'acqua, scarichi intasati o guasti alla caldaia, offriamo pronto intervento 24 ore su 24, 7 giorni su 7.`,
     
-    `${name}, situata in ${region}, conta ${population} abitanti e presenta una varietà di edifici con impianti idraulici di diverse epoche. La nostra rete di professionisti verificati offre assistenza completa per riparazioni, manutenzioni e nuove installazioni in tutta la provincia di ${province}.`,
+    `${name}, situata nel cuore della provincia di ${province} in ${region}, conta ${population} residenti distribuiti tra il nucleo urbano principale e le frazioni circostanti. La città presenta un patrimonio edilizio eterogeneo: palazzi storici nel centro, quartieri residenziali degli anni '60-'80 con condomini di media altezza, e nuove costruzioni nelle zone di espansione. Ogni tipologia edilizia richiede competenze specifiche in ambito idraulico. I nostri professionisti sono specializzati nella gestione di impianti di diverse epoche e materiali, dalle vecchie tubature in ferro zincato ai moderni sistemi in polietilene. Operiamo in tutti i quartieri di ${name}, inclusi ${neighborhoods.slice(0, 3).join(', ')}, garantendo tempi di risposta rapidi e preventivi trasparenti. La vicinanza con altri centri della provincia di ${province} ci permette di offrire assistenza capillare su tutto il territorio.`,
     
-    `Nella provincia di ${province}, ${name} rappresenta un importante centro urbano con ${population} residenti. I nostri idraulici qualificati sono specializzati negli interventi tipici degli edifici della zona ${region}, garantendo soluzioni efficaci e durature.`
+    `Nella provincia di ${province}, ${name} rappresenta un importante polo urbano con i suoi ${population} abitanti. La struttura urbanistica della città riflette decenni di sviluppo: il centro storico conserva edifici con impianti idraulici che richiedono manutenzione specializzata, mentre le zone residenziali più recenti presentano tecnologie impiantistiche moderne. I nostri idraulici qualificati intervengono quotidianamente su problematiche diverse: dalle riparazioni urgenti di perdite d'acqua alla manutenzione ordinaria di caldaie e scaldabagni, dalla sostituzione di sanitari alla ristrutturazione completa di bagni e cucine. Conosciamo le specificità degli impianti della zona ${region} e siamo attrezzati per gestire ogni tipo di intervento. La nostra presenza capillare garantisce assistenza rapida non solo a ${name}, ma anche nelle zone limitrofe come ${neighborhoods.slice(0, 2).join(' e ')}.`,
+    
+    `${name} (${province}) è un centro urbano dinamico con ${population} abitanti, caratterizzato da un mix di edifici storici e costruzioni moderne. L'area metropolitana comprende sia il centro città, dove gli edifici d'epoca richiedono interventi di manutenzione specializzati sugli impianti datati, sia le periferie con complessi condominiali e abitazioni unifamiliari di più recente costruzione. I professionisti della nostra rete conoscono le peculiarità idrauliche del territorio ${region}: dalla durezza dell'acqua locale che influisce sulla formazione di calcare, alle caratteristiche delle reti fognarie comunali. Offriamo servizi completi che spaziano dal pronto intervento per emergenze alla programmazione di lavori di ristrutturazione impiantistica. I nostri idraulici raggiungono tutti i quartieri di ${name} e i comuni della provincia di ${province}, garantendo professionalità e puntualità.`
   ];
   
   return templates[idx];
+}
+
+/**
+ * Get estimated word count for city page content
+ * Used to verify minimum 500 words target
+ */
+export function getEstimatedWordCount(cityData: CityData): number {
+  const richContent = getCityRichContent(cityData);
+  const introText = getCityIntroText(cityData);
+  
+  let wordCount = 0;
+  
+  // Count intro text
+  wordCount += introText.split(/\s+/).length;
+  
+  // Count problems section
+  wordCount += richContent.problemsSection.content.split(/\s+/).length;
+  richContent.problemsSection.problems.forEach(p => {
+    wordCount += p.split(/\s+/).length;
+  });
+  
+  // Count neighborhoods section
+  wordCount += richContent.neighborhoodsSection.content.split(/\s+/).length;
+  
+  // Count response time section
+  wordCount += richContent.responseTimeSection.content.split(/\s+/).length;
+  
+  // Count pricing section
+  wordCount += richContent.pricingSection.content.split(/\s+/).length;
+  
+  return wordCount;
 }

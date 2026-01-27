@@ -36,6 +36,7 @@ import {
 } from '@/lib/seoData';
 import { generateJsonLd, getCityFAQs, BASE_URL } from '@/lib/seoJsonLd';
 import KeywordLandingPage from './KeywordLandingPage';
+import NeighborhoodLandingPage from './NeighborhoodLandingPage';
 import { getServiceRichContent, generateCityServiceContent } from '@/lib/serviceContent';
 import InlineWizard from '@/components/InlineWizard';
 import heroBg from '@/assets/hero-bg.avif';
@@ -43,6 +44,8 @@ import heroBg from '@/assets/hero-bg.avif';
 // SEO Config & Rich Content
 import { getIndexingDecision, isTop50City, isCoreService } from '@/lib/seoConfig';
 import { getCityRichContent, getCityIntroText } from '@/lib/cityRichContent';
+import { getCityLocalContent, getCityLocalFAQs } from '@/lib/cityLocalContent';
+import { getNeighborhoodPage, getNeighborhoodPagesForCity } from '@/lib/neighborhoodPagesData';
 
 // SEO Components
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
@@ -52,6 +55,10 @@ import { RelatedServices } from '@/components/seo/RelatedServices';
 import { CustomerReviews } from '@/components/seo/CustomerReviews';
 import { CityServicesLinks } from '@/components/seo/CityServicesLinks';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { CityLocalProblemsSection } from '@/components/seo/CityLocalProblemsSection';
+import { CityNeighborhoodsSection } from '@/components/seo/CityNeighborhoodsSection';
+import { CityRecentInterventions } from '@/components/seo/CityRecentInterventions';
+import { CityLocalFAQSection } from '@/components/seo/CityLocalFAQSection';
 
 // Icon mapping
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -81,11 +88,14 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
   // FIRST: Check if this slug is a keyword page
   const keywordPageData = getKeywordPageBySlug(slug);
   
+  // SECOND: Check if this is a neighborhood page (e.g., "milano-navigli-idraulico")
+  const neighborhoodData = getNeighborhoodPage(slug);
+  
   let cityData: CityData | undefined;
   let serviceData: ServiceData | undefined;
   
-  // Only try to match city/service if it's not a keyword page
-  if (!keywordPageData) {
+  // Only try to match city/service if it's not a keyword page or neighborhood page
+  if (!keywordPageData && !neighborhoodData) {
     // Try to match city-service format first: {city}-{service} e.g., "milano-manutenzione-caldaie"
     for (const service of SERVICES) {
       if (slug.endsWith(`-${service.slug}`)) {
@@ -108,6 +118,11 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
   // If this is a keyword page, render KeywordLandingPage directly
   if (keywordPageData) {
     return <KeywordLandingPage slug={slug} />;
+  }
+  
+  // If this is a neighborhood page, render NeighborhoodLandingPage
+  if (neighborhoodData) {
+    return <NeighborhoodLandingPage neighborhoodData={neighborhoodData} />;
   }
   
   // If no city data found, show 404 page (not redirect to homepage)
@@ -208,6 +223,17 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
   // Get rich city content for Top 50 cities
   const cityRichContent = isTop50City(cityData.slug) ? getCityRichContent(cityData) : null;
   const cityIntroText = isTop50City(cityData.slug) ? getCityIntroText(cityData) : null;
+  
+  // Get advanced local content for Top 50 cities (Phase 1-3 SEO)
+  const cityLocalContent = isTop50City(cityData.slug) 
+    ? getCityLocalContent(cityData.slug, cityData.name, cityData.region) 
+    : null;
+  const cityLocalFAQs = isTop50City(cityData.slug) 
+    ? getCityLocalFAQs(cityData.name, cityData.province) 
+    : null;
+  
+  // Get neighborhood pages for this city (for internal linking)
+  const neighborhoodPages = getNeighborhoodPagesForCity(cityData.slug);
 
   // Generate structured data using utility (only include aggregateRating for indexed pages)
   const jsonLd = generateJsonLd(
@@ -771,13 +797,67 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
       {/* Related Services Grid - Like ProntoPro */}
       <RelatedServices cityData={cityData} currentServiceSlug={serviceData?.slug} />
 
+      {/* NEW PHASE 1: Local Problems Section - Only for Top 50 cities (city-only pages) */}
+      {cityLocalContent && !serviceData && (
+        <CityLocalProblemsSection 
+          cityName={cityData.name}
+          localContent={cityLocalContent}
+        />
+      )}
+
+      {/* NEW PHASE 2: Neighborhoods Section - Only for Top 50 cities (city-only pages) */}
+      {isTop50City(cityData.slug) && !serviceData && (
+        <CityNeighborhoodsSection cityData={cityData} />
+      )}
+
+      {/* NEW PHASE 5: Recent Interventions - Only for Top 50 cities (city-only pages) */}
+      {cityLocalContent && !serviceData && (
+        <CityRecentInterventions 
+          cityName={cityData.name}
+          localContent={cityLocalContent}
+        />
+      )}
+
+      {/* Neighborhood Pages Links - Only for major cities with neighborhood pages */}
+      {neighborhoodPages.length > 0 && !serviceData && (
+        <section className="py-12 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <h2 className="text-2xl font-bold text-center mb-6">
+              Idraulici per Quartiere a {cityData.name}
+            </h2>
+            <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
+              Cerchi un idraulico specializzato nel tuo quartiere? Scopri i professionisti disponibili nelle diverse zone di {cityData.name}.
+            </p>
+            <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
+              {neighborhoodPages.map((n) => (
+                <Link
+                  key={`${n.citySlug}-${n.neighborhoodSlug}`}
+                  to={`/${n.citySlug}-${n.neighborhoodSlug}-idraulico`}
+                  className="bg-card hover:bg-primary/10 border border-border text-foreground hover:text-primary px-4 py-2 rounded-full text-sm transition-colors"
+                >
+                  Idraulico {n.neighborhoodName}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* City Services & Nearby Cities - Internal Linking (Top 50 only) */}
       {isTop50City(cityData.slug) && (
         <CityServicesLinks cityData={cityData} />
       )}
 
-      {/* FAQ Section with visible HTML (complements JSON-LD schema) */}
-      {isTop50City(cityData.slug) && (
+      {/* NEW PHASE 3: Localized FAQ Section - Only for Top 50 cities (city-only pages) */}
+      {cityLocalFAQs && !serviceData && (
+        <CityLocalFAQSection 
+          cityName={cityData.name}
+          faqs={cityLocalFAQs}
+        />
+      )}
+
+      {/* FAQ Section with visible HTML (complements JSON-LD schema) - for service pages */}
+      {isTop50City(cityData.slug) && serviceData && (
         <FAQSection 
           cityName={cityData.name}
           serviceName={serviceData?.name}

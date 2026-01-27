@@ -2,6 +2,7 @@
  * Pricing Pages Data - SEO pages for plumbing costs
  * 
  * Structure: Title, price tables, urgency info, city links, FAQs
+ * Enhanced with: Service schema data, related guides, price ranges
  */
 
 export interface PriceRow {
@@ -12,6 +13,11 @@ export interface PriceRow {
 export interface FAQ {
   question: string;
   answer: string;
+}
+
+export interface RelatedGuide {
+  slug: string;
+  title: string;
 }
 
 export interface PricingPage {
@@ -29,6 +35,11 @@ export interface PricingPage {
   factors: string[];
   whenPriceIncreases: string[];
   faqs: FAQ[];
+  // Schema.org Service data
+  serviceName: string;
+  priceRange: string;
+  // Related guides for internal linking
+  relatedGuides: RelatedGuide[];
 }
 
 export const PRICING_PAGES: PricingPage[] = [
@@ -77,6 +88,13 @@ export const PRICING_PAGES: PricingPage[] = [
       { question: 'Un preventivo idraulico è gratuito?', answer: 'Spesso sì, soprattutto se richiesto online. Su Idraulici Subito puoi ricevere preventivi gratuiti da professionisti della tua zona.' },
       { question: 'Si paga anche se non si fa il lavoro?', answer: 'A volte viene richiesto solo il diritto di chiamata (40-70€), ma molti idraulici lo scontano se poi effettuano il lavoro.' },
       { question: 'Conviene aspettare se la perdita è piccola?', answer: 'No, spesso peggiora e costa di più dopo. Una piccola perdita ignorata può causare danni strutturali e muffa.' }
+    ],
+    serviceName: 'Intervento Idraulico',
+    priceRange: '40-300',
+    relatedGuides: [
+      { slug: 'perdita-acqua-sotto-lavello', title: 'Perdita acqua sotto il lavello: cosa fare' },
+      { slug: 'scarico-doccia-intasato', title: 'Scarico doccia intasato: rimedi veloci' },
+      { slug: 'wc-otturato-acqua-sale', title: 'WC otturato e acqua che sale' }
     ]
   },
   {
@@ -123,6 +141,13 @@ export const PRICING_PAGES: PricingPage[] = [
       { question: 'Quanto costa trovare una perdita nascosta?', answer: 'La ricerca perdita con strumenti professionali (termocamera, geofono) costa 100-250€, ma evita di demolire a caso.' },
       { question: 'Chi paga se la perdita viene dal vicino?', answer: 'La riparazione è a carico di chi ha causato il danno. Documenta tutto con foto per eventuali rivalse.' },
       { question: 'Posso riparare da solo una perdita?', answer: 'Solo se è un semplice rubinetto o flessibile. Per tubi fissi è meglio chiamare un professionista.' }
+    ],
+    serviceName: 'Riparazione Perdita Acqua',
+    priceRange: '50-500',
+    relatedGuides: [
+      { slug: 'tubo-perde-muro-urgente', title: 'Tubo che perde dal muro: è urgente?' },
+      { slug: 'macchia-acqua-muro', title: 'Macchia d\'acqua sul muro: da dove viene?' },
+      { slug: 'perdita-acqua-sotto-lavello', title: 'Perdita acqua sotto il lavello' }
     ]
   },
   {
@@ -165,6 +190,13 @@ export const PRICING_PAGES: PricingPage[] = [
       { question: 'Qual è la differenza tra disostruzione e spurgo?', answer: 'La disostruzione rimuove un\'ostruzione specifica (sonda). Lo spurgo pulisce completamente le tubature (idrogetto o autospurgo).' },
       { question: 'Quanto costa un autospurgo?', answer: 'L\'intervento con camion autospurgo parte da 200-300€ per situazioni semplici, fino a 800€ per colonne condominiali.' },
       { question: 'Chi paga lo spurgo in condominio?', answer: 'Se l\'intasamento è nella colonna comune, paga il condominio. Se è nel tratto privato, paga il singolo condomino.' }
+    ],
+    serviceName: 'Spurgo Scarichi',
+    priceRange: '50-600',
+    relatedGuides: [
+      { slug: 'scarico-doccia-intasato', title: 'Scarico doccia intasato: rimedi veloci' },
+      { slug: 'lavandino-cucina-intasato', title: 'Lavandino cucina intasato: cosa fare' },
+      { slug: 'colonna-scarico-condominio-intasata', title: 'Colonna di scarico condominio intasata' }
     ]
   },
   {
@@ -209,6 +241,13 @@ export const PRICING_PAGES: PricingPage[] = [
       { question: 'Posso sturare il WC da solo?', answer: 'Puoi provare con ventosa e acqua calda. Se non funziona dopo 2-3 tentativi, meglio chiamare un professionista.' },
       { question: 'Quanto tempo ci vuole?', answer: 'Una disostruzione semplice richiede 15-30 minuti. Casi complessi possono richiedere 1-2 ore.' },
       { question: 'Il WC potrebbe rompersi durante lo sturaggio?', answer: 'Con strumenti professionali è raro. Il rischio aumenta con metodi fai-da-te improvvisati.' }
+    ],
+    serviceName: 'Disostruzione WC',
+    priceRange: '60-300',
+    relatedGuides: [
+      { slug: 'wc-otturato-acqua-sale', title: 'WC otturato e acqua che sale' },
+      { slug: 'perdita-cassetta-wc', title: 'Perdita acqua dalla cassetta WC' },
+      { slug: 'scarico-bagno-gorgoglii', title: 'Scarico bagno che fa gorgoglii' }
     ]
   },
   {
@@ -248,6 +287,13 @@ export const PRICING_PAGES: PricingPage[] = [
       { question: 'Posso cambiare il sifone da solo?', answer: 'Sì, è uno dei lavori idraulici più semplici. Basta svitare il vecchio e avvitare il nuovo. Se non sei pratico, un idraulico lo fa in 15-20 minuti.' },
       { question: 'Quanto dura un sifone?', answer: 'Un sifone in plastica dura 10-15 anni, uno in ottone anche 30 anni se ben mantenuto.' },
       { question: 'Come capisco se il sifone va sostituito?', answer: 'Quando perde nonostante le guarnizioni nuove, è crepato, o è molto incrostato e puzza anche dopo la pulizia.' }
+    ],
+    serviceName: 'Sostituzione Sifone',
+    priceRange: '40-250',
+    relatedGuides: [
+      { slug: 'perdita-acqua-sotto-lavello', title: 'Perdita acqua sotto il lavello' },
+      { slug: 'sifone-cucina-puzza', title: 'Sifone cucina puzza: perché' },
+      { slug: 'piletta-lavandino-bloccata', title: 'Piletta lavandino bloccata' }
     ]
   },
   {
@@ -287,6 +333,13 @@ export const PRICING_PAGES: PricingPage[] = [
       { question: 'Ogni quanto va fatta la manutenzione?', answer: 'La manutenzione ordinaria va fatta ogni anno. Il controllo fumi ogni 2-4 anni a seconda della Regione e del tipo di caldaia.' },
       { question: 'Cosa rischio se non faccio la manutenzione?', answer: 'Multa da 50 a 3.000€, maggiore consumo di gas, rischio guasti e, nei casi gravi, pericolo per la sicurezza.' },
       { question: 'Chi può fare la manutenzione?', answer: 'Solo tecnici abilitati che possono rilasciare il rapporto di controllo e applicare il bollino.' }
+    ],
+    serviceName: 'Manutenzione Caldaia',
+    priceRange: '80-200',
+    relatedGuides: [
+      { slug: 'caldaia-non-parte', title: 'Caldaia non parte: controlli da fare' },
+      { slug: 'pressione-caldaia-bassa', title: 'Pressione caldaia bassa: cosa significa' },
+      { slug: 'caldaia-blocco-reset', title: 'Caldaia in blocco: reset o tecnico?' }
     ]
   },
   {
@@ -327,6 +380,13 @@ export const PRICING_PAGES: PricingPage[] = [
       { question: 'Come posso ridurre il costo?', answer: 'Chiudi l\'acqua generale prima di chiamare. Se il problema è contenuto, potresti aspettare il mattino seguente.' },
       { question: 'Il preventivo viene fatto prima?', answer: 'Di solito viene data una stima telefonica, poi un preventivo preciso dopo aver visto il problema.' },
       { question: 'Devo pagare se poi non faccio i lavori?', answer: 'Generalmente sì, il costo dell\'uscita urgente viene comunque addebitato (diritto di chiamata).' }
+    ],
+    serviceName: 'Pronto Intervento Idraulico',
+    priceRange: '80-400',
+    relatedGuides: [
+      { slug: 'tubo-perde-muro-urgente', title: 'Tubo che perde dal muro: è urgente?' },
+      { slug: 'perdita-soffitto-chi-chiamare', title: 'Perdita acqua dal soffitto: chi chiamare' },
+      { slug: 'perdita-acqua-sotto-lavello', title: 'Perdita acqua sotto il lavello' }
     ]
   },
   {
@@ -367,6 +427,13 @@ export const PRICING_PAGES: PricingPage[] = [
       { question: 'Conviene riparare o sostituire tutto il tubo?', answer: 'Se il tubo è vecchio e corroso, spesso conviene sostituire tutto il tratto per evitare problemi futuri.' },
       { question: 'Chi paga le riparazioni al muro dopo?', answer: 'L\'idraulico ripara il tubo. Per il ripristino murario serve un muratore (costo aggiuntivo 100-300€).' },
       { question: 'Quanto tempo ci vuole?', answer: 'Riparazione visibile: 1-2 ore. Tubo nel muro: mezza giornata o più.' }
+    ],
+    serviceName: 'Riparazione Tubo',
+    priceRange: '70-700',
+    relatedGuides: [
+      { slug: 'tubo-perde-muro-urgente', title: 'Tubo che perde dal muro: è urgente?' },
+      { slug: 'macchia-acqua-muro', title: 'Macchia d\'acqua sul muro: da dove viene?' },
+      { slug: 'contatore-gira-rubinetti-chiusi', title: 'Contatore acqua che gira ma rubinetti chiusi' }
     ]
   },
   {
@@ -409,6 +476,13 @@ export const PRICING_PAGES: PricingPage[] = [
       { question: 'Posso comprare i sanitari e farli solo installare?', answer: 'Sì, molti preferiscono così. L\'idraulico si occupa solo della posa e ti fa pagare meno.' },
       { question: 'Quanto tempo ci vuole?', answer: 'Un sanitario singolo: 1-2 ore. Bagno completo: 1-2 giorni.' },
       { question: 'Cosa serve per il WC sospeso?', answer: 'Serve una struttura incassata nel muro (telaio). Se non c\'è, va installata (costo aggiuntivo 200-400€).' }
+    ],
+    serviceName: 'Installazione Sanitari',
+    priceRange: '60-1000',
+    relatedGuides: [
+      { slug: 'perdita-cassetta-wc', title: 'Perdita acqua dalla cassetta WC' },
+      { slug: 'perdita-flessibile-bidet', title: 'Perdita dal flessibile del bidet' },
+      { slug: 'rubinetto-perde-continuamente', title: 'Rubinetto che perde continuamente' }
     ]
   },
   {
@@ -449,6 +523,13 @@ export const PRICING_PAGES: PricingPage[] = [
       { question: 'Posso cambiare il rubinetto da solo?', answer: 'Sì, è relativamente semplice. Servono chiave inglese, teflon e un po\' di pazienza.' },
       { question: 'Conviene comprare rubinetti economici?', answer: 'I rubinetti troppo economici durano poco. Meglio spendere 50-100€ per qualità media.' },
       { question: 'Quanto dura un rubinetto?', answer: 'Un buon rubinetto dura 10-20 anni. La cartuccia interna potrebbe necessitare sostituzione prima.' }
+    ],
+    serviceName: 'Sostituzione Rubinetto',
+    priceRange: '40-200',
+    relatedGuides: [
+      { slug: 'rubinetto-perde-continuamente', title: 'Rubinetto che perde continuamente' },
+      { slug: 'perdita-flessibile-bidet', title: 'Perdita dal flessibile del bidet' },
+      { slug: 'perdita-acqua-sotto-lavello', title: 'Perdita acqua sotto il lavello' }
     ]
   }
 ];

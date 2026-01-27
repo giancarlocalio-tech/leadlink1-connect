@@ -140,6 +140,51 @@ function generateBreadcrumbs(items: BreadcrumbItem[]) {
   };
 }
 
+// Generate Service schema with Offer for pricing pages
+export function generateServiceWithOffer(options: {
+  name: string;
+  description: string;
+  url: string;
+  priceRange: string;
+  priceCurrency?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${options.url}#service`,
+    "name": options.name,
+    "description": options.description,
+    "url": options.url,
+    "areaServed": {
+      "@type": "Country",
+      "name": "Italia"
+    },
+    "provider": {
+      "@type": "Organization",
+      "@id": `${BASE_URL}#organization`,
+      "name": "Idraulici Subito",
+      "url": BASE_URL,
+      "logo": `${BASE_URL}/favicon.png`
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": `Prezzi ${options.name}`,
+      "itemListElement": [{
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": options.name
+        },
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "priceCurrency": options.priceCurrency || "EUR",
+          "price": options.priceRange
+        }
+      }]
+    }
+  };
+}
+
 // Generate complete JSON-LD objects (array format = best compatibility with Google)
 export function generateJsonLd(
   serviceOptions: LocalBusinessOptions,

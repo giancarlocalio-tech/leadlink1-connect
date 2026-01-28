@@ -6,6 +6,13 @@
  * 
  * Only for 5 major cities: Milano, Roma, Napoli, Torino, Bologna
  * 5-8 neighborhoods per city
+ * 
+ * Sections:
+ * 1) Introduzione locale (characteristics)
+ * 2) Problemi frequenti a {Zona}
+ * 3) Tempi di intervento a {Zona}
+ * 4) Quanto può costare (link to pricing)
+ * 5) CTA: Trova un idraulico a {Città}
  */
 
 import { useState } from 'react';
@@ -20,7 +27,10 @@ import {
   Building2,
   AlertTriangle,
   CheckCircle,
-  Phone
+  Phone,
+  Euro,
+  Timer,
+  BookOpen
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/Layout';
@@ -40,23 +50,25 @@ export default function NeighborhoodLandingPage({ neighborhoodData }: Neighborho
     citySlug, 
     cityName, 
     province, 
-    region,
     neighborhoodSlug,
     neighborhoodName,
     description,
     characteristics,
-    commonProblems
+    commonProblems,
+    interventionTimes,
+    relatedGuideSlug,
+    relatedPricingSlug
   } = neighborhoodData;
 
-  const pageTitle = `Idraulico ${neighborhoodName} ${cityName} - Pronto Intervento | Preventivi Gratuiti`;
-  const pageDescription = `Cerchi un idraulico a ${neighborhoodName}, ${cityName}? ✓ Professionisti verificati ✓ Risposta in 15 min ✓ Interventi urgenti. Specializzati nella zona ${neighborhoodName}.`;
+  const pageTitle = `Idraulico ${neighborhoodName} ${cityName} – Pronto Intervento`;
+  const pageDescription = `Cerchi un idraulico a ${neighborhoodName}, ${cityName}? ✓ Professionisti verificati ✓ Risposta in ${interventionTimes.urgent} ✓ Interventi urgenti. Specializzati nella zona ${neighborhoodName}.`;
   const canonicalUrl = `${BASE_URL}/${citySlug}-${neighborhoodSlug}-idraulico`;
 
   // Get other neighborhoods in the same city
   const otherNeighborhoods = getNeighborhoodPagesForCity(citySlug)
     .filter(n => n.neighborhoodSlug !== neighborhoodSlug);
 
-  // JSON-LD Structured Data
+  // JSON-LD Structured Data with areaServed
   const jsonLd = [
     {
       "@context": "https://schema.org",
@@ -64,14 +76,20 @@ export default function NeighborhoodLandingPage({ neighborhoodData }: Neighborho
       "name": `Idraulico ${neighborhoodName} ${cityName}`,
       "description": description,
       "url": canonicalUrl,
-      "areaServed": {
-        "@type": "Place",
-        "name": `${neighborhoodName}, ${cityName}`,
-        "containedInPlace": {
+      "areaServed": [
+        {
+          "@type": "Place",
+          "name": neighborhoodName,
+          "containedInPlace": {
+            "@type": "City",
+            "name": cityName
+          }
+        },
+        {
           "@type": "City",
           "name": cityName
         }
-      },
+      ],
       "provider": {
         "@type": "Organization",
         "name": "Idraulici Subito",
@@ -84,7 +102,7 @@ export default function NeighborhoodLandingPage({ neighborhoodData }: Neighborho
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Home", "item": BASE_URL },
         { "@type": "ListItem", "position": 2, "name": `Idraulico ${cityName}`, "item": `${BASE_URL}/${citySlug}` },
-        { "@type": "ListItem", "position": 3, "name": `${neighborhoodName}`, "item": canonicalUrl }
+        { "@type": "ListItem", "position": 3, "name": `Idraulico ${neighborhoodName}`, "item": canonicalUrl }
       ]
     }
   ];
@@ -161,8 +179,8 @@ export default function NeighborhoodLandingPage({ neighborhoodData }: Neighborho
           </div>
           
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight drop-shadow-lg">
-            Idraulico a {neighborhoodName}<br />
-            <span className="text-primary-foreground/90">{cityName}</span>
+            Idraulico {neighborhoodName} {cityName}:<br />
+            <span className="text-primary-foreground/90">Interventi Rapidi</span>
           </h1>
           
           <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
@@ -186,7 +204,7 @@ export default function NeighborhoodLandingPage({ neighborhoodData }: Neighborho
             </div>
             <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
               <Clock className="h-4 w-4 text-white" />
-              <span className="text-white text-sm font-medium">Risposta in 15 min</span>
+              <span className="text-white text-sm font-medium">Urgenze: {interventionTimes.urgent}</span>
             </div>
             <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
               <Star className="h-4 w-4 text-white fill-white" />
@@ -196,7 +214,7 @@ export default function NeighborhoodLandingPage({ neighborhoodData }: Neighborho
         </div>
       </section>
 
-      {/* Neighborhood Characteristics */}
+      {/* Section 1: Introduzione Locale - Characteristics */}
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
@@ -204,12 +222,12 @@ export default function NeighborhoodLandingPage({ neighborhoodData }: Neighborho
               <div className="bg-primary/10 p-3 rounded-full">
                 <Building2 className="h-6 w-6 text-primary" />
               </div>
-              <h2 className="text-2xl font-bold">Caratteristiche di {neighborhoodName}</h2>
+              <h2 className="text-2xl font-bold">Il Quartiere {neighborhoodName}</h2>
             </div>
             
             <p className="text-muted-foreground mb-8">
-              Il quartiere {neighborhoodName} di {cityName} presenta caratteristiche specifiche 
-              che i nostri idraulici conoscono perfettamente:
+              {neighborhoodName} è una zona con caratteristiche specifiche che i nostri idraulici 
+              conoscono perfettamente. Ecco cosa rende unico questo quartiere di {cityName}:
             </p>
             
             <ul className="grid md:grid-cols-2 gap-4">
@@ -227,19 +245,20 @@ export default function NeighborhoodLandingPage({ neighborhoodData }: Neighborho
         </div>
       </section>
 
-      {/* Common Problems */}
+      {/* Section 2: Problemi Frequenti */}
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="flex items-center gap-3 mb-6">
-              <div className="bg-amber-500/10 p-3 rounded-full">
-                <AlertTriangle className="h-6 w-6 text-amber-500" />
+              <div className="bg-destructive/10 p-3 rounded-full">
+                <AlertTriangle className="h-6 w-6 text-destructive" />
               </div>
-              <h2 className="text-2xl font-bold">Problemi Comuni a {neighborhoodName}</h2>
+              <h2 className="text-2xl font-bold">Problemi Idraulici Frequenti a {neighborhoodName}</h2>
             </div>
             
             <p className="text-muted-foreground mb-8">
-              Ecco i problemi idraulici che risolviamo più frequentemente nella zona {neighborhoodName}:
+              Ecco i problemi idraulici che i nostri professionisti risolvono più frequentemente 
+              nella zona {neighborhoodName}:
             </p>
             
             <div className="space-y-3">
@@ -256,14 +275,111 @@ export default function NeighborhoodLandingPage({ neighborhoodData }: Neighborho
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* Section 3: Tempi di Intervento */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="bg-blue-500/10 p-3 rounded-full">
+                <Timer className="h-6 w-6 text-blue-600" />
+              </div>
+              <h2 className="text-2xl font-bold">Tempi di Intervento a {neighborhoodName}</h2>
+            </div>
+            
+            <p className="text-muted-foreground mb-8">
+              Quanto tempo serve per raggiungere {neighborhoodName}? Ecco i tempi medi dei nostri idraulici:
+            </p>
+            
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              <div className="bg-card border border-border rounded-xl p-6 text-center">
+                <div className="text-3xl font-bold text-primary mb-2">
+                  {interventionTimes.standard}
+                </div>
+                <div className="text-muted-foreground font-medium">
+                  Intervento Standard
+                </div>
+                <p className="text-sm text-muted-foreground mt-2">
+                  In orario lavorativo normale
+                </p>
+              </div>
+              
+              <div className="bg-primary/5 border border-primary/20 rounded-xl p-6 text-center">
+                <div className="text-3xl font-bold text-primary mb-2">
+                  {interventionTimes.urgent}
+                </div>
+                <div className="text-foreground font-medium">
+                  Pronto Intervento
+                </div>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Per emergenze urgenti
+                </p>
+              </div>
+            </div>
+            
+            {/* Factors */}
+            <div className="bg-muted/50 rounded-lg p-4">
+              <p className="text-sm font-medium mb-2">Fattori che influenzano i tempi:</p>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                {interventionTimes.factors.map((factor, index) => (
+                  <li key={index} className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-primary rounded-full" />
+                    {factor}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 4: Quanto Può Costare */}
+      <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="bg-green-500/10 p-3 rounded-full">
+                <Euro className="h-6 w-6 text-green-600" />
+              </div>
+              <h2 className="text-2xl font-bold">Quanto Costa un Intervento a {neighborhoodName}</h2>
+            </div>
+            
+            <p className="text-muted-foreground mb-6">
+              I costi degli interventi idraulici a {neighborhoodName} sono in linea con quelli di {cityName}. 
+              Le tariffe possono variare in base alla complessità del lavoro e all'urgenza.
+            </p>
+            
+            <div className="bg-card border border-border rounded-xl p-6">
+              <p className="mb-4">
+                Per un preventivo personalizzato gratuito, richiedi un intervento e confronta 
+                le offerte dei professionisti della zona.
+              </p>
+              
+              <div className="flex flex-wrap gap-3">
+                <Link to={`/${relatedPricingSlug}`}>
+                  <Button variant="outline">
+                    <Euro className="h-4 w-4 mr-2" />
+                    Vedi Listino Prezzi
+                  </Button>
+                </Link>
+                <Button onClick={() => setShowWizard(true)}>
+                  Richiedi Preventivo Gratuito
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 5: CTA */}
       <section className="py-12 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-2xl font-bold mb-4">
-            Hai bisogno di un idraulico a {neighborhoodName}?
+            Trova un Idraulico a {cityName}
           </h2>
           <p className="text-primary-foreground/90 mb-6 max-w-xl mx-auto">
-            I nostri professionisti conoscono bene la zona {neighborhoodName} e possono intervenire rapidamente.
+            I nostri professionisti conoscono bene la zona {neighborhoodName} e possono intervenire rapidamente. 
+            Confronta preventivi gratuiti e scegli in totale libertà.
           </p>
           <Button 
             onClick={() => setShowWizard(true)}
@@ -310,7 +426,7 @@ export default function NeighborhoodLandingPage({ neighborhoodData }: Neighborho
         </section>
       )}
 
-      {/* Internal Links */}
+      {/* Internal Links (Guide + Pricing + City) */}
       <section className="py-12 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
@@ -324,17 +440,17 @@ export default function NeighborhoodLandingPage({ neighborhoodData }: Neighborho
                 <span className="font-medium">Idraulico {cityName}</span>
               </Link>
               <Link
-                to="/guide/perdita-acqua-cosa-fare"
+                to={`/guide/${relatedGuideSlug}`}
                 className="bg-card border border-border rounded-lg p-4 hover:border-primary transition-colors text-center"
               >
-                <AlertTriangle className="h-6 w-6 text-amber-500 mx-auto mb-2" />
-                <span className="font-medium">Guida Perdite Acqua</span>
+                <BookOpen className="h-6 w-6 text-primary mx-auto mb-2" />
+                <span className="font-medium">Guida Problemi</span>
               </Link>
               <Link
-                to="/prezzi-idraulico"
+                to={`/${relatedPricingSlug}`}
                 className="bg-card border border-border rounded-lg p-4 hover:border-primary transition-colors text-center"
               >
-                <span className="text-2xl mb-2 block">💰</span>
+                <Euro className="h-6 w-6 text-green-600 mx-auto mb-2" />
                 <span className="font-medium">Prezzi Idraulico</span>
               </Link>
             </div>

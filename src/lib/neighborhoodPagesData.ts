@@ -18,6 +18,13 @@ export interface NeighborhoodData {
   description: string;
   characteristics: string[];
   commonProblems: string[];
+  interventionTimes: {
+    standard: string;
+    urgent: string;
+    factors: string[];
+  };
+  relatedGuideSlug: string;
+  relatedPricingSlug: string;
 }
 
 // Neighborhood pages for major cities
@@ -42,7 +49,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Perdite in impianti centenari',
       'Scarichi intasati in colonne fognarie verticali',
       'Pressione idrica variabile ai piani alti'
-    ]
+    ],
+    interventionTimes: {
+      standard: '20-40 minuti',
+      urgent: '15-25 minuti',
+      factors: ['Traffico intenso in Area C', 'ZTL con accesso limitato', 'Parcheggio difficoltoso']
+    },
+    relatedGuideSlug: 'perdite-acqua',
+    relatedPricingSlug: 'costi-idraulico'
   },
   {
     citySlug: 'milano',
@@ -63,7 +77,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Infiltrazioni nelle cantine',
       'Problemi fognari legati ai canali',
       'Impianti di locali commerciali sovraccaricati'
-    ]
+    ],
+    interventionTimes: {
+      standard: '25-45 minuti',
+      urgent: '15-30 minuti',
+      factors: ['Vie strette lungo i canali', 'Accesso limitato in orari serali', 'Parcheggio quasi impossibile']
+    },
+    relatedGuideSlug: 'scarichi-intasati',
+    relatedPricingSlug: 'costo-spurgo-fogne'
   },
   {
     citySlug: 'milano',
@@ -84,7 +105,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Pressione idrica insufficiente',
       'Scarichi condominiali intasati',
       'Perdite nelle giunzioni tra vecchio e nuovo'
-    ]
+    ],
+    interventionTimes: {
+      standard: '20-35 minuti',
+      urgent: '15-25 minuti',
+      factors: ['Buona accessibilità stradale', 'Vicinanza al centro', 'Parcheggio mediamente disponibile']
+    },
+    relatedGuideSlug: 'caldaia-e-riscaldamento',
+    relatedPricingSlug: 'costo-manutenzione-caldaia'
   },
   {
     citySlug: 'milano',
@@ -105,7 +133,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Problemi di pressione ai piani alti dei grattacieli',
       'Adeguamento impianti in ristrutturazioni',
       'Scarichi sovradimensionati per nuovi usi'
-    ]
+    ],
+    interventionTimes: {
+      standard: '20-40 minuti',
+      urgent: '15-25 minuti',
+      factors: ['Zona pedonale limitata', 'Accesso ai grattacieli con portineria', 'Traffico moderato']
+    },
+    relatedGuideSlug: 'perdite-acqua',
+    relatedPricingSlug: 'costo-riparazione-perdita-acqua'
   },
   {
     citySlug: 'milano',
@@ -126,7 +161,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Caldaie trascurate che si guastano',
       'Rubinetti e sanitari usurati',
       'Perdite non segnalate tempestivamente'
-    ]
+    ],
+    interventionTimes: {
+      standard: '20-35 minuti',
+      urgent: '15-25 minuti',
+      factors: ['Buona accessibilità', 'Parcheggio disponibile', 'Zona universitaria trafficata in orari di lezione']
+    },
+    relatedGuideSlug: 'problemi-sanitari',
+    relatedPricingSlug: 'costo-sostituzione-sanitari'
   },
 
   // ROMA
@@ -149,7 +191,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Fognature storiche sottodimensionate',
       'Perdite in murature antiche',
       'Scarichi intasati da calcare secolare'
-    ]
+    ],
+    interventionTimes: {
+      standard: '30-50 minuti',
+      urgent: '20-35 minuti',
+      factors: ['Vicoli inaccessibili ai mezzi', 'ZTL permanente', 'Parcheggio impossibile nel quartiere']
+    },
+    relatedGuideSlug: 'perdite-acqua',
+    relatedPricingSlug: 'costo-riparazione-perdita-acqua'
   },
   {
     citySlug: 'roma',
@@ -170,7 +219,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Tubazioni in ferro corrose',
       'Problemi di distribuzione calore',
       'Impianti sovradimensionati da efficientare'
-    ]
+    ],
+    interventionTimes: {
+      standard: '20-35 minuti',
+      urgent: '15-25 minuti',
+      factors: ['Strade larghe e accessibili', 'Parcheggio disponibile', 'Zona periferica meno trafficata']
+    },
+    relatedGuideSlug: 'caldaia-e-riscaldamento',
+    relatedPricingSlug: 'costo-manutenzione-caldaia'
   },
   {
     citySlug: 'roma',
@@ -191,7 +247,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Caldaie a terra ingombranti',
       'Pressione idrica ai piani alti',
       'Integrazione impianti moderni in contesti storici'
-    ]
+    ],
+    interventionTimes: {
+      standard: '25-40 minuti',
+      urgent: '15-30 minuti',
+      factors: ['Vicinanza Vaticano con traffico turistico', 'Parcheggio difficile', 'Portinerie per accesso']
+    },
+    relatedGuideSlug: 'perdite-acqua',
+    relatedPricingSlug: 'costi-idraulico'
   },
   {
     citySlug: 'roma',
@@ -212,7 +275,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Scarichi condominiali intasati',
       'Caldaie autonome da manutenere',
       'Perdite nelle colonne montanti'
-    ]
+    ],
+    interventionTimes: {
+      standard: '20-35 minuti',
+      urgent: '15-25 minuti',
+      factors: ['Metro A nelle vicinanze', 'Traffico moderato', 'Parcheggio mediamente disponibile']
+    },
+    relatedGuideSlug: 'scarichi-intasati',
+    relatedPricingSlug: 'costo-spurgo-fogne'
   },
   {
     citySlug: 'roma',
@@ -233,7 +303,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Autoclave sovraccariche',
       'Perdite da sbalzi di pressione',
       'Impianti esterni esposti'
-    ]
+    ],
+    interventionTimes: {
+      standard: '25-40 minuti',
+      urgent: '20-30 minuti',
+      factors: ['Strade in salita', 'Zona residenziale tranquilla', 'Parcheggio disponibile']
+    },
+    relatedGuideSlug: 'perdite-acqua',
+    relatedPricingSlug: 'costi-idraulico'
   },
 
   // NAPOLI
@@ -256,7 +333,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Umidità di risalita pervasiva',
       'Fognature storiche intasate',
       'Pressione idrica molto bassa'
-    ]
+    ],
+    interventionTimes: {
+      standard: '35-55 minuti',
+      urgent: '25-40 minuti',
+      factors: ['Vicoli inaccessibili', 'ZTL rigida', 'Trasporto attrezzature a piedi']
+    },
+    relatedGuideSlug: 'scarichi-intasati',
+    relatedPricingSlug: 'costo-spurgo-fogne'
   },
   {
     citySlug: 'napoli',
@@ -277,7 +361,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Autoclave sempre in funzione',
       'Impianti datati nei vecchi palazzi',
       'Caldaie sotto stress d\'inverno'
-    ]
+    ],
+    interventionTimes: {
+      standard: '25-40 minuti',
+      urgent: '20-30 minuti',
+      factors: ['Strade in salita', 'Parcheggio difficile ma possibile', 'Funicolari come alternativa']
+    },
+    relatedGuideSlug: 'caldaia-e-riscaldamento',
+    relatedPricingSlug: 'costo-manutenzione-caldaia'
   },
   {
     citySlug: 'napoli',
@@ -298,7 +389,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Tubature esterne ossidate',
       'Impianti di pregio da preservare',
       'Scarichi intasati da calcare'
-    ]
+    ],
+    interventionTimes: {
+      standard: '20-35 minuti',
+      urgent: '15-25 minuti',
+      factors: ['Lungomare trafficato', 'ZTL in alcune ore', 'Parcheggio a pagamento disponibile']
+    },
+    relatedGuideSlug: 'perdite-acqua',
+    relatedPricingSlug: 'costo-riparazione-perdita-acqua'
   },
   {
     citySlug: 'napoli',
@@ -319,7 +417,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Colonne fognarie intasate',
       'Caldaie centralizzate obsolete',
       'Perdite nelle tubature in ferro'
-    ]
+    ],
+    interventionTimes: {
+      standard: '15-30 minuti',
+      urgent: '10-20 minuti',
+      factors: ['Zona ben collegata', 'Strade larghe', 'Parcheggio disponibile']
+    },
+    relatedGuideSlug: 'caldaia-e-riscaldamento',
+    relatedPricingSlug: 'costo-manutenzione-caldaia'
   },
   {
     citySlug: 'napoli',
@@ -340,7 +445,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Corrosione accelerata da salsedine',
       'Impianti esterni danneggiati',
       'Autoclave frequentemente guaste'
-    ]
+    ],
+    interventionTimes: {
+      standard: '30-45 minuti',
+      urgent: '20-35 minuti',
+      factors: ['Strade tortuose in salita', 'Traffico limitato', 'Accesso alle ville con cancelli']
+    },
+    relatedGuideSlug: 'emergenze-idrauliche',
+    relatedPricingSlug: 'costo-pronto-intervento-idraulico'
   },
 
   // TORINO
@@ -363,7 +475,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Tubature in ferro corrose',
       'Caldaie a terra ingombranti',
       'Interventi soggetti a vincoli'
-    ]
+    ],
+    interventionTimes: {
+      standard: '20-35 minuti',
+      urgent: '15-25 minuti',
+      factors: ['ZTL centrale', 'Portici per accesso pedonale', 'Parcheggio limitato']
+    },
+    relatedGuideSlug: 'caldaia-e-riscaldamento',
+    relatedPricingSlug: 'costo-manutenzione-caldaia'
   },
   {
     citySlug: 'torino',
@@ -384,7 +503,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Scarichi sovraccaricati',
       'Caldaie guaste per uso intensivo',
       'Perdite in edifici fatiscenti'
-    ]
+    ],
+    interventionTimes: {
+      standard: '15-30 minuti',
+      urgent: '10-20 minuti',
+      factors: ['Zona centrale ben collegata', 'Parcheggio difficile', 'Vie strette']
+    },
+    relatedGuideSlug: 'scarichi-intasati',
+    relatedPricingSlug: 'costo-spurgo-fogne'
   },
   {
     citySlug: 'torino',
@@ -405,7 +531,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Impianti datati ma di pregio',
       'Caldaie centralizzate da efficientare',
       'Pressione idrica ai piani alti'
-    ]
+    ],
+    interventionTimes: {
+      standard: '15-30 minuti',
+      urgent: '10-20 minuti',
+      factors: ['Zona residenziale tranquilla', 'Buona accessibilità', 'Parcheggio disponibile']
+    },
+    relatedGuideSlug: 'caldaia-e-riscaldamento',
+    relatedPricingSlug: 'costo-manutenzione-caldaia'
   },
   {
     citySlug: 'torino',
@@ -426,7 +559,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Tubature vecchissime',
       'Scarichi sottodimensionati',
       'Perdite croniche'
-    ]
+    ],
+    interventionTimes: {
+      standard: '15-25 minuti',
+      urgent: '10-20 minuti',
+      factors: ['Strade larghe ex industriali', 'Parcheggio facile', 'Zona poco trafficata']
+    },
+    relatedGuideSlug: 'perdite-acqua',
+    relatedPricingSlug: 'costo-riparazione-perdita-acqua'
   },
   {
     citySlug: 'torino',
@@ -447,7 +587,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Integrazione sistemi diversi',
       'Scarichi commerciali sovraccaricati',
       'Manutenzione complessi moderni'
-    ]
+    ],
+    interventionTimes: {
+      standard: '15-30 minuti',
+      urgent: '10-20 minuti',
+      factors: ['Area ben servita', 'Parcheggio abbondante', 'Vicinanza tangenziale']
+    },
+    relatedGuideSlug: 'problemi-sanitari',
+    relatedPricingSlug: 'costo-sostituzione-sanitari'
   },
 
   // BOLOGNA
@@ -470,7 +617,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Tubature antiche da sostituire',
       'Umidità nei piani terra sotto i portici',
       'Scarichi intasati nelle vecchie case'
-    ]
+    ],
+    interventionTimes: {
+      standard: '20-35 minuti',
+      urgent: '15-25 minuti',
+      factors: ['ZTL estesa', 'Portici coperti per accesso pedonale', 'Parcheggio fuori centro']
+    },
+    relatedGuideSlug: 'perdite-acqua',
+    relatedPricingSlug: 'costi-idraulico'
   },
   {
     citySlug: 'bologna',
@@ -491,7 +645,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Caldaie vecchie e inquinanti',
       'Scarichi condominiali intasati',
       'Perdite croniche'
-    ]
+    ],
+    interventionTimes: {
+      standard: '15-30 minuti',
+      urgent: '10-20 minuti',
+      factors: ['Vicinanza stazione centrale', 'Buona accessibilità', 'Parcheggio disponibile']
+    },
+    relatedGuideSlug: 'caldaia-e-riscaldamento',
+    relatedPricingSlug: 'costo-manutenzione-caldaia'
   },
   {
     citySlug: 'bologna',
@@ -512,7 +673,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Caldaie trascurate',
       'Rubinetti e sanitari usurati',
       'Manutenzione differita'
-    ]
+    ],
+    interventionTimes: {
+      standard: '15-30 minuti',
+      urgent: '10-20 minuti',
+      factors: ['Zona universitaria', 'Buona accessibilità', 'Parcheggio mediamente disponibile']
+    },
+    relatedGuideSlug: 'problemi-sanitari',
+    relatedPricingSlug: 'costo-sostituzione-sanitari'
   },
   {
     citySlug: 'bologna',
@@ -533,7 +701,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Autoclave sovraccariche',
       'Impianti esterni esposti al gelo',
       'Caldaie sotto stress d\'inverno'
-    ]
+    ],
+    interventionTimes: {
+      standard: '20-35 minuti',
+      urgent: '15-25 minuti',
+      factors: ['Strade in salita verso i colli', 'Traffico limitato', 'Parcheggio disponibile']
+    },
+    relatedGuideSlug: 'caldaia-e-riscaldamento',
+    relatedPricingSlug: 'costo-manutenzione-caldaia'
   },
   {
     citySlug: 'bologna',
@@ -554,7 +729,14 @@ export const NEIGHBORHOOD_PAGES: NeighborhoodData[] = [
       'Impianti di pregio da preservare',
       'Tubature antiche',
       'Standard qualitativi elevati richiesti'
-    ]
+    ],
+    interventionTimes: {
+      standard: '20-35 minuti',
+      urgent: '15-25 minuti',
+      factors: ['ZTL con permessi', 'Vicinanza centro storico', 'Parcheggio limitato']
+    },
+    relatedGuideSlug: 'perdite-acqua',
+    relatedPricingSlug: 'costi-idraulico'
   }
 ];
 

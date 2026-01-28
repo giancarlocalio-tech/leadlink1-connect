@@ -31,6 +31,7 @@ import BlogArticlePage from "./pages/BlogArticlePage";
 import BlogCategoryPage from "./pages/BlogCategoryPage";
 import GuideIndexPage from "./pages/GuideIndexPage";
 import GuidePage from "./pages/GuidePage";
+import GuideHubPage from "./pages/GuideHubPage";
 import ApprofondimentoPage from "./pages/ApprofondimentoPage";
 import ApprofondimentiIndexPage from "./pages/ApprofondimentiIndexPage";
 import StatisticsPage from "./pages/StatisticsPage";
@@ -582,6 +583,14 @@ const App = () => (
             <Route path="/guide" element={<GuideIndexPage />} />
             <Route path="/guide/approfondimenti" element={<ApprofondimentiIndexPage />} />
             <Route path="/guide/approfondimenti/:slug" element={<ApprofondimentoPage />} />
+            {/* Hub/Pillar Pages - FASE 10 Topical Authority - Must come before :slug */}
+            <Route path="/guide/perdite-acqua" element={<GuideHubPage />} />
+            <Route path="/guide/scarichi-intasati" element={<GuideHubPage />} />
+            <Route path="/guide/caldaia-e-riscaldamento" element={<GuideHubPage />} />
+            <Route path="/guide/problemi-sanitari" element={<GuideHubPage />} />
+            <Route path="/guide/emergenze-idrauliche" element={<GuideHubPage />} />
+            
+            {/* Individual Guide Pages */}
             <Route path="/guide/:slug" element={<GuidePage />} />
             
             {/* Linkbait Content Pages */}

@@ -59,10 +59,47 @@ export default function GuideIndexPage() {
         </div>
       </section>
 
+      {/* Hub Pages Section */}
+      <section className="py-12 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl font-bold mb-4 text-center">Guide Complete per Argomento</h2>
+          <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
+            Le nostre guide pilastro approfondiscono ogni macro-argomento con tutto quello che devi sapere.
+          </p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {[
+              { slug: 'perdite-acqua', name: 'Perdite d\'Acqua', desc: 'Tutto su perdite, infiltrazioni e come gestirle', Icon: Droplets },
+              { slug: 'scarichi-intasati', name: 'Scarichi Intasati', desc: 'WC, lavandino, doccia: cause e soluzioni', Icon: Trash2 },
+              { slug: 'caldaia-e-riscaldamento', name: 'Caldaia e Riscaldamento', desc: 'Blocchi, manutenzione, termosifoni', Icon: Flame },
+              { slug: 'problemi-sanitari', name: 'Problemi Sanitari', desc: 'WC, rubinetti, docce e lavabi', Icon: ShowerHead },
+              { slug: 'emergenze-idrauliche', name: 'Emergenze Idrauliche', desc: 'Cosa fare in situazioni urgenti', Icon: AlertTriangle },
+            ].map(({ slug, name, desc, Icon }) => (
+              <Link key={slug} to={`/guide/${slug}`}>
+                <Card className="h-full hover:shadow-lg transition-all hover:border-primary/30">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="bg-primary/10 p-3 rounded-full">
+                        <Icon className="h-6 w-6 text-primary" />
+                      </div>
+                      <h3 className="font-bold text-lg">{name}</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-4">{desc}</p>
+                    <span className="text-primary font-medium flex items-center gap-1 text-sm">
+                      Leggi la guida completa
+                      <ArrowRight className="h-4 w-4" />
+                    </span>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Categories */}
       <section className="py-12">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-8 text-center">Categorie Guide</h2>
+          <h2 className="text-2xl font-bold mb-8 text-center">Guide per Categoria</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-4xl mx-auto">
             {GUIDE_CATEGORIES.map((cat) => {
               const Icon = CATEGORY_ICONS[cat.slug] || Wrench;

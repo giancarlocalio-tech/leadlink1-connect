@@ -38,6 +38,9 @@ import StatisticsPage from "./pages/StatisticsPage";
 import ChecklistPage from "./pages/ChecklistPage";
 import ServiceNationalPage from "./pages/ServiceNationalPage";
 import PricingPage from "./pages/PricingPage";
+import ChiSiamoPage from "./pages/ChiSiamoPage";
+import ComeFunzionaPage from "./pages/ComeFunzionaPage";
+import ContattiPage from "./pages/ContattiPage";
 import NotFound from "./pages/NotFound";
 import IdraulicoRedirect from "./components/IdraulicoRedirect";
 import ServiziRedirect from "./components/ServiziRedirect";
@@ -65,6 +68,9 @@ const App = () => (
             <Route path="/dashboard/profilo" element={<ProfilePage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/termini" element={<TermsPage />} />
+            <Route path="/chi-siamo" element={<ChiSiamoPage />} />
+            <Route path="/come-funziona" element={<ComeFunzionaPage />} />
+            <Route path="/contatti" element={<ContattiPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/per-idraulici" element={<PlumberLandingPage />} />
             <Route path="/registrazione/piano" element={<PlumberPlanSelectionPage />} />

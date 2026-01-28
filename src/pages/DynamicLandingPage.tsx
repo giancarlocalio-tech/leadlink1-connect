@@ -818,26 +818,57 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
         />
       )}
 
-      {/* Neighborhood Pages Links - Only for major cities with neighborhood pages */}
+      {/* Neighborhood Pages Links - H2 Section for major cities with neighborhood pages */}
       {neighborhoodPages.length > 0 && !serviceData && (
-        <section className="py-12 bg-muted/30">
+        <section className="py-16 bg-primary/5">
           <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold text-center mb-6">
-              Idraulici per Quartiere a {cityData.name}
-            </h2>
-            <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
-              Cerchi un idraulico specializzato nel tuo quartiere? Scopri i professionisti disponibili nelle diverse zone di {cityData.name}.
-            </p>
-            <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
-              {neighborhoodPages.map((n) => (
-                <Link
-                  key={`${n.citySlug}-${n.neighborhoodSlug}`}
-                  to={`/${n.citySlug}-${n.neighborhoodSlug}-idraulico`}
-                  className="bg-card hover:bg-primary/10 border border-border text-foreground hover:text-primary px-4 py-2 rounded-full text-sm transition-colors"
+            <div className="max-w-4xl mx-auto">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="bg-primary/10 p-3 rounded-full">
+                  <MapPin className="h-6 w-6 text-primary" />
+                </div>
+                <h2 className="text-2xl md:text-3xl font-bold">
+                  Idraulici per Zone e Quartieri
+                </h2>
+              </div>
+              
+              <p className="text-muted-foreground mb-8">
+                I nostri idraulici operano in tutti i quartieri di {cityData.name}. 
+                Scegli la tua zona per trovare professionisti specializzati nella tua area:
+              </p>
+              
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {neighborhoodPages.map((n) => (
+                  <Link
+                    key={`${n.citySlug}-${n.neighborhoodSlug}`}
+                    to={`/${n.citySlug}-${n.neighborhoodSlug}-idraulico`}
+                    className="group bg-card border border-border rounded-xl p-4 hover:border-primary/50 hover:shadow-md transition-all"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                          Idraulico {n.neighborhoodName}
+                        </h3>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Interventi rapidi in zona
+                        </p>
+                      </div>
+                      <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+              
+              {/* Link to core service */}
+              <div className="mt-8 text-center">
+                <Link 
+                  to={`/${cityData.slug}-pronto-intervento`}
+                  className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium"
                 >
-                  Idraulico {n.neighborhoodName}
+                  Pronto Intervento {cityData.name}
+                  <ArrowRight className="h-4 w-4" />
                 </Link>
-              ))}
+              </div>
             </div>
           </div>
         </section>

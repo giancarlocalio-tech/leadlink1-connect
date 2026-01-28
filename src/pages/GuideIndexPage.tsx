@@ -219,6 +219,38 @@ export default function GuideIndexPage() {
         </div>
       </section>
 
+      {/* Major Cities Links */}
+      <section className="py-12 bg-muted/30 border-t">
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl font-bold mb-4 text-center">Trova un Idraulico nelle Principali Città</h2>
+          <p className="text-muted-foreground text-center mb-8 max-w-xl mx-auto">
+            Servizio disponibile in tutta Italia. Scopri i professionisti nelle città principali.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
+            {[
+              { slug: 'milano', name: 'Milano' },
+              { slug: 'roma', name: 'Roma' },
+              { slug: 'napoli', name: 'Napoli' },
+              { slug: 'torino', name: 'Torino' },
+              { slug: 'bologna', name: 'Bologna' },
+              { slug: 'firenze', name: 'Firenze' },
+              { slug: 'genova', name: 'Genova' },
+              { slug: 'palermo', name: 'Palermo' },
+              { slug: 'bari', name: 'Bari' },
+              { slug: 'catania', name: 'Catania' },
+            ].map(city => (
+              <Link
+                key={city.slug}
+                to={`/${city.slug}`}
+                className="bg-card hover:bg-primary/10 border border-border text-foreground hover:text-primary px-4 py-2 rounded-full text-sm transition-colors"
+              >
+                Idraulico {city.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-16 bg-primary/5">
         <div className="container mx-auto px-4 text-center">

@@ -12,6 +12,7 @@
 
 import { CITIES, KEYWORD_PAGES } from './seoData';
 import { TOP_50_CITIES, CORE_SERVICES, CORE_KEYWORD_PAGES, getIndexablePageCounts } from './seoConfig';
+import { NEIGHBORHOOD_PAGES } from './neighborhoodPagesData';
 
 const BASE_URL = 'https://www.idraulicisubito.com';
 const TODAY = new Date().toISOString().split('T')[0];
@@ -122,6 +123,20 @@ export function generateCityServiceSitemaps(): string[] {
 }
 
 /**
+ * Generate neighborhood pages sitemap (25 URLs)
+ */
+export function generateNeighborhoodsSitemap(): string {
+  const neighborhoodUrls: SitemapUrl[] = NEIGHBORHOOD_PAGES.map(n => ({
+    loc: `${BASE_URL}/${n.citySlug}-${n.neighborhoodSlug}-idraulico`,
+    lastmod: TODAY,
+    changefreq: 'weekly' as const,
+    priority: 0.85,
+  }));
+  
+  return generateSitemapXml(neighborhoodUrls);
+}
+
+/**
  * Generate sitemap index
  */
 export function generateSitemapIndex(cityServiceSitemapCount: number): string {
@@ -129,6 +144,7 @@ export function generateSitemapIndex(cityServiceSitemapCount: number): string {
     'sitemap-static.xml',
     'sitemap-keywords.xml',
     'sitemap-cities.xml',
+    'sitemap-neighborhoods.xml', // Added neighborhoods sitemap
   ];
   
   // Add city-service sitemaps
@@ -156,6 +172,7 @@ export function getAllIndexableUrls(): {
   keywords: string[];
   cities: string[];
   cityServices: string[];
+  neighborhoods: string[];
   total: number;
 } {
   const staticUrls = [
@@ -186,12 +203,18 @@ export function getAllIndexableUrls(): {
     }
   }
   
+  // Neighborhood pages (25 URLs)
+  const neighborhoodUrls = NEIGHBORHOOD_PAGES.map(n => 
+    `${BASE_URL}/${n.citySlug}-${n.neighborhoodSlug}-idraulico`
+  );
+  
   return {
     static: staticUrls,
     keywords: keywordUrls,
     cities: cityUrls,
     cityServices: cityServiceUrls,
-    total: staticUrls.length + keywordUrls.length + cityUrls.length + cityServiceUrls.length,
+    neighborhoods: neighborhoodUrls,
+    total: staticUrls.length + keywordUrls.length + cityUrls.length + cityServiceUrls.length + neighborhoodUrls.length,
   };
 }
 
@@ -206,8 +229,9 @@ export function getSitemapStats() {
     totalServices: CORE_SERVICES.length,
     totalKeywordPages: CORE_KEYWORD_PAGES.length,
     totalCityServicePages: TOP_50_CITIES.length * CORE_SERVICES.length,
-    totalSitemapFiles: 4, // static, keywords, cities, city-services
-    totalIndexablePages: counts.total,
+    totalNeighborhoodPages: NEIGHBORHOOD_PAGES.length,
+    totalSitemapFiles: 5, // static, keywords, cities, neighborhoods, city-services
+    totalIndexablePages: counts.total + NEIGHBORHOOD_PAGES.length,
     // For comparison
     previousTotalPages: CITIES.length * 15 + KEYWORD_PAGES.length + 5, // Approximate old count
     reductionPercent: Math.round((1 - counts.total / (CITIES.length * 15)) * 100)
@@ -228,6 +252,9 @@ export function generateAllSitemaps(): { filename: string; content: string }[] {
   
   // Top 50 cities sitemap
   files.push({ filename: 'sitemap-cities.xml', content: generateCitiesSitemap() });
+  
+  // Neighborhood pages sitemap (25 URLs)
+  files.push({ filename: 'sitemap-neighborhoods.xml', content: generateNeighborhoodsSitemap() });
   
   // City+Service sitemaps (Top 50 × 5)
   const cityServiceSitemaps = generateCityServiceSitemaps();

@@ -31,6 +31,7 @@ import { HubFAQSection } from '@/components/hub/HubFAQSection';
 import { HubRelatedGuides } from '@/components/hub/HubRelatedGuides';
 import { HubFinalCTA } from '@/components/hub/HubFinalCTA';
 import { HubOtherTopics } from '@/components/hub/HubOtherTopics';
+import { GuideAuthorBox } from '@/components/guide/GuideAuthorBox';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
@@ -117,8 +118,8 @@ export default function GuideHubPage() {
     dateModified: hub.updatedAt,
     author: {
       '@type': 'Organization',
-      name: 'Idraulici Subito',
-      url: 'https://www.idraulicisubito.com'
+      name: 'Redazione IdrauliciSubito',
+      url: 'https://www.idraulicisubito.com/chi-siamo'
     },
     publisher: {
       '@type': 'Organization',

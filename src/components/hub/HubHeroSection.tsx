@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { HubPage } from '@/lib/hubPagesData';
+import { GuideAuthorBox } from '@/components/guide/GuideAuthorBox';
 
 interface HubHeroSectionProps {
   hub: HubPage;
@@ -30,9 +31,12 @@ export function HubHeroSection({ hub, CategoryIcon }: HubHeroSectionProps) {
             {hub.h1}
           </h1>
 
-          <p className="text-lg md:text-xl text-muted-foreground mb-8">
+          <p className="text-lg md:text-xl text-muted-foreground mb-6">
             {hub.intro}
           </p>
+
+          {/* EEAT Author Box */}
+          <GuideAuthorBox updatedAt={hub.updatedAt} className="mb-8" />
 
           <div className="flex flex-wrap gap-4">
             <Link to="/richiesta">

@@ -17,6 +17,7 @@ import { GuideSection } from '@/components/guide/GuideSection';
 import { GuideCostsSection } from '@/components/guide/GuideCostsSection';
 import { GuideCityLinks } from '@/components/guide/GuideCityLinks';
 import { GuideRelatedContent } from '@/components/guide/GuideRelatedContent';
+import { GuideAuthorBox } from '@/components/guide/GuideAuthorBox';
 
 export default function GuidePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -56,8 +57,8 @@ export default function GuidePage() {
     dateModified: guide.updatedAt,
     author: {
       '@type': 'Organization',
-      name: 'Idraulici Subito',
-      url: 'https://www.idraulicisubito.com'
+      name: 'Redazione IdrauliciSubito',
+      url: 'https://www.idraulicisubito.com/chi-siamo'
     },
     publisher: {
       '@type': 'Organization',
@@ -155,16 +156,15 @@ export default function GuidePage() {
 
             <p className="text-base md:text-lg text-muted-foreground mb-6">{guide.excerpt}</p>
 
-            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-              <span className="flex items-center gap-1">
-                <Calendar className="h-4 w-4" />
-                Aggiornato il {new Date(guide.updatedAt).toLocaleDateString('it-IT')}
-              </span>
+            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-4">
               <span className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />
                 {guide.readingTime} min di lettura
               </span>
             </div>
+            
+            {/* EEAT Author Box */}
+            <GuideAuthorBox updatedAt={guide.updatedAt} />
           </div>
         </div>
       </section>

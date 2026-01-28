@@ -31,7 +31,7 @@ export function Footer() {
             </div>
           </div>
           
-          {/* Quick Links */}
+          {/* Link Utili */}
           <div>
             <h3 className="font-semibold text-foreground mb-4">Link Utili</h3>
             <ul className="space-y-2">
@@ -46,17 +46,17 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link to="/guide" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
+                  Guide e Consigli
+                </Link>
+              </li>
+              <li>
                 <Link to="/per-idraulici" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
                   Per Idraulici
                 </Link>
               </li>
-              <li>
-                <Link to="/auth" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-                  Area Idraulici
-                </Link>
-              </li>
-              {/* Keyword pages for SEO - show first 8 */}
-              {KEYWORD_PAGES.slice(0, 8).map((page) => (
+              {/* Keyword pages for SEO - show first 5 */}
+              {KEYWORD_PAGES.slice(0, 5).map((page) => (
                 <li key={page.slug}>
                   <Link 
                     to={`/${page.slug}`} 
@@ -66,6 +66,38 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+            </ul>
+          </div>
+
+          {/* Chi Siamo - EEAT Links */}
+          <div>
+            <h3 className="font-semibold text-foreground mb-4">Chi Siamo</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link to="/chi-siamo" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
+                  La Nostra Mission
+                </Link>
+              </li>
+              <li>
+                <Link to="/come-funziona" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
+                  Come Funziona
+                </Link>
+              </li>
+              <li>
+                <Link to="/contatti" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
+                  Contatti
+                </Link>
+              </li>
+              <li>
+                <Link to="/privacy" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/termini" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
+                  Termini di Utilizzo
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -89,22 +121,6 @@ export function Footer() {
             </ul>
           </div>
           
-          {/* Legal */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Legale</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/privacy" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link to="/termini" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-                  Termini di Utilizzo
-                </Link>
-              </li>
-            </ul>
-          </div>
         </div>
 
         {/* Cities Section - SEO Internal Linking */}

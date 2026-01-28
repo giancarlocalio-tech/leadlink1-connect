@@ -426,12 +426,12 @@ export default function NeighborhoodLandingPage({ neighborhoodData }: Neighborho
         </section>
       )}
 
-      {/* Internal Links (Guide + Pricing + City) */}
+      {/* Internal Links (City + Guide + Pricing + Core Service) - Minimum 4 links */}
       <section className="py-12 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <h3 className="text-xl font-bold mb-6 text-center">Link Utili</h3>
-            <div className="grid md:grid-cols-3 gap-4">
+            <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
               <Link
                 to={`/${citySlug}`}
                 className="bg-card border border-border rounded-lg p-4 hover:border-primary transition-colors text-center"
@@ -450,8 +450,15 @@ export default function NeighborhoodLandingPage({ neighborhoodData }: Neighborho
                 to={`/${relatedPricingSlug}`}
                 className="bg-card border border-border rounded-lg p-4 hover:border-primary transition-colors text-center"
               >
-                <Euro className="h-6 w-6 text-green-600 mx-auto mb-2" />
+                <Euro className="h-6 w-6 text-primary mx-auto mb-2" />
                 <span className="font-medium">Prezzi Idraulico</span>
+              </Link>
+              <Link
+                to={`/${citySlug}-pronto-intervento`}
+                className="bg-card border border-border rounded-lg p-4 hover:border-primary transition-colors text-center"
+              >
+                <AlertTriangle className="h-6 w-6 text-primary mx-auto mb-2" />
+                <span className="font-medium">Pronto Intervento</span>
               </Link>
             </div>
           </div>

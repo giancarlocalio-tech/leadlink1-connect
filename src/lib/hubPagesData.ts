@@ -10,14 +10,21 @@ export interface HubFAQ {
   answer: string;
 }
 
+export interface TopSearchedProblem {
+  title: string;
+  guideSlug: string; // link to specific guide
+  description?: string;
+}
+
 export interface HubPage {
   slug: string;
   title: string;
   metaTitle: string;
   metaDescription: string;
   h1: string;
-  intro: string;
+  intro: string; // FASE 1: Enhanced SEO intro with synonyms
   categorySlug: string; // Matches GUIDE_CATEGORIES slug
+  aboutTopic: string; // FASE 5: For Article schema "about" field
   content: {
     overview: string;
     commonProblems: string;
@@ -25,6 +32,8 @@ export interface HubPage {
     prevention: string;
     costs: string;
   };
+  topSearchedProblems: TopSearchedProblem[]; // FASE 2: Most searched problems
+  costsSummary: string; // FASE 3: Brief cost summary text
   faqs: HubFAQ[];
   relatedPricingPages: string[]; // slugs
   publishedAt: string;
@@ -39,7 +48,9 @@ export const HUB_PAGES: HubPage[] = [
     metaTitle: 'Perdite d\'Acqua in Casa: Cause, Soluzioni e Costi | Guida Completa',
     metaDescription: 'Tutto quello che devi sapere sulle perdite d\'acqua domestiche: come individuarle, valutare la gravità, intervenire correttamente e quando chiamare un idraulico.',
     h1: 'Perdite d\'Acqua in Casa: Guida Completa',
-    intro: 'Le perdite d\'acqua sono tra i problemi idraulici più comuni e potenzialmente dannosi. Che si tratti di un rubinetto che gocciola o di una tubatura nascosta nel muro, ogni perdita merita attenzione. In questa guida completa trovi tutto ciò che devi sapere per identificare, valutare e gestire qualsiasi tipo di perdita idrica.',
+    // FASE 1: SEO-enhanced intro with synonyms (150+ words)
+    intro: 'Le perdite d\'acqua, infiltrazioni e tubi che perdono rappresentano i problemi idraulici più comuni in case e appartamenti italiani. Che si tratti di un rubinetto che gocciola, una tubatura nascosta nel muro che trasuda, o un\'infiltrazione dal soffitto del bagno, ogni perdita idrica merita attenzione immediata. Le conseguenze di una perdita non trattata vanno dallo spreco in bolletta fino a danni strutturali gravi come umidità, muffa e cedimenti dell\'intonaco. In questa guida completa scoprirai come identificare ogni tipo di perdita — visibile o nascosta — valutare correttamente la gravità della situazione, e capire quando è possibile intervenire da soli e quando invece serve chiamare un idraulico professionista. Ti spieghiamo i segnali d\'allarme da non ignorare, i costi indicativi degli interventi, e le azioni preventive per proteggere il tuo impianto idraulico domestico.',
+    aboutTopic: 'Perdite d\'acqua domestiche e infiltrazioni idriche in abitazioni',
     categorySlug: 'perdite',
     content: {
       overview: `
@@ -207,6 +218,18 @@ export const HUB_PAGES: HubPage[] = [
         answer: 'I professionisti usano strumenti specifici: rilevatori di umidità per mappare l\'estensione, termocamere per individuare tubazioni calde o fredde, geofoni per "ascoltare" il rumore dell\'acqua, e videoispezioni per controllare l\'interno dei tubi. Questi strumenti evitano demolizioni inutili.'
       }
     ],
+    // FASE 2: Most searched problems with links to guides
+    topSearchedProblems: [
+      { title: 'Perdita acqua sotto il lavello', guideSlug: 'perdita-rubinetto', description: 'Flessibili, sifone o raccordi che gocciolano' },
+      { title: 'Tubo che perde dal muro', guideSlug: 'perdita-tubo-muro', description: 'Infiltrazione nascosta da individuare' },
+      { title: 'Perdita acqua dal soffitto', guideSlug: 'infiltrazione-soffitto', description: 'Macchie e gocciolamenti dall\'alto' },
+      { title: 'Rubinetto che gocciola', guideSlug: 'rubinetto-gocciola', description: 'Guarnizioni o cartucce da sostituire' },
+      { title: 'Calorifero che perde', guideSlug: 'termosifone-perde', description: 'Valvole, raccordi o corpo radiatore' },
+      { title: 'WC che perde dalla base', guideSlug: 'wc-perde-base', description: 'Guarnizione di tenuta compromessa' },
+      { title: 'Caldaia che gocciola', guideSlug: 'caldaia-perde-acqua', description: 'Valvola sicurezza o scambiatore' }
+    ],
+    // FASE 3: Cost summary
+    costsSummary: 'Riparare una perdita d\'acqua costa mediamente dai 30€ per una semplice guarnizione fino a 600€ o più per interventi su tubature nel muro. La ricerca perdite con strumentazione professionale costa 100-300€. Gli interventi urgenti hanno maggiorazioni del 30-50%.',
     relatedPricingPages: ['costi-idraulico', 'costo-riparazione-perdita-acqua'],
     publishedAt: '2026-01-28',
     updatedAt: '2026-01-28'
@@ -219,7 +242,9 @@ export const HUB_PAGES: HubPage[] = [
     metaTitle: 'Scarichi Intasati: Come Sturare WC, Lavandino e Doccia | Guida Completa',
     metaDescription: 'Problemi con scarichi intasati? Scopri le cause più comuni, i rimedi immediati, cosa evitare e quando chiamare un professionista per la disostruzione.',
     h1: 'Scarichi Intasati: Guida Completa',
-    intro: 'Uno scarico intasato è uno dei problemi domestici più fastidiosi e frequenti. Che sia il WC, il lavandino della cucina o lo scarico della doccia, un\'ostruzione può trasformarsi rapidamente in un\'emergenza. Questa guida ti spiega tutto ciò che devi sapere per affrontare e prevenire i problemi di scarico.',
+    // FASE 1: SEO-enhanced intro with synonyms
+    intro: 'Gli scarichi intasati, tubi otturati e sifoni bloccati sono tra le emergenze domestiche più frequenti in case e appartamenti. Quando l\'acqua non defluisce dal WC, dal lavandino della cucina o dalla doccia, la situazione può degenerare rapidamente in un allagamento o in risalita di cattivi odori e liquami. Le cause più comuni sono accumuli di capelli, residui di sapone, grassi solidificati e oggetti caduti accidentalmente. In questa guida completa scoprirai come riconoscere il tipo di ostruzione, quali rimedi fai-da-te puoi provare in sicurezza, e quando invece è indispensabile chiamare un idraulico specializzato in disostruzione e spurgo. Ti spieghiamo cosa evitare per non peggiorare la situazione, i costi indicativi degli interventi professionali, e le buone abitudini per prevenire futuri intasamenti nel tuo impianto di scarico.',
+    aboutTopic: 'Scarichi intasati e ostruzioni tubature domestiche',
     categorySlug: 'scarichi',
     content: {
       overview: `
@@ -403,6 +428,17 @@ export const HUB_PAGES: HubPage[] = [
         answer: 'Per problemi occasionali no. Ma per intasamenti ricorrenti, odori persistenti, o prima di acquistare una casa, la videoispezione è fondamentale: mostra lo stato reale delle tubature, individua crepe, radici, accumuli, e permette interventi mirati evitando costi inutili.'
       }
     ],
+    // FASE 2: Most searched problems
+    topSearchedProblems: [
+      { title: 'WC intasato che non scarica', guideSlug: 'wc-intasato', description: 'Ostruzione nel sifone o nella colonna' },
+      { title: 'Lavandino cucina otturato', guideSlug: 'lavandino-intasato', description: 'Grassi e residui di cibo solidificati' },
+      { title: 'Doccia che non scarica', guideSlug: 'doccia-intasata', description: 'Capelli e sapone accumulati' },
+      { title: 'Acqua che risale dagli scarichi', guideSlug: 'risalita-liquami', description: 'Problema alla colonna condominiale' },
+      { title: 'Cattivo odore dagli scarichi', guideSlug: 'odore-scarichi', description: 'Sifone secco o ostruzione parziale' },
+      { title: 'Bidet o lavabo bagno lento', guideSlug: 'scarico-lento', description: 'Accumulo nel sifone da pulire' }
+    ],
+    // FASE 3: Cost summary
+    costsSummary: 'Sturare uno scarico costa dai 50€ per una semplice disostruzione fino a 400€ per spurgo di colonne condominiali. L\'uso di sonde elettriche costa 100-200€. Per ostruzioni gravi con videoispezione, si può arrivare a 250€. Interventi urgenti hanno maggiorazioni del 30-50%.',
     relatedPricingPages: ['costo-spurgo-fogne', 'costi-idraulico'],
     publishedAt: '2026-01-28',
     updatedAt: '2026-01-28'
@@ -415,7 +451,9 @@ export const HUB_PAGES: HubPage[] = [
     metaTitle: 'Problemi Caldaia e Riscaldamento: Cause, Soluzioni e Costi | Guida Completa',
     metaDescription: 'Caldaia in blocco, termosifoni freddi, acqua calda che non arriva? Scopri le cause più comuni, cosa puoi fare e quando chiamare un tecnico specializzato.',
     h1: 'Problemi Caldaia e Riscaldamento: Guida Completa',
-    intro: 'La caldaia è il cuore dell\'impianto di riscaldamento domestico. Quando smette di funzionare correttamente, specialmente in inverno, diventa un\'emergenza. Questa guida ti aiuta a capire i problemi più comuni, valutarne la gravità e sapere quando è necessario l\'intervento di un tecnico.',
+    // FASE 1: SEO-enhanced intro with synonyms
+    intro: 'I problemi alla caldaia, al boiler e all\'impianto di riscaldamento sono tra le emergenze più stressanti in case e appartamenti, specialmente durante l\'inverno. Quando la caldaia va in blocco, i termosifoni restano freddi, o l\'acqua calda sanitaria non arriva, la vita domestica si ferma. Le cause possono essere molteplici: guasti alla scheda elettronica, sensori difettosi, pressione anomala dell\'impianto, aria nei radiatori, o necessità di manutenzione. In questa guida completa scoprirai come riconoscere i sintomi dei problemi più comuni, quali controlli puoi fare in autonomia (come il reset o la verifica pressione), e quando è indispensabile chiamare un tecnico caldaista abilitato. Ti spieghiamo anche i costi medi degli interventi, la manutenzione obbligatoria per legge, e come prevenire guasti improvvisi al tuo sistema di riscaldamento domestico.',
+    aboutTopic: 'Problemi caldaia, boiler e impianti di riscaldamento domestico',
     categorySlug: 'caldaie',
     content: {
       overview: `
@@ -591,6 +629,18 @@ export const HUB_PAGES: HubPage[] = [
         answer: 'I codici errore (E01, E02, ecc.) indicano il tipo di guasto rilevato dalla centralina. Ogni marca usa codici diversi. Consulta il manuale o cerca online il codice specifico + marca della caldaia. Comunicalo sempre al tecnico quando chiami.'
       }
     ],
+    // FASE 2: Most searched problems
+    topSearchedProblems: [
+      { title: 'Caldaia in blocco con codice errore', guideSlug: 'caldaia-blocco', description: 'Cause e soluzioni per i blocchi frequenti' },
+      { title: 'Termosifoni freddi o tiepidi', guideSlug: 'termosifoni-freddi', description: 'Aria, pressione o circolatore guasto' },
+      { title: 'Caldaia che non scalda acqua', guideSlug: 'caldaia-no-acqua-calda', description: 'Problemi allo scambiatore o flussostato' },
+      { title: 'Pressione caldaia troppo bassa', guideSlug: 'pressione-caldaia-bassa', description: 'Perdita impianto o vaso espansione' },
+      { title: 'Caldaia che perde acqua', guideSlug: 'caldaia-perde-acqua', description: 'Valvola sicurezza o giunti' },
+      { title: 'Caldaia che fa rumore', guideSlug: 'caldaia-rumorosa', description: 'Calcare o problemi al bruciatore' },
+      { title: 'Manutenzione caldaia obbligatoria', guideSlug: 'manutenzione-caldaia', description: 'Controlli e frequenza per legge' }
+    ],
+    // FASE 3: Cost summary
+    costsSummary: 'La manutenzione ordinaria della caldaia costa 80-150€. Una riparazione per blocco costa 80-200€. La sostituzione di componenti (scheda elettronica, scambiatore) può arrivare a 400-600€. Per una caldaia nuova a condensazione, il costo è 1.500-4.000€ con detrazioni fiscali disponibili.',
     relatedPricingPages: ['costo-manutenzione-caldaia', 'costo-installazione-caldaia'],
     publishedAt: '2026-01-28',
     updatedAt: '2026-01-28'
@@ -603,7 +653,9 @@ export const HUB_PAGES: HubPage[] = [
     metaTitle: 'Problemi WC, Lavabi, Docce e Rubinetti: Soluzioni e Costi | Guida Completa',
     metaDescription: 'WC che perde, rubinetto che gocciola, doccia con poca pressione? Scopri le cause dei problemi più comuni a sanitari e rubinetti e quando serve un idraulico.',
     h1: 'Problemi Sanitari e Rubinetti: Guida Completa',
-    intro: 'I sanitari e i rubinetti sono tra gli elementi più utilizzati in casa. Piccoli problemi come un rubinetto che gocciola o un WC che scorre possono sembrare banali, ma causano sprechi significativi e possono peggiorare nel tempo. Questa guida ti aiuta a riconoscere, gestire e prevenire i problemi più comuni.',
+    // FASE 1: SEO-enhanced intro with synonyms
+    intro: 'I problemi a sanitari, rubinetti, WC, lavabi, bidet e docce sono tra i più frequenti in case e appartamenti italiani. Un rubinetto che gocciola, un water che scorre continuamente, una doccia con poca pressione o un lavandino che perde dal sifone: sono disagi quotidiani che causano sprechi idrici significativi e possono degenerare in danni maggiori se ignorati. La buona notizia è che molti di questi problemi hanno cause semplici e soluzioni accessibili. In questa guida completa scoprirai come diagnosticare i guasti più comuni ai tuoi impianti sanitari, quali interventi puoi affrontare in autonomia con pochi strumenti, e quando è necessario chiamare un idraulico professionista. Ti spieghiamo anche i costi indicativi per riparazioni e sostituzioni, e i consigli per una manutenzione preventiva che allunga la vita dei tuoi rubinetti e sanitari.',
+    aboutTopic: 'Problemi a sanitari, rubinetti, WC, docce e lavabi domestici',
     categorySlug: 'sanitari',
     content: {
       overview: `
@@ -787,6 +839,18 @@ export const HUB_PAGES: HubPage[] = [
         answer: 'Solo manodopera: 150-300€ per rimuovere il vecchio e installare il nuovo. Se bisogna anche spostare gli scarichi o adattare gli attacchi, il costo aumenta. Il WC stesso costa da 80€ a 500€+ in base al modello.'
       }
     ],
+    // FASE 2: Most searched problems
+    topSearchedProblems: [
+      { title: 'Rubinetto che gocciola', guideSlug: 'rubinetto-gocciola', description: 'Guarnizione o cartuccia da sostituire' },
+      { title: 'WC che scorre continuamente', guideSlug: 'wc-scorre', description: 'Galleggiante o guarnizione scarico' },
+      { title: 'Doccia con poca pressione', guideSlug: 'poca-pressione-doccia', description: 'Soffione intasato o problema impianto' },
+      { title: 'Perdita dal sifone lavabo', guideSlug: 'perdita-sifone', description: 'Guarnizioni o dadi da stringere' },
+      { title: 'Cassetta WC che non carica', guideSlug: 'cassetta-wc-guasta', description: 'Meccanismo interno da riparare' },
+      { title: 'Box doccia che perde', guideSlug: 'box-doccia-perde', description: 'Silicone o guarnizioni da rifare' },
+      { title: 'Scarico doccia lento', guideSlug: 'scarico-doccia-lento', description: 'Capelli e sapone da rimuovere' }
+    ],
+    // FASE 3: Cost summary
+    costsSummary: 'Riparare un rubinetto costa 30-80€. La sostituzione della cassetta WC costa 100-200€. Per installare un nuovo lavabo o WC, la manodopera costa 150-300€ (escluso il sanitario). La sostituzione completa di rubinetteria doccia costa 100-250€.',
     relatedPricingPages: ['costo-sostituzione-sanitari', 'costi-idraulico'],
     publishedAt: '2026-01-28',
     updatedAt: '2026-01-28'
@@ -799,7 +863,9 @@ export const HUB_PAGES: HubPage[] = [
     metaTitle: 'Emergenze Idrauliche: Guida Pronto Intervento | Cosa Fare Subito',
     metaDescription: 'Allagamento, tubo rotto, perdita grave? Scopri cosa fare immediatamente in caso di emergenza idraulica e come trovare un idraulico per pronto intervento.',
     h1: 'Emergenze Idrauliche: Cosa Fare Subito',
-    intro: 'Un\'emergenza idraulica può capitare in qualsiasi momento: un tubo che esplode, un allagamento improvviso, una perdita che minaccia l\'impianto elettrico. Sapere cosa fare nei primi minuti può fare la differenza tra un problema gestibile e un disastro. Questa guida ti prepara ad affrontare le situazioni più critiche.',
+    // FASE 1: SEO-enhanced intro with synonyms
+    intro: 'Le emergenze idrauliche come allagamenti, tubi rotti, perdite improvvise e riflussi fognari possono colpire case e appartamenti in qualsiasi momento, di giorno o di notte. Un tubo che esplode, l\'acqua che invade il pavimento, una perdita che raggiunge l\'impianto elettrico: sono situazioni che richiedono azione immediata per evitare danni gravissimi alla struttura e ai vicini. Sapere cosa fare nei primi minuti critici può fare la differenza tra un problema contenibile e un disastro costoso. In questa guida di pronto intervento scoprirai le azioni immediate da compiere per mettere in sicurezza la tua casa, come trovare rapidamente un idraulico disponibile per emergenze urgenti, e i costi tipici del pronto intervento idraulico. Ti spieghiamo anche come prepararti in anticipo per gestire al meglio eventuali emergenze future e proteggere la tua abitazione.',
+    aboutTopic: 'Emergenze idrauliche, pronto intervento e allagamenti domestici',
     categorySlug: 'emergenze',
     content: {
       overview: `
@@ -989,6 +1055,18 @@ export const HUB_PAGES: HubPage[] = [
         answer: 'Sì, appena hai messo in sicurezza la situazione. Molte polizze richiedono denuncia entro 24-72 ore. Documenta tutto con foto e video prima di qualsiasi intervento di riparazione. Conserva fatture e preventivi.'
       }
     ],
+    // FASE 2: Most searched problems
+    topSearchedProblems: [
+      { title: 'Tubo rotto che allaga', guideSlug: 'tubo-rotto', description: 'Azione immediata e contenimento' },
+      { title: 'WC che trabocca', guideSlug: 'wc-trabocca', description: 'Bloccare lo scarico e l\'acqua' },
+      { title: 'Allagamento da lavatrice', guideSlug: 'allagamento-lavatrice', description: 'Staccare acqua e corrente' },
+      { title: 'Riflusso liquami dagli scarichi', guideSlug: 'risalita-liquami', description: 'Emergenza fognatura urgente' },
+      { title: 'Perdita vicino all\'elettricità', guideSlug: 'perdita-impianto-elettrico', description: 'Rischio folgorazione' },
+      { title: 'Tubature gelate che scoppiano', guideSlug: 'tubi-gelati', description: 'Emergenza invernale' },
+      { title: 'Perdita caldaia improvvisa', guideSlug: 'caldaia-perde-acqua', description: 'Chiudere acqua e gas' }
+    ],
+    // FASE 3: Cost summary
+    costsSummary: 'Il pronto intervento idraulico costa 80-150€ in orario normale, con maggiorazioni del 30-50% per sera, notte e festivi. Un\'uscita urgente notturna può costare 100-200€ solo per la chiamata. Interventi complessi come riparazione tubi rotti arrivano a 300-500€ con urgenza.',
     relatedPricingPages: ['costo-pronto-intervento-idraulico', 'costi-idraulico'],
     publishedAt: '2026-01-28',
     updatedAt: '2026-01-28'

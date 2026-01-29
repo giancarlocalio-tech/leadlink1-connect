@@ -195,10 +195,13 @@ export default function BlogArticlePage() {
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            {/* Enhanced Article Content */}
+            {/* Enhanced Article Content - Universal Visual Template */}
             <EnhancedArticleContent 
               slug={article.slug} 
-              originalContent={article.content} 
+              originalContent={article.content}
+              articleTitle={article.h1}
+              category={article.category}
+              tags={article.tags}
             />
 
             {/* Tags */}

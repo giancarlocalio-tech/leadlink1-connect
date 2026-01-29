@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { getProblemCityPageBySlug } from "@/lib/problemCityPagesData";
+import { getProblemCityPageBySlug, getCityLocalContent } from "@/lib/problemCityPagesData";
 import { Layout } from "@/components/Layout";
 import { Breadcrumb, BreadcrumbItem } from "@/components/seo/Breadcrumb";
 import { SummaryBox } from "@/components/blog/SummaryBox";
@@ -8,6 +8,10 @@ import { MethodCard } from "@/components/blog/MethodCard";
 import { WarningBox } from "@/components/blog/WarningBox";
 import { ProCallBox } from "@/components/blog/ProCallBox";
 import { FinalCTABox } from "@/components/blog/FinalCTABox";
+import { CityWhySection } from "@/components/seo/CityWhySection";
+import { LocalMiniFAQ, generateLocalFAQItems } from "@/components/seo/LocalMiniFAQ";
+import { MidArticleCTA } from "@/components/seo/MidArticleCTA";
+import { HeroCtaBanner } from "@/components/seo/HeroCtaBanner";
 import { MapPin, AlertCircle, Wrench, Home } from "lucide-react";
 
 const ProblemCityPage = () => {
@@ -43,14 +47,25 @@ const ProblemCityPage = () => {
     );
   }
 
+  // Get city local content for enhanced sections
+  const cityLocalData = getCityLocalContent(pageData.citySlug);
+
   const breadcrumbItems: BreadcrumbItem[] = [
     { name: "Blog", url: "/blog" },
     { name: pageData.h1, url: `/${pageData.slug}` }
   ];
 
   const canonicalUrl = `https://www.idraulicisubito.com/${pageData.slug}`;
+  const problemContext = `${pageData.problemName} a ${pageData.cityName}`;
 
-  // JSON-LD Schema
+  // Generate local FAQ items for schema
+  const localFAQItems = generateLocalFAQItems(
+    pageData.cityName,
+    pageData.problemName,
+    pageData.problemSlug
+  );
+
+  // JSON-LD Schema - Article
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -76,10 +91,12 @@ const ProblemCityPage = () => {
     }
   };
 
+  // JSON-LD Schema - FAQ (extended with local questions)
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
+      // Original generic FAQs
       {
         "@type": "Question",
         "name": `Come risolvere ${pageData.problemName.toLowerCase()} a ${pageData.cityName}?`,
@@ -88,17 +105,19 @@ const ProblemCityPage = () => {
           "text": `Per risolvere ${pageData.problemName.toLowerCase()} a ${pageData.cityName}, puoi provare metodi fai-da-te come acqua calda, bicarbonato e aceto, o lo sturalavandini. Se il problema persiste, è consigliabile chiamare un idraulico professionista.`
         }
       },
-      {
+      // Local FAQ questions (cost, time, urgency)
+      ...localFAQItems.map(faq => ({
         "@type": "Question",
-        "name": `Quanto costa un idraulico per ${pageData.problemName.toLowerCase()} a ${pageData.cityName}?`,
+        "name": faq.question,
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": `Il costo di un idraulico a ${pageData.cityName} per questo tipo di intervento varia tra 50€ e 150€, a seconda della complessità del problema e dell'urgenza dell'intervento.`
+          "text": faq.answer
         }
-      }
+      }))
     ]
   };
 
+  // JSON-LD Schema - Breadcrumb
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -107,6 +126,24 @@ const ProblemCityPage = () => {
       { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.idraulicisubito.com/blog" },
       { "@type": "ListItem", "position": 3, "name": pageData.h1, "item": canonicalUrl }
     ]
+  };
+
+  // JSON-LD Schema - LocalBusiness / Service
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": `${pageData.problemName} a ${pageData.cityName}`,
+    "description": pageData.metaDescription,
+    "provider": {
+      "@type": "Organization",
+      "name": "Idraulici Subito",
+      "url": "https://www.idraulicisubito.com"
+    },
+    "areaServed": {
+      "@type": "City",
+      "name": pageData.cityName
+    },
+    "serviceType": "Idraulico"
   };
 
   // Map methods to summary items with icons
@@ -119,7 +156,10 @@ const ProblemCityPage = () => {
   const problemIcon = pageData.problemSlug.includes('lavandino') ? '🪠' :
                        pageData.problemSlug.includes('wc') ? '🚽' :
                        pageData.problemSlug.includes('scaldabagno') ? '🚿' :
-                       pageData.problemSlug.includes('caldaia') ? '🔥' : '🔧';
+                       pageData.problemSlug.includes('caldaia') ? '🔥' :
+                       pageData.problemSlug.includes('tubo') ? '💧' :
+                       pageData.problemSlug.includes('doccia') ? '🚿' :
+                       pageData.problemSlug.includes('termosifone') ? '🌡️' : '🔧';
 
   return (
     <Layout>
@@ -150,11 +190,20 @@ const ProblemCityPage = () => {
         <script type="application/ld+json">
           {JSON.stringify(breadcrumbSchema)}
         </script>
+        <script type="application/ld+json">
+          {JSON.stringify(serviceSchema)}
+        </script>
       </Helmet>
 
       <article className="bg-background min-h-screen">
         {/* Breadcrumb */}
         <Breadcrumb items={breadcrumbItems} />
+
+        {/* Hero CTA Banner - Above the fold */}
+        <HeroCtaBanner 
+          cityName={pageData.cityName} 
+          problemContext={problemContext}
+        />
 
         {/* Header */}
         <header className="container mx-auto px-4 py-8">
@@ -203,6 +252,19 @@ const ProblemCityPage = () => {
               </ul>
             </section>
 
+            {/* Why Section - Localized */}
+            {cityLocalData && (
+              <CityWhySection
+                cityName={pageData.cityName}
+                problemName={pageData.problemName}
+                waterType={cityLocalData.waterType}
+                buildingAge={cityLocalData.buildingAge}
+                commonIssues={cityLocalData.commonIssues}
+                neighborhoods={cityLocalData.neighborhoods}
+                problemSlug={pageData.problemSlug}
+              />
+            )}
+
             {/* Methods Section */}
             <section>
               <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-3">
@@ -223,6 +285,13 @@ const ProblemCityPage = () => {
               </div>
             </section>
 
+            {/* Mid-Article CTA */}
+            <MidArticleCTA 
+              cityName={pageData.cityName}
+              problemContext={problemContext}
+              variant="compact"
+            />
+
             {/* Warnings */}
             {pageData.warnings.length > 0 && (
               <section className="space-y-4">
@@ -239,7 +308,7 @@ const ProblemCityPage = () => {
               {pageData.whenToCallText}
             </ProCallBox>
 
-            {/* Local Paragraph */}
+            {/* Local Paragraph - Original */}
             <section className="bg-muted/30 rounded-2xl p-6 md:p-8 border border-border">
               <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-3">
                 <Home className="h-5 w-5 text-primary" />
@@ -250,12 +319,26 @@ const ProblemCityPage = () => {
               </p>
             </section>
 
-            {/* Final CTA */}
+            {/* Local Mini FAQ - 3 Questions */}
+            <LocalMiniFAQ
+              cityName={pageData.cityName}
+              problemName={pageData.problemName}
+              problemSlug={pageData.problemSlug}
+            />
+
+            {/* Full CTA - Before Final */}
+            <MidArticleCTA 
+              cityName={pageData.cityName}
+              problemContext={problemContext}
+              variant="full"
+            />
+
+            {/* Final CTA with Form */}
             <FinalCTABox
               title={pageData.ctaTitle}
               description={pageData.ctaText}
               interventionType={pageData.interventionType}
-              problemContext={`${pageData.problemName} a ${pageData.cityName}`}
+              problemContext={problemContext}
             />
           </div>
         </div>

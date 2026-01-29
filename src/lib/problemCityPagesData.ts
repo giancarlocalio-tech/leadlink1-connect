@@ -1,6 +1,13 @@
 // Problem + City SEO Pages Data
 // URL structure: /[problem-slug]-[city-slug]
 
+export interface CityLocalContent {
+  waterType: string;
+  buildingAge: string;
+  commonIssues: string;
+  neighborhoods: string;
+}
+
 export interface ProblemCityPage {
   slug: string;
   problemSlug: string;
@@ -140,6 +147,11 @@ const cityLocalContent: Record<string, { waterType: string; buildingAge: string;
     commonIssues: "problemi di riscaldamento invernale e tubature storiche",
     neighborhoods: "Città Alta, Borgo Santa Caterina, Colognola e Monterosso"
   }
+};
+
+// Export function to get city local content
+export const getCityLocalContent = (citySlug: string): CityLocalContent | undefined => {
+  return cityLocalContent[citySlug];
 };
 
 // Problem templates

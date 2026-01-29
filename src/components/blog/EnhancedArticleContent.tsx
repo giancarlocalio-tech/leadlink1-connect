@@ -31,7 +31,8 @@ interface ArticleEnhancement {
   finalCta?: {
     title: string;
     description: string;
-    buttonText: string;
+    interventionType: string;
+    problemContext: string;
   };
 }
 
@@ -124,7 +125,8 @@ const ARTICLE_ENHANCEMENTS: Record<string, ArticleEnhancement> = {
     finalCta: {
       title: 'Non si è ancora sturato?',
       description: 'Il problema potrebbe essere più profondo di quanto pensi. Trova subito un idraulico qualificato vicino a te per un intervento rapido e risolutivo.',
-      buttonText: '🔧 TROVA UN IDRAULICO ORA'
+      interventionType: 'sturare_spurgo',
+      problemContext: 'Lavandino intasato - metodi fai da te non hanno funzionato'
     }
   }
 };
@@ -202,7 +204,8 @@ export function EnhancedArticleContent({ slug, originalContent }: EnhancedArticl
         <FinalCTABox
           title={enhancement.finalCta.title}
           description={enhancement.finalCta.description}
-          buttonText={enhancement.finalCta.buttonText}
+          interventionType={enhancement.finalCta.interventionType}
+          problemContext={enhancement.finalCta.problemContext}
         />
       )}
     </div>

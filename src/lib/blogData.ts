@@ -1,6 +1,8 @@
 // Blog data for SEO-optimized articles
 // Practical guides and tutorials for plumbing topics
 
+import { NEW_BLOG_ARTICLES } from './blogArticlesNew';
+
 export interface BlogArticle {
   slug: string;
   title: string;
@@ -1100,28 +1102,45 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   }
 ];
 
-// Helper functions
+// Merge existing articles with new ones
+export const ALL_BLOG_ARTICLES: BlogArticle[] = [...BLOG_ARTICLES, ...NEW_BLOG_ARTICLES];
+
+// Helper functions that use all articles
 export const getArticleBySlug = (slug: string): BlogArticle | undefined => {
-  return BLOG_ARTICLES.find(article => article.slug === slug);
+  return ALL_BLOG_ARTICLES.find(article => article.slug === slug);
 };
 
 export const getArticlesByCategory = (category: string): BlogArticle[] => {
-  return BLOG_ARTICLES.filter(article => article.category === category);
+  return ALL_BLOG_ARTICLES.filter(article => article.category === category);
 };
 
 export const getLatestArticles = (count: number = 5): BlogArticle[] => {
-  return [...BLOG_ARTICLES]
+  return [...ALL_BLOG_ARTICLES]
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
     .slice(0, count);
 };
 
+export const getRecentArticles = (limit: number = 5): BlogArticle[] => {
+  return getLatestArticles(limit);
+};
+
 export const getRelatedArticles = (currentSlug: string, count: number = 3): BlogArticle[] => {
-  const current = getArticleBySlug(currentSlug);
-  if (!current) return [];
+  const currentArticle = getArticleBySlug(currentSlug);
+  if (!currentArticle) return [];
   
-  return BLOG_ARTICLES
-    .filter(article => article.slug !== currentSlug && article.category === current.category)
-    .slice(0, count);
+  // Find articles with matching tags or category
+  return ALL_BLOG_ARTICLES
+    .filter(article => article.slug !== currentSlug)
+    .map(article => {
+      const matchingTags = article.tags.filter(tag => 
+        currentArticle.tags.includes(tag)
+      ).length;
+      const categoryMatch = article.category === currentArticle.category ? 2 : 0;
+      return { article, score: matchingTags + categoryMatch };
+    })
+    .sort((a, b) => b.score - a.score)
+    .slice(0, count)
+    .map(item => item.article);
 };
 
 export const getCategoryBySlug = (slug: string): BlogCategory | undefined => {
@@ -1130,7 +1149,7 @@ export const getCategoryBySlug = (slug: string): BlogCategory | undefined => {
 
 export const getAllTags = (): string[] => {
   const tags = new Set<string>();
-  BLOG_ARTICLES.forEach(article => {
+  ALL_BLOG_ARTICLES.forEach(article => {
     article.tags.forEach(tag => tags.add(tag));
   });
   return Array.from(tags).sort();
@@ -1138,7 +1157,6 @@ export const getAllTags = (): string[] => {
 
 // Get blog articles suitable for linking from city pages
 export const getArticlesForCityPage = (): BlogArticle[] => {
-  // Return the most relevant articles for city landing pages
   const prioritySlugs = [
     'perdita-acqua-cosa-fare',
     'scarico-otturato-rimedi',

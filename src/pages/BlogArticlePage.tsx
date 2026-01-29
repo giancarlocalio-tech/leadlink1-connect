@@ -3,11 +3,11 @@ import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Layout } from '@/components/Layout';
 import { getArticleBySlug, getRelatedArticles, BLOG_CATEGORIES } from '@/lib/blogData';
-import { generateJsonLd } from '@/lib/seoJsonLd';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, ArrowLeft, ArrowRight, Share2, BookOpen } from 'lucide-react';
+import { Calendar, Clock, ArrowLeft, ArrowRight, Share2, BookOpen, User } from 'lucide-react';
+import { EnhancedArticleContent } from '@/components/blog/EnhancedArticleContent';
 
 export default function BlogArticlePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -37,7 +37,7 @@ export default function BlogArticlePage() {
     author: {
       '@type': 'Organization',
       name: 'Idraulici Subito',
-      url: 'https://idraulicisubito.com'
+      url: 'https://www.idraulicisubito.com/chi-siamo'
     },
     publisher: {
       '@type': 'Organization',
@@ -62,13 +62,13 @@ export default function BlogArticlePage() {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://idraulicisubito.com'
+        item: 'https://www.idraulicisubito.com'
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Blog',
-        item: 'https://idraulicisubito.com/blog'
+        item: 'https://www.idraulicisubito.com/blog'
       },
       {
         '@type': 'ListItem',
@@ -134,12 +134,12 @@ export default function BlogArticlePage() {
       </section>
 
       {/* Article Header */}
-      <section className="py-8 md:py-12 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+      <section className="py-10 md:py-14 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
             <Link
               to="/blog"
-              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6"
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
             >
               <ArrowLeft className="h-4 w-4" />
               Torna al Blog
@@ -149,18 +149,24 @@ export default function BlogArticlePage() {
               {category?.name}
             </Badge>
 
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-5 leading-tight">
               {article.h1}
             </h1>
 
-            <p className="text-lg text-muted-foreground mb-6">
+            <p className="text-lg md:text-xl text-muted-foreground mb-6 leading-relaxed">
               {article.excerpt}
             </p>
 
-            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground border-t border-border/50 pt-5">
+              <span className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <User className="h-4 w-4 text-primary" />
+                </div>
+                <span className="font-medium">Redazione IdrauliciSubito</span>
+              </span>
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                Pubblicato il {new Date(article.publishedAt).toLocaleDateString('it-IT', {
+                {new Date(article.publishedAt).toLocaleDateString('it-IT', {
                   day: 'numeric',
                   month: 'long',
                   year: 'numeric'
@@ -185,45 +191,47 @@ export default function BlogArticlePage() {
       </section>
 
       {/* Article Content */}
-      <section className="py-12">
+      <section className="py-12 md:py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            {/* Add TOC styling */}
-            <style>{`
-              .toc {
-                background: hsl(var(--muted));
-                border-radius: 0.5rem;
-                padding: 1rem 1.5rem;
-                margin-bottom: 2rem;
-              }
-              .toc li {
-                margin: 0.5rem 0;
-              }
-              .toc a {
-                color: hsl(var(--primary));
-                text-decoration: none;
-              }
-              .toc a:hover {
-                text-decoration: underline;
-              }
-              article h2[id], article h3[id] {
-                scroll-margin-top: 100px;
-              }
-            `}</style>
-            <article 
-              className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:marker:text-primary"
-              dangerouslySetInnerHTML={{ __html: article.content }}
+            {/* Enhanced Article Content */}
+            <EnhancedArticleContent 
+              slug={article.slug} 
+              originalContent={article.content} 
             />
 
             {/* Tags */}
-            <div className="mt-12 pt-8 border-t">
+            <div className="mt-12 pt-8 border-t border-border">
               <h3 className="text-sm font-semibold text-muted-foreground mb-3">Tag:</h3>
               <div className="flex flex-wrap gap-2">
                 {article.tags.map(tag => (
-                  <Badge key={tag} variant="outline">
+                  <Badge key={tag} variant="outline" className="text-sm">
                     {tag}
                   </Badge>
                 ))}
+              </div>
+            </div>
+
+            {/* Author Box */}
+            <div className="mt-8 p-6 bg-muted/30 rounded-xl border border-border/50">
+              <div className="flex items-start gap-4">
+                <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                  <User className="h-7 w-7 text-primary" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-foreground mb-1">Redazione IdrauliciSubito</h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Contenuti verificati da professionisti del settore idraulico. 
+                    Ultimo aggiornamento: {new Date(article.updatedAt).toLocaleDateString('it-IT', {
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric'
+                    })}
+                  </p>
+                  <Link to="/chi-siamo" className="text-sm text-primary hover:underline mt-2 inline-block">
+                    Scopri di più su di noi →
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -234,7 +242,7 @@ export default function BlogArticlePage() {
       <section className="py-12 bg-primary/5">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <Card className="border-primary/20">
+            <Card className="border-primary/20 shadow-lg">
               <CardContent className="p-6 md:p-8 text-center">
                 <BookOpen className="h-12 w-12 mx-auto mb-4 text-primary" />
                 <h2 className="text-xl md:text-2xl font-bold mb-3">

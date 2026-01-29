@@ -6,13 +6,15 @@
  * - 20 core keyword pages
  * - Top 50 cities
  * - Top 50 cities × 5 core services = 250 combinations
+ * - Blog articles and categories
  * 
- * Total: ~320 pages (down from 3300+)
+ * Total: ~350+ pages
  */
 
 import { CITIES, KEYWORD_PAGES } from './seoData';
 import { TOP_50_CITIES, CORE_SERVICES, CORE_KEYWORD_PAGES, getIndexablePageCounts } from './seoConfig';
 import { NEIGHBORHOOD_PAGES } from './neighborhoodPagesData';
+import { BLOG_ARTICLES, BLOG_CATEGORIES } from './blogData';
 
 const BASE_URL = 'https://www.idraulicisubito.com';
 const TODAY = new Date().toISOString().split('T')[0];
@@ -54,11 +56,41 @@ export function generateStaticSitemap(): string {
   const staticUrls: SitemapUrl[] = [
     { loc: `${BASE_URL}/`, lastmod: TODAY, changefreq: 'daily', priority: 1.0 },
     { loc: `${BASE_URL}/per-idraulici`, lastmod: TODAY, changefreq: 'weekly', priority: 0.8 },
-    { loc: `${BASE_URL}/blog`, lastmod: TODAY, changefreq: 'weekly', priority: 0.7 },
+    { loc: `${BASE_URL}/blog`, lastmod: TODAY, changefreq: 'weekly', priority: 0.8 },
+    { loc: `${BASE_URL}/guide`, lastmod: TODAY, changefreq: 'weekly', priority: 0.8 },
     { loc: `${BASE_URL}/privacy`, lastmod: TODAY, changefreq: 'yearly', priority: 0.3 },
     { loc: `${BASE_URL}/termini`, lastmod: TODAY, changefreq: 'yearly', priority: 0.3 },
   ];
   return generateSitemapXml(staticUrls);
+}
+
+/**
+ * Generate blog sitemap (articles + categories)
+ */
+export function generateBlogSitemap(): string {
+  const blogUrls: SitemapUrl[] = [];
+  
+  // Add blog categories
+  BLOG_CATEGORIES.forEach(category => {
+    blogUrls.push({
+      loc: `${BASE_URL}/blog/categoria/${category.slug}`,
+      lastmod: TODAY,
+      changefreq: 'weekly',
+      priority: 0.7,
+    });
+  });
+  
+  // Add all blog articles
+  BLOG_ARTICLES.forEach(article => {
+    blogUrls.push({
+      loc: `${BASE_URL}/blog/${article.slug}`,
+      lastmod: article.updatedAt || article.publishedAt,
+      changefreq: 'monthly',
+      priority: 0.75,
+    });
+  });
+  
+  return generateSitemapXml(blogUrls);
 }
 
 /**
@@ -144,7 +176,8 @@ export function generateSitemapIndex(cityServiceSitemapCount: number): string {
     'sitemap-static.xml',
     'sitemap-keywords.xml',
     'sitemap-cities.xml',
-    'sitemap-neighborhoods.xml', // Added neighborhoods sitemap
+    'sitemap-neighborhoods.xml',
+    'sitemap-blog.xml', // Blog articles and categories
   ];
   
   // Add city-service sitemaps
@@ -173,12 +206,14 @@ export function getAllIndexableUrls(): {
   cities: string[];
   cityServices: string[];
   neighborhoods: string[];
+  blog: string[];
   total: number;
 } {
   const staticUrls = [
     `${BASE_URL}/`,
     `${BASE_URL}/per-idraulici`,
     `${BASE_URL}/blog`,
+    `${BASE_URL}/guide`,
     `${BASE_URL}/privacy`,
     `${BASE_URL}/termini`,
   ];
@@ -208,13 +243,23 @@ export function getAllIndexableUrls(): {
     `${BASE_URL}/${n.citySlug}-${n.neighborhoodSlug}-idraulico`
   );
   
+  // Blog URLs (categories + articles)
+  const blogUrls: string[] = [];
+  BLOG_CATEGORIES.forEach(category => {
+    blogUrls.push(`${BASE_URL}/blog/categoria/${category.slug}`);
+  });
+  BLOG_ARTICLES.forEach(article => {
+    blogUrls.push(`${BASE_URL}/blog/${article.slug}`);
+  });
+  
   return {
     static: staticUrls,
     keywords: keywordUrls,
     cities: cityUrls,
     cityServices: cityServiceUrls,
     neighborhoods: neighborhoodUrls,
-    total: staticUrls.length + keywordUrls.length + cityUrls.length + cityServiceUrls.length + neighborhoodUrls.length,
+    blog: blogUrls,
+    total: staticUrls.length + keywordUrls.length + cityUrls.length + cityServiceUrls.length + neighborhoodUrls.length + blogUrls.length,
   };
 }
 
@@ -223,6 +268,7 @@ export function getAllIndexableUrls(): {
  */
 export function getSitemapStats() {
   const counts = getIndexablePageCounts();
+  const blogCount = BLOG_ARTICLES.length + BLOG_CATEGORIES.length;
   
   return {
     totalCities: TOP_50_CITIES.length,
@@ -230,8 +276,9 @@ export function getSitemapStats() {
     totalKeywordPages: CORE_KEYWORD_PAGES.length,
     totalCityServicePages: TOP_50_CITIES.length * CORE_SERVICES.length,
     totalNeighborhoodPages: NEIGHBORHOOD_PAGES.length,
-    totalSitemapFiles: 5, // static, keywords, cities, neighborhoods, city-services
-    totalIndexablePages: counts.total + NEIGHBORHOOD_PAGES.length,
+    totalBlogPages: blogCount,
+    totalSitemapFiles: 6, // static, keywords, cities, neighborhoods, blog, city-services
+    totalIndexablePages: counts.total + NEIGHBORHOOD_PAGES.length + blogCount,
     // For comparison
     previousTotalPages: CITIES.length * 15 + KEYWORD_PAGES.length + 5, // Approximate old count
     reductionPercent: Math.round((1 - counts.total / (CITIES.length * 15)) * 100)
@@ -255,6 +302,9 @@ export function generateAllSitemaps(): { filename: string; content: string }[] {
   
   // Neighborhood pages sitemap (25 URLs)
   files.push({ filename: 'sitemap-neighborhoods.xml', content: generateNeighborhoodsSitemap() });
+  
+  // Blog sitemap (articles + categories)
+  files.push({ filename: 'sitemap-blog.xml', content: generateBlogSitemap() });
   
   // City+Service sitemaps (Top 50 × 5)
   const cityServiceSitemaps = generateCityServiceSitemaps();

@@ -4,7 +4,7 @@ interface ArticleIntroProps {
 
 export function ArticleIntro({ children }: ArticleIntroProps) {
   return (
-    <div className="text-lg text-muted-foreground leading-relaxed mb-8 border-l-4 border-primary/30 pl-6 py-2">
+    <div className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-10 border-l-4 border-primary pl-6 py-4 bg-muted/30 rounded-r-xl">
       {children}
     </div>
   );

@@ -7,16 +7,16 @@ interface WarningBoxProps {
 
 export function WarningBox({ title = "Attenzione", children }: WarningBoxProps) {
   return (
-    <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-700 rounded-xl p-5 my-6">
-      <div className="flex items-start gap-3">
-        <div className="shrink-0 w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center">
-          <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+    <div className="bg-gradient-to-br from-amber-50 via-amber-100/50 to-amber-50 dark:from-amber-950/30 dark:via-amber-900/20 dark:to-amber-950/30 border border-amber-300 dark:border-amber-700 rounded-2xl p-5 md:p-6 my-8 shadow-sm">
+      <div className="flex items-start gap-4">
+        <div className="shrink-0 w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center">
+          <AlertTriangle className="h-6 w-6 text-amber-600 dark:text-amber-400" />
         </div>
-        <div>
-          <h4 className="font-semibold text-amber-800 dark:text-amber-300 mb-1">
+        <div className="space-y-2">
+          <h4 className="font-bold text-amber-800 dark:text-amber-300 text-lg">
             ⚠️ {title}
           </h4>
-          <div className="text-amber-700 dark:text-amber-400/90 text-sm leading-relaxed">
+          <div className="text-amber-700 dark:text-amber-400/90 leading-relaxed">
             {children}
           </div>
         </div>

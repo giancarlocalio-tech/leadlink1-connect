@@ -19,6 +19,8 @@ interface ArticleRequestFormProps {
   title?: string;
   /** Description displayed above the form */
   description?: string;
+  /** Compact mode without header */
+  compact?: boolean;
 }
 
 export function ArticleRequestForm({
@@ -26,6 +28,7 @@ export function ArticleRequestForm({
   problemContext = '',
   title = 'Non si è ancora risolto?',
   description = 'Trova subito un idraulico qualificato vicino a te.',
+  compact = false,
 }: ArticleRequestFormProps) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -115,15 +118,21 @@ export function ArticleRequestForm({
   }
 
   return (
-    <div className="bg-primary/10 border-2 border-primary/30 rounded-2xl p-6 md:p-8 my-10">
-      <div className="text-center mb-6">
-        <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-          {title}
-        </h3>
-        <p className="text-muted-foreground text-lg">
-          {description}
-        </p>
-      </div>
+    <div className={compact ? "" : "bg-primary/10 border-2 border-primary/30 rounded-2xl p-6 md:p-8 my-10"}>
+      {!compact && (title || description) && (
+        <div className="text-center mb-6">
+          {title && (
+            <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+              {title}
+            </h3>
+          )}
+          {description && (
+            <p className="text-muted-foreground text-lg">
+              {description}
+            </p>
+          )}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto">
         {/* Name */}

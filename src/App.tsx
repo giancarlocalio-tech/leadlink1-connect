@@ -44,6 +44,7 @@ import ContattiPage from "./pages/ContattiPage";
 import NotFound from "./pages/NotFound";
 import IdraulicoRedirect from "./components/IdraulicoRedirect";
 import ServiziRedirect from "./components/ServiziRedirect";
+import ProblemCityPage from "./pages/ProblemCityPage";
 
 const queryClient = new QueryClient();
 
@@ -621,6 +622,28 @@ const App = () => (
             <Route path="/costo-riparazione-tubo-perdita" element={<PricingPage />} />
             <Route path="/costo-installazione-sanitari" element={<PricingPage />} />
             <Route path="/costo-sostituzione-rubinetto" element={<PricingPage />} />
+            
+            {/* Problem + City SEO Pages */}
+            <Route path="/lavandino-intasato-milano" element={<ProblemCityPage />} />
+            <Route path="/lavandino-intasato-roma" element={<ProblemCityPage />} />
+            <Route path="/lavandino-intasato-torino" element={<ProblemCityPage />} />
+            <Route path="/lavandino-intasato-napoli" element={<ProblemCityPage />} />
+            <Route path="/lavandino-intasato-bologna" element={<ProblemCityPage />} />
+            <Route path="/wc-otturato-milano" element={<ProblemCityPage />} />
+            <Route path="/wc-otturato-roma" element={<ProblemCityPage />} />
+            <Route path="/wc-otturato-torino" element={<ProblemCityPage />} />
+            <Route path="/wc-otturato-napoli" element={<ProblemCityPage />} />
+            <Route path="/wc-otturato-firenze" element={<ProblemCityPage />} />
+            <Route path="/scaldabagno-non-scalda-milano" element={<ProblemCityPage />} />
+            <Route path="/scaldabagno-non-scalda-roma" element={<ProblemCityPage />} />
+            <Route path="/scaldabagno-non-scalda-torino" element={<ProblemCityPage />} />
+            <Route path="/scaldabagno-non-scalda-napoli" element={<ProblemCityPage />} />
+            <Route path="/scaldabagno-non-scalda-genova" element={<ProblemCityPage />} />
+            <Route path="/caldaia-in-blocco-milano" element={<ProblemCityPage />} />
+            <Route path="/caldaia-in-blocco-roma" element={<ProblemCityPage />} />
+            <Route path="/caldaia-in-blocco-torino" element={<ProblemCityPage />} />
+            <Route path="/caldaia-in-blocco-napoli" element={<ProblemCityPage />} />
+            <Route path="/caldaia-in-blocco-verona" element={<ProblemCityPage />} />
             
             {/* 301 Redirects for legacy URL patterns */}
             <Route path="/idraulico/:city/:service" element={<IdraulicoRedirect type="city-service" />} />

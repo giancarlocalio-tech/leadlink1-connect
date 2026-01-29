@@ -1,0 +1,264 @@
+import { useParams, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
+import { getProblemCityPageBySlug } from "@/lib/problemCityPagesData";
+import { Layout } from "@/components/Layout";
+import { Breadcrumb, BreadcrumbItem } from "@/components/seo/Breadcrumb";
+import { SummaryBox } from "@/components/blog/SummaryBox";
+import { MethodCard } from "@/components/blog/MethodCard";
+import { WarningBox } from "@/components/blog/WarningBox";
+import { ProCallBox } from "@/components/blog/ProCallBox";
+import { FinalCTABox } from "@/components/blog/FinalCTABox";
+import { MapPin, AlertCircle, Wrench, Home } from "lucide-react";
+
+const ProblemCityPage = () => {
+  const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
+  
+  const pageData = slug ? getProblemCityPageBySlug(slug) : undefined;
+  
+  if (!pageData) {
+    return (
+      <Layout>
+        <Helmet>
+          <meta name="prerender-status-code" content="404" />
+          <meta name="robots" content="noindex, nofollow" />
+          <title>Pagina non trovata | Idraulici Subito</title>
+        </Helmet>
+        <div className="container mx-auto px-4 py-16 text-center">
+          <h1 className="text-2xl font-bold mb-4">Pagina non trovata</h1>
+          <p className="text-muted-foreground mb-6">
+            La pagina che stai cercando non esiste.
+          </p>
+          <button 
+            onClick={() => navigate("/")}
+            className="bg-primary text-primary-foreground px-6 py-3 rounded-lg"
+          >
+            Torna alla Home
+          </button>
+        </div>
+      </Layout>
+    );
+  }
+
+  const breadcrumbItems: BreadcrumbItem[] = [
+    { name: "Blog", url: "/blog" },
+    { name: pageData.h1, url: `/${pageData.slug}` }
+  ];
+
+  const canonicalUrl = `https://www.idraulicisubito.com/${pageData.slug}`;
+
+  // JSON-LD Schema
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": pageData.h1,
+    "description": pageData.metaDescription,
+    "author": {
+      "@type": "Organization",
+      "name": "Idraulici Subito"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Idraulici Subito",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.idraulicisubito.com/logo.png"
+      }
+    },
+    "mainEntityOfPage": canonicalUrl,
+    "about": {
+      "@type": "Thing",
+      "name": pageData.problemName,
+      "description": `Guida pratica per risolvere ${pageData.problemName.toLowerCase()} a ${pageData.cityName}`
+    }
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": `Come risolvere ${pageData.problemName.toLowerCase()} a ${pageData.cityName}?`,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": `Per risolvere ${pageData.problemName.toLowerCase()} a ${pageData.cityName}, puoi provare metodi fai-da-te come acqua calda, bicarbonato e aceto, o lo sturalavandini. Se il problema persiste, è consigliabile chiamare un idraulico professionista.`
+        }
+      },
+      {
+        "@type": "Question",
+        "name": `Quanto costa un idraulico per ${pageData.problemName.toLowerCase()} a ${pageData.cityName}?`,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": `Il costo di un idraulico a ${pageData.cityName} per questo tipo di intervento varia tra 50€ e 150€, a seconda della complessità del problema e dell'urgenza dell'intervento.`
+        }
+      }
+    ]
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.idraulicisubito.com" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.idraulicisubito.com/blog" },
+      { "@type": "ListItem", "position": 3, "name": pageData.h1, "item": canonicalUrl }
+    ]
+  };
+
+  // Map methods to summary items with icons
+  const summaryItems = pageData.methods.map(m => ({
+    icon: m.icon,
+    label: m.title.replace(/Metodo \d+ — /, '')
+  }));
+
+  // Get problem icon
+  const problemIcon = pageData.problemSlug.includes('lavandino') ? '🪠' :
+                       pageData.problemSlug.includes('wc') ? '🚽' :
+                       pageData.problemSlug.includes('scaldabagno') ? '🚿' :
+                       pageData.problemSlug.includes('caldaia') ? '🔥' : '🔧';
+
+  return (
+    <Layout>
+      <Helmet>
+        <title>{pageData.metaTitle}</title>
+        <meta name="description" content={pageData.metaDescription} />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <link rel="canonical" href={canonicalUrl} />
+        
+        {/* Open Graph */}
+        <meta property="og:title" content={pageData.metaTitle} />
+        <meta property="og:description" content={pageData.metaDescription} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:type" content="article" />
+        
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageData.metaTitle} />
+        <meta name="twitter:description" content={pageData.metaDescription} />
+        
+        {/* JSON-LD */}
+        <script type="application/ld+json">
+          {JSON.stringify(articleSchema)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(faqSchema)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(breadcrumbSchema)}
+        </script>
+      </Helmet>
+
+      <article className="bg-background min-h-screen">
+        {/* Breadcrumb */}
+        <Breadcrumb items={breadcrumbItems} />
+
+        {/* Header */}
+        <header className="container mx-auto px-4 py-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-center gap-2 text-primary mb-4">
+              <MapPin className="h-5 w-5" />
+              <span className="text-sm font-medium">{pageData.cityName}</span>
+            </div>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight mb-6">
+              {pageData.h1}
+            </h1>
+          </div>
+        </header>
+
+        {/* Content */}
+        <div className="container mx-auto px-4 pb-16">
+          <div className="max-w-4xl mx-auto space-y-12">
+            
+            {/* Summary Box */}
+            <SummaryBox
+              icon={problemIcon}
+              title={`Problema con ${pageData.problemName.toLowerCase()}? Prova questi passaggi prima di chiamare un idraulico`}
+              items={summaryItems}
+            />
+
+            {/* Introduction */}
+            <section className="prose prose-lg max-w-none">
+              <p className="text-lg text-muted-foreground leading-relaxed" 
+                 dangerouslySetInnerHTML={{ __html: pageData.introText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} 
+              />
+            </section>
+
+            {/* Causes Section */}
+            <section>
+              <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-3">
+                <AlertCircle className="h-6 w-6 text-primary" />
+                {pageData.causesTitle}
+              </h2>
+              <ul className="space-y-3">
+                {pageData.causes.map((cause, index) => (
+                  <li key={index} className="flex items-start gap-3 text-muted-foreground">
+                    <span className="text-primary mt-1">✓</span>
+                    <span>{cause}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            {/* Methods Section */}
+            <section>
+              <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-3">
+                <Wrench className="h-6 w-6 text-primary" />
+                Cosa Puoi Provare da Solo
+              </h2>
+              <div className="grid gap-6">
+                {pageData.methods.map((method, index) => (
+                  <MethodCard
+                    key={index}
+                    icon={method.icon}
+                    number={index + 1}
+                    title={method.title.replace(/Metodo \d+ — /, '')}
+                    description={method.description}
+                    steps={method.steps}
+                  />
+                ))}
+              </div>
+            </section>
+
+            {/* Warnings */}
+            {pageData.warnings.length > 0 && (
+              <section className="space-y-4">
+                {pageData.warnings.map((warning, index) => (
+                  <WarningBox key={index}>
+                    {warning}
+                  </WarningBox>
+                ))}
+              </section>
+            )}
+
+            {/* When to Call Section */}
+            <ProCallBox title={pageData.whenToCallTitle}>
+              {pageData.whenToCallText}
+            </ProCallBox>
+
+            {/* Local Paragraph */}
+            <section className="bg-muted/30 rounded-2xl p-6 md:p-8 border border-border">
+              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-3">
+                <Home className="h-5 w-5 text-primary" />
+                {pageData.localParagraphTitle}
+              </h2>
+              <p className="text-muted-foreground leading-relaxed">
+                {pageData.localParagraphText}
+              </p>
+            </section>
+
+            {/* Final CTA */}
+            <FinalCTABox
+              title={pageData.ctaTitle}
+              description={pageData.ctaText}
+              interventionType={pageData.interventionType}
+              problemContext={`${pageData.problemName} a ${pageData.cityName}`}
+            />
+          </div>
+        </div>
+      </article>
+    </Layout>
+  );
+};
+
+export default ProblemCityPage;

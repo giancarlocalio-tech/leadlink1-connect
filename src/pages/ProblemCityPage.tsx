@@ -12,6 +12,8 @@ import { CityWhySection } from "@/components/seo/CityWhySection";
 import { LocalMiniFAQ, generateLocalFAQItems } from "@/components/seo/LocalMiniFAQ";
 import { MidArticleCTA } from "@/components/seo/MidArticleCTA";
 import { HeroCtaBanner } from "@/components/seo/HeroCtaBanner";
+import { RelatedGuideLink } from "@/components/seo/RelatedGuideLink";
+import { SimilarProblemsInCity } from "@/components/seo/SimilarProblemsInCity";
 import { MapPin, AlertCircle, Wrench, Home } from "lucide-react";
 
 const ProblemCityPage = () => {
@@ -324,6 +326,19 @@ const ProblemCityPage = () => {
               cityName={pageData.cityName}
               problemName={pageData.problemName}
               problemSlug={pageData.problemSlug}
+            />
+
+            {/* Related Guide Link - Link to main blog article */}
+            <RelatedGuideLink 
+              problemSlug={pageData.problemSlug}
+              problemName={pageData.problemName}
+            />
+
+            {/* Similar Problems in This City - Internal Linking */}
+            <SimilarProblemsInCity
+              currentProblemSlug={pageData.problemSlug}
+              citySlug={pageData.citySlug}
+              cityName={pageData.cityName}
             />
 
             {/* Full CTA - Before Final */}

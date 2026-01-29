@@ -5,6 +5,7 @@ import { WarningBox } from './WarningBox';
 import { ProCallBox } from './ProCallBox';
 import { FinalCTABox } from './FinalCTABox';
 import { ArticleIntro } from './ArticleIntro';
+import { LocalProblemLinks } from './LocalProblemLinks';
 
 // Icon mapping for common topics
 const TOPIC_ICONS: Record<string, string> = {
@@ -519,6 +520,12 @@ export function ArticleContentParser({
           </p>
         </ProCallBox>
       )}
+      
+      {/* Local Problem City Links - Internal Linking for SEO */}
+      <LocalProblemLinks 
+        articleSlug={articleSlug} 
+        articleTitle={articleTitle} 
+      />
       
       {/* Final CTA */}
       <FinalCTABox

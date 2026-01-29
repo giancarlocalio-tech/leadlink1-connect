@@ -6,8 +6,9 @@ import { getArticleBySlug, getRelatedArticles, BLOG_CATEGORIES } from '@/lib/blo
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, ArrowLeft, ArrowRight, Share2, BookOpen, User } from 'lucide-react';
+import { Calendar, Clock, ArrowLeft, Share2, User } from 'lucide-react';
 import { EnhancedArticleContent } from '@/components/blog/EnhancedArticleContent';
+import { ArticleRequestForm } from '@/components/blog/ArticleRequestForm';
 
 export default function BlogArticlePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -238,27 +239,16 @@ export default function BlogArticlePage() {
         </div>
       </section>
 
-      {/* CTA Box */}
-      <section className="py-12 bg-primary/5">
+      {/* CTA Box with Inline Form */}
+      <section className="py-12 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <Card className="border-primary/20 shadow-lg">
-              <CardContent className="p-6 md:p-8 text-center">
-                <BookOpen className="h-12 w-12 mx-auto mb-4 text-primary" />
-                <h2 className="text-xl md:text-2xl font-bold mb-3">
-                  Hai bisogno di un idraulico professionista?
-                </h2>
-                <p className="text-muted-foreground mb-6">
-                  Se il problema richiede l'intervento di un esperto, richiedi subito un preventivo gratuito.
-                </p>
-                <Link to="/richiesta">
-                  <Button size="lg" className="w-full sm:w-auto">
-                    Richiedi Preventivo Gratuito
-                    <ArrowRight className="h-5 w-5 ml-2" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+            <ArticleRequestForm
+              title="Hai bisogno di un idraulico professionista?"
+              description="Se il problema richiede l'intervento di un esperto, richiedi subito un preventivo gratuito."
+              interventionType="altro"
+              problemContext={`Richiesta da articolo: ${article.h1}`}
+            />
           </div>
         </div>
       </section>

@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { getProblemCityPageBySlug } from "@/lib/problemCityPagesData";
 import { Layout } from "@/components/Layout";
@@ -11,10 +11,13 @@ import { FinalCTABox } from "@/components/blog/FinalCTABox";
 import { MapPin, AlertCircle, Wrench, Home } from "lucide-react";
 
 const ProblemCityPage = () => {
-  const { slug } = useParams<{ slug: string }>();
+  const location = useLocation();
   const navigate = useNavigate();
   
-  const pageData = slug ? getProblemCityPageBySlug(slug) : undefined;
+  // Extract slug from pathname (e.g., "/lavandino-intasato-milano" -> "lavandino-intasato-milano")
+  const slug = location.pathname.replace(/^\//, '');
+  
+  const pageData = getProblemCityPageBySlug(slug);
   
   if (!pageData) {
     return (

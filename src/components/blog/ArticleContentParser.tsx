@@ -9,28 +9,38 @@ import { ArticleIntro } from './ArticleIntro';
 // Icon mapping for common topics
 const TOPIC_ICONS: Record<string, string> = {
   'acqua bollente': '🔥',
+  'acqua calda': '🔥',
   'bicarbonato': '🧪',
   'aceto': '🧪',
+  'sale': '🧂',
   'ventosa': '🪠',
   'sifone': '🔧',
   'sonda': '🌀',
+  'gancio': '🪝',
   'attrezzi': '🧰',
   'pulizia': '🧹',
+  'pulisci': '🧹',
   'riparazione': '🔩',
+  'ripara': '🔩',
   'controllo': '🔍',
+  'controlla': '🔍',
+  'verifica': '🔍',
   'sicurezza': '🛡️',
   'emergenza': '🚨',
   'risparmio': '💰',
   'manutenzione': '⚙️',
   'caldaia': '🔥',
   'termosifone': '🌡️',
+  'termostato': '🌡️',
   'rubinetto': '🚿',
   'tubo': '🔧',
   'perdita': '💧',
   'allagamento': '🌊',
   'wc': '🚽',
+  'water': '🚽',
   'doccia': '🚿',
   'lavandino': '🚰',
+  'lavandino cucina': '🚰',
   'valvola': '🔩',
   'pressione': '📊',
   'bonus': '💶',
@@ -42,6 +52,22 @@ const TOPIC_ICONS: Record<string, string> = {
   'flessibile': '〰️',
   'stucco': '🧱',
   'fascetta': '🔗',
+  'nastro': '🩹',
+  'bottiglia': '🧴',
+  'detersivo': '🧴',
+  'enzimi': '🦠',
+  'reset': '🔄',
+  'sfiata': '💨',
+  'gas': '🔥',
+  'elettric': '⚡',
+  'pilota': '🔥',
+  'filtro': '🔲',
+  'pompa': '⚙️',
+  'scarico': '🚿',
+  'griglia': '🔲',
+  'stringi': '🔧',
+  'sostituire': '🔄',
+  'sostituisci': '🔄',
   'default': '✅'
 };
 
@@ -58,7 +84,7 @@ function getIconForContent(text: string): string {
 
 // Parse HTML content into structured sections
 interface ParsedSection {
-  type: 'intro' | 'method' | 'warning' | 'procall' | 'list' | 'text' | 'h2' | 'h3';
+  type: 'intro' | 'causes' | 'method' | 'warning' | 'procall' | 'prevention' | 'list' | 'text' | 'h2' | 'h3';
   title?: string;
   content: string;
   items?: string[];
@@ -97,10 +123,25 @@ function parseHtmlContent(htmlContent: string): ParsedSection[] {
     // Detect section types based on title keywords
     const lowerTitle = title.toLowerCase();
     
+    // "Cause comuni" or similar sections
+    if (lowerTitle.includes('cause') || 
+        lowerTitle.includes('perché') ||
+        lowerTitle.includes('origine')) {
+      sections.push({
+        type: 'causes',
+        title,
+        content: remainingContent,
+        items: extractListItems(remainingContent),
+        icon: '🔍'
+      });
+      return;
+    }
+    
     // Pro call / When to call professional sections
     if (lowerTitle.includes('quando chiamare') || 
         lowerTitle.includes('professionista') ||
-        lowerTitle.includes('idraulico') && lowerTitle.includes('quando')) {
+        lowerTitle.includes('idraulico') && lowerTitle.includes('quando') ||
+        lowerTitle.includes('tecnico') && lowerTitle.includes('quando')) {
       sections.push({
         type: 'procall',
         title,
@@ -114,22 +155,40 @@ function parseHtmlContent(htmlContent: string): ParsedSection[] {
         lowerTitle.includes('errori') ||
         lowerTitle.includes('cosa non fare') ||
         lowerTitle.includes('pericolo') ||
-        lowerTitle.includes('evitare')) {
+        lowerTitle.includes('evitare') ||
+        lowerTitle.includes('segnali di problemi')) {
       sections.push({
         type: 'warning',
-        title,
+        title: cleanWarningTitle(title),
         content: stripHtml(remainingContent),
         items: extractListItems(remainingContent)
       });
       return;
     }
     
+    // Prevention / Tips sections
+    if (lowerTitle.includes('prevenzione') ||
+        lowerTitle.includes('consigli') ||
+        lowerTitle.includes('buone abitudini') ||
+        lowerTitle.includes('come evitare')) {
+      sections.push({
+        type: 'prevention',
+        title,
+        content: remainingContent,
+        items: extractListItems(remainingContent),
+        icon: '💡'
+      });
+      return;
+    }
+    
     // Method cards (numbered sections or practical methods)
-    const isNumbered = /^[0-9]+[.\s]/.test(title) || /^(metodo|passo|step|fase)\s+[0-9]+/i.test(title);
+    const isNumbered = /^[0-9]+[.\s]/.test(title) || 
+                       /^(metodo|passo|step|fase|causa)\s+[0-9]+/i.test(title);
     const isPracticalMethod = lowerTitle.includes('metodo') || 
                                lowerTitle.includes('soluzione') ||
                                lowerTitle.includes('rimedio') ||
-                               lowerTitle.includes('tecnica');
+                               lowerTitle.includes('tecnica') ||
+                               /^(le prime|prima|1\.|2\.|3\.|4\.|5\.)/.test(lowerTitle);
     
     if (isNumbered || isPracticalMethod) {
       // Extract steps from list items
@@ -142,6 +201,17 @@ function parseHtmlContent(htmlContent: string): ParsedSection[] {
         content: description,
         items: steps,
         icon: getIconForContent(title)
+      });
+      return;
+    }
+    
+    // Check for "Codici di errore" or similar info sections
+    if (lowerTitle.includes('codic') || lowerTitle.includes('error')) {
+      sections.push({
+        type: 'h2',
+        title,
+        content: remainingContent,
+        icon: '📟'
       });
       return;
     }
@@ -163,23 +233,27 @@ function stripHtml(html: string): string {
   return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
+// Clean warning title
+function cleanWarningTitle(title: string): string {
+  return title
+    .replace(/^attenzione[:\s]*/i, '')
+    .replace(/cosa non fare/i, 'Cosa NON fare')
+    .trim() || 'Attenzione';
+}
+
 // Extract list items from HTML
 function extractListItems(html: string): string[] {
   const items: string[] = [];
-  const liMatches = html.match(/<li[^>]*>([^<]+(?:<[^/][^>]*>[^<]+<\/[^>]+>)*[^<]*)<\/li>/gi) || [];
   
-  liMatches.forEach(match => {
-    const text = stripHtml(match);
-    if (text) items.push(text);
-  });
+  // Match all list items
+  const liRegex = /<li[^>]*>([\s\S]*?)<\/li>/gi;
+  let match;
   
-  // Also extract from ol items
-  const olMatches = html.match(/<li[^>]*>[\s\S]*?<\/li>/gi) || [];
-  if (items.length === 0) {
-    olMatches.forEach(match => {
-      const text = stripHtml(match);
-      if (text && !items.includes(text)) items.push(text);
-    });
+  while ((match = liRegex.exec(html)) !== null) {
+    const text = stripHtml(match[1]);
+    if (text && !items.includes(text)) {
+      items.push(text);
+    }
   }
   
   return items;
@@ -199,8 +273,8 @@ function extractFirstParagraph(html: string): string {
 // Clean method title (remove numbering prefix for display)
 function cleanMethodTitle(title: string): string {
   return title
-    .replace(/^[0-9]+[.\s:]+/, '')
-    .replace(/^(metodo|passo|step|fase)\s+[0-9]+[.\s:]+/i, '')
+    .replace(/^[0-9]+[.\s:—–-]+\s*/g, '')
+    .replace(/^(metodo|passo|step|fase|causa)\s+[0-9]+[.\s:—–-]*/i, '')
     .trim();
 }
 
@@ -216,11 +290,65 @@ function generateSummaryItems(sections: ParsedSection[]): Array<{ icon: string; 
   }
   
   // Fallback: use h2 sections
-  const h2Sections = sections.filter(s => s.type === 'h2');
+  const h2Sections = sections.filter(s => s.type === 'h2' || s.type === 'causes');
   return h2Sections.slice(0, 5).map(section => ({
     icon: section.icon || '📌',
     label: section.title || 'Sezione'
   }));
+}
+
+// Render causes section
+function renderCausesSection(section: ParsedSection): ReactNode {
+  return (
+    <section key="causes" className="space-y-4 my-8">
+      <h2 className="text-2xl font-bold text-foreground flex items-center gap-3">
+        <span className="text-2xl">🔍</span>
+        {section.title}
+      </h2>
+      {section.items && section.items.length > 0 ? (
+        <ul className="space-y-3 bg-muted/30 rounded-xl p-5">
+          {section.items.map((item, i) => (
+            <li key={i} className="flex items-start gap-3 text-muted-foreground">
+              <span className="text-primary mt-0.5">•</span>
+              <span className="leading-relaxed">{item}</span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div 
+          className="prose prose-lg max-w-none prose-p:text-muted-foreground"
+          dangerouslySetInnerHTML={{ __html: section.content }}
+        />
+      )}
+    </section>
+  );
+}
+
+// Render prevention section
+function renderPreventionSection(section: ParsedSection): ReactNode {
+  return (
+    <section key="prevention" className="space-y-4 my-8 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/30 dark:to-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-2xl p-6">
+      <h2 className="text-xl font-bold text-foreground flex items-center gap-3">
+        <span className="text-2xl">💡</span>
+        {section.title}
+      </h2>
+      {section.items && section.items.length > 0 ? (
+        <ul className="space-y-2">
+          {section.items.map((item, i) => (
+            <li key={i} className="flex items-start gap-3 text-muted-foreground">
+              <span className="text-blue-500 mt-0.5">✓</span>
+              <span className="leading-relaxed">{item}</span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div 
+          className="prose prose-lg max-w-none prose-p:text-muted-foreground"
+          dangerouslySetInnerHTML={{ __html: section.content }}
+        />
+      )}
+    </section>
+  );
 }
 
 // Render a parsed section as React component
@@ -232,6 +360,12 @@ function renderSection(section: ParsedSection, index: number, articleTitle: stri
           <p>{section.content}</p>
         </ArticleIntro>
       );
+    
+    case 'causes':
+      return renderCausesSection(section);
+    
+    case 'prevention':
+      return renderPreventionSection(section);
     
     case 'method':
       return (
@@ -249,9 +383,12 @@ function renderSection(section: ParsedSection, index: number, articleTitle: stri
       return (
         <WarningBox key={`warning-${index}`} title={section.title}>
           {section.items && section.items.length > 0 ? (
-            <ul className="list-disc list-inside space-y-1">
+            <ul className="list-none space-y-2">
               {section.items.map((item, i) => (
-                <li key={i}>{item}</li>
+                <li key={i} className="flex items-start gap-2">
+                  <span className="text-amber-600">•</span>
+                  <span>{item}</span>
+                </li>
               ))}
             </ul>
           ) : (
@@ -269,13 +406,13 @@ function renderSection(section: ParsedSection, index: number, articleTitle: stri
     
     case 'h2':
       return (
-        <section key={`section-${index}`} className="space-y-4">
+        <section key={`section-${index}`} className="space-y-4 my-8">
           <h2 className="text-2xl font-bold text-foreground flex items-center gap-3">
             <span className="text-2xl">{section.icon}</span>
             {section.title}
           </h2>
           <div 
-            className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-p:leading-relaxed prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:marker:text-primary prose-li:my-1 prose-h3:text-xl prose-h3:font-semibold prose-h3:mt-6 prose-h3:mb-3"
+            className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-p:leading-relaxed prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:marker:text-primary prose-li:my-1 prose-h3:text-xl prose-h3:font-semibold prose-h3:mt-6 prose-h3:mb-3 prose-strong:text-foreground"
             dangerouslySetInnerHTML={{ __html: section.content }}
           />
         </section>
@@ -310,13 +447,22 @@ export function ArticleContentParser({
   
   // Get intro section
   const introSection = sections.find(s => s.type === 'intro');
-  const otherSections = sections.filter(s => s.type !== 'intro');
+  
+  // Get causes section
+  const causesSection = sections.find(s => s.type === 'causes');
+  
+  // Get other sections (excluding intro, causes, and methods if we're rendering them separately)
+  const otherSections = sections.filter(s => 
+    s.type !== 'intro' && 
+    s.type !== 'causes' && 
+    (s.type !== 'method' || !hasMethodCards)
+  );
   
   // Check if there's a pro call section
   const hasProCallSection = sections.some(s => s.type === 'procall');
   
   // Number the method cards properly
-  let methodIndex = 0;
+  let methodNumber = 0;
   
   return (
     <div className="space-y-8">
@@ -331,16 +477,19 @@ export function ArticleContentParser({
       {summaryItems.length >= 2 && (
         <SummaryBox
           icon={getIconForContent(articleTitle)}
-          title={articleTitle}
+          title={`Problema con ${articleTitle.toLowerCase().replace('come ', '').replace('la ', '').replace('il ', '')}? Prova questi passaggi`}
           items={summaryItems}
         />
       )}
       
+      {/* Causes Section */}
+      {causesSection && renderCausesSection(causesSection)}
+      
       {/* Methods as Cards */}
       {hasMethodCards && (
-        <div className="space-y-6">
+        <div className="space-y-6 my-10">
           <h2 className="text-2xl font-bold text-foreground">
-            I metodi consigliati
+            🛠️ Cosa puoi provare da solo
           </h2>
           <div className="grid gap-6">
             {methodSections.map((section, index) => (
@@ -358,9 +507,7 @@ export function ArticleContentParser({
       )}
       
       {/* Other sections */}
-      {otherSections
-        .filter(s => s.type !== 'method' || !hasMethodCards)
-        .map((section, index) => renderSection(section, index, articleTitle))}
+      {otherSections.map((section, index) => renderSection(section, index, articleTitle))}
       
       {/* Add ProCallBox if none exists */}
       {!hasProCallSection && (
@@ -375,8 +522,8 @@ export function ArticleContentParser({
       
       {/* Final CTA */}
       <FinalCTABox
-        title="Hai bisogno di un professionista?"
-        description="Trova subito un idraulico qualificato nella tua zona per un intervento rapido e risolutivo."
+        title="Non si è ancora risolto?"
+        description="Il problema potrebbe essere più serio. Trova subito un idraulico qualificato vicino a te."
         interventionType={interventionType}
         problemContext={`Richiesta da articolo: ${articleTitle}`}
       />

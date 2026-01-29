@@ -1,130 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Lavandino Intasato -->
-  <url>
-    <loc>https://www.idraulicisubito.com/lavandino-intasato-milano</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.idraulicisubito.com/lavandino-intasato-roma</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.idraulicisubito.com/lavandino-intasato-torino</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.idraulicisubito.com/lavandino-intasato-napoli</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.idraulicisubito.com/lavandino-intasato-bologna</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
+  <!-- Lavandino Intasato - 10 cities -->
+  <url><loc>https://www.idraulicisubito.com/lavandino-intasato-milano</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/lavandino-intasato-roma</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/lavandino-intasato-torino</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/lavandino-intasato-napoli</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/lavandino-intasato-bologna</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/lavandino-intasato-firenze</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/lavandino-intasato-genova</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/lavandino-intasato-bari</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/lavandino-intasato-verona</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/lavandino-intasato-padova</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
   
-  <!-- WC Otturato -->
-  <url>
-    <loc>https://www.idraulicisubito.com/wc-otturato-milano</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.idraulicisubito.com/wc-otturato-roma</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.idraulicisubito.com/wc-otturato-torino</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.idraulicisubito.com/wc-otturato-napoli</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.idraulicisubito.com/wc-otturato-firenze</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
+  <!-- WC Otturato - 10 cities -->
+  <url><loc>https://www.idraulicisubito.com/wc-otturato-milano</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/wc-otturato-roma</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/wc-otturato-torino</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/wc-otturato-napoli</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/wc-otturato-bologna</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/wc-otturato-firenze</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/wc-otturato-genova</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/wc-otturato-bari</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/wc-otturato-palermo</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/wc-otturato-catania</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
   
-  <!-- Scaldabagno Non Scalda -->
-  <url>
-    <loc>https://www.idraulicisubito.com/scaldabagno-non-scalda-milano</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.idraulicisubito.com/scaldabagno-non-scalda-roma</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.idraulicisubito.com/scaldabagno-non-scalda-torino</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.idraulicisubito.com/scaldabagno-non-scalda-napoli</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.idraulicisubito.com/scaldabagno-non-scalda-genova</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
+  <!-- Scaldabagno Non Scalda - 10 cities -->
+  <url><loc>https://www.idraulicisubito.com/scaldabagno-non-scalda-milano</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/scaldabagno-non-scalda-roma</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/scaldabagno-non-scalda-torino</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/scaldabagno-non-scalda-napoli</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/scaldabagno-non-scalda-bologna</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/scaldabagno-non-scalda-firenze</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/scaldabagno-non-scalda-genova</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/scaldabagno-non-scalda-bari</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/scaldabagno-non-scalda-verona</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/scaldabagno-non-scalda-venezia</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
   
-  <!-- Caldaia in Blocco -->
-  <url>
-    <loc>https://www.idraulicisubito.com/caldaia-in-blocco-milano</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.idraulicisubito.com/caldaia-in-blocco-roma</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.idraulicisubito.com/caldaia-in-blocco-torino</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.idraulicisubito.com/caldaia-in-blocco-napoli</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.idraulicisubito.com/caldaia-in-blocco-verona</loc>
-    <lastmod>2026-01-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
+  <!-- Caldaia in Blocco - 10 cities -->
+  <url><loc>https://www.idraulicisubito.com/caldaia-in-blocco-milano</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/caldaia-in-blocco-roma</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/caldaia-in-blocco-torino</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/caldaia-in-blocco-napoli</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/caldaia-in-blocco-bologna</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/caldaia-in-blocco-firenze</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/caldaia-in-blocco-genova</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/caldaia-in-blocco-bari</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/caldaia-in-blocco-verona</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/caldaia-in-blocco-trieste</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  
+  <!-- Tubo che Perde - 10 cities -->
+  <url><loc>https://www.idraulicisubito.com/tubo-che-perde-milano</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/tubo-che-perde-roma</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/tubo-che-perde-torino</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/tubo-che-perde-napoli</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/tubo-che-perde-bologna</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/tubo-che-perde-firenze</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/tubo-che-perde-genova</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/tubo-che-perde-bari</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/tubo-che-perde-verona</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/tubo-che-perde-modena</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  
+  <!-- Doccia Non Scarica - 10 cities -->
+  <url><loc>https://www.idraulicisubito.com/doccia-non-scarica-milano</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/doccia-non-scarica-roma</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/doccia-non-scarica-torino</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/doccia-non-scarica-napoli</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/doccia-non-scarica-bologna</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/doccia-non-scarica-firenze</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/doccia-non-scarica-genova</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/doccia-non-scarica-bari</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/doccia-non-scarica-verona</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/doccia-non-scarica-parma</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  
+  <!-- Scarico Cucina Lento - 10 cities -->
+  <url><loc>https://www.idraulicisubito.com/scarico-cucina-lento-milano</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/scarico-cucina-lento-roma</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/scarico-cucina-lento-torino</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/scarico-cucina-lento-napoli</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/scarico-cucina-lento-bologna</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/scarico-cucina-lento-firenze</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/scarico-cucina-lento-genova</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/scarico-cucina-lento-bari</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/scarico-cucina-lento-verona</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/scarico-cucina-lento-reggio-emilia</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  
+  <!-- Termosifone Freddo - 10 cities -->
+  <url><loc>https://www.idraulicisubito.com/termosifone-freddo-milano</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/termosifone-freddo-roma</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/termosifone-freddo-torino</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/termosifone-freddo-napoli</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/termosifone-freddo-bologna</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/termosifone-freddo-firenze</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/termosifone-freddo-genova</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/termosifone-freddo-bari</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/termosifone-freddo-verona</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.idraulicisubito.com/termosifone-freddo-bergamo</loc><lastmod>2026-01-29</lastmod><priority>0.8</priority><changefreq>monthly</changefreq></url>
 </urlset>

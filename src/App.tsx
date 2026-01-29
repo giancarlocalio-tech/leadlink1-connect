@@ -623,27 +623,101 @@ const App = () => (
             <Route path="/costo-installazione-sanitari" element={<PricingPage />} />
             <Route path="/costo-sostituzione-rubinetto" element={<PricingPage />} />
             
-            {/* Problem + City SEO Pages */}
+            {/* Problem + City SEO Pages - Lavandino Intasato */}
             <Route path="/lavandino-intasato-milano" element={<ProblemCityPage />} />
             <Route path="/lavandino-intasato-roma" element={<ProblemCityPage />} />
             <Route path="/lavandino-intasato-torino" element={<ProblemCityPage />} />
             <Route path="/lavandino-intasato-napoli" element={<ProblemCityPage />} />
             <Route path="/lavandino-intasato-bologna" element={<ProblemCityPage />} />
+            <Route path="/lavandino-intasato-firenze" element={<ProblemCityPage />} />
+            <Route path="/lavandino-intasato-genova" element={<ProblemCityPage />} />
+            <Route path="/lavandino-intasato-bari" element={<ProblemCityPage />} />
+            <Route path="/lavandino-intasato-verona" element={<ProblemCityPage />} />
+            <Route path="/lavandino-intasato-padova" element={<ProblemCityPage />} />
+            
+            {/* Problem + City SEO Pages - WC Otturato */}
             <Route path="/wc-otturato-milano" element={<ProblemCityPage />} />
             <Route path="/wc-otturato-roma" element={<ProblemCityPage />} />
             <Route path="/wc-otturato-torino" element={<ProblemCityPage />} />
             <Route path="/wc-otturato-napoli" element={<ProblemCityPage />} />
+            <Route path="/wc-otturato-bologna" element={<ProblemCityPage />} />
             <Route path="/wc-otturato-firenze" element={<ProblemCityPage />} />
+            <Route path="/wc-otturato-genova" element={<ProblemCityPage />} />
+            <Route path="/wc-otturato-bari" element={<ProblemCityPage />} />
+            <Route path="/wc-otturato-palermo" element={<ProblemCityPage />} />
+            <Route path="/wc-otturato-catania" element={<ProblemCityPage />} />
+            
+            {/* Problem + City SEO Pages - Scaldabagno Non Scalda */}
             <Route path="/scaldabagno-non-scalda-milano" element={<ProblemCityPage />} />
             <Route path="/scaldabagno-non-scalda-roma" element={<ProblemCityPage />} />
             <Route path="/scaldabagno-non-scalda-torino" element={<ProblemCityPage />} />
             <Route path="/scaldabagno-non-scalda-napoli" element={<ProblemCityPage />} />
+            <Route path="/scaldabagno-non-scalda-bologna" element={<ProblemCityPage />} />
+            <Route path="/scaldabagno-non-scalda-firenze" element={<ProblemCityPage />} />
             <Route path="/scaldabagno-non-scalda-genova" element={<ProblemCityPage />} />
+            <Route path="/scaldabagno-non-scalda-bari" element={<ProblemCityPage />} />
+            <Route path="/scaldabagno-non-scalda-verona" element={<ProblemCityPage />} />
+            <Route path="/scaldabagno-non-scalda-venezia" element={<ProblemCityPage />} />
+            
+            {/* Problem + City SEO Pages - Caldaia in Blocco */}
             <Route path="/caldaia-in-blocco-milano" element={<ProblemCityPage />} />
             <Route path="/caldaia-in-blocco-roma" element={<ProblemCityPage />} />
             <Route path="/caldaia-in-blocco-torino" element={<ProblemCityPage />} />
             <Route path="/caldaia-in-blocco-napoli" element={<ProblemCityPage />} />
+            <Route path="/caldaia-in-blocco-bologna" element={<ProblemCityPage />} />
+            <Route path="/caldaia-in-blocco-firenze" element={<ProblemCityPage />} />
+            <Route path="/caldaia-in-blocco-genova" element={<ProblemCityPage />} />
+            <Route path="/caldaia-in-blocco-bari" element={<ProblemCityPage />} />
             <Route path="/caldaia-in-blocco-verona" element={<ProblemCityPage />} />
+            <Route path="/caldaia-in-blocco-trieste" element={<ProblemCityPage />} />
+            
+            {/* Problem + City SEO Pages - Tubo che Perde */}
+            <Route path="/tubo-che-perde-milano" element={<ProblemCityPage />} />
+            <Route path="/tubo-che-perde-roma" element={<ProblemCityPage />} />
+            <Route path="/tubo-che-perde-torino" element={<ProblemCityPage />} />
+            <Route path="/tubo-che-perde-napoli" element={<ProblemCityPage />} />
+            <Route path="/tubo-che-perde-bologna" element={<ProblemCityPage />} />
+            <Route path="/tubo-che-perde-firenze" element={<ProblemCityPage />} />
+            <Route path="/tubo-che-perde-genova" element={<ProblemCityPage />} />
+            <Route path="/tubo-che-perde-bari" element={<ProblemCityPage />} />
+            <Route path="/tubo-che-perde-verona" element={<ProblemCityPage />} />
+            <Route path="/tubo-che-perde-modena" element={<ProblemCityPage />} />
+            
+            {/* Problem + City SEO Pages - Doccia Non Scarica */}
+            <Route path="/doccia-non-scarica-milano" element={<ProblemCityPage />} />
+            <Route path="/doccia-non-scarica-roma" element={<ProblemCityPage />} />
+            <Route path="/doccia-non-scarica-torino" element={<ProblemCityPage />} />
+            <Route path="/doccia-non-scarica-napoli" element={<ProblemCityPage />} />
+            <Route path="/doccia-non-scarica-bologna" element={<ProblemCityPage />} />
+            <Route path="/doccia-non-scarica-firenze" element={<ProblemCityPage />} />
+            <Route path="/doccia-non-scarica-genova" element={<ProblemCityPage />} />
+            <Route path="/doccia-non-scarica-bari" element={<ProblemCityPage />} />
+            <Route path="/doccia-non-scarica-verona" element={<ProblemCityPage />} />
+            <Route path="/doccia-non-scarica-parma" element={<ProblemCityPage />} />
+            
+            {/* Problem + City SEO Pages - Scarico Cucina Lento */}
+            <Route path="/scarico-cucina-lento-milano" element={<ProblemCityPage />} />
+            <Route path="/scarico-cucina-lento-roma" element={<ProblemCityPage />} />
+            <Route path="/scarico-cucina-lento-torino" element={<ProblemCityPage />} />
+            <Route path="/scarico-cucina-lento-napoli" element={<ProblemCityPage />} />
+            <Route path="/scarico-cucina-lento-bologna" element={<ProblemCityPage />} />
+            <Route path="/scarico-cucina-lento-firenze" element={<ProblemCityPage />} />
+            <Route path="/scarico-cucina-lento-genova" element={<ProblemCityPage />} />
+            <Route path="/scarico-cucina-lento-bari" element={<ProblemCityPage />} />
+            <Route path="/scarico-cucina-lento-verona" element={<ProblemCityPage />} />
+            <Route path="/scarico-cucina-lento-reggio-emilia" element={<ProblemCityPage />} />
+            
+            {/* Problem + City SEO Pages - Termosifone Freddo */}
+            <Route path="/termosifone-freddo-milano" element={<ProblemCityPage />} />
+            <Route path="/termosifone-freddo-roma" element={<ProblemCityPage />} />
+            <Route path="/termosifone-freddo-torino" element={<ProblemCityPage />} />
+            <Route path="/termosifone-freddo-napoli" element={<ProblemCityPage />} />
+            <Route path="/termosifone-freddo-bologna" element={<ProblemCityPage />} />
+            <Route path="/termosifone-freddo-firenze" element={<ProblemCityPage />} />
+            <Route path="/termosifone-freddo-genova" element={<ProblemCityPage />} />
+            <Route path="/termosifone-freddo-bari" element={<ProblemCityPage />} />
+            <Route path="/termosifone-freddo-verona" element={<ProblemCityPage />} />
+            <Route path="/termosifone-freddo-bergamo" element={<ProblemCityPage />} />
             
             {/* 301 Redirects for legacy URL patterns */}
             <Route path="/idraulico/:city/:service" element={<IdraulicoRedirect type="city-service" />} />

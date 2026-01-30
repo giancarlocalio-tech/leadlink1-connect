@@ -660,50 +660,62 @@ const generatePage = (problemSlug: string, citySlug: string): ProblemCityPage =>
     }
   };
 
+  // SEO-OPTIMIZED H1: "[Problema] a [Città]: cosa fare e quando chiamare l'idraulico"
   const h1Texts: Record<string, string> = {
-    "lavandino-intasato": `Lavandino Intasato a ${cityName}: Come Risolvere`,
-    "wc-otturato": `WC Otturato a ${cityName}: Cosa Fare`,
-    "scaldabagno-non-scalda": `Scaldabagno Non Scalda a ${cityName}: Cause e Soluzioni`,
-    "caldaia-in-blocco": `Caldaia in Blocco a ${cityName}: Come Risolvere`,
-    "tubo-che-perde": `Tubo che Perde a ${cityName}: Cosa Fare Subito`,
-    "doccia-non-scarica": `Doccia che Non Scarica a ${cityName}: Come Risolvere`,
-    "scarico-cucina-lento": `Scarico Cucina Lento a ${cityName}: Cause e Rimedi`,
-    "termosifone-freddo": `Termosifone Freddo a ${cityName}: Come Risolvere`
+    "lavandino-intasato": `Lavandino Intasato a ${cityName}: Cosa Fare e Quando Chiamare l'Idraulico`,
+    "wc-otturato": `WC Otturato a ${cityName}: Cosa Fare e Quando Chiamare l'Idraulico`,
+    "scaldabagno-non-scalda": `Scaldabagno Non Scalda a ${cityName}: Cosa Fare e Quando Chiamare il Tecnico`,
+    "caldaia-in-blocco": `Caldaia in Blocco a ${cityName}: Cosa Fare e Quando Chiamare il Tecnico`,
+    "tubo-che-perde": `Tubo che Perde a ${cityName}: Cosa Fare Subito e Quando Chiamare l'Idraulico`,
+    "doccia-non-scarica": `Doccia Non Scarica a ${cityName}: Cosa Fare e Quando Chiamare l'Idraulico`,
+    "scarico-cucina-lento": `Scarico Cucina Lento a ${cityName}: Cosa Fare e Quando Chiamare l'Idraulico`,
+    "termosifone-freddo": `Termosifone Freddo a ${cityName}: Cosa Fare e Quando Chiamare il Tecnico`
   };
 
+  // SEO-OPTIMIZED META TITLE: "[Problema] a [Città] | Idraulico Urgente e Riparazioni"
   const metaTitles: Record<string, string> = {
-    "lavandino-intasato": `Lavandino Intasato a ${cityName} | Soluzioni Rapide e Idraulico`,
-    "wc-otturato": `WC Otturato a ${cityName} | Soluzioni e Pronto Intervento`,
-    "scaldabagno-non-scalda": `Scaldabagno Non Scalda a ${cityName} | Riparazione Urgente`,
-    "caldaia-in-blocco": `Caldaia in Blocco a ${cityName} | Sblocco e Assistenza`,
-    "tubo-che-perde": `Tubo che Perde a ${cityName} | Riparazione Urgente 24h`,
-    "doccia-non-scarica": `Doccia Non Scarica a ${cityName} | Disostruzione Rapida`,
-    "scarico-cucina-lento": `Scarico Cucina Lento a ${cityName} | Cause e Soluzioni`,
-    "termosifone-freddo": `Termosifone Freddo a ${cityName} | Soluzioni e Assistenza`
+    "lavandino-intasato": `Lavandino Intasato a ${cityName} | Idraulico Urgente e Riparazioni`,
+    "wc-otturato": `WC Otturato a ${cityName} | Idraulico Urgente e Riparazioni`,
+    "scaldabagno-non-scalda": `Scaldabagno Non Scalda a ${cityName} | Tecnico Urgente e Riparazioni`,
+    "caldaia-in-blocco": `Caldaia in Blocco a ${cityName} | Tecnico Urgente e Sblocco`,
+    "tubo-che-perde": `Tubo che Perde a ${cityName} | Idraulico Urgente 24h`,
+    "doccia-non-scarica": `Doccia Non Scarica a ${cityName} | Idraulico Urgente e Disostruzione`,
+    "scarico-cucina-lento": `Scarico Cucina Lento a ${cityName} | Idraulico e Disostruzione`,
+    "termosifone-freddo": `Termosifone Freddo a ${cityName} | Tecnico Urgente e Assistenza`
   };
 
+  // SEO-OPTIMIZED META DESCRIPTION
   const metaDescriptions: Record<string, string> = {
-    "lavandino-intasato": `Hai il lavandino intasato a ${cityName}? Scopri le cause, i metodi fai-da-te e quando chiamare un idraulico. Pronto intervento in tutta la provincia.`,
-    "wc-otturato": `WC otturato a ${cityName}? Scopri come sturarlo da solo e quando chiamare un idraulico. Intervento rapido in tutta la provincia.`,
-    "scaldabagno-non-scalda": `Lo scaldabagno non scalda l'acqua a ${cityName}? Scopri le cause, i controlli da fare e quando chiamare un tecnico. Assistenza in tutta la provincia.`,
-    "caldaia-in-blocco": `La caldaia è in blocco a ${cityName}? Scopri le cause comuni, come resettarla e quando chiamare un tecnico caldaista. Pronto intervento.`,
-    "tubo-che-perde": `Hai un tubo che perde a ${cityName}? Scopri cosa fare subito, come limitare i danni e quando chiamare un idraulico. Intervento urgente 24h.`,
-    "doccia-non-scarica": `La doccia non scarica a ${cityName}? Scopri le cause dell'intasamento e i rimedi fai-da-te. Idraulico pronto intervento se serve.`,
-    "scarico-cucina-lento": `Scarico della cucina lento a ${cityName}? Ecco le cause, i rimedi casalinghi e quando chiamare un idraulico professionista.`,
-    "termosifone-freddo": `Termosifone freddo a ${cityName}? Scopri come sfiatarlo, controllare le valvole e quando serve un tecnico. Assistenza riscaldamento.`
+    "lavandino-intasato": `Hai il lavandino intasato a ${cityName}? Scopri cosa fare subito e quando chiamare un idraulico. Richiedi preventivi gratuiti da professionisti nella tua zona.`,
+    "wc-otturato": `Hai il WC otturato a ${cityName}? Scopri cosa fare subito e quando chiamare un idraulico. Richiedi preventivi gratuiti da professionisti nella tua zona.`,
+    "scaldabagno-non-scalda": `Lo scaldabagno non scalda a ${cityName}? Scopri cosa fare subito e quando chiamare un tecnico. Richiedi preventivi gratuiti da professionisti nella tua zona.`,
+    "caldaia-in-blocco": `La caldaia è in blocco a ${cityName}? Scopri cosa fare subito e quando chiamare un tecnico caldaista. Richiedi preventivi gratuiti da professionisti.`,
+    "tubo-che-perde": `Hai un tubo che perde a ${cityName}? Scopri cosa fare subito e quando chiamare un idraulico. Intervento urgente 24h disponibile.`,
+    "doccia-non-scarica": `La doccia non scarica a ${cityName}? Scopri cosa fare subito e quando chiamare un idraulico. Richiedi preventivi gratuiti da professionisti.`,
+    "scarico-cucina-lento": `Scarico cucina lento a ${cityName}? Scopri cosa fare subito e quando chiamare un idraulico. Richiedi preventivi gratuiti da professionisti.`,
+    "termosifone-freddo": `Termosifone freddo a ${cityName}? Scopri cosa fare subito e quando chiamare un tecnico. Richiedi preventivi gratuiti da professionisti.`
   };
 
+  // SEO-OPTIMIZED INTRO TEXT (min 6 righe, 2+ menzioni città)
   const introTexts: Record<string, string> = {
-    "lavandino-intasato": `Hai il **lavandino intasato a ${cityName}**? È uno dei problemi idraulici più comuni, soprattutto in una città con ${city.buildingAge}. L'${city.waterType} può contribuire ad accelerare l'accumulo di depositi nelle tubature. In questa guida trovi le cause, i rimedi fai-da-te e quando è il momento di chiamare un professionista.`,
-    "wc-otturato": `Hai il **WC otturato a ${cityName}**? È una situazione fastidiosa che richiede un intervento rapido. In una città con ${city.buildingAge}, questo problema può essere legato sia a cattive abitudini sia all'età degli impianti. Ecco come affrontarlo e quando chiamare un professionista.`,
-    "scaldabagno-non-scalda": `Il tuo **scaldabagno non scalda l'acqua a ${cityName}**? Restare senza acqua calda è un disagio importante. In una città con ${city.waterType}, il calcare può essere una delle cause principali. Vediamo cosa puoi controllare e quando è necessario l'intervento di un tecnico.`,
-    "caldaia-in-blocco": `La tua **caldaia è in blocco a ${cityName}**? Restare senza riscaldamento, specialmente durante l'inverno, è un problema urgente. Vediamo le cause più comuni, cosa puoi provare a fare e quando è indispensabile chiamare un tecnico certificato.`,
-    "tubo-che-perde": `Hai un **tubo che perde a ${cityName}**? Una perdita d'acqua può causare danni significativi se non affrontata tempestivamente. In una città con ${city.buildingAge}, le tubature possono essere soggette a ${city.commonIssues}. Ecco cosa fare subito e quando chiamare un idraulico.`,
-    "doccia-non-scarica": `La **doccia non scarica bene a ${cityName}**? L'acqua che ristagna nel piatto doccia è un problema comune, soprattutto in zone con ${city.waterType}. Spesso la causa è semplice, ma a volte indica problemi più profondi. Vediamo come intervenire.`,
-    "scarico-cucina-lento": `Lo **scarico della cucina è lento a ${cityName}**? È uno dei problemi più frequenti, causato principalmente da accumuli di grasso e residui alimentari. In una città con ${city.buildingAge}, le tubature possono essere più soggette a ostruzioni. Ecco come risolvere.`,
-    "termosifone-freddo": `Hai un **termosifone freddo a ${cityName}**? Durante i mesi invernali è un problema urgente da risolvere. Le cause possono essere diverse, dall'aria nell'impianto a problemi più complessi. Vediamo cosa puoi fare prima di chiamare un tecnico.`
+    "lavandino-intasato": `Una **perdita d'acqua** o un **lavandino intasato** in casa può causare danni gravi in poco tempo. Se ti trovi a **${cityName}** e noti che l'acqua non defluisce correttamente dal lavandino, è importante capire come intervenire. In molte abitazioni di ${cityName}, soprattutto nei ${city.buildingAge}, le tubature possono essere soggette a ${city.commonIssues} a causa dell'${city.waterType}. I quartieri come ${city.neighborhoods} sono particolarmente interessati da questo problema. In questa guida vediamo cosa puoi fare immediatamente da solo, quali errori evitare, e quando è il momento di contattare un **idraulico a ${cityName}** per una soluzione definitiva.`,
+    
+    "wc-otturato": `Avere il **WC otturato** è una situazione fastidiosa e urgente che richiede un intervento tempestivo. Se ti trovi a **${cityName}** e l'acqua nel water non scende o, peggio, risale, devi agire subito per evitare allagamenti. Negli ${city.buildingAge} tipici di ${cityName}, soprattutto nelle zone come ${city.neighborhoods}, questo problema è purtroppo frequente. ${city.commonIssues.charAt(0).toUpperCase() + city.commonIssues.slice(1)} possono aggravare la situazione rendendo gli scarichi più vulnerabili. In questa guida scoprirai cosa puoi fare da solo, quando è davvero il caso di chiamare un **idraulico a ${cityName}** e quanto potrebbe costare l'intervento professionale.`,
+    
+    "scaldabagno-non-scalda": `Restare senza **acqua calda** è un disagio enorme, soprattutto durante i mesi freddi. Se il tuo **scaldabagno non scalda** e ti trovi a **${cityName}**, è fondamentale capire se puoi risolvere da solo o se serve un tecnico. L'${city.waterType} tipica di ${cityName} è una delle cause principali di malfunzionamenti: il calcare si deposita sulla resistenza o sulla serpentina riducendo l'efficienza. Nelle zone come ${city.neighborhoods}, dove gli ${city.buildingAge} sono diffusi, questo problema è molto comune. Vediamo insieme cosa controllare prima di chiamare un **tecnico a ${cityName}** e come evitare di rimanere senza acqua calda.`,
+    
+    "caldaia-in-blocco": `La **caldaia in blocco** è uno dei problemi più temuti durante l'inverno, soprattutto a **${cityName}** dove le temperature possono scendere notevolmente. Se la tua caldaia mostra errori o non parte, non andare nel panico: spesso il problema ha soluzioni semplici. Negli ${city.buildingAge} delle zone come ${city.neighborhoods}, le caldaie sono spesso sollecitate al massimo e l'${city.waterType} può causare accumuli che compromettono il funzionamento. In questa guida ti spieghiamo cosa controllare da solo, quando resettare è sicuro, e soprattutto quando è indispensabile chiamare un **tecnico caldaista a ${cityName}** per evitare rischi.`,
+    
+    "tubo-che-perde": `Un **tubo che perde** può causare danni enormi in poche ore: infiltrazioni, macchie sui muri, muffe e persino cortocircuiti. Se hai scoperto una perdita d'acqua a **${cityName}**, la prima cosa da fare è limitare i danni. Negli ${city.buildingAge} delle zone come ${city.neighborhoods}, le tubature sono spesso soggette a ${city.commonIssues} e l'${city.waterType} accelera la corrosione. Un tubo che perde a ${cityName} non è mai un problema da sottovalutare. In questa guida ti spieghiamo cosa fare immediatamente, come tamponare la situazione, e quando è urgente chiamare un **idraulico a ${cityName}** per una riparazione definitiva.`,
+    
+    "doccia-non-scarica": `L'acqua che ristagna nel **piatto doccia** è un problema fastidioso e poco igienico. Se la tua **doccia non scarica** e ti trovi a **${cityName}**, le cause possono essere diverse ma spesso facilmente risolvibili. L'${city.waterType} favorisce l'accumulo di calcare che, unito a capelli e residui di sapone, crea ostruzioni ostinate. Negli ${city.buildingAge} delle zone come ${city.neighborhoods}, le pilette e le tubature hanno spesso diametri ridotti che peggiorano il problema. Vediamo insieme cosa puoi fare da solo e quando serve chiamare un **idraulico a ${cityName}** per una pulizia professionale.`,
+    
+    "scarico-cucina-lento": `Uno **scarico cucina lento** è un problema molto comune che peggiora se ignorato. Se il lavello della cucina a **${cityName}** impiega troppo tempo a svuotarsi, l'ostruzione è probabilmente causata da accumuli di grasso e residui alimentari. L'${city.waterType} reagisce con i grassi creando depositi saponosi difficili da rimuovere. Negli ${city.buildingAge} delle zone come ${city.neighborhoods}, le tubature hanno spesso diametri non adeguati all'uso moderno delle cucine. In questa guida scoprirai i rimedi fai-da-te più efficaci e quando è il momento di chiamare un **idraulico a ${cityName}** per una pulizia professionale.`,
+    
+    "termosifone-freddo": `Un **termosifone freddo** durante l'inverno è un problema urgente che va risolto rapidamente. Se ti trovi a **${cityName}** e uno o più radiatori non scaldano, le cause possono essere diverse: dall'aria intrappolata a problemi più seri nell'impianto. L'${city.waterType} deposita fanghi e calcare nei termosifoni riducendo la circolazione dell'acqua calda. Negli ${city.buildingAge} delle zone come ${city.neighborhoods}, gli impianti di riscaldamento sono spesso datati e necessitano di manutenzione. Vediamo cosa puoi fare da solo e quando serve chiamare un **tecnico a ${cityName}** per una diagnosi approfondita.`
   };
 
+  // Local paragraph texts (enhanced)
   const localParagraphs: Record<string, string> = {
     "lavandino-intasato": `A ${cityName}, il lavandino intasato è particolarmente frequente nelle zone come ${city.neighborhoods}. Gli ${city.buildingAge} spesso presentano ${city.commonIssues}, rendendo gli scarichi più soggetti a ostruzioni. L'${city.waterType} tipica della zona può accelerare la formazione di depositi. Se abiti in un condominio storico o in una zona con impianti datati, potresti riscontrare questo problema più spesso.`,
     "wc-otturato": `Nelle zone come ${city.neighborhoods}, il WC otturato è un problema ricorrente, specialmente negli ${city.buildingAge}. ${city.commonIssues.charAt(0).toUpperCase() + city.commonIssues.slice(1)} possono aggravare la situazione. Se vivi in un condominio con colonne di scarico condivise, un'ostruzione nel tuo appartamento potrebbe indicare un problema più ampio nella rete fognaria del palazzo.`,

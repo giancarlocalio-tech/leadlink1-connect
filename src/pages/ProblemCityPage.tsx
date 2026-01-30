@@ -6,7 +6,6 @@ import { Breadcrumb, BreadcrumbItem } from "@/components/seo/Breadcrumb";
 import { SummaryBox } from "@/components/blog/SummaryBox";
 import { MethodCard } from "@/components/blog/MethodCard";
 import { WarningBox } from "@/components/blog/WarningBox";
-import { ProCallBox } from "@/components/blog/ProCallBox";
 import { FinalCTABox } from "@/components/blog/FinalCTABox";
 import { CityWhySection } from "@/components/seo/CityWhySection";
 import { LocalMiniFAQ, generateLocalFAQItems } from "@/components/seo/LocalMiniFAQ";
@@ -14,7 +13,10 @@ import { MidArticleCTA } from "@/components/seo/MidArticleCTA";
 import { HeroCtaBanner } from "@/components/seo/HeroCtaBanner";
 import { RelatedGuideLink } from "@/components/seo/RelatedGuideLink";
 import { SimilarProblemsInCity } from "@/components/seo/SimilarProblemsInCity";
-import { MapPin, AlertCircle, Wrench, Home } from "lucide-react";
+import { ProblemCityCostSection } from "@/components/seo/ProblemCityCostSection";
+import { ProblemCityZonesSection } from "@/components/seo/ProblemCityZonesSection";
+import { ProblemCityWhenToCallSection } from "@/components/seo/ProblemCityWhenToCallSection";
+import { MapPin, AlertCircle, Wrench, Home, ListChecks, Ban } from "lucide-react";
 
 const ProblemCityPage = () => {
   const location = useLocation();
@@ -53,8 +55,8 @@ const ProblemCityPage = () => {
   const cityLocalData = getCityLocalContent(pageData.citySlug);
 
   const breadcrumbItems: BreadcrumbItem[] = [
-    { name: "Blog", url: "/blog" },
-    { name: pageData.h1, url: `/${pageData.slug}` }
+    { name: pageData.cityName, url: `/${pageData.citySlug}` },
+    { name: pageData.problemName, url: `/${pageData.slug}` }
   ];
 
   const canonicalUrl = `https://www.idraulicisubito.com/${pageData.slug}`;
@@ -125,8 +127,8 @@ const ProblemCityPage = () => {
     "@type": "BreadcrumbList",
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.idraulicisubito.com" },
-      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.idraulicisubito.com/blog" },
-      { "@type": "ListItem", "position": 3, "name": pageData.h1, "item": canonicalUrl }
+      { "@type": "ListItem", "position": 2, "name": pageData.cityName, "item": `https://www.idraulicisubito.com/${pageData.citySlug}` },
+      { "@type": "ListItem", "position": 3, "name": pageData.problemName, "item": canonicalUrl }
     ]
   };
 
@@ -207,7 +209,7 @@ const ProblemCityPage = () => {
           problemContext={problemContext}
         />
 
-        {/* Header */}
+        {/* Header with SEO-optimized H1 */}
         <header className="container mx-auto px-4 py-8">
           <div className="max-w-4xl mx-auto">
             <div className="flex items-center gap-2 text-primary mb-4">
@@ -231,18 +233,18 @@ const ProblemCityPage = () => {
               items={summaryItems}
             />
 
-            {/* Introduction */}
+            {/* SECTION 1: SEO-Optimized Introduction (min 6 lines) */}
             <section className="prose prose-lg max-w-none">
               <p className="text-lg text-muted-foreground leading-relaxed" 
-                 dangerouslySetInnerHTML={{ __html: pageData.introText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} 
+                 dangerouslySetInnerHTML={{ __html: pageData.introText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>') }} 
               />
             </section>
 
-            {/* Causes Section */}
+            {/* SECTION 2: Causes Section - "Cause comuni di [problema] a [città]" */}
             <section>
-              <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-3">
+              <h2 className="text-xl md:text-2xl font-bold text-foreground mb-6 flex items-center gap-3">
                 <AlertCircle className="h-6 w-6 text-primary" />
-                {pageData.causesTitle}
+                Cause Comuni di {pageData.problemName} a {pageData.cityName}
               </h2>
               <ul className="space-y-3">
                 {pageData.causes.map((cause, index) => (
@@ -254,7 +256,7 @@ const ProblemCityPage = () => {
               </ul>
             </section>
 
-            {/* Why Section - Localized */}
+            {/* Why Section - Localized explanation */}
             {cityLocalData && (
               <CityWhySection
                 cityName={pageData.cityName}
@@ -267,11 +269,11 @@ const ProblemCityPage = () => {
               />
             )}
 
-            {/* Methods Section */}
+            {/* SECTION 3: "Cosa fare subito se hai [problema] a [città]" */}
             <section>
-              <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-3">
-                <Wrench className="h-6 w-6 text-primary" />
-                Cosa Puoi Provare da Solo
+              <h2 className="text-xl md:text-2xl font-bold text-foreground mb-6 flex items-center gap-3">
+                <ListChecks className="h-6 w-6 text-primary" />
+                Cosa Fare Subito se Hai {pageData.problemName} a {pageData.cityName}
               </h2>
               <div className="grid gap-6">
                 {pageData.methods.map((method, index) => (
@@ -294,32 +296,47 @@ const ProblemCityPage = () => {
               variant="compact"
             />
 
-            {/* Warnings */}
+            {/* SECTION 4: "Cosa NON fare" - Warnings */}
             {pageData.warnings.length > 0 && (
-              <section className="space-y-4">
-                {pageData.warnings.map((warning, index) => (
-                  <WarningBox key={index}>
-                    {warning}
-                  </WarningBox>
-                ))}
+              <section>
+                <h2 className="text-xl md:text-2xl font-bold text-foreground mb-6 flex items-center gap-3">
+                  <Ban className="h-6 w-6 text-destructive" />
+                  Cosa NON Fare con {pageData.problemName}
+                </h2>
+                <div className="space-y-4">
+                  {pageData.warnings.map((warning, index) => (
+                    <WarningBox key={index}>
+                      {warning}
+                    </WarningBox>
+                  ))}
+                </div>
               </section>
             )}
 
-            {/* When to Call Section */}
-            <ProCallBox title={pageData.whenToCallTitle}>
-              {pageData.whenToCallText}
-            </ProCallBox>
+            {/* SECTION 5: "Quando chiamare un idraulico a [città]" */}
+            <ProblemCityWhenToCallSection
+              cityName={pageData.cityName}
+              problemName={pageData.problemName}
+              problemSlug={pageData.problemSlug}
+            />
 
-            {/* Local Paragraph - Original */}
-            <section className="bg-muted/30 rounded-2xl p-6 md:p-8 border border-border">
-              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-3">
-                <Home className="h-5 w-5 text-primary" />
-                {pageData.localParagraphTitle}
-              </h2>
-              <p className="text-muted-foreground leading-relaxed">
-                {pageData.localParagraphText}
-              </p>
-            </section>
+            {/* SECTION 6: "Quanto costa risolvere [problema] a [città]" */}
+            <ProblemCityCostSection
+              cityName={pageData.cityName}
+              citySlug={pageData.citySlug}
+              problemName={pageData.problemName}
+              problemSlug={pageData.problemSlug}
+            />
+
+            {/* SECTION 7: "Zone servite a [città]" */}
+            {cityLocalData && (
+              <ProblemCityZonesSection
+                cityName={pageData.cityName}
+                citySlug={pageData.citySlug}
+                neighborhoods={cityLocalData.neighborhoods}
+                problemName={pageData.problemName}
+              />
+            )}
 
             {/* Local Mini FAQ - 3 Questions */}
             <LocalMiniFAQ
@@ -348,10 +365,10 @@ const ProblemCityPage = () => {
               variant="full"
             />
 
-            {/* Final CTA with Form */}
+            {/* SECTION 8: Final CTA with Form - Strong visual CTA */}
             <FinalCTABox
-              title={pageData.ctaTitle}
-              description={pageData.ctaText}
+              title={`Hai ${pageData.problemName} a ${pageData.cityName}?`}
+              description={`Invia una richiesta gratuita e ricevi preventivi da idraulici disponibili nella tua zona. Intervento rapido in tutta ${pageData.cityName} e provincia.`}
               interventionType={pageData.interventionType}
               problemContext={problemContext}
             />

@@ -408,6 +408,10 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
                   qualunque sia il problema idraulico. Inserisci il problema, indica la zona e vieni contattato da un{' '}
                   <Link to="/idraulico-vicino-a-me" className="text-primary hover:underline font-medium">idraulico vicino a te</Link>.
                 </p>
+                <p className="text-lg leading-relaxed mt-4">
+                  Offriamo anche servizio di <strong>idraulico a Milano 24 ore su 24</strong> per emergenze urgenti come perdite gravi, 
+                  allagamenti e guasti improvvisi. Pronto intervento garantito anche nei weekend e festivi.
+                </p>
               </div>
               
               <div className="text-center">
@@ -449,8 +453,11 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
                   + tutta la provincia
                 </span>
               </div>
-              <p className="text-sm text-muted-foreground">
-                Questo ti aiuta a trovare un <strong>idraulico Navigli</strong>, <strong>idraulico Lambrate</strong>, <strong>idraulico zona Isola</strong> e in qualsiasi altra zona di Milano.
+              <p className="text-muted-foreground leading-relaxed mt-6">
+                Operiamo in tutti i quartieri di Milano, dal centro storico a zone come Navigli, Porta Romana, Isola e Città Studi. 
+                I nostri idraulici conoscono bene le tipologie di impianti presenti negli edifici milanesi, 
+                dai palazzi d'epoca agli appartamenti moderni. Questo ti aiuta a trovare un <strong>idraulico Navigli</strong>, 
+                <strong>idraulico Lambrate</strong>, <strong>idraulico zona Isola</strong> e in qualsiasi altra zona di Milano.
               </p>
             </div>
           </div>
@@ -541,12 +548,24 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
               : `Servizi Idraulici a ${cityData.name}`
             }
           </h2>
-          <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
             {serviceData
               ? generateCityServiceContent(cityData.name, serviceData.name, serviceData.slug)
               : `I nostri idraulici a ${cityData.name} offrono una gamma completa di servizi per la tua casa o attività. Dalle riparazioni urgenti alle installazioni programmate, trovi professionisti verificati pronti a intervenire in tutti i quartieri della città.`
             }
           </p>
+          
+          {/* MIGLIORIA #1 - SEO text under services for Milano */}
+          {isMilano && (
+            <div className="bg-muted/50 rounded-xl p-6 mb-12 max-w-3xl mx-auto">
+              <p className="text-muted-foreground leading-relaxed text-center">
+                I nostri <strong>idraulici a Milano</strong> intervengono ogni giorno per emergenze domestiche e lavori programmati. 
+                Dalla riparazione di <Link to="/costi-riparazione-perdita-acqua" className="text-primary hover:underline">perdite d'acqua</Link>{' '}
+                alla sostituzione di caldaie, copriamo tutti i quartieri di Milano e i comuni limitrofi 
+                garantendo interventi rapidi e professionisti verificati.
+              </p>
+            </div>
+          )}
           
           <div className={`grid ${serviceData ? 'md:grid-cols-1 max-w-md' : 'md:grid-cols-3 max-w-4xl'} gap-6 mx-auto`}>
             {displayServices.map((service, index) => {
@@ -822,6 +841,18 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
               </div>
             </div>
           </div>
+          
+          {/* MIGLIORIA #3 - SEO text for comuni limitrofi Milano */}
+          {isMilano && (
+            <div className="max-w-3xl mx-auto mt-8 bg-muted/50 rounded-xl p-6">
+              <p className="text-muted-foreground leading-relaxed text-center">
+                I nostri professionisti operano anche nei principali comuni vicino Milano come Monza, 
+                Sesto San Giovanni, Cinisello Balsamo, Rho e Legnano. Se cerchi un{' '}
+                <strong>idraulico vicino Milano</strong>, puoi inviare una richiesta gratuita e ricevere 
+                preventivi da tecnici disponibili nella tua zona della <strong>provincia di Milano</strong>.
+              </p>
+            </div>
+          )}
 
           {/* Internal Links - Related Cities */}
           <div className="mt-12 max-w-4xl mx-auto">
@@ -1047,6 +1078,21 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
           serviceName={serviceData?.name}
           faqs={getCityFAQs(serviceShortName, cityData.name)}
         />
+      )}
+
+      {/* MIGLIORIA #5 - Final SEO block before footer for Milano */}
+      {isMilano && (
+        <section className="py-12 bg-background">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto bg-card border border-border rounded-xl p-8">
+              <p className="text-muted-foreground leading-relaxed text-center">
+                Se hai bisogno di un <strong>idraulico a Milano</strong> per un intervento urgente o un lavoro programmato, 
+                puoi inviare una richiesta gratuita in pochi minuti. Confronta più professionisti della tua zona 
+                e scegli quello più adatto alle tue esigenze. Il servizio è completamente gratuito e senza impegno.
+              </p>
+            </div>
+          </div>
+        </section>
       )}
 
       {/* CTA Section */}

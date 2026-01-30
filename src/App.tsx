@@ -720,6 +720,9 @@ const App = () => (
             <Route path="/termosifone-freddo-bergamo" element={<ProblemCityPage />} />
             
             {/* 301 Redirects for legacy URL patterns */}
+            {/* IMPORTANT: /idraulico-milano → /milano (canonical consolidation) */}
+            <Route path="/idraulico-milano" element={<Navigate to="/milano" replace />} />
+            <Route path="/milano-idraulico" element={<Navigate to="/milano" replace />} />
             <Route path="/idraulico/:city/:service" element={<IdraulicoRedirect type="city-service" />} />
             <Route path="/idraulico/:city" element={<IdraulicoRedirect type="city" />} />
             <Route path="/servizi/:service" element={<ServiziRedirect />} />

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { 
@@ -11,16 +11,26 @@ import {
   Wrench,
   Droplets,
   Flame,
-  ArrowRight,
-  AlertTriangle,
-  HelpCircle
+  ArrowRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/Layout';
-import { generateJsonLd, getCityFAQs, BASE_URL } from '@/lib/seoJsonLd';
+import { generateJsonLd, BASE_URL } from '@/lib/seoJsonLd';
 import InlineWizard from '@/components/InlineWizard';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import heroBg from '@/assets/hero-bg.avif';
+
+// Import all city SEO components
+import {
+  CityIntroSection,
+  CityNeighborhoodsSection,
+  CityCommonProblemsSection,
+  CityResponseTimesSection,
+  CityCostSection,
+  CityEmergencySignsSection,
+  CityLocalFAQSection,
+  CityInternalLinksSection,
+  generateCityFAQs
+} from '@/components/city';
 
 // City-specific data
 const CITY_DATA: Record<string, {
@@ -37,7 +47,7 @@ const CITY_DATA: Record<string, {
     province: 'BS',
     region: 'Lombardia',
     population: '200.000',
-    neighborhoods: ['Centro Storico', 'San Polo', 'Borgo Trento', 'Lamarmora', 'Urago Mella', 'Sant\'Eufemia', 'Buffalora', 'Fiumicello'],
+    neighborhoods: ['Centro Storico', 'San Polo', 'Borgo Trento', 'Lamarmora', 'Urago Mella', "Sant'Eufemia", 'Buffalora', 'Fiumicello'],
     nearbyAreas: ['Rezzato', 'Concesio', 'Gussago', 'Bovezzo', 'Collebeato', 'Nave', 'Botticino', 'Mazzano'],
     description: 'Trova idraulici professionisti a Brescia e provincia. Interventi rapidi per riparazioni, installazioni e manutenzione di impianti idraulici, caldaie e condizionatori.'
   },
@@ -49,43 +59,116 @@ const CITY_DATA: Record<string, {
     neighborhoods: ['Centro', 'Navigli', 'Isola', 'Porta Romana', 'Porta Venezia', 'Lambrate', 'Bicocca', 'San Siro', 'Niguarda', 'Baggio', 'Città Studi', 'Brera'],
     nearbyAreas: ['Monza', 'Sesto San Giovanni', 'Cinisello Balsamo', 'Rho', 'Legnano', 'Cologno Monzese', 'Corsico', 'San Donato Milanese'],
     description: 'Trova idraulici professionisti a Milano e hinterland. Pronto intervento 24/7 per emergenze idrauliche, riparazioni e installazioni.'
+  },
+  'roma': {
+    name: 'Roma',
+    province: 'RM',
+    region: 'Lazio',
+    population: '2.800.000',
+    neighborhoods: ['Centro Storico', 'Trastevere', 'Prati', 'Testaccio', 'EUR', 'San Giovanni', 'Parioli', 'Monteverde', 'Ostiense', 'Tiburtino'],
+    nearbyAreas: ['Fiumicino', 'Ciampino', 'Guidonia', 'Tivoli', 'Ostia', 'Frascati', 'Marino', 'Albano Laziale'],
+    description: 'Trova idraulici professionisti a Roma e provincia. Pronto intervento 24/7 per emergenze idrauliche in tutta la capitale.'
+  },
+  'napoli': {
+    name: 'Napoli',
+    province: 'NA',
+    region: 'Campania',
+    population: '900.000',
+    neighborhoods: ['Centro Storico', 'Vomero', 'Chiaia', 'Posillipo', 'Fuorigrotta', 'Bagnoli', 'Mergellina', 'San Giovanni', 'Ponticelli'],
+    nearbyAreas: ['Pozzuoli', 'Portici', 'Ercolano', 'Torre del Greco', 'Casoria', 'Afragola', 'Giugliano', 'Marano'],
+    description: 'Trova idraulici professionisti a Napoli e provincia. Interventi rapidi per emergenze idrauliche in tutta la città partenopea.'
+  },
+  'torino': {
+    name: 'Torino',
+    province: 'TO',
+    region: 'Piemonte',
+    population: '850.000',
+    neighborhoods: ['Centro', 'San Salvario', 'Crocetta', 'Vanchiglia', 'Aurora', 'Barriera di Milano', 'Lingotto', 'Santa Rita', 'Mirafiori'],
+    nearbyAreas: ['Moncalieri', 'Collegno', 'Rivoli', 'Nichelino', 'Settimo Torinese', 'Grugliasco', 'Chieri', 'Venaria Reale'],
+    description: 'Trova idraulici professionisti a Torino e prima cintura. Pronto intervento 24/7 per emergenze idrauliche.'
+  },
+  'bologna': {
+    name: 'Bologna',
+    province: 'BO',
+    region: 'Emilia-Romagna',
+    population: '390.000',
+    neighborhoods: ['Centro', 'Bolognina', 'San Donato', 'Savena', 'Saragozza', 'Santo Stefano', 'Navile', 'San Vitale'],
+    nearbyAreas: ['Casalecchio', 'San Lazzaro', 'Castel Maggiore', 'Imola', 'Budrio', 'Zola Predosa'],
+    description: 'Trova idraulici professionisti a Bologna e provincia. Interventi rapidi per emergenze idrauliche nella città dei portici.'
+  },
+  'firenze': {
+    name: 'Firenze',
+    province: 'FI',
+    region: 'Toscana',
+    population: '380.000',
+    neighborhoods: ['Centro', 'Santa Croce', 'San Lorenzo', 'Campo di Marte', 'Rifredi', 'Novoli', 'Isolotto', 'Gavinana'],
+    nearbyAreas: ['Scandicci', 'Fiesole', 'Sesto Fiorentino', 'Campi Bisenzio', 'Bagno a Ripoli', 'Impruneta'],
+    description: 'Trova idraulici professionisti a Firenze e provincia. Pronto intervento per emergenze idrauliche nella città del Rinascimento.'
+  },
+  'genova': {
+    name: 'Genova',
+    province: 'GE',
+    region: 'Liguria',
+    population: '560.000',
+    neighborhoods: ['Centro Storico', 'Nervi', 'Pegli', 'Sampierdarena', 'Sestri Ponente', 'Albaro', 'Quarto', 'Marassi'],
+    nearbyAreas: ['Rapallo', 'Chiavari', 'Arenzano', 'Recco', 'Bogliasco', 'Camogli'],
+    description: 'Trova idraulici professionisti a Genova e riviera. Interventi rapidi per emergenze idrauliche in tutta la Superba.'
+  },
+  'palermo': {
+    name: 'Palermo',
+    province: 'PA',
+    region: 'Sicilia',
+    population: '630.000',
+    neighborhoods: ['Centro Storico', 'Politeama', 'Libertà', 'Zisa', 'Brancaccio', 'Mondello', 'Sferracavallo', 'Borgo Vecchio'],
+    nearbyAreas: ['Monreale', 'Bagheria', 'Carini', 'Villabate', 'Ficarazzi', 'Termini Imerese'],
+    description: 'Trova idraulici professionisti a Palermo e provincia. Pronto intervento 24/7 per emergenze idrauliche nel capoluogo siciliano.'
+  },
+  'catania': {
+    name: 'Catania',
+    province: 'CT',
+    region: 'Sicilia',
+    population: '290.000',
+    neighborhoods: ['Centro', 'Borgo', 'Ognina', 'Picanello', 'San Giovanni Galermo', 'Librino', 'Nesima', 'Cibali'],
+    nearbyAreas: ['Acireale', 'Misterbianco', 'Gravina di Catania', 'Belpasso', 'Mascalucia', 'San Gregorio'],
+    description: 'Trova idraulici professionisti a Catania e provincia. Interventi rapidi per emergenze idrauliche ai piedi dell\'Etna.'
+  },
+  'bari': {
+    name: 'Bari',
+    province: 'BA',
+    region: 'Puglia',
+    population: '320.000',
+    neighborhoods: ['Bari Vecchia', 'Murat', 'Libertà', 'Madonnella', 'Japigia', 'San Paolo', 'Poggiofranco', 'Carrassi'],
+    nearbyAreas: ['Modugno', 'Triggiano', 'Valenzano', 'Capurso', 'Bitonto', 'Molfetta'],
+    description: 'Trova idraulici professionisti a Bari e provincia. Pronto intervento per emergenze idrauliche nel capoluogo pugliese.'
+  },
+  'verona': {
+    name: 'Verona',
+    province: 'VR',
+    region: 'Veneto',
+    population: '260.000',
+    neighborhoods: ['Centro Storico', 'Borgo Trento', 'San Zeno', 'Veronetta', 'Borgo Roma', 'Borgo Nuovo', 'Stadio'],
+    nearbyAreas: ['Villafranca', 'San Giovanni Lupatoto', 'Bussolengo', 'Pescantina', 'San Martino Buon Albergo'],
+    description: 'Trova idraulici professionisti a Verona e provincia. Interventi rapidi per emergenze idrauliche nella città scaligera.'
+  },
+  'venezia': {
+    name: 'Venezia',
+    province: 'VE',
+    region: 'Veneto',
+    population: '260.000',
+    neighborhoods: ['San Marco', 'Cannaregio', 'Dorsoduro', 'Castello', 'Santa Croce', 'Mestre', 'Marghera', 'Lido'],
+    nearbyAreas: ['Mestre', 'Marghera', 'Spinea', 'Mirano', 'Chioggia', 'Jesolo'],
+    description: 'Trova idraulici professionisti a Venezia e terraferma. Pronto intervento per emergenze idrauliche nella Serenissima.'
+  },
+  'padova': {
+    name: 'Padova',
+    province: 'PD',
+    region: 'Veneto',
+    population: '210.000',
+    neighborhoods: ['Centro', 'Arcella', 'Savonarola', 'Sant\'Osvaldo', 'Guizza', 'Sacra Famiglia', 'Forcellini'],
+    nearbyAreas: ['Abano Terme', 'Selvazzano Dentro', 'Rubano', 'Albignasego', 'Cadoneghe', 'Limena'],
+    description: 'Trova idraulici professionisti a Padova e provincia. Interventi rapidi per emergenze idrauliche nella città del Santo.'
   }
 };
-
-// Milan-specific FAQ for schema markup
-const MILAN_FAQ = [
-  {
-    question: 'Quanto costa un idraulico a Milano?',
-    answer: 'Il costo di un idraulico a Milano varia in base al tipo di intervento e all\'urgenza. Un intervento standard parte da 50-80€, mentre le emergenze notturne o nei weekend possono avere una maggiorazione. Su IdrauliciSubito ricevi preventivi gratuiti e trasparenti per confrontare i prezzi.'
-  },
-  {
-    question: 'Come faccio a trovare un idraulico a Milano con IdrauliciSubito?',
-    answer: 'Compila il form indicando il problema e la zona di Milano. Riceverai una risposta da un idraulico disponibile nella tua area in pochi minuti. Il servizio è completamente gratuito e senza impegno.'
-  },
-  {
-    question: 'Il servizio per trovare un idraulico a Milano è gratuito?',
-    answer: 'Sì, il servizio è 100% gratuito. Non ci sono costi nascosti né commissioni. Riceverai preventivi trasparenti direttamente dagli idraulici.'
-  },
-  {
-    question: 'In quanto tempo vengo contattato da un idraulico a Milano?',
-    answer: 'Nella maggior parte dei casi vieni contattato entro 15 minuti dalla richiesta. Per le urgenze, molti idraulici possono intervenire anche in giornata.'
-  },
-  {
-    question: 'Idraulico urgente Milano è disponibile 24/7?',
-    answer: 'Sì, molti idraulici a Milano offrono servizio di pronto intervento 24 ore su 24, inclusi weekend e festivi, per emergenze come perdite d\'acqua, allagamenti o guasti alla caldaia.'
-  }
-];
-
-// Common plumbing problems for Milano
-const COMMON_PROBLEMS = [
-  'Perdite d\'acqua improvvise',
-  'Tubi rotti o che perdono',
-  'WC bloccato',
-  'Scarico lavandino intasato',
-  'Scaldabagno o caldaia che non funzionano',
-  'Allagamenti in casa',
-  'Sostituzione rubinetti e sanitari'
-];
 
 const SERVICES = [
   { icon: Droplets, title: 'Riparazione perdite', desc: 'Intervento rapido per perdite acqua e infiltrazioni' },
@@ -98,37 +181,22 @@ export default function CityLandingPage() {
   const navigate = useNavigate();
   const [showWizard, setShowWizard] = useState(false);
   
-  // Extract city from URL path (e.g., /idraulico-brescia -> brescia)
+  // Extract city from URL path
   const pathname = window.location.pathname;
   const citySlug = pathname.replace('/', '').replace('idraulico-', '').toLowerCase();
   const cityData = CITY_DATA[citySlug];
-  const isMilano = citySlug === 'milano';
   
-  useEffect(() => {
-    if (!cityData) {
-      navigate('/');
-    }
-  }, [cityData, navigate]);
-  
-  if (!cityData) return null;
+  if (!cityData) {
+    navigate('/');
+    return null;
+  }
 
-  // Milano-specific SEO title and H1
-  const pageTitle = isMilano 
-    ? 'Idraulico a Milano | Pronto Intervento 24/7 per Urgenze'
-    : `Idraulico ${cityData.name} - Pronto Intervento 24/7 | Preventivi Gratuiti`;
-  
-  const pageH1 = isMilano 
-    ? 'Idraulico a Milano – Interventi Urgenti e Professionali'
-    : `Idraulico a ${cityData.name}`;
-  
-  const pageDescription = isMilano
-    ? `Cerchi un idraulico a Milano pronto a intervenire per perdite, scarichi intasati o altre emergenze? ✓ Pronto intervento 24/7 ✓ Milano e provincia ✓ Risposta in 15 minuti.`
-    : `Cerchi un idraulico a ${cityData.name}? ✓ Professionisti verificati ✓ Risposta in 15 min ✓ Preventivi gratuiti. Riparazioni, installazioni e emergenze idrauliche in tutta ${cityData.name} e provincia.`;
-  
-  // Canonical URL: /milano for Milano, /citySlug for others
-  const canonicalUrl = `https://www.idraulicisubito.com/${citySlug}`;
+  // SEO metadata
+  const pageTitle = `Idraulico a ${cityData.name} | Pronto Intervento 24h | Preventivo Gratuito`;
+  const pageDescription = `Cerchi un idraulico a ${cityData.name}? ✓ Pronto intervento 24/7 ✓ Professionisti verificati ✓ Preventivo gratuito. Interveniamo in tutta ${cityData.name} e provincia per perdite, scarichi intasati e emergenze.`;
+  const canonicalUrl = `${BASE_URL}/${citySlug}`;
 
-  // Generate consistent rating based on city for AggregateRating schema
+  // Generate consistent rating for AggregateRating schema
   const generateConsistentRating = (seed: string) => {
     let hash = 0;
     for (let i = 0; i < seed.length; i++) {
@@ -143,8 +211,8 @@ export default function CityLandingPage() {
   
   const rating = generateConsistentRating(citySlug);
 
-  // Use Milano-specific FAQ for schema if Milano
-  const faqForSchema = isMilano ? MILAN_FAQ : getCityFAQs('idraulico', cityData.name);
+  // Generate FAQs for schema
+  const faqForSchema = generateCityFAQs(cityData.name, citySlug);
 
   const structuredData = generateJsonLd(
     {
@@ -168,6 +236,8 @@ export default function CityLandingPage() {
     [{ name: `Idraulico ${cityData.name}`, url: canonicalUrl }]
   );
 
+  const handleRequestClick = () => setShowWizard(true);
+
   // Show wizard inline
   if (showWizard) {
     return (
@@ -175,19 +245,9 @@ export default function CityLandingPage() {
         <Helmet>
           <title>{pageTitle}</title>
           <meta name="description" content={pageDescription} />
-          <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+          <meta name="robots" content="index, follow, max-image-preview:large" />
           <link rel="canonical" href={canonicalUrl} />
-          <meta property="og:title" content={pageTitle} />
-          <meta property="og:description" content={pageDescription} />
-          <meta property="og:url" content={canonicalUrl} />
-          <meta property="og:type" content="website" />
-          <meta property="og:image" content="https://www.idraulicisubito.com/og-image.jpg" />
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content={pageTitle} />
-          <meta name="twitter:description" content={pageDescription} />
-          <script type="application/ld+json">
-            {JSON.stringify(structuredData)}
-          </script>
+          <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
         </Helmet>
         <div className="py-8 md:py-12">
           <div className="container mx-auto px-4">
@@ -203,19 +263,15 @@ export default function CityLandingPage() {
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
-        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://www.idraulicisubito.com/og-image.jpg" />
+        <meta property="og:image" content={`${BASE_URL}/og-image.jpg`} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={pageTitle} />
-        <meta name="twitter:description" content={pageDescription} />
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
       </Helmet>
 
       {/* Hero Section */}
@@ -236,24 +292,18 @@ export default function CityLandingPage() {
           </div>
           
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-lg">
-            {pageH1}
-            {!isMilano && (
-              <>
-                <br />
-                <span className="text-primary-foreground/90">Pronto Intervento 24/7</span>
-              </>
-            )}
+            Idraulico a {cityData.name}
+            <br />
+            <span className="text-primary-foreground/90">Pronto Intervento 24/7</span>
           </h1>
           
           <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            {isMilano 
-              ? 'Trova subito un idraulico professionista a Milano e provincia. Preventivi gratuiti e risposta in 15 minuti.'
-              : `Trova subito un idraulico professionista a ${cityData.name} e provincia. Preventivi gratuiti e risposta in 15 minuti.`
-            }
+            Trova subito un idraulico professionista a {cityData.name} e provincia. 
+            Preventivi gratuiti e risposta in 15 minuti.
           </p>
           
           <Button 
-            onClick={() => setShowWizard(true)}
+            onClick={handleRequestClick}
             size="lg"
             className="text-lg py-6 px-10 rounded-full font-semibold shadow-xl"
           >
@@ -273,104 +323,47 @@ export default function CityLandingPage() {
             </div>
             <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
               <Star className="h-4 w-4 text-white fill-white" />
-              <span className="text-white text-sm font-medium">4.8/5 recensioni</span>
+              <span className="text-white text-sm font-medium">{rating.ratingValue}/5 recensioni</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* BLOCCO 3 - Milano Intro Text (Above the Fold) */}
-      {isMilano && (
-        <section className="py-12 bg-background">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto">
-              <div className="bg-accent/30 border-l-4 border-primary p-6 rounded-r-lg mb-8">
-                <p className="text-lg leading-relaxed">
-                  Se stai cercando un <strong>idraulico a Milano</strong> pronto a intervenire per{' '}
-                  <Link to="/costi-riparazione-perdita-acqua" className="text-primary hover:underline font-medium">perdite d'acqua</Link>,{' '}
-                  scarichi intasati o altre emergenze, sei nel posto giusto.
-                </p>
-                <p className="text-lg leading-relaxed mt-4">
-                  Il nostro servizio collega rapidamente chi ha bisogno con tecnici disponibili a <strong>Milano e provincia</strong>,{' '}
-                  qualunque sia il problema idraulico. Inserisci il problema, indica la zona e vieni contattato da un{' '}
-                  <Link to="/idraulico-vicino-a-me" className="text-primary hover:underline font-medium">idraulico vicino a te</Link>.
-                </p>
-              </div>
-              
-              <div className="text-center">
-                <Button 
-                  onClick={() => setShowWizard(true)}
-                  size="lg"
-                  className="rounded-full"
-                >
-                  Trova un Idraulico Ora <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
+      {/* 1. Local SEO Intro */}
+      <CityIntroSection 
+        cityName={cityData.name}
+        citySlug={citySlug}
+        region={cityData.region}
+        onRequestClick={handleRequestClick}
+      />
 
-      {/* BLOCCO 4 - Milano Neighborhoods Section (SEO Locale) */}
-      {isMilano && (
-        <section className="py-12 bg-muted/30">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto">
-              <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-                <MapPin className="h-6 w-6 text-primary" />
-                Zone di Milano Coperte
-              </h2>
-              <p className="text-muted-foreground mb-6">
-                Il servizio è attivo in <strong>tutte le zone di Milano</strong>, tra cui:
-              </p>
-              <div className="flex flex-wrap gap-2 mb-6">
-                {cityData.neighborhoods.map((zone, index) => (
-                  <span 
-                    key={index} 
-                    className="bg-card border border-border px-4 py-2 rounded-full text-sm font-medium hover:border-primary transition-colors"
-                  >
-                    {zone}
-                  </span>
-                ))}
-                <span className="bg-primary/10 border border-primary/30 px-4 py-2 rounded-full text-sm font-medium text-primary">
-                  + tutta la provincia
-                </span>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                👉 Questo ti aiuta a trovare un idraulico Navigli, idraulico Lambrate, idraulico zona Isola e in qualsiasi altra zona di Milano.
-              </p>
-            </div>
-          </div>
-        </section>
-      )}
+      {/* 2. Neighborhoods Section */}
+      <CityNeighborhoodsSection 
+        cityName={cityData.name}
+        citySlug={citySlug}
+        neighborhoods={cityData.neighborhoods}
+        nearbyAreas={cityData.nearbyAreas}
+      />
 
-      {/* BLOCCO 5 - Common Problems Section */}
-      {isMilano && (
-        <section className="py-12 bg-background">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto">
-              <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-                <AlertTriangle className="h-6 w-6 text-primary" />
-                Problemi per cui puoi usare il servizio
-              </h2>
-              <div className="grid sm:grid-cols-2 gap-3">
-                {COMMON_PROBLEMS.map((problem, index) => (
-                  <div key={index} className="flex items-center gap-3 bg-card border border-border rounded-lg p-4">
-                    <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
-                    <span className="font-medium">{problem}</span>
-                  </div>
-                ))}
-              </div>
-              <p className="text-sm text-muted-foreground mt-6">
-                Questo ti permette di trovare un idraulico Milano per qualsiasi tipo di intervento, 
-                dalla semplice riparazione alla <Link to="/pronto-intervento-idraulico" className="text-primary hover:underline">emergenza idraulica</Link>.
-              </p>
-            </div>
-          </div>
-        </section>
-      )}
+      {/* 3. Common Problems Section */}
+      <CityCommonProblemsSection 
+        cityName={cityData.name}
+        citySlug={citySlug}
+      />
 
-      {/* Services Section - For all cities */}
+      {/* 4. Response Times Section */}
+      <CityResponseTimesSection 
+        cityName={cityData.name}
+        citySlug={citySlug}
+      />
+
+      {/* 5. Cost Section */}
+      <CityCostSection 
+        cityName={cityData.name}
+        citySlug={citySlug}
+      />
+
+      {/* Services Section */}
       <section className="py-16 bg-muted/50">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-4">
@@ -394,123 +387,29 @@ export default function CityLandingPage() {
         </div>
       </section>
 
-      {/* Coverage Areas - For non-Milano cities */}
-      {!isMilano && (
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl md:text-3xl font-bold text-center mb-4">
-              Zone Coperte a {cityData.name}
-            </h2>
-            <p className="text-muted-foreground text-center mb-10 max-w-2xl mx-auto">
-              I nostri idraulici operano in tutte le zone di {cityData.name} e nei comuni limitrofi
-            </p>
-            
-            <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                  <MapPin className="h-5 w-5 text-primary" />
-                  Quartieri di {cityData.name}
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {cityData.neighborhoods.map((area, index) => (
-                    <span key={index} className="bg-muted px-3 py-1 rounded-full text-sm">
-                      {area}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              
-              <div>
-                <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                  <MapPin className="h-5 w-5 text-primary" />
-                  Comuni Vicini
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {cityData.nearbyAreas.map((area, index) => (
-                    <span key={index} className="bg-muted px-3 py-1 rounded-full text-sm">
-                      {area}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
+      {/* 6. Emergency Signs Section */}
+      <CityEmergencySignsSection 
+        cityName={cityData.name}
+        onRequestClick={handleRequestClick}
+      />
 
-      {/* BLOCCO 6 - Milano Mini FAQ Section */}
-      {isMilano && (
-        <section className="py-12 bg-background">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto">
-              <h2 className="text-2xl font-bold mb-8 flex items-center gap-2">
-                <HelpCircle className="h-6 w-6 text-primary" />
-                Domande Frequenti su Idraulico Milano
-              </h2>
-              
-              <Accordion type="single" collapsible className="w-full">
-                {MILAN_FAQ.map((faq, index) => (
-                  <AccordionItem key={index} value={`item-${index}`}>
-                    <AccordionTrigger className="text-left font-semibold">
-                      {faq.question}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground">
-                      {faq.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
-          </div>
-        </section>
-      )}
+      {/* 7. Local FAQ Section */}
+      <CityLocalFAQSection 
+        cityName={cityData.name}
+        citySlug={citySlug}
+      />
 
-      {/* BLOCCO 7 - Internal Links Section (Milano) */}
-      {isMilano && (
-        <section className="py-12 bg-muted/30">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto">
-              <h2 className="text-xl font-bold mb-6">Risorse Utili</h2>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <Link 
-                  to="/pronto-intervento-idraulico" 
-                  className="bg-card border border-border rounded-lg p-4 hover:border-primary hover:shadow-md transition-all flex items-center gap-3"
-                >
-                  <Clock className="h-5 w-5 text-primary" />
-                  <span className="font-medium">Pronto Intervento 24/7</span>
-                </Link>
-                <Link 
-                  to="/costi-riparazione-perdita-acqua" 
-                  className="bg-card border border-border rounded-lg p-4 hover:border-primary hover:shadow-md transition-all flex items-center gap-3"
-                >
-                  <Droplets className="h-5 w-5 text-primary" />
-                  <span className="font-medium">Costi Riparazione Perdite</span>
-                </Link>
-                <Link 
-                  to="/preventivo-idraulico" 
-                  className="bg-card border border-border rounded-lg p-4 hover:border-primary hover:shadow-md transition-all flex items-center gap-3"
-                >
-                  <CheckCircle className="h-5 w-5 text-primary" />
-                  <span className="font-medium">Preventivo Idraulico</span>
-                </Link>
-                <Link 
-                  to="/idraulico-vicino-a-me" 
-                  className="bg-card border border-border rounded-lg p-4 hover:border-primary hover:shadow-md transition-all flex items-center gap-3"
-                >
-                  <MapPin className="h-5 w-5 text-primary" />
-                  <span className="font-medium">Idraulico Vicino a Me</span>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
+      {/* 8. Internal Links Section */}
+      <CityInternalLinksSection 
+        cityName={cityData.name}
+        citySlug={citySlug}
+      />
 
       {/* Why Choose Us */}
       <section className="py-16 bg-primary/5">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
-            Perché scegliere Idraulici Subito a {cityData.name}
+            Perché Scegliere Idraulici Subito a {cityData.name}
           </h2>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
@@ -532,26 +431,23 @@ export default function CityLandingPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* Final CTA Section */}
       <section className="py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-2xl md:text-3xl font-bold mb-4">
-            {isMilano 
-              ? 'Hai bisogno di un idraulico a Milano adesso?' 
-              : `Hai bisogno di un idraulico a ${cityData.name}?`
-            }
+            Hai Bisogno di un Idraulico a {cityData.name} Adesso?
           </h2>
           <p className="text-primary-foreground/90 mb-8 max-w-xl mx-auto">
             Richiedi un preventivo gratuito in meno di 2 minuti. 
-            Riceverai risposte da professionisti della tua zona.
+            Nessun impegno, riceverai risposte da professionisti della tua zona.
           </p>
           <Button 
-            onClick={() => setShowWizard(true)}
+            onClick={handleRequestClick}
             size="lg"
             variant="secondary"
             className="text-lg py-6 px-10 rounded-full font-semibold"
           >
-            Trova Idraulico a {cityData.name}
+            Trova Idraulico a {cityData.name} Ora
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         </div>

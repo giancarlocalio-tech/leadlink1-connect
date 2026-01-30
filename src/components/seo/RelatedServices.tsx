@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { SERVICES, CityData } from '@/lib/seoData';
+import { SERVICES, CityData, KEYWORD_PAGES } from '@/lib/seoData';
 
 interface RelatedServicesProps {
   cityData?: CityData;
@@ -15,6 +15,23 @@ const SHOULD_LINK_TO_NEAR_ME = [
   'caldaia-perde-acqua',
   'riparazione-scaldabagno',
 ];
+
+// Map service slugs to valid keyword page slugs
+const SERVICE_TO_KEYWORD_MAP: Record<string, string> = {
+  'idraulico': 'idraulico-vicino-a-me',
+  'manutenzione-caldaie': 'assistenza-caldaie',
+  'spurgo-fognature': 'spurgo-pozzi-neri',
+  'riparazione-perdite': 'idraulico-urgente',
+  'pronto-intervento': 'pronto-intervento-idraulico',
+  'installazione-sanitari': 'impianto-idraulico-bagno',
+  'condizionatori': 'termoidraulica',
+  'impianto-riscaldamento': 'termoidraulica',
+  'scarichi-intasati': 'disotturazione-wc',
+  'ristrutturazione-bagno': 'impianto-idraulico-bagno',
+  'scaldabagno': 'riparazione-scaldabagno',
+  'autoclave': 'impianto-idraulico',
+  'addolcitore-acqua': 'impianto-idraulico',
+};
 
 // Related keyword pages to show based on current page
 const RELATED_KEYWORD_PAGES = [
@@ -62,14 +79,26 @@ export function RelatedServices({ cityData, currentServiceSlug }: RelatedService
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
           {relatedServices.slice(0, 12).map((service) => {
             // If cityData is provided, link to city+service page
-            // Otherwise link to service keyword page if available
-            const href = cityData 
-              ? `/${cityData.slug}-${service.slug}`
-              : `/${service.slug}`;
+            // Otherwise map to valid keyword page
+            let href: string;
+            let text: string;
             
-            const text = cityData 
-              ? `${cityData.name} ${service.name}`
-              : service.name;
+            if (cityData) {
+              href = `/${cityData.slug}-${service.slug}`;
+              text = `${cityData.name} ${service.name}`;
+            } else {
+              // Map service slug to valid keyword page slug
+              const keywordSlug = SERVICE_TO_KEYWORD_MAP[service.slug];
+              if (keywordSlug) {
+                href = `/${keywordSlug}`;
+                // Get the display name from keyword pages if available
+                const keywordPage = KEYWORD_PAGES.find(k => k.slug === keywordSlug);
+                text = keywordPage?.h1 || service.name;
+              } else {
+                // Fallback: skip services without a valid mapping
+                return null;
+              }
+            }
             
             return (
               <Link
@@ -80,7 +109,7 @@ export function RelatedServices({ cityData, currentServiceSlug }: RelatedService
                 {text}
               </Link>
             );
-          })}
+          }).filter(Boolean)}
         </div>
 
         {/* Related keyword pages row */}

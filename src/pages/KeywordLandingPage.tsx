@@ -13,6 +13,8 @@ import { LocalStats } from '@/components/seo/LocalStats';
 import { ProfessionalsList } from '@/components/seo/ProfessionalsList';
 import { CustomerReviews } from '@/components/seo/CustomerReviews';
 import { RelatedServices } from '@/components/seo/RelatedServices';
+import { NearMeIntroSection, NearMeLocalIntentSection } from '@/components/seo/NearMeSEOSections';
+import { NearMeFAQSection, generateNearMeFAQSchema } from '@/components/seo/NearMeFAQSection';
 import heroBg from '@/assets/hero-bg.avif';
 
 interface KeywordLandingPageProps {
@@ -46,7 +48,6 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
   const canonicalUrl = `${BASE_URL}/${pageData.slug}`;
 
   // Generate consistent rating based on slug for AggregateRating schema
-  // This enables Google rich snippets with stars (like ProntoPro)
   const generateConsistentRating = (seed: string) => {
     let hash = 0;
     for (let i = 0; i < seed.length; i++) {
@@ -64,7 +65,7 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
   const rating = generateConsistentRating(pageData.slug);
 
   // Generate structured data using utility
-  const structuredData = generateJsonLd(
+  const baseStructuredData = generateJsonLd(
     {
       name: `Idraulici Subito - ${pageData.h1}`,
       description: pageData.description,
@@ -77,9 +78,14 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
       ],
       aggregateRating: rating
     },
-    getKeywordFAQs(pageData.h1),
+    isNearMePage ? [] : getKeywordFAQs(pageData.h1), // Don't use generic FAQs for near-me page
     [{ name: pageData.h1, url: canonicalUrl }]
   );
+
+  // For "idraulico-vicino-a-me", add dedicated FAQ schema
+  const structuredData = isNearMePage 
+    ? [...baseStructuredData, generateNearMeFAQSchema()]
+    : baseStructuredData;
 
   // Nearby cities to show when no location is detected
   const popularCities = CITIES.slice(0, 12);
@@ -271,6 +277,16 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
         </section>
       )}
 
+      {/* SEO Intro Section - Only for "vicino a me" page */}
+      {isNearMePage && (
+        <NearMeIntroSection onShowWizard={() => setShowWizard(true)} />
+      )}
+
+      {/* Local Intent Section - Only for "vicino a me" page */}
+      {isNearMePage && (
+        <NearMeLocalIntentSection />
+      )}
+
       {/* Local Stats Section */}
       <LocalStats serviceName={pageData.h1} />
 
@@ -295,18 +311,37 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
         </div>
       </section>
 
+      {/* Mid-article CTA - Only for "vicino a me" page */}
+      {isNearMePage && (
+        <section className="py-10 bg-accent/20">
+          <div className="container mx-auto px-4 text-center">
+            <p className="text-lg font-semibold mb-4">Hai bisogno di un idraulico vicino a te?</p>
+            <Button onClick={() => setShowWizard(true)} size="lg" className="rounded-full">
+              Trova un idraulico ora <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </div>
+        </section>
+      )}
+
       {/* Professionals List Section */}
       <ProfessionalsList serviceName={pageData.h1} onRequestQuote={() => setShowWizard(true)} />
 
       {/* Customer Reviews Section */}
       <CustomerReviews serviceName={pageData.h1} />
 
+      {/* FAQ Section - Only for "vicino a me" page */}
+      {isNearMePage && (
+        <NearMeFAQSection />
+      )}
+
       {/* Related Services Section */}
       <RelatedServices currentServiceSlug={slug} />
 
       <section className="py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">Trova il Professionista Giusto per Te</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">
+            {isNearMePage ? 'Trova un idraulico vicino a te ora' : 'Trova il Professionista Giusto per Te'}
+          </h2>
           <p className="text-primary-foreground/90 mb-8 max-w-xl mx-auto">
             Richiedi un preventivo gratuito in meno di 2 minuti.
           </p>

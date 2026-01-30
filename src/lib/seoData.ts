@@ -3327,7 +3327,7 @@ export interface KeywordPageData {
 export const KEYWORD_PAGES: KeywordPageData[] = [
   {
     slug: 'idraulico-vicino-a-me',
-    title: 'Idraulico Vicino a Me - Trova Professionisti nella Tua Zona',
+    title: 'Idraulico vicino a me | Trova un tecnico rapido nella tua zona',
     h1: 'Trova un Idraulico Vicino a Te',
     description: 'Cerchi un idraulico vicino a te? Trova professionisti verificati nella tua zona con risposta in 15 minuti. Preventivi gratuiti e senza impegno.',
     keywords: ['idraulico vicino a me', 'idraulico nelle vicinanze', 'idraulico zona', 'cerco idraulico', 'cerco un idraulico', 'trova idraulico']

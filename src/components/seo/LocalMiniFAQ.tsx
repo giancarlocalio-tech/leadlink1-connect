@@ -88,7 +88,7 @@ const getUrgencyInfo = (problemSlug: string): { level: string; explanation: stri
   return urgency[problemSlug] || { level: "Media", explanation: "Valuta in base alla gravità del problema." };
 };
 
-// Generate FAQ items
+// Generate FAQ items (4 questions for schema markup)
 export const generateLocalFAQItems = (
   cityName: string,
   problemName: string,
@@ -110,6 +110,10 @@ export const generateLocalFAQItems = (
     {
       question: `${problemName} è un problema urgente?`,
       answer: `Livello di urgenza: ${urgencyInfo.level}. ${urgencyInfo.explanation} In caso di dubbio, contatta un professionista per una valutazione.`
+    },
+    {
+      question: `Quando devo chiamare un idraulico per ${problemName.toLowerCase()}?`,
+      answer: `Chiama un idraulico a ${cityName} se: il problema persiste dopo aver provato i metodi fai-da-te, se l'acqua non defluisce affatto, se noti cattivi odori persistenti, o se il problema si ripresenta frequentemente. Un professionista può diagnosticare cause nascoste e prevenire danni maggiori.`
     }
   ];
 };
@@ -136,6 +140,11 @@ export function LocalMiniFAQ({ cityName, problemName, problemSlug }: LocalMiniFA
       icon: AlertTriangle,
       question: `${problemName} è un problema urgente?`,
       answer: `Livello di urgenza: ${urgencyInfo.level}. ${urgencyInfo.explanation} In caso di dubbio, contatta un professionista per una valutazione.`
+    },
+    {
+      icon: HelpCircle,
+      question: `Quando devo chiamare un idraulico per ${problemName.toLowerCase()}?`,
+      answer: `Chiama un idraulico a ${cityName} se: il problema persiste dopo aver provato i metodi fai-da-te, se l'acqua non defluisce affatto, se noti cattivi odori persistenti, o se il problema si ripresenta frequentemente. Un professionista può diagnosticare cause nascoste e prevenire danni maggiori.`
     }
   ];
 

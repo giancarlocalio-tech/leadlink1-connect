@@ -16,15 +16,18 @@ import { SimilarProblemsInCity } from "@/components/seo/SimilarProblemsInCity";
 import { ProblemCityCostSection } from "@/components/seo/ProblemCityCostSection";
 import { ProblemCityZonesSection } from "@/components/seo/ProblemCityZonesSection";
 import { ProblemCityWhenToCallSection } from "@/components/seo/ProblemCityWhenToCallSection";
-import { MapPin, AlertCircle, Wrench, Home, ListChecks, Ban } from "lucide-react";
+import { ProblemCityWhereSection } from "@/components/seo/ProblemCityWhereSection";
+import { ProblemCityWarningSignsSection } from "@/components/seo/ProblemCityWarningSignsSection";
+import { ProblemCityMistakesSection } from "@/components/seo/ProblemCityMistakesSection";
+import { ProblemCityDIYLimitations } from "@/components/seo/ProblemCityDIYLimitations";
+import { MapPin, AlertCircle, Wrench, Home, ListChecks, Ban, Phone } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const ProblemCityPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  // Extract slug from pathname (e.g., "/lavandino-intasato-milano" -> "lavandino-intasato-milano")
   const slug = location.pathname.replace(/^\//, '');
-  
   const pageData = getProblemCityPageBySlug(slug);
   
   if (!pageData) {
@@ -37,13 +40,8 @@ const ProblemCityPage = () => {
         </Helmet>
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-2xl font-bold mb-4">Pagina non trovata</h1>
-          <p className="text-muted-foreground mb-6">
-            La pagina che stai cercando non esiste.
-          </p>
-          <button 
-            onClick={() => navigate("/")}
-            className="bg-primary text-primary-foreground px-6 py-3 rounded-lg"
-          >
+          <p className="text-muted-foreground mb-6">La pagina che stai cercando non esiste.</p>
+          <button onClick={() => navigate("/")} className="bg-primary text-primary-foreground px-6 py-3 rounded-lg">
             Torna alla Home
           </button>
         </div>
@@ -51,7 +49,6 @@ const ProblemCityPage = () => {
     );
   }
 
-  // Get city local content for enhanced sections
   const cityLocalData = getCityLocalContent(pageData.citySlug);
 
   const breadcrumbItems: BreadcrumbItem[] = [
@@ -62,12 +59,8 @@ const ProblemCityPage = () => {
   const canonicalUrl = `https://www.idraulicisubito.com/${pageData.slug}`;
   const problemContext = `${pageData.problemName} a ${pageData.cityName}`;
 
-  // Generate local FAQ items for schema
-  const localFAQItems = generateLocalFAQItems(
-    pageData.cityName,
-    pageData.problemName,
-    pageData.problemSlug
-  );
+  // Generate local FAQ items for schema (expanded to 4+ questions)
+  const localFAQItems = generateLocalFAQItems(pageData.cityName, pageData.problemName, pageData.problemSlug);
 
   // JSON-LD Schema - Article
   const articleSchema = {
@@ -75,17 +68,11 @@ const ProblemCityPage = () => {
     "@type": "Article",
     "headline": pageData.h1,
     "description": pageData.metaDescription,
-    "author": {
-      "@type": "Organization",
-      "name": "Idraulici Subito"
-    },
+    "author": { "@type": "Organization", "name": "Idraulici Subito" },
     "publisher": {
       "@type": "Organization",
       "name": "Idraulici Subito",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://www.idraulicisubito.com/logo.png"
-      }
+      "logo": { "@type": "ImageObject", "url": "https://www.idraulicisubito.com/logo.png" }
     },
     "mainEntityOfPage": canonicalUrl,
     "about": {
@@ -95,12 +82,11 @@ const ProblemCityPage = () => {
     }
   };
 
-  // JSON-LD Schema - FAQ (extended with local questions)
+  // JSON-LD Schema - FAQ (4+ questions)
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      // Original generic FAQs
       {
         "@type": "Question",
         "name": `Come risolvere ${pageData.problemName.toLowerCase()} a ${pageData.cityName}?`,
@@ -109,14 +95,18 @@ const ProblemCityPage = () => {
           "text": `Per risolvere ${pageData.problemName.toLowerCase()} a ${pageData.cityName}, puoi provare metodi fai-da-te come acqua calda, bicarbonato e aceto, o lo sturalavandini. Se il problema persiste, è consigliabile chiamare un idraulico professionista.`
         }
       },
-      // Local FAQ questions (cost, time, urgency)
+      {
+        "@type": "Question",
+        "name": `Quando chiamare un idraulico per ${pageData.problemName.toLowerCase()} a ${pageData.cityName}?`,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": `Chiama un idraulico a ${pageData.cityName} se il problema persiste dopo i tentativi fai-da-te, se noti cattivi odori, se l'acqua risale o se il problema si ripresenta frequentemente.`
+        }
+      },
       ...localFAQItems.map(faq => ({
         "@type": "Question",
         "name": faq.question,
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": faq.answer
-        }
+        "acceptedAnswer": { "@type": "Answer", "text": faq.answer }
       }))
     ]
   };
@@ -132,31 +122,23 @@ const ProblemCityPage = () => {
     ]
   };
 
-  // JSON-LD Schema - LocalBusiness / Service
+  // JSON-LD Schema - Service
   const serviceSchema = {
     "@context": "https://schema.org",
     "@type": "Service",
     "name": `${pageData.problemName} a ${pageData.cityName}`,
     "description": pageData.metaDescription,
-    "provider": {
-      "@type": "Organization",
-      "name": "Idraulici Subito",
-      "url": "https://www.idraulicisubito.com"
-    },
-    "areaServed": {
-      "@type": "City",
-      "name": pageData.cityName
-    },
+    "provider": { "@type": "Organization", "name": "Idraulici Subito", "url": "https://www.idraulicisubito.com" },
+    "areaServed": { "@type": "City", "name": pageData.cityName },
     "serviceType": "Idraulico"
   };
 
-  // Map methods to summary items with icons
+  // Map methods to summary items
   const summaryItems = pageData.methods.map(m => ({
     icon: m.icon,
     label: m.title.replace(/Metodo \d+ — /, '')
   }));
 
-  // Get problem icon
   const problemIcon = pageData.problemSlug.includes('lavandino') ? '🪠' :
                        pageData.problemSlug.includes('wc') ? '🚽' :
                        pageData.problemSlug.includes('scaldabagno') ? '🚿' :
@@ -172,44 +154,24 @@ const ProblemCityPage = () => {
         <meta name="description" content={pageData.metaDescription} />
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <link rel="canonical" href={canonicalUrl} />
-        
-        {/* Open Graph */}
         <meta property="og:title" content={pageData.metaTitle} />
         <meta property="og:description" content={pageData.metaDescription} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="article" />
-        
-        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageData.metaTitle} />
         <meta name="twitter:description" content={pageData.metaDescription} />
-        
-        {/* JSON-LD */}
-        <script type="application/ld+json">
-          {JSON.stringify(articleSchema)}
-        </script>
-        <script type="application/ld+json">
-          {JSON.stringify(faqSchema)}
-        </script>
-        <script type="application/ld+json">
-          {JSON.stringify(breadcrumbSchema)}
-        </script>
-        <script type="application/ld+json">
-          {JSON.stringify(serviceSchema)}
-        </script>
+        <script type="application/ld+json">{JSON.stringify(articleSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(serviceSchema)}</script>
       </Helmet>
 
       <article className="bg-background min-h-screen">
-        {/* Breadcrumb */}
         <Breadcrumb items={breadcrumbItems} />
+        <HeroCtaBanner cityName={pageData.cityName} problemContext={problemContext} />
 
-        {/* Hero CTA Banner - Above the fold */}
-        <HeroCtaBanner 
-          cityName={pageData.cityName} 
-          problemContext={problemContext}
-        />
-
-        {/* Header with SEO-optimized H1 */}
+        {/* H1 SEO-optimized */}
         <header className="container mx-auto px-4 py-8">
           <div className="max-w-4xl mx-auto">
             <div className="flex items-center gap-2 text-primary mb-4">
@@ -222,9 +184,8 @@ const ProblemCityPage = () => {
           </div>
         </header>
 
-        {/* Content */}
         <div className="container mx-auto px-4 pb-16">
-          <div className="max-w-4xl mx-auto space-y-12">
+          <div className="max-w-4xl mx-auto space-y-10">
             
             {/* Summary Box */}
             <SummaryBox
@@ -233,14 +194,26 @@ const ProblemCityPage = () => {
               items={summaryItems}
             />
 
-            {/* SECTION 1: SEO-Optimized Introduction (min 6 lines) */}
+            {/* 2️⃣ INTRO OTTIMIZZATA SEO + LOCALE (min 6 righe) */}
             <section className="prose prose-lg max-w-none">
               <p className="text-lg text-muted-foreground leading-relaxed" 
                  dangerouslySetInnerHTML={{ __html: pageData.introText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>') }} 
               />
             </section>
 
-            {/* SECTION 2: Causes Section - "Cause comuni di [problema] a [città]" */}
+            {/* 3️⃣ SEZIONE "DOVE SUCCEDE PIÙ SPESSO A [CITTÀ]" */}
+            {cityLocalData && (
+              <ProblemCityWhereSection
+                cityName={pageData.cityName}
+                citySlug={pageData.citySlug}
+                problemName={pageData.problemName}
+                problemSlug={pageData.problemSlug}
+                neighborhoods={cityLocalData.neighborhoods}
+                buildingAge={cityLocalData.buildingAge}
+              />
+            )}
+
+            {/* CAUSE COMUNI */}
             <section>
               <h2 className="text-xl md:text-2xl font-bold text-foreground mb-6 flex items-center gap-3">
                 <AlertCircle className="h-6 w-6 text-primary" />
@@ -256,7 +229,7 @@ const ProblemCityPage = () => {
               </ul>
             </section>
 
-            {/* Why Section - Localized explanation */}
+            {/* Localized Why Section */}
             {cityLocalData && (
               <CityWhySection
                 cityName={pageData.cityName}
@@ -269,7 +242,7 @@ const ProblemCityPage = () => {
               />
             )}
 
-            {/* SECTION 3: "Cosa fare subito se hai [problema] a [città]" */}
+            {/* 4️⃣ COSA FARE SUBITO (Metodi fai-da-te) */}
             <section>
               <h2 className="text-xl md:text-2xl font-bold text-foreground mb-6 flex items-center gap-3">
                 <ListChecks className="h-6 w-6 text-primary" />
@@ -287,16 +260,21 @@ const ProblemCityPage = () => {
                   />
                 ))}
               </div>
+              
+              {/* ⚠️ Warning: quando il fai-da-te NON funziona */}
+              <ProblemCityDIYLimitations problemSlug={pageData.problemSlug} />
             </section>
 
             {/* Mid-Article CTA */}
-            <MidArticleCTA 
-              cityName={pageData.cityName}
-              problemContext={problemContext}
-              variant="compact"
+            <MidArticleCTA cityName={pageData.cityName} problemContext={problemContext} variant="compact" />
+
+            {/* 5️⃣ SEGNALI DI PROBLEMA GRAVE */}
+            <ProblemCityWarningSignsSection
+              problemName={pageData.problemName}
+              problemSlug={pageData.problemSlug}
             />
 
-            {/* SECTION 4: "Cosa NON fare" - Warnings */}
+            {/* COSA NON FARE - Warnings */}
             {pageData.warnings.length > 0 && (
               <section>
                 <h2 className="text-xl md:text-2xl font-bold text-foreground mb-6 flex items-center gap-3">
@@ -305,22 +283,26 @@ const ProblemCityPage = () => {
                 </h2>
                 <div className="space-y-4">
                   {pageData.warnings.map((warning, index) => (
-                    <WarningBox key={index}>
-                      {warning}
-                    </WarningBox>
+                    <WarningBox key={index}>{warning}</WarningBox>
                   ))}
                 </div>
               </section>
             )}
 
-            {/* SECTION 5: "Quando chiamare un idraulico a [città]" */}
+            {/* 7️⃣ ERRORI COMUNI CHE PEGGIORANO IL PROBLEMA */}
+            <ProblemCityMistakesSection
+              problemName={pageData.problemName}
+              problemSlug={pageData.problemSlug}
+            />
+
+            {/* QUANDO CHIAMARE UN IDRAULICO */}
             <ProblemCityWhenToCallSection
               cityName={pageData.cityName}
               problemName={pageData.problemName}
               problemSlug={pageData.problemSlug}
             />
 
-            {/* SECTION 6: "Quanto costa risolvere [problema] a [città]" */}
+            {/* 6️⃣ SEZIONE PREZZI LOCALIZZATA */}
             <ProblemCityCostSection
               cityName={pageData.cityName}
               citySlug={pageData.citySlug}
@@ -328,7 +310,7 @@ const ProblemCityPage = () => {
               problemSlug={pageData.problemSlug}
             />
 
-            {/* SECTION 7: "Zone servite a [città]" */}
+            {/* 7️⃣ ZONE SERVITE */}
             {cityLocalData && (
               <ProblemCityZonesSection
                 cityName={pageData.cityName}
@@ -338,37 +320,32 @@ const ProblemCityPage = () => {
               />
             )}
 
-            {/* Local Mini FAQ - 3 Questions */}
+            {/* 8️⃣ FAQ CON SCHEMA MARKUP */}
             <LocalMiniFAQ
               cityName={pageData.cityName}
               problemName={pageData.problemName}
               problemSlug={pageData.problemSlug}
             />
 
-            {/* Related Guide Link - Link to main blog article */}
+            {/* 9️⃣ LINK INTERNI */}
             <RelatedGuideLink 
               problemSlug={pageData.problemSlug}
               problemName={pageData.problemName}
             />
 
-            {/* Similar Problems in This City - Internal Linking */}
             <SimilarProblemsInCity
               currentProblemSlug={pageData.problemSlug}
               citySlug={pageData.citySlug}
               cityName={pageData.cityName}
             />
 
-            {/* Full CTA - Before Final */}
-            <MidArticleCTA 
-              cityName={pageData.cityName}
-              problemContext={problemContext}
-              variant="full"
-            />
+            {/* Full CTA */}
+            <MidArticleCTA cityName={pageData.cityName} problemContext={problemContext} variant="full" />
 
-            {/* SECTION 8: Final CTA with Form - Strong visual CTA */}
+            {/* 🔟 CTA FINALE SUPER FORTE */}
             <FinalCTABox
-              title={`Hai ${pageData.problemName} a ${pageData.cityName}?`}
-              description={`Invia una richiesta gratuita e ricevi preventivi da idraulici disponibili nella tua zona. Intervento rapido in tutta ${pageData.cityName} e provincia.`}
+              title={`Hai ancora ${pageData.problemName} a ${pageData.cityName}?`}
+              description={`Invia una richiesta gratuita e ricevi preventivi da idraulici disponibili nella tua zona. Intervento rapido in tutta ${pageData.cityName} e provincia. Nessun impegno, solo professionisti verificati.`}
               interventionType={pageData.interventionType}
               problemContext={problemContext}
             />

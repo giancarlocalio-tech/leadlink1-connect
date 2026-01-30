@@ -129,6 +129,30 @@ export function RelatedServices({ cityData, currentServiceSlug }: RelatedService
             </div>
           </div>
         )}
+
+        {/* Main Cities Links - Internal Linking to /milano etc. */}
+        {!cityData && (
+          <div className="mt-10 max-w-4xl mx-auto">
+            <p className="text-center text-sm text-muted-foreground mb-4">Idraulico nelle principali città:</p>
+            <div className="flex flex-wrap justify-center gap-2">
+              <Link to="/milano" className="text-sm py-2 px-4 bg-primary/10 text-primary hover:bg-primary/20 rounded-full transition-colors font-medium">
+                Idraulico a Milano
+              </Link>
+              <Link to="/roma" className="text-sm py-2 px-4 bg-muted hover:bg-muted/80 rounded-full transition-colors">
+                Idraulico Roma
+              </Link>
+              <Link to="/torino" className="text-sm py-2 px-4 bg-muted hover:bg-muted/80 rounded-full transition-colors">
+                Idraulico Torino
+              </Link>
+              <Link to="/napoli" className="text-sm py-2 px-4 bg-muted hover:bg-muted/80 rounded-full transition-colors">
+                Idraulico Napoli
+              </Link>
+              <Link to="/bologna" className="text-sm py-2 px-4 bg-muted hover:bg-muted/80 rounded-full transition-colors">
+                Idraulico Bologna
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

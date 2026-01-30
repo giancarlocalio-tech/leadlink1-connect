@@ -55,6 +55,10 @@ const CITY_DATA: Record<string, {
 // Milan-specific FAQ for schema markup
 const MILAN_FAQ = [
   {
+    question: 'Quanto costa un idraulico a Milano?',
+    answer: 'Il costo di un idraulico a Milano varia in base al tipo di intervento e all\'urgenza. Un intervento standard parte da 50-80€, mentre le emergenze notturne o nei weekend possono avere una maggiorazione. Su IdrauliciSubito ricevi preventivi gratuiti e trasparenti per confrontare i prezzi.'
+  },
+  {
     question: 'Come faccio a trovare un idraulico a Milano con IdrauliciSubito?',
     answer: 'Compila il form indicando il problema e la zona di Milano. Riceverai una risposta da un idraulico disponibile nella tua area in pochi minuti. Il servizio è completamente gratuito e senza impegno.'
   },
@@ -67,7 +71,7 @@ const MILAN_FAQ = [
     answer: 'Nella maggior parte dei casi vieni contattato entro 15 minuti dalla richiesta. Per le urgenze, molti idraulici possono intervenire anche in giornata.'
   },
   {
-    question: 'Posso usare il servizio per urgenze notturne o nel weekend a Milano?',
+    question: 'Idraulico urgente Milano è disponibile 24/7?',
     answer: 'Sì, molti idraulici a Milano offrono servizio di pronto intervento 24 ore su 24, inclusi weekend e festivi, per emergenze come perdite d\'acqua, allagamenti o guasti alla caldaia.'
   }
 ];
@@ -110,18 +114,19 @@ export default function CityLandingPage() {
 
   // Milano-specific SEO title and H1
   const pageTitle = isMilano 
-    ? 'Idraulico Milano Urgente | Trova Subito un Idraulico Vicino a Te'
+    ? 'Idraulico a Milano | Pronto Intervento 24/7 per Urgenze'
     : `Idraulico ${cityData.name} - Pronto Intervento 24/7 | Preventivi Gratuiti`;
   
   const pageH1 = isMilano 
-    ? 'Cerchi un Idraulico a Milano? Trovalo Subito'
+    ? 'Idraulico a Milano – Interventi Urgenti e Professionali'
     : `Idraulico a ${cityData.name}`;
   
   const pageDescription = isMilano
-    ? `Cerchi un idraulico a Milano per un'emergenza? ✓ Perdite d'acqua ✓ WC bloccato ✓ Caldaia guasta. Trova subito un idraulico disponibile a Milano e provincia. Risposta in 15 minuti.`
+    ? `Cerchi un idraulico a Milano pronto a intervenire per perdite, scarichi intasati o altre emergenze? ✓ Pronto intervento 24/7 ✓ Milano e provincia ✓ Risposta in 15 minuti.`
     : `Cerchi un idraulico a ${cityData.name}? ✓ Professionisti verificati ✓ Risposta in 15 min ✓ Preventivi gratuiti. Riparazioni, installazioni e emergenze idrauliche in tutta ${cityData.name} e provincia.`;
   
-  const canonicalUrl = `https://www.idraulicisubito.com/idraulico-${citySlug}`;
+  // Canonical URL: /milano for Milano, /citySlug for others
+  const canonicalUrl = `https://www.idraulicisubito.com/${citySlug}`;
 
   // Generate consistent rating based on city for AggregateRating schema
   const generateConsistentRating = (seed: string) => {
@@ -281,13 +286,14 @@ export default function CityLandingPage() {
             <div className="max-w-3xl mx-auto">
               <div className="bg-accent/30 border-l-4 border-primary p-6 rounded-r-lg mb-8">
                 <p className="text-lg leading-relaxed">
-                  Se hai cercato <strong>idraulico Milano</strong> probabilmente hai un problema urgente: 
-                  una <Link to="/costi-riparazione-perdita-acqua" className="text-primary hover:underline font-medium">perdita d'acqua</Link>, 
-                  il WC bloccato, lo scarico che non va o un allagamento in casa.
+                  Se stai cercando un <strong>idraulico a Milano</strong> pronto a intervenire per{' '}
+                  <Link to="/costi-riparazione-perdita-acqua" className="text-primary hover:underline font-medium">perdite d'acqua</Link>,{' '}
+                  scarichi intasati o altre emergenze, sei nel posto giusto.
                 </p>
                 <p className="text-lg leading-relaxed mt-4">
-                  Con <strong>IdrauliciSubito</strong> puoi trovare un <Link to="/idraulico-vicino-a-me" className="text-primary hover:underline font-medium">idraulico disponibile</Link> a Milano e provincia in pochi minuti.
-                  Inserisci il problema, indica la zona e vieni contattato da un professionista vicino a te.
+                  Il nostro servizio collega rapidamente chi ha bisogno con tecnici disponibili a <strong>Milano e provincia</strong>,{' '}
+                  qualunque sia il problema idraulico. Inserisci il problema, indica la zona e vieni contattato da un{' '}
+                  <Link to="/idraulico-vicino-a-me" className="text-primary hover:underline font-medium">idraulico vicino a te</Link>.
                 </p>
               </div>
               

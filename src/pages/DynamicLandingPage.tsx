@@ -164,7 +164,8 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
   const isRoma = cityData.slug === 'roma' && !serviceData;
   const isNapoli = cityData.slug === 'napoli' && !serviceData;
   const isTorino = cityData.slug === 'torino' && !serviceData;
-  const isMajorCity = isMilano || isRoma || isNapoli || isTorino;
+  const isBologna = cityData.slug === 'bologna' && !serviceData;
+  const isMajorCity = isMilano || isRoma || isNapoli || isTorino || isBologna;
   
   const pageTitle = isMilano
     ? 'Idraulico a Milano 24h | Pronto intervento rapido in tutti i quartieri'
@@ -174,9 +175,11 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
         ? 'Idraulico Napoli 24h | Pronto Intervento in Tutti i Quartieri'
         : isTorino
           ? 'Idraulico Torino 24h | Pronto Intervento in Tutti i Quartieri'
-          : serviceData 
-            ? `${serviceData.name} ${cityData.name} - Professionisti Verificati | Preventivi Gratuiti`
-            : `Idraulico ${cityData.name} - Pronto Intervento 24/7 | Preventivi Gratuiti`;
+          : isBologna
+            ? 'Idraulico Bologna 24h | Pronto Intervento in Tutti i Quartieri'
+            : serviceData 
+              ? `${serviceData.name} ${cityData.name} - Professionisti Verificati | Preventivi Gratuiti`
+              : `Idraulico ${cityData.name} - Pronto Intervento 24/7 | Preventivi Gratuiti`;
     
   const pageDescription = isMilano
     ? `Cerchi un idraulico a Milano pronto a intervenire per perdite d'acqua, wc bloccato, scarico intasato o allagamento? ✓ Pronto intervento 24/7 ✓ Milano e provincia ✓ Risposta in 15 minuti.`
@@ -186,9 +189,11 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
         ? `Cerchi un idraulico a Napoli per emergenze, perdite, scarichi otturati o caldaie? ✓ Pronto intervento 24/7 ✓ Napoli e provincia ✓ Risposta in 15 minuti. Professionisti verificati.`
         : isTorino
           ? `Cerchi un idraulico a Torino per emergenze, perdite, scarichi otturati o caldaie? ✓ Pronto intervento 24/7 ✓ Torino e provincia ✓ Risposta in 15 minuti. Professionisti verificati.`
-          : serviceData
-            ? `Cerchi ${serviceData.name.toLowerCase()} a ${cityData.name}? ✓ Professionisti verificati ✓ Risposta in 15 min ✓ Preventivi gratuiti. Servizio in tutta ${cityData.name} e provincia.`
-            : `Cerchi un idraulico a ${cityData.name}? ✓ Professionisti verificati ✓ Risposta in 15 min ✓ Preventivi gratuiti. Riparazioni, installazioni e emergenze idrauliche in tutta ${cityData.name} e provincia.`;
+          : isBologna
+            ? `Cerchi un idraulico a Bologna per emergenze, perdite, scarichi otturati o caldaie? ✓ Pronto intervento 24/7 ✓ Bologna e provincia ✓ Risposta in 15 minuti. Professionisti verificati.`
+            : serviceData
+              ? `Cerchi ${serviceData.name.toLowerCase()} a ${cityData.name}? ✓ Professionisti verificati ✓ Risposta in 15 min ✓ Preventivi gratuiti. Servizio in tutta ${cityData.name} e provincia.`
+              : `Cerchi un idraulico a ${cityData.name}? ✓ Professionisti verificati ✓ Risposta in 15 min ✓ Preventivi gratuiti. Riparazioni, installazioni e emergenze idrauliche in tutta ${cityData.name} e provincia.`;
 
   // SEO INDEXING DECISION
   const indexingDecision = getIndexingDecision(
@@ -215,9 +220,11 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
         ? 'Idraulici a Napoli e Provincia'
         : isTorino
           ? 'Idraulici a Torino e Provincia'
-          : serviceData
-            ? `${serviceData.name} a ${cityData.name}`
-            : `Idraulico a ${cityData.name}`;
+          : isBologna
+            ? 'Idraulici a Bologna e Provincia'
+            : serviceData
+              ? `${serviceData.name} a ${cityData.name}`
+              : `Idraulico a ${cityData.name}`;
 
   // Build area served array
   const areaServed = [
@@ -297,8 +304,16 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
     { question: 'Gli idraulici a Torino fanno pronto intervento 24 ore?', answer: 'Sì, molti idraulici a Torino offrono servizio di pronto intervento 24 ore su 24, inclusi weekend e festivi, per emergenze come perdite d\'acqua, allagamenti o guasti alla caldaia.' }
   ];
 
+  // Bologna-specific FAQ for JSON-LD schema
+  const bolognaFAQs = [
+    { question: 'Quanto costa un idraulico a Bologna?', answer: 'Il costo di un idraulico a Bologna varia in base al tipo di intervento e all\'urgenza. Un intervento standard parte da 50-80€, mentre le emergenze notturne o nei weekend possono avere una maggiorazione. Su IdrauliciSubito ricevi preventivi gratuiti e trasparenti per confrontare i prezzi.' },
+    { question: 'In quanto tempo arriva un idraulico a Bologna?', answer: 'Nella maggior parte dei casi vieni contattato entro 15 minuti dalla richiesta. Per le urgenze, molti idraulici possono intervenire anche in giornata, a seconda della zona di Bologna e della disponibilità.' },
+    { question: 'Trovate idraulici anche in provincia?', answer: 'Sì, il nostro servizio copre tutta Bologna e provincia, inclusi comuni come Casalecchio di Reno, San Lazzaro di Savena, Imola, Castel Maggiore, Zola Predosa, Budrio e Ozzano dell\'Emilia.' },
+    { question: 'Gli idraulici a Bologna fanno pronto intervento 24 ore?', answer: 'Sì, molti idraulici a Bologna offrono servizio di pronto intervento 24 ore su 24, inclusi weekend e festivi, per emergenze come perdite d\'acqua, allagamenti o guasti alla caldaia.' }
+  ];
+
   // Get the appropriate FAQs for JSON-LD
-  const citySpecificFAQs = isMilano ? milanoFAQs : isRoma ? romaFAQs : isNapoli ? napoliFAQs : isTorino ? torinoFAQs : getCityFAQs(serviceShortName, cityData.name);
+  const citySpecificFAQs = isMilano ? milanoFAQs : isRoma ? romaFAQs : isNapoli ? napoliFAQs : isTorino ? torinoFAQs : isBologna ? bolognaFAQs : getCityFAQs(serviceShortName, cityData.name);
 
   // Generate structured data using utility (only include aggregateRating for indexed pages)
   const jsonLd = generateJsonLd(
@@ -585,6 +600,42 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
         </section>
       )}
 
+      {/* BOLOGNA-SPECIFIC SEO INTRO SECTION */}
+      {isBologna && (
+        <section className="py-12 bg-background">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto">
+              <div className="bg-accent/30 border-l-4 border-primary p-6 rounded-r-lg mb-8">
+                <p className="text-lg leading-relaxed">
+                  Trova <strong>idraulici qualificati a Bologna</strong> per emergenze idrauliche,{' '}
+                  <Link to="/costi-riparazione-perdita-acqua" className="text-primary hover:underline font-medium">perdite d'acqua</Link>,{' '}
+                  scarichi otturati, problemi alla caldaia e installazioni sanitarie. Richiedi preventivi gratuiti e ricevi risposte rapide da professionisti della tua zona.
+                </p>
+                <p className="text-lg leading-relaxed mt-4">
+                  Il nostro servizio collega rapidamente chi ha bisogno con tecnici disponibili a <strong>Bologna e provincia</strong>.{' '}
+                  Inserisci il problema, indica la zona e vieni contattato da un{' '}
+                  <Link to="/idraulico-vicino-a-me" className="text-primary hover:underline font-medium">idraulico vicino a te</Link>.
+                </p>
+                <p className="text-lg leading-relaxed mt-4">
+                  Offriamo anche servizio di <strong>idraulico a Bologna 24 ore su 24</strong> per emergenze urgenti come perdite gravi, 
+                  allagamenti e guasti improvvisi. Pronto intervento garantito anche nei weekend e festivi.
+                </p>
+              </div>
+              
+              <div className="text-center">
+                <Button 
+                  onClick={() => setShowWizard(true)}
+                  size="lg"
+                  className="rounded-full"
+                >
+                  Trova un Idraulico Ora <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* MILANO-SPECIFIC QUARTIERI SECTION */}
       {isMilano && (
         <section className="py-12 bg-muted/30">
@@ -729,6 +780,42 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
         </section>
       )}
 
+      {/* BOLOGNA-SPECIFIC QUARTIERI SECTION */}
+      {isBologna && (
+        <section className="py-12 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <MapPin className="h-6 w-6 text-primary" />
+                Zone di Bologna in cui interveniamo
+              </h2>
+              <p className="text-muted-foreground mb-6">
+                Il servizio è attivo in <strong>tutte le zone di Bologna</strong>, tra cui:
+              </p>
+              <div className="flex flex-wrap gap-2 mb-6">
+                {['Centro Storico', 'Bolognina', 'San Donato', 'Savena', 'Santo Stefano', 'Barca', 'Borgo Panigale', 'Saragozza', 'Corticella', 'Mazzini'].map((zone, index) => (
+                  <span 
+                    key={index} 
+                    className="bg-card border border-border px-4 py-2 rounded-full text-sm font-medium hover:border-primary transition-colors"
+                  >
+                    {zone}
+                  </span>
+                ))}
+                <span className="bg-primary/10 border border-primary/30 px-4 py-2 rounded-full text-sm font-medium text-primary">
+                  + tutta la provincia
+                </span>
+              </div>
+              <p className="text-muted-foreground leading-relaxed mt-6">
+                Operiamo in tutti i quartieri di Bologna, dal Centro Storico a zone come Bolognina, San Donato, Saragozza e Savena. 
+                I nostri idraulici conoscono bene le tipologie di impianti presenti negli edifici bolognesi, 
+                dai palazzi storici agli appartamenti moderni. Questo ti aiuta a trovare un <strong>idraulico Centro Bologna</strong>, 
+                <strong>idraulico Bolognina</strong>, <strong>idraulico zona San Donato</strong> e in qualsiasi altra zona di Bologna.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* MILANO-SPECIFIC PROBLEMI SECTION */}
       {isMilano && (
         <section className="py-12 bg-background">
@@ -861,6 +948,41 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
               </div>
               <p className="text-sm text-muted-foreground mt-6">
                 Questo ti permette di trovare un <strong>idraulico Torino</strong> per qualsiasi tipo di intervento, 
+                dalla semplice riparazione alla <Link to="/pronto-intervento-idraulico" className="text-primary hover:underline">emergenza idraulica</Link>.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* BOLOGNA-SPECIFIC PROBLEMI SECTION */}
+      {isBologna && (
+        <section className="py-12 bg-background">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <AlertTriangle className="h-6 w-6 text-primary" />
+                Problemi idraulici che risolviamo a Bologna
+              </h2>
+              <div className="grid sm:grid-cols-2 gap-3">
+                {[
+                  'Perdite d\'acqua improvvise',
+                  'Tubi rotti o che perdono',
+                  'WC bloccato o intasato',
+                  'Scarico lavandino intasato',
+                  'Scaldabagno o caldaia che non funzionano',
+                  'Allagamenti in casa',
+                  'Sostituzione rubinetti e sanitari',
+                  'Spurgo fognature Bologna'
+                ].map((problem, index) => (
+                  <div key={index} className="flex items-center gap-3 bg-card border border-border rounded-lg p-4">
+                    <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
+                    <span className="font-medium">{problem}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-sm text-muted-foreground mt-6">
+                Questo ti permette di trovare un <strong>idraulico Bologna</strong> per qualsiasi tipo di intervento, 
                 dalla semplice riparazione alla <Link to="/pronto-intervento-idraulico" className="text-primary hover:underline">emergenza idraulica</Link>.
               </p>
             </div>
@@ -1041,6 +1163,51 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
         </section>
       )}
 
+      {/* BOLOGNA-SPECIFIC FAQ SECTION */}
+      {isBologna && (
+        <section className="py-12 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-2xl font-bold mb-8 flex items-center gap-2">
+                <HelpCircle className="h-6 w-6 text-primary" />
+                Domande frequenti: Idraulico a Bologna
+              </h2>
+              <div className="space-y-6">
+                <div className="bg-card border border-border rounded-lg p-6">
+                  <h3 className="font-semibold text-lg mb-2">Quanto costa un idraulico a Bologna?</h3>
+                  <p className="text-muted-foreground">
+                    Il costo di un idraulico a Bologna varia in base al tipo di intervento e all'urgenza. Un intervento standard parte da 50-80€, 
+                    mentre le emergenze notturne o nei weekend possono avere una maggiorazione. Su IdrauliciSubito ricevi{' '}
+                    <Link to="/preventivo-idraulico" className="text-primary hover:underline">preventivi gratuiti</Link> e trasparenti per confrontare i prezzi.
+                  </p>
+                </div>
+                <div className="bg-card border border-border rounded-lg p-6">
+                  <h3 className="font-semibold text-lg mb-2">In quanto tempo arriva un idraulico a Bologna?</h3>
+                  <p className="text-muted-foreground">
+                    Nella maggior parte dei casi vieni contattato entro 15 minuti dalla richiesta. Per le urgenze, molti idraulici possono intervenire anche in giornata, 
+                    a seconda della zona di Bologna e della disponibilità.
+                  </p>
+                </div>
+                <div className="bg-card border border-border rounded-lg p-6">
+                  <h3 className="font-semibold text-lg mb-2">Trovate idraulici anche in provincia?</h3>
+                  <p className="text-muted-foreground">
+                    Sì, il nostro servizio copre tutta Bologna e provincia, inclusi comuni come Casalecchio di Reno, San Lazzaro di Savena, 
+                    Imola, Castel Maggiore, Zola Predosa, Budrio e Ozzano dell'Emilia.
+                  </p>
+                </div>
+                <div className="bg-card border border-border rounded-lg p-6">
+                  <h3 className="font-semibold text-lg mb-2">Gli idraulici a Bologna fanno pronto intervento 24 ore?</h3>
+                  <p className="text-muted-foreground">
+                    Sì, molti idraulici a Bologna offrono servizio di <Link to="/pronto-intervento-idraulico" className="text-primary hover:underline">pronto intervento 24 ore su 24</Link>, 
+                    inclusi weekend e festivi, per emergenze come perdite d'acqua, allagamenti o guasti alla caldaia.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Local Statistics Section - Like ProntoPro */}
       <LocalStats cityName={cityData.name} serviceName={serviceData?.name} />
 
@@ -1103,6 +1270,18 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
                 I nostri <strong>idraulici a Torino</strong> intervengono ogni giorno per emergenze domestiche e lavori programmati. 
                 Dalla riparazione di <Link to="/costi-riparazione-perdita-acqua" className="text-primary hover:underline">perdite d'acqua</Link>{' '}
                 alla sostituzione di caldaie, copriamo tutti i quartieri di Torino e i comuni limitrofi della provincia 
+                garantendo interventi rapidi e professionisti verificati.
+              </p>
+            </div>
+          )}
+          
+          {/* SEO text under services for Bologna */}
+          {isBologna && (
+            <div className="bg-muted/50 rounded-xl p-6 mb-12 max-w-3xl mx-auto">
+              <p className="text-muted-foreground leading-relaxed text-center">
+                I nostri <strong>idraulici a Bologna</strong> intervengono ogni giorno per emergenze domestiche e lavori programmati. 
+                Dalla riparazione di <Link to="/costi-riparazione-perdita-acqua" className="text-primary hover:underline">perdite d'acqua</Link>{' '}
+                alla sostituzione di caldaie, copriamo tutti i quartieri di Bologna e i comuni limitrofi della provincia 
                 garantendo interventi rapidi e professionisti verificati.
               </p>
             </div>
@@ -1427,6 +1606,18 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
                 Nichelino, Rivoli, Collegno, Settimo Torinese, Venaria Reale e Grugliasco. Se cerchi un{' '}
                 <strong>idraulico vicino Torino</strong>, puoi inviare una richiesta gratuita e ricevere 
                 preventivi da tecnici disponibili nella tua zona della <strong>provincia di Torino</strong>.
+              </p>
+            </div>
+          )}
+          
+          {/* SEO text for comuni limitrofi Bologna */}
+          {isBologna && (
+            <div className="max-w-3xl mx-auto mt-8 bg-muted/50 rounded-xl p-6">
+              <p className="text-muted-foreground leading-relaxed text-center">
+                I nostri professionisti operano anche nei principali comuni vicino Bologna come Casalecchio di Reno, 
+                San Lazzaro di Savena, Imola, Castel Maggiore, Zola Predosa, Budrio e Ozzano dell'Emilia. Se cerchi un{' '}
+                <strong>idraulico vicino Bologna</strong>, puoi inviare una richiesta gratuita e ricevere 
+                preventivi da tecnici disponibili nella tua zona della <strong>provincia di Bologna</strong>.
               </p>
             </div>
           )}

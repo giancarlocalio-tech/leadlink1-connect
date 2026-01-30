@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Calendar, Clock, ArrowLeft, Share2, User } from 'lucide-react';
 import { EnhancedArticleContent } from '@/components/blog/EnhancedArticleContent';
 import { ArticleRequestForm } from '@/components/blog/ArticleRequestForm';
+import { getBlogArticleFAQs } from '@/components/blog/BlogArticleFAQ';
 
 export default function BlogArticlePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -26,6 +27,9 @@ export default function BlogArticlePage() {
 
   const canonicalUrl = `https://www.idraulicisubito.com/blog/${article.slug}`;
   const category = BLOG_CATEGORIES.find(c => c.slug === article.category);
+  
+  // Get FAQs for this article for schema markup
+  const articleFAQs = getBlogArticleFAQs(article.slug, article.h1);
 
   // JSON-LD per articolo blog
   const articleJsonLd = {
@@ -37,7 +41,7 @@ export default function BlogArticlePage() {
     dateModified: article.updatedAt,
     author: {
       '@type': 'Organization',
-      name: 'Idraulici Subito',
+      name: 'Redazione IdrauliciSubito',
       url: 'https://www.idraulicisubito.com/chi-siamo'
     },
     publisher: {
@@ -48,6 +52,10 @@ export default function BlogArticlePage() {
         '@type': 'ImageObject',
         url: 'https://www.idraulicisubito.com/logo.png'
       }
+    },
+    about: {
+      '@type': 'Thing',
+      name: article.tags[0] || article.title
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
@@ -78,6 +86,20 @@ export default function BlogArticlePage() {
         item: canonicalUrl
       }
     ]
+  };
+  
+  // FAQ Schema for rich snippets
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: articleFAQs.map(faq => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer
+      }
+    }))
   };
 
   const handleShare = async () => {
@@ -115,6 +137,7 @@ export default function BlogArticlePage() {
         <meta name="twitter:description" content={article.metaDescription} />
         <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
       </Helmet>
 
       {/* Breadcrumb */}

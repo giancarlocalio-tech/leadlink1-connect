@@ -6,7 +6,10 @@ import { ProCallBox } from './ProCallBox';
 import { FinalCTABox } from './FinalCTABox';
 import { ArticleIntro } from './ArticleIntro';
 import { LocalProblemLinks } from './LocalProblemLinks';
-
+import { EnhancedArticleIntro } from './EnhancedArticleIntro';
+import { DIYLimitationsWarning } from './DIYLimitationsWarning';
+import { WhatPlumberDoes } from './WhatPlumberDoes';
+import { BlogArticleFAQ } from './BlogArticleFAQ';
 // Icon mapping for common topics
 const TOPIC_ICONS: Record<string, string> = {
   'acqua bollente': '🔥',
@@ -467,12 +470,12 @@ export function ArticleContentParser({
   
   return (
     <div className="space-y-8">
-      {/* Intro */}
-      {introSection && (
-        <ArticleIntro>
-          <p>{introSection.content}</p>
-        </ArticleIntro>
-      )}
+      {/* Enhanced Intro - Longer and more SEO-optimized */}
+      <EnhancedArticleIntro
+        articleSlug={articleSlug}
+        articleTitle={articleTitle}
+        originalIntro={introSection?.content || ''}
+      />
       
       {/* Summary Box */}
       {summaryItems.length >= 2 && (
@@ -507,6 +510,14 @@ export function ArticleContentParser({
         </div>
       )}
       
+      {/* DIY Limitations Warning - After methods */}
+      {hasMethodCards && (
+        <DIYLimitationsWarning 
+          articleSlug={articleSlug}
+          articleTitle={articleTitle}
+        />
+      )}
+      
       {/* Other sections */}
       {otherSections.map((section, index) => renderSection(section, index, articleTitle))}
       
@@ -521,16 +532,28 @@ export function ArticleContentParser({
         </ProCallBox>
       )}
       
+      {/* What the Plumber Does - New section */}
+      <WhatPlumberDoes 
+        articleSlug={articleSlug}
+        articleTitle={articleTitle}
+      />
+      
       {/* Local Problem City Links - Internal Linking for SEO */}
       <LocalProblemLinks 
         articleSlug={articleSlug} 
         articleTitle={articleTitle} 
       />
       
-      {/* Final CTA */}
+      {/* FAQ Section with Schema */}
+      <BlogArticleFAQ 
+        articleSlug={articleSlug}
+        articleTitle={articleTitle}
+      />
+      
+      {/* Final CTA - Strong conversion-focused */}
       <FinalCTABox
-        title="Non si è ancora risolto?"
-        description="Il problema potrebbe essere più serio. Trova subito un idraulico qualificato vicino a te."
+        title="Il problema non si risolve?"
+        description="Se i metodi fai-da-te non hanno funzionato, il problema potrebbe essere più serio. Trova subito un idraulico qualificato vicino a te."
         interventionType={interventionType}
         problemContext={`Richiesta da articolo: ${articleTitle}`}
       />

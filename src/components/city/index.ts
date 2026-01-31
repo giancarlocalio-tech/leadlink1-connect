@@ -7,3 +7,12 @@ export { CityCostSection } from './CityCostSection';
 export { CityEmergencySignsSection } from './CityEmergencySignsSection';
 export { CityLocalFAQSection, generateCityFAQs } from './CityLocalFAQSection';
 export { CityInternalLinksSection } from './CityInternalLinksSection';
+
+// Napoli-specific components (ultra-optimized for top 3 ranking)
+export { NapoliIntroSection } from './NapoliIntroSection';
+export { NapoliNeighborhoodsSection } from './NapoliNeighborhoodsSection';
+export { NapoliWhyProblemsSection } from './NapoliWhyProblemsSection';
+export { NapoliBuildingTypesSection } from './NapoliBuildingTypesSection';
+export { NapoliStatisticsSection } from './NapoliStatisticsSection';
+export { NapoliExtendedFAQSection, getNapoliFAQSchema } from './NapoliExtendedFAQSection';
+export { NapoliEmergencyTipsSection } from './NapoliEmergencyTipsSection';

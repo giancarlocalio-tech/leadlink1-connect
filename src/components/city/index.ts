@@ -16,3 +16,7 @@ export { NapoliBuildingTypesSection } from './NapoliBuildingTypesSection';
 export { NapoliStatisticsSection } from './NapoliStatisticsSection';
 export { NapoliExtendedFAQSection, getNapoliFAQSchema } from './NapoliExtendedFAQSection';
 export { NapoliEmergencyTipsSection } from './NapoliEmergencyTipsSection';
+export { NapoliTableOfContents } from './NapoliTableOfContents';
+export { NapoliCostSection } from './NapoliCostSection';
+export { NapoliProblemLinksSection } from './NapoliProblemLinksSection';
+export { NapoliReviewsSection } from './NapoliReviewsSection';

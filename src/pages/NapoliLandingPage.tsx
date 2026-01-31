@@ -121,10 +121,11 @@ export default function NapoliLandingPage() {
         "validFrom": "2024-01-01"
       }
     },
-    // FAQPage schema
+    // FAQPage schema - UNICO per questa pagina
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
+      "@id": `${canonicalUrl}#faq`,
       "mainEntity": NAPOLI_EXTENDED_FAQS.map(faq => ({
         "@type": "Question",
         "name": faq.question,

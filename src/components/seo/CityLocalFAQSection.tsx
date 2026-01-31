@@ -45,25 +45,19 @@ export function CityLocalFAQSection({ cityName, faqs }: CityLocalFAQSectionProps
             e della provincia.
           </p>
 
-          {/* FAQ Items - Always visible in DOM for SEO */}
-          <div className="space-y-3" itemScope itemType="https://schema.org/FAQPage">
+          {/* FAQ Items - NO microdata here, JSON-LD is used instead */}
+          <div className="space-y-3">
             {faqs.map((faq, index) => (
               <div 
                 key={index}
                 className="bg-card rounded-xl border border-border overflow-hidden"
-                itemScope
-                itemProp="mainEntity"
-                itemType="https://schema.org/Question"
               >
                 <button
                   onClick={() => setOpenIndex(openIndex === index ? null : index)}
                   className="w-full flex items-center justify-between gap-4 p-5 text-left hover:bg-muted/50 transition-colors"
                   aria-expanded={openIndex === index}
                 >
-                  <h3 
-                    className="font-semibold text-foreground pr-4"
-                    itemProp="name"
-                  >
+                  <h3 className="font-semibold text-foreground pr-4">
                     {faq.question}
                   </h3>
                   <ChevronDown 
@@ -80,15 +74,9 @@ export function CityLocalFAQSection({ cityName, faqs }: CityLocalFAQSectionProps
                     "transition-all duration-200",
                     openIndex === index ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0 overflow-hidden"
                   )}
-                  itemScope
-                  itemProp="acceptedAnswer"
-                  itemType="https://schema.org/Answer"
                 >
                   <div className="px-5 pb-5 pt-0">
-                    <p 
-                      className="text-muted-foreground leading-relaxed"
-                      itemProp="text"
-                    >
+                    <p className="text-muted-foreground leading-relaxed">
                       {faq.answer}
                     </p>
                   </div>
@@ -96,13 +84,8 @@ export function CityLocalFAQSection({ cityName, faqs }: CityLocalFAQSectionProps
                 
                 {/* Hidden answer for SEO when collapsed */}
                 {openIndex !== index && (
-                  <div 
-                    className="sr-only"
-                    itemScope
-                    itemProp="acceptedAnswer"
-                    itemType="https://schema.org/Answer"
-                  >
-                    <span itemProp="text">{faq.answer}</span>
+                  <div className="sr-only">
+                    <span>{faq.answer}</span>
                   </div>
                 )}
               </div>

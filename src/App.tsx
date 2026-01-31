@@ -45,6 +45,7 @@ import NotFound from "./pages/NotFound";
 import IdraulicoRedirect from "./components/IdraulicoRedirect";
 import ServiziRedirect from "./components/ServiziRedirect";
 import ProblemCityPage from "./pages/ProblemCityPage";
+import NapoliLandingPage from "./pages/NapoliLandingPage";
 
 const queryClient = new QueryClient();
 
@@ -726,6 +727,9 @@ const App = () => (
             <Route path="/idraulico/:city/:service" element={<IdraulicoRedirect type="city-service" />} />
             <Route path="/idraulico/:city" element={<IdraulicoRedirect type="city" />} />
             <Route path="/servizi/:service" element={<ServiziRedirect />} />
+            
+            {/* NAPOLI - Ultra-optimized landing page for top 3 ranking */}
+            <Route path="/napoli" element={<NapoliLandingPage />} />
             
             {/* Dynamic city and city+service SEO pages - catches patterns like "milano" or "milano-manutenzione-caldaie" */}
             <Route path="/:slug" element={<DynamicLandingPage type="city-service" />} />

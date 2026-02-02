@@ -20,3 +20,6 @@ export { NapoliTableOfContents } from './NapoliTableOfContents';
 export { NapoliCostSection } from './NapoliCostSection';
 export { NapoliProblemLinksSection } from './NapoliProblemLinksSection';
 export { NapoliReviewsSection } from './NapoliReviewsSection';
+
+// Milano-specific components
+export { MilanoNeighborhoodsSection } from './MilanoNeighborhoodsSection';

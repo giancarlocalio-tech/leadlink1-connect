@@ -47,6 +47,7 @@ import ServiziRedirect from "./components/ServiziRedirect";
 import ProblemCityPage from "./pages/ProblemCityPage";
 import NapoliLandingPage from "./pages/NapoliLandingPage";
 import NapoliQuartierePage from "./pages/NapoliQuartierePage";
+import MilanoQuartierePage from "./pages/MilanoQuartierePage";
 
 const queryClient = new QueryClient();
 
@@ -772,6 +773,43 @@ const App = () => (
             <Route path="/idraulico-napoli-porto" element={<NapoliQuartierePage />} />
             <Route path="/idraulico-napoli-san-giuseppe" element={<NapoliQuartierePage />} />
             <Route path="/idraulico-napoli-agnano" element={<NapoliQuartierePage />} />
+            
+            {/* MILANO QUARTIERI - Local SEO pages */}
+            <Route path="/idraulico-milano-navigli" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-brera" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-porta-romana" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-citta-studi" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-isola" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-porta-venezia" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-porta-genova" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-lambrate" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-porta-nuova" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-garibaldi" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-centrale" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-loreto" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-bicocca" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-bovisa" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-niguarda" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-affori" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-quarto-oggiaro" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-san-siro" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-baggio" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-barona" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-ticinese" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-tortona" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-sempione" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-sarpi" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-greco" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-precotto" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-crescenzago" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-turro" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-gorla" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-corvetto" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-gratosoglio" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-chiesa-rossa" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-vigentino" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-rogoredo" element={<MilanoQuartierePage />} />
+            <Route path="/idraulico-milano-stadera" element={<MilanoQuartierePage />} />
             
             {/* Dynamic city and city+service SEO pages - catches patterns like "milano" or "milano-manutenzione-caldaie" */}
             <Route path="/:slug" element={<DynamicLandingPage type="city-service" />} />

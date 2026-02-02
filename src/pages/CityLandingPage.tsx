@@ -29,7 +29,8 @@ import {
   CityEmergencySignsSection,
   CityLocalFAQSection,
   CityInternalLinksSection,
-  generateCityFAQs
+  generateCityFAQs,
+  MilanoNeighborhoodsSection
 } from '@/components/city';
 
 // City-specific data
@@ -338,12 +339,16 @@ export default function CityLandingPage() {
       />
 
       {/* 2. Neighborhoods Section */}
-      <CityNeighborhoodsSection 
-        cityName={cityData.name}
-        citySlug={citySlug}
-        neighborhoods={cityData.neighborhoods}
-        nearbyAreas={cityData.nearbyAreas}
-      />
+      {citySlug === 'milano' ? (
+        <MilanoNeighborhoodsSection />
+      ) : (
+        <CityNeighborhoodsSection 
+          cityName={cityData.name}
+          citySlug={citySlug}
+          neighborhoods={cityData.neighborhoods}
+          nearbyAreas={cityData.nearbyAreas}
+        />
+      )}
 
       {/* 3. Common Problems Section */}
       <CityCommonProblemsSection 

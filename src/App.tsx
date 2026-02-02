@@ -46,6 +46,7 @@ import IdraulicoRedirect from "./components/IdraulicoRedirect";
 import ServiziRedirect from "./components/ServiziRedirect";
 import ProblemCityPage from "./pages/ProblemCityPage";
 import NapoliLandingPage from "./pages/NapoliLandingPage";
+import NapoliQuartierePage from "./pages/NapoliQuartierePage";
 
 const queryClient = new QueryClient();
 
@@ -730,6 +731,26 @@ const App = () => (
             
             {/* NAPOLI - Ultra-optimized landing page for top 3 ranking */}
             <Route path="/napoli" element={<NapoliLandingPage />} />
+            
+            {/* NAPOLI QUARTIERI - Local SEO pages */}
+            <Route path="/idraulico-napoli-centro-storico" element={<NapoliQuartierePage />} />
+            <Route path="/idraulico-napoli-vomero" element={<NapoliQuartierePage />} />
+            <Route path="/idraulico-napoli-arenella" element={<NapoliQuartierePage />} />
+            <Route path="/idraulico-napoli-posillipo" element={<NapoliQuartierePage />} />
+            <Route path="/idraulico-napoli-chiaia" element={<NapoliQuartierePage />} />
+            <Route path="/idraulico-napoli-mergellina" element={<NapoliQuartierePage />} />
+            <Route path="/idraulico-napoli-fuorigrotta" element={<NapoliQuartierePage />} />
+            <Route path="/idraulico-napoli-bagnoli" element={<NapoliQuartierePage />} />
+            <Route path="/idraulico-napoli-soccavo" element={<NapoliQuartierePage />} />
+            <Route path="/idraulico-napoli-pianura" element={<NapoliQuartierePage />} />
+            <Route path="/idraulico-napoli-san-giovanni-a-teduccio" element={<NapoliQuartierePage />} />
+            <Route path="/idraulico-napoli-scampia" element={<NapoliQuartierePage />} />
+            <Route path="/idraulico-napoli-secondigliano" element={<NapoliQuartierePage />} />
+            <Route path="/idraulico-napoli-ponticelli" element={<NapoliQuartierePage />} />
+            <Route path="/idraulico-napoli-barra" element={<NapoliQuartierePage />} />
+            <Route path="/idraulico-napoli-piscinola" element={<NapoliQuartierePage />} />
+            <Route path="/idraulico-napoli-chiaiano" element={<NapoliQuartierePage />} />
+            <Route path="/idraulico-napoli-capodimonte" element={<NapoliQuartierePage />} />
             
             {/* Dynamic city and city+service SEO pages - catches patterns like "milano" or "milano-manutenzione-caldaie" */}
             <Route path="/:slug" element={<DynamicLandingPage type="city-service" />} />

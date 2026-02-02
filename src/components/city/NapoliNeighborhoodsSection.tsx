@@ -1,72 +1,51 @@
 /**
  * NapoliNeighborhoodsSection - Extended neighborhoods coverage
  * 
- * Shows 25+ Naples neighborhoods organized by area
- * Links to dedicated neighborhood pages for local SEO
+ * Shows 40 Naples neighborhoods organized by area
+ * ALL items are clickable links to dedicated neighborhood pages
  */
 
 import { Link } from 'react-router-dom';
 import { MapPin } from 'lucide-react';
-import { NAPOLI_NEIGHBORHOODS, NAPOLI_NEARBY_AREAS } from '@/lib/napoliSeoContent';
 import { NAPOLI_QUARTIERI } from '@/lib/napoliQuartieriData';
+import { NAPOLI_NEARBY_AREAS } from '@/lib/napoliSeoContent';
 
-// Map neighborhood names to slugs - Complete coverage of 40 Naples neighborhoods
-const neighborhoodToSlug: Record<string, string> = {
-  'Centro Storico': 'centro-storico',
-  'Vomero': 'vomero',
-  'Arenella': 'arenella',
-  'Posillipo': 'posillipo',
-  'Chiaia': 'chiaia',
-  'Mergellina': 'mergellina',
-  'Fuorigrotta': 'fuorigrotta',
-  'Bagnoli': 'bagnoli',
-  'Soccavo': 'soccavo',
-  'Pianura': 'pianura',
-  'San Giovanni a Teduccio': 'san-giovanni-a-teduccio',
-  'Scampia': 'scampia',
-  'Secondigliano': 'secondigliano',
-  'Ponticelli': 'ponticelli',
-  'Barra': 'barra',
-  'Piscinola': 'piscinola',
-  'Chiaiano': 'chiaiano',
-  'Capodimonte': 'capodimonte',
-  'Sanità': 'sanita',
-  'Rione Sanità': 'sanita',
-  'Materdei': 'materdei',
-  'Colli Aminei': 'colli-aminei',
-  'Rione Alto': 'rione-alto',
-  'Miano': 'miano',
-  'Marianella': 'marianella',
-  'Poggioreale': 'poggioreale',
-  'Gianturco': 'gianturco',
-  'San Carlo all\'Arena': 'san-carlo-all-arena',
-  'Stella': 'stella',
-  'Avvocata': 'avvocata',
-  'Montecalvario': 'montecalvario',
-  'Quartieri Spagnoli': 'quartieri-spagnoli',
-  'San Ferdinando': 'san-ferdinando',
-  'Pendino': 'pendino',
-  'Mercato': 'mercato',
-  'San Lorenzo': 'san-lorenzo',
-  'Vicaria': 'vicaria',
-  'Porto': 'porto',
-  'San Giuseppe': 'san-giuseppe',
-  'Agnano': 'agnano'
-};
+// Organize neighborhoods by area for better UX
+const neighborhoodGroups = [
+  {
+    title: 'Centro Storico e Zone Storiche',
+    slugs: ['centro-storico', 'quartieri-spagnoli', 'san-lorenzo', 'pendino', 'mercato', 'vicaria', 'porto', 'san-giuseppe']
+  },
+  {
+    title: 'Zone Collinari',
+    slugs: ['vomero', 'arenella', 'posillipo', 'capodimonte', 'colli-aminei', 'rione-alto', 'materdei']
+  },
+  {
+    title: 'Zone Storiche Interne',
+    slugs: ['sanita', 'stella', 'avvocata', 'montecalvario', 'san-ferdinando', 'san-carlo-all-arena']
+  },
+  {
+    title: 'Lungomare e Costa',
+    slugs: ['chiaia', 'mergellina', 'bagnoli', 'agnano']
+  },
+  {
+    title: 'Zone Residenziali Ovest',
+    slugs: ['fuorigrotta', 'soccavo', 'pianura']
+  },
+  {
+    title: 'Zone Est',
+    slugs: ['san-giovanni-a-teduccio', 'barra', 'ponticelli', 'poggioreale', 'gianturco']
+  },
+  {
+    title: 'Zone Nord',
+    slugs: ['secondigliano', 'scampia', 'piscinola', 'chiaiano', 'miano', 'marianella']
+  }
+];
 
 export function NapoliNeighborhoodsSection() {
-  // Group neighborhoods by area type
-  const neighborhoodGroups = [
-    { title: 'Centro e Zone Storiche', items: NAPOLI_NEIGHBORHOODS.slice(0, 5) },
-    { title: 'Zone Collinari', items: NAPOLI_NEIGHBORHOODS.slice(5, 10) },
-    { title: 'Lungomare e Costa', items: NAPOLI_NEIGHBORHOODS.slice(10, 15) },
-    { title: 'Zone Residenziali', items: NAPOLI_NEIGHBORHOODS.slice(15, 20) },
-    { title: 'Zone Est e Nord', items: NAPOLI_NEIGHBORHOODS.slice(20) }
-  ];
-
-  // Check if neighborhood has a dedicated page
-  const hasPage = (name: string): boolean => {
-    return name in neighborhoodToSlug;
+  // Get quartiere data by slug
+  const getQuartiere = (slug: string) => {
+    return NAPOLI_QUARTIERI.find(q => q.slug === slug);
   };
 
   return (
@@ -82,7 +61,7 @@ export function NapoliNeighborhoodsSection() {
                 Interveniamo in Tutti i Quartieri di Napoli
               </h2>
               <p className="text-muted-foreground mt-1">
-                Copertura capillare in tutta la città e provincia
+                40 quartieri coperti con pagine dedicate
               </p>
             </div>
           </div>
@@ -93,7 +72,7 @@ export function NapoliNeighborhoodsSection() {
             riceverai assistenza rapida e professionale per qualsiasi problema idraulico.
           </p>
           
-          {/* Neighborhoods by area */}
+          {/* Neighborhoods by area - ALL CLICKABLE */}
           <div className="space-y-6 mb-10">
             {neighborhoodGroups.map((group, groupIndex) => (
               <div key={groupIndex}>
@@ -101,27 +80,39 @@ export function NapoliNeighborhoodsSection() {
                   {group.title}
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {group.items.map((neighborhood, index) => (
-                    hasPage(neighborhood) ? (
+                  {group.slugs.map((slug) => {
+                    const quartiere = getQuartiere(slug);
+                    if (!quartiere) return null;
+                    return (
                       <Link
-                        key={index}
-                        to={`/idraulico-napoli-${neighborhoodToSlug[neighborhood]}`}
+                        key={slug}
+                        to={`/idraulico-napoli-${slug}`}
                         className="bg-card border border-border px-4 py-2 rounded-full text-sm font-medium hover:border-primary hover:bg-primary/5 transition-colors"
+                        title={`Idraulico ${quartiere.nome} - Pronto intervento`}
                       >
-                        {neighborhood}
+                        {quartiere.nome}
                       </Link>
-                    ) : (
-                      <span 
-                        key={index}
-                        className="bg-card border border-border px-4 py-2 rounded-full text-sm font-medium"
-                      >
-                        {neighborhood}
-                      </span>
-                    )
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Quick stats */}
+          <div className="grid grid-cols-3 gap-4 mb-10 text-center">
+            <div className="bg-card border border-border rounded-lg p-4">
+              <div className="text-2xl font-bold text-primary">40</div>
+              <div className="text-sm text-muted-foreground">Quartieri coperti</div>
+            </div>
+            <div className="bg-card border border-border rounded-lg p-4">
+              <div className="text-2xl font-bold text-primary">24h</div>
+              <div className="text-sm text-muted-foreground">Disponibilità</div>
+            </div>
+            <div className="bg-card border border-border rounded-lg p-4">
+              <div className="text-2xl font-bold text-primary">30min</div>
+              <div className="text-sm text-muted-foreground">Tempo medio arrivo</div>
+            </div>
           </div>
           
           {/* Nearby areas */}
@@ -147,14 +138,16 @@ export function NapoliNeighborhoodsSection() {
             </div>
           </div>
           
-          {/* Local SEO text with links */}
+          {/* Local SEO text with more links */}
           <div className="mt-8 p-4 bg-accent/30 rounded-lg">
             <p className="text-sm text-muted-foreground">
               👉 Trova un{' '}
               <Link to="/idraulico-napoli-vomero" className="text-primary hover:underline font-medium">idraulico Vomero</Link>,{' '}
               <Link to="/idraulico-napoli-chiaia" className="text-primary hover:underline font-medium">idraulico Chiaia</Link>,{' '}
               <Link to="/idraulico-napoli-posillipo" className="text-primary hover:underline font-medium">idraulico Posillipo</Link>,{' '}
-              <Link to="/idraulico-napoli-fuorigrotta" className="text-primary hover:underline font-medium">idraulico Fuorigrotta</Link> o in qualsiasi altra 
+              <Link to="/idraulico-napoli-centro-storico" className="text-primary hover:underline font-medium">idraulico Centro Storico</Link>,{' '}
+              <Link to="/idraulico-napoli-fuorigrotta" className="text-primary hover:underline font-medium">idraulico Fuorigrotta</Link>,{' '}
+              <Link to="/idraulico-napoli-quartieri-spagnoli" className="text-primary hover:underline font-medium">idraulico Quartieri Spagnoli</Link> o in qualsiasi altra 
               zona di Napoli con un solo click.
             </p>
           </div>

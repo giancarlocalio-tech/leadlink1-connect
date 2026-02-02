@@ -21,5 +21,15 @@ export { NapoliCostSection } from './NapoliCostSection';
 export { NapoliProblemLinksSection } from './NapoliProblemLinksSection';
 export { NapoliReviewsSection } from './NapoliReviewsSection';
 
-// Milano-specific components
+// Milano-specific components (ultra-optimized for top 3 ranking)
 export { MilanoNeighborhoodsSection } from './MilanoNeighborhoodsSection';
+export { MilanoIntroSection } from './MilanoIntroSection';
+export { MilanoWhyProblemsSection } from './MilanoWhyProblemsSection';
+export { MilanoBuildingTypesSection } from './MilanoBuildingTypesSection';
+export { MilanoStatisticsSection } from './MilanoStatisticsSection';
+export { MilanoExtendedFAQSection, getMilanoFAQSchema } from './MilanoExtendedFAQSection';
+export { MilanoEmergencyTipsSection } from './MilanoEmergencyTipsSection';
+export { MilanoTableOfContents } from './MilanoTableOfContents';
+export { MilanoCostSection } from './MilanoCostSection';
+export { MilanoProblemLinksSection } from './MilanoProblemLinksSection';
+export { MilanoReviewsSection } from './MilanoReviewsSection';

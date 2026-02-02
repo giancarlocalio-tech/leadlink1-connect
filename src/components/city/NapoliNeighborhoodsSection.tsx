@@ -10,7 +10,7 @@ import { MapPin } from 'lucide-react';
 import { NAPOLI_NEIGHBORHOODS, NAPOLI_NEARBY_AREAS } from '@/lib/napoliSeoContent';
 import { NAPOLI_QUARTIERI } from '@/lib/napoliQuartieriData';
 
-// Map neighborhood names to slugs
+// Map neighborhood names to slugs - Complete coverage of 40 Naples neighborhoods
 const neighborhoodToSlug: Record<string, string> = {
   'Centro Storico': 'centro-storico',
   'Vomero': 'vomero',
@@ -29,7 +29,29 @@ const neighborhoodToSlug: Record<string, string> = {
   'Barra': 'barra',
   'Piscinola': 'piscinola',
   'Chiaiano': 'chiaiano',
-  'Capodimonte': 'capodimonte'
+  'Capodimonte': 'capodimonte',
+  'Sanità': 'sanita',
+  'Rione Sanità': 'sanita',
+  'Materdei': 'materdei',
+  'Colli Aminei': 'colli-aminei',
+  'Rione Alto': 'rione-alto',
+  'Miano': 'miano',
+  'Marianella': 'marianella',
+  'Poggioreale': 'poggioreale',
+  'Gianturco': 'gianturco',
+  'San Carlo all\'Arena': 'san-carlo-all-arena',
+  'Stella': 'stella',
+  'Avvocata': 'avvocata',
+  'Montecalvario': 'montecalvario',
+  'Quartieri Spagnoli': 'quartieri-spagnoli',
+  'San Ferdinando': 'san-ferdinando',
+  'Pendino': 'pendino',
+  'Mercato': 'mercato',
+  'San Lorenzo': 'san-lorenzo',
+  'Vicaria': 'vicaria',
+  'Porto': 'porto',
+  'San Giuseppe': 'san-giuseppe',
+  'Agnano': 'agnano'
 };
 
 export function NapoliNeighborhoodsSection() {

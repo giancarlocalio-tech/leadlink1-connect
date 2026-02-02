@@ -5,20 +5,25 @@
  * Target: Top 3 Google ranking for "idraulico napoli"
  */
 
-// Extended Napoli neighborhoods (25+ zones)
+// Extended Napoli neighborhoods (40+ zones) - Complete coverage
 export const NAPOLI_NEIGHBORHOODS = [
-  // Zone Centro
+  // Zone Centro Storico
   'Centro Storico', 'Spaccanapoli', 'Quartieri Spagnoli', 'Forcella', 'San Lorenzo',
+  'Pendino', 'Mercato', 'Vicaria', 'Porto', 'San Giuseppe',
+  // Zone Storiche
+  'Sanità', 'Stella', 'Avvocata', 'Montecalvario', 'San Ferdinando',
+  'San Carlo all\'Arena',
   // Zone Collinari
   'Vomero', 'Arenella', 'Posillipo', 'Capodimonte', 'Colli Aminei',
+  'Rione Alto', 'Materdei',
   // Zone Costiere
-  'Chiaia', 'Mergellina', 'Santa Lucia', 'Bagnoli', 'Marechiaro',
-  // Zone Residenziali
-  'Fuorigrotta', 'Soccavo', 'Pianura', 'Agnano', 'Cavalleggeri',
+  'Chiaia', 'Mergellina', 'Santa Lucia', 'Bagnoli', 'Marechiaro', 'Agnano',
+  // Zone Residenziali Ovest
+  'Fuorigrotta', 'Soccavo', 'Pianura', 'Cavalleggeri',
   // Zone Est
-  'San Giovanni a Teduccio', 'Barra', 'Ponticelli', 'San Giorgio a Cremano',
+  'San Giovanni a Teduccio', 'Barra', 'Ponticelli', 'Poggioreale', 'Gianturco',
   // Zone Nord
-  'Secondigliano', 'Scampia', 'Piscinola', 'Chiaiano', 'Miano'
+  'Secondigliano', 'Scampia', 'Piscinola', 'Chiaiano', 'Miano', 'Marianella'
 ];
 
 // Extended nearby municipalities (province coverage)

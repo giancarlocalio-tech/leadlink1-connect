@@ -2,10 +2,35 @@
  * NapoliNeighborhoodsSection - Extended neighborhoods coverage
  * 
  * Shows 25+ Naples neighborhoods organized by area
+ * Links to dedicated neighborhood pages for local SEO
  */
 
+import { Link } from 'react-router-dom';
 import { MapPin } from 'lucide-react';
 import { NAPOLI_NEIGHBORHOODS, NAPOLI_NEARBY_AREAS } from '@/lib/napoliSeoContent';
+import { NAPOLI_QUARTIERI } from '@/lib/napoliQuartieriData';
+
+// Map neighborhood names to slugs
+const neighborhoodToSlug: Record<string, string> = {
+  'Centro Storico': 'centro-storico',
+  'Vomero': 'vomero',
+  'Arenella': 'arenella',
+  'Posillipo': 'posillipo',
+  'Chiaia': 'chiaia',
+  'Mergellina': 'mergellina',
+  'Fuorigrotta': 'fuorigrotta',
+  'Bagnoli': 'bagnoli',
+  'Soccavo': 'soccavo',
+  'Pianura': 'pianura',
+  'San Giovanni a Teduccio': 'san-giovanni-a-teduccio',
+  'Scampia': 'scampia',
+  'Secondigliano': 'secondigliano',
+  'Ponticelli': 'ponticelli',
+  'Barra': 'barra',
+  'Piscinola': 'piscinola',
+  'Chiaiano': 'chiaiano',
+  'Capodimonte': 'capodimonte'
+};
 
 export function NapoliNeighborhoodsSection() {
   // Group neighborhoods by area type
@@ -17,8 +42,13 @@ export function NapoliNeighborhoodsSection() {
     { title: 'Zone Est e Nord', items: NAPOLI_NEIGHBORHOODS.slice(20) }
   ];
 
+  // Check if neighborhood has a dedicated page
+  const hasPage = (name: string): boolean => {
+    return name in neighborhoodToSlug;
+  };
+
   return (
-    <section className="py-16 bg-muted/30">
+    <section id="quartieri" className="py-16 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-3 mb-6">
@@ -50,12 +80,22 @@ export function NapoliNeighborhoodsSection() {
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {group.items.map((neighborhood, index) => (
-                    <span 
-                      key={index}
-                      className="bg-card border border-border px-4 py-2 rounded-full text-sm font-medium hover:border-primary transition-colors"
-                    >
-                      {neighborhood}
-                    </span>
+                    hasPage(neighborhood) ? (
+                      <Link
+                        key={index}
+                        to={`/idraulico-napoli-${neighborhoodToSlug[neighborhood]}`}
+                        className="bg-card border border-border px-4 py-2 rounded-full text-sm font-medium hover:border-primary hover:bg-primary/5 transition-colors"
+                      >
+                        {neighborhood}
+                      </Link>
+                    ) : (
+                      <span 
+                        key={index}
+                        className="bg-card border border-border px-4 py-2 rounded-full text-sm font-medium"
+                      >
+                        {neighborhood}
+                      </span>
+                    )
                   ))}
                 </div>
               </div>
@@ -85,13 +125,14 @@ export function NapoliNeighborhoodsSection() {
             </div>
           </div>
           
-          {/* Local SEO text */}
+          {/* Local SEO text with links */}
           <div className="mt-8 p-4 bg-accent/30 rounded-lg">
             <p className="text-sm text-muted-foreground">
-              👉 Trova un <strong className="text-foreground">idraulico Vomero</strong>, 
-              <strong className="text-foreground"> idraulico Chiaia</strong>, 
-              <strong className="text-foreground"> idraulico Posillipo</strong>, 
-              <strong className="text-foreground"> idraulico Fuorigrotta</strong> o in qualsiasi altra 
+              👉 Trova un{' '}
+              <Link to="/idraulico-napoli-vomero" className="text-primary hover:underline font-medium">idraulico Vomero</Link>,{' '}
+              <Link to="/idraulico-napoli-chiaia" className="text-primary hover:underline font-medium">idraulico Chiaia</Link>,{' '}
+              <Link to="/idraulico-napoli-posillipo" className="text-primary hover:underline font-medium">idraulico Posillipo</Link>,{' '}
+              <Link to="/idraulico-napoli-fuorigrotta" className="text-primary hover:underline font-medium">idraulico Fuorigrotta</Link> o in qualsiasi altra 
               zona di Napoli con un solo click.
             </p>
           </div>

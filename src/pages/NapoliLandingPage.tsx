@@ -60,7 +60,7 @@ export default function NapoliLandingPage() {
   
   // SEO metadata - Ultra-optimized for "idraulico napoli"
   const pageTitle = 'Idraulico a Napoli | Pronto Intervento 24h in Tutti i Quartieri ⭐ 4.7/5';
-  const pageDescription = 'Cerchi un idraulico a Napoli? ✓ Pronto intervento 24/7 ✓ 80+ professionisti verificati ✓ Arrivo medio 35 min ✓ Preventivo gratuito. Interveniamo in tutti i quartieri: Vomero, Chiaia, Posillipo, Centro Storico, Fuorigrotta e tutta la provincia.';
+  const pageDescription = 'Cerchi un idraulico a Napoli? ✓ Pronto intervento 24h ✓ Intervento urgente in 30-60 minuti ✓ 80+ professionisti verificati ✓ Preventivo gratuito. Serviamo tutti i quartieri: Vomero, Chiaia, Posillipo, Centro Storico, Fuorigrotta.';
   const canonicalUrl = `${BASE_URL}/napoli`;
 
   // Generate consistent rating for schema

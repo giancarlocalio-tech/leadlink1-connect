@@ -115,7 +115,7 @@ export const NAPOLI_EXTENDED_FAQS = [
   },
   {
     question: 'In quali zone di Napoli intervenite?',
-    answer: 'Copriamo tutta Napoli città: Centro Storico, Vomero, Chiaia, Posillipo, Fuorigrotta, Bagnoli, Ponticelli, Secondigliano e tutte le altre zone. Interveniamo anche nella provincia: Pozzuoli, Portici, Ercolano, Torre del Greco, Casoria, Afragola, Giugliano e tutti i comuni limitrofi.'
+    answer: 'Copriamo tutta Napoli città con pronto intervento 24h: Centro Storico, Vomero, Chiaia, Posillipo, Fuorigrotta, Bagnoli, Ponticelli, Secondigliano, Scampia, Arenella e tutte le altre zone. Arrivo medio in 30-60 minuti in qualsiasi quartiere.'
   },
   {
     question: 'Quanto costa un pronto intervento notturno a Napoli?',
@@ -178,13 +178,13 @@ export const NAPOLI_INTRO_CONTENT = {
   
   paragraph2: `La conformazione geografica della città partenopea – costruita su colline con dislivelli di oltre 150 metri – causa problemi di pressione dell'acqua che variano enormemente tra quartieri bassi come Chiaia e zone collinari come Vomero e Posillipo. Gli edifici storici del Centro, molti dei quali risalgono al XVI-XVIII secolo, hanno tubature che richiedono interventi specializzati e grande esperienza.`,
   
-  paragraph3: `Con **IdrauliciSubito** trovi rapidamente un idraulico verificato disponibile nella tua zona di Napoli. Il nostro servizio copre capillarmente l'intera città: dal Centro Storico ai Quartieri Spagnoli, da Forcella a Chiaia, da Mergellina a Posillipo, dal Vomero all'Arenella, da Fuorigrotta a Bagnoli, da Ponticelli a San Giovanni. Interveniamo anche in tutta la provincia napoletana: Pozzuoli, Portici, Ercolano, Torre del Greco, Casoria, Afragola, Giugliano e tutti i comuni limitrofi.`,
+  paragraph3: `Con **IdrauliciSubito** trovi rapidamente un idraulico verificato disponibile nella tua zona di Napoli. Il nostro servizio copre capillarmente l'intera città: dal Centro Storico ai Quartieri Spagnoli, da Forcella a Chiaia, da Mergellina a Posillipo, dal Vomero all'Arenella, da Fuorigrotta a Bagnoli, da Ponticelli a San Giovanni, da Secondigliano a Scampia.`,
   
   paragraph4: `I problemi idraulici più frequenti a Napoli includono: **perdite d'acqua** nei vecchi condomini con tubature in piombo o ferro zincato, **scarichi intasati** causati dal calcare dell'acqua napoletana (25-35°F di durezza), **caldaie in blocco** durante i mesi invernali, **pressione insufficiente** ai piani alti delle zone collinari. Per ognuno di questi problemi i nostri idraulici hanno l'esperienza e gli strumenti per intervenire rapidamente.`,
   
   whyUs: [
     'Idraulici napoletani verificati con esperienza specifica sul patrimonio edilizio locale',
-    'Pronto intervento 24/7 in tutti i quartieri di Napoli e provincia',
+    'Pronto intervento 24h in tutti i quartieri di Napoli - arrivo in 30-60 minuti',
     'Preventivi gratuiti e trasparenti prima di ogni intervento',
     'Tempi di arrivo medi di 35 minuti in città',
     'Conoscenza approfondita delle problematiche locali: pressione, calcare, edifici storici'

@@ -91,7 +91,7 @@ async function sendWhatsAppTemplate(
 
     console.log(`Sending template payload:`, JSON.stringify(templatePayload, null, 2));
 
-    const contactIdentifier = `phone:${encodeURIComponent(formattedPhone)}`;
+    const contactIdentifier = `phone:${formattedPhone}`;
     const messageResponse = await fetch(`https://api.respond.io/v2/contact/${contactIdentifier}/message`, {
       method: 'POST',
       headers: {

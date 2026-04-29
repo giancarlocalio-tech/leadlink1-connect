@@ -63,50 +63,8 @@ async function sendWhatsAppTemplate(
       formattedPhone = '+' + formattedPhone;
     }
     
-    // Phone without + for API identifier lookup
-    const phoneForIdentifier = formattedPhone.replace(/^\+/, '');
-    
     console.log(`Sending WhatsApp template to: ${formattedPhone}`);
     console.log(`Template params:`, templateParams);
-    
-    // First, find or create contact
-    const contactResponse = await fetch(`https://api.respond.io/v2/contact/phone:${phoneForIdentifier}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${respondIoApiKey}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    
-    let contactId: string;
-    
-    if (contactResponse.ok) {
-      const contactData = await contactResponse.json();
-      contactId = contactData.id;
-      console.log(`Found existing contact: ${contactId}`);
-    } else {
-      // Create new contact
-      const createContactResponse = await fetch(`https://api.respond.io/v2/contact`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${respondIoApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          phone: formattedPhone,
-        }),
-      });
-      
-      if (!createContactResponse.ok) {
-        const errorText = await createContactResponse.text();
-        console.error(`Failed to create contact: ${errorText}`);
-        return { success: false, error: `Failed to create contact: ${errorText}` };
-      }
-      
-      const newContact = await createContactResponse.json();
-      contactId = newContact.id;
-      console.log(`Created new contact: ${contactId}`);
-    }
     
     // Send template message via channel
     const templatePayload = {
@@ -133,7 +91,8 @@ async function sendWhatsAppTemplate(
 
     console.log(`Sending template payload:`, JSON.stringify(templatePayload, null, 2));
 
-    const messageResponse = await fetch(`https://api.respond.io/v2/contact/id:${contactId}/message`, {
+    const contactIdentifier = `phone:${formattedPhone}`;
+    const messageResponse = await fetch(`https://api.respond.io/v2/contact/${contactIdentifier}/message`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${respondIoApiKey}`,

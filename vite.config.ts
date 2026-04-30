@@ -4,6 +4,24 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
 import { staticSeoPlugin } from "./vite-plugin-static-seo";
+import { execSync } from "node:child_process";
+
+// Auto-generate sitemap-city-services.xml + sitemap.xml index from the
+// canonical city/service data sources at every build, so new
+// city×service pages and slug changes ship without manual XML edits.
+function autoSitemapsPlugin() {
+  return {
+    name: "auto-sitemaps",
+    apply: "build" as const,
+    buildStart() {
+      try {
+        execSync("node scripts/generate-sitemaps.mjs", { stdio: "inherit" });
+      } catch (e) {
+        console.warn("[auto-sitemaps] generation failed:", e);
+      }
+    },
+  };
+}
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({

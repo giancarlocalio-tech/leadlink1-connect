@@ -64,8 +64,11 @@ ${csUrls.join('\n')}
 `;
 fs.writeFileSync(path.join(PUBLIC, 'sitemap-city-services.xml'), csXml);
 
-// 2) City standalone sitemap (refresh)
-const cityUrls = cities.map(c => urlEntry(`${DOMAIN}/${c}`, '0.8', 'weekly'));
+// 2) City standalone sitemap (refresh) — masters get max priority
+const cityUrls = cities.map(c => {
+  const isMaster = MASTER_CITIES.has(c);
+  return urlEntry(`${DOMAIN}/${c}`, isMaster ? '1.0' : '0.8', 'weekly');
+});
 const citiesXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Auto-generated ${TODAY} — ${cities.length} city pages -->

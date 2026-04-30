@@ -75,17 +75,12 @@ export default defineConfig(({ mode }) => ({
     // Uses tsx to load TypeScript metadata module from src/lib/seoMetadata.ts.
     staticSeoPlugin({
       routesProvider: async () => {
-        // Use tsx to import a TS file at build closeBundle time.
-        // tsx is a peer dep of bun/vite available in Lovable build env.
-        const { default: tsx } = await import("tsx/esm/api");
-        // Fallback: use esbuild-runtime via dynamic import of compiled JS we'll write.
-        // Actually, simplest approach: use an inlined dynamic import via import.meta.url
-        // After vite build, src/ is available; but to avoid resolving src/* in node ESM,
-        // we'll instead read the TS file with a bundler. Easier: use vite's own ssrLoadModule
-        // is not available here. So: shell out to `node --import tsx`.
-        // To keep this dependency-free, use a small inline transpile via esbuild (already a vite dep).
-        const { build } = await import("esbuild");
-        const result = await build({
+        // esbuild ships transitively with Vite; load it dynamically and bundle
+        // the TS metadata module to a single ESM string we can import via data URI.
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore - esbuild is a vite transitive dep available at build time
+        const esbuild = await import("esbuild");
+        const result = await esbuild.build({
           entryPoints: [path.resolve(__dirname, "src/lib/seoMetadata.ts")],
           bundle: true,
           platform: "node",

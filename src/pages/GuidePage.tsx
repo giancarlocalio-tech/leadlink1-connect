@@ -149,6 +149,9 @@ export default function GuidePage() {
         {faqJsonLd && (
           <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
         )}
+        {howToJsonLd && (
+          <script type="application/ld+json">{JSON.stringify(howToJsonLd)}</script>
+        )}
       </Helmet>
 
       {/* Sticky Mobile CTA */}
@@ -196,6 +199,17 @@ export default function GuidePage() {
           </div>
         </div>
       </section>
+
+      {/* AI Answer Box — ottimizzato per AI Overviews / GEO */}
+      {quickAnswer && (
+        <section className="py-6">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto">
+              <AIAnswerBox quickAnswer={quickAnswer} />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Table of Contents */}
       <section className="py-6">

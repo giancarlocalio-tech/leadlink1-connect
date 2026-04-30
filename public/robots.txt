@@ -31,4 +31,16 @@ Disallow: /richiesta?
 Disallow: /*?q=
 Disallow: /*?*
 
+# Sitemap index (contains all sub-sitemaps)
 Sitemap: https://www.idraulicisubito.com/sitemap.xml
+
+# Direct references to sub-sitemaps (helps faster discovery)
+Sitemap: https://www.idraulicisubito.com/sitemap-static.xml
+Sitemap: https://www.idraulicisubito.com/sitemap-keywords.xml
+Sitemap: https://www.idraulicisubito.com/sitemap-cities.xml
+Sitemap: https://www.idraulicisubito.com/sitemap-city-services.xml
+Sitemap: https://www.idraulicisubito.com/sitemap-neighborhoods.xml
+Sitemap: https://www.idraulicisubito.com/sitemap-napoli-quartieri.xml
+Sitemap: https://www.idraulicisubito.com/sitemap-milano-quartieri.xml
+Sitemap: https://www.idraulicisubito.com/sitemap-problem-city.xml
+Sitemap: https://www.idraulicisubito.com/sitemap-blog.xml

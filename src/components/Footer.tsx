@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { MapPin, Phone, Flame, Droplets } from 'lucide-react';
 import { CITIES, SERVICES, KEYWORD_PAGES } from '@/lib/seoData';
+import { buildWhatsAppUrl } from '@/lib/whatsappConfig';
 // Use logo from public folder for reliability
 const logo = '/logo.png';
 

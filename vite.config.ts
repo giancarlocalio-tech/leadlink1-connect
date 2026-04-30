@@ -31,6 +31,7 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
+    autoSitemapsPlugin(),
     mode === "development" && componentTagger(),
     VitePWA({
       registerType: "autoUpdate",

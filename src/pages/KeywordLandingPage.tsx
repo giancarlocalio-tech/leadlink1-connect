@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/Layout';
 import { getKeywordPageBySlug, CITIES } from '@/lib/seoData';
 import { generateJsonLd, getKeywordFAQs, BASE_URL } from '@/lib/seoJsonLd';
+import { getKeywordPageCanonical, getDifferentiatedH1 } from '@/lib/canonicalHierarchy';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import InlineWizard from '@/components/InlineWizard';
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
@@ -46,7 +47,15 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
   
   if (!pageData) return null;
 
-  const canonicalUrl = `${BASE_URL}/${pageData.slug}`;
+  const selfUrl = `${BASE_URL}/${pageData.slug}`;
+  // Anti-cannibalization: /idraulico-{master-city} → canonical to /{master-city}
+  const canonicalUrl = getKeywordPageCanonical(pageData.slug, selfUrl);
+  // Differentiate H1 when this page is secondary to a master city page
+  const cityMatch = pageData.slug.match(/^idraulico-([a-z-]+)$/);
+  const differentiatedH1 = cityMatch
+    ? getDifferentiatedH1('keyword-city', { citySlug: cityMatch[1] })
+    : null;
+  const displayH1 = differentiatedH1 || pageData.h1;
 
   // Generate consistent rating based on slug for AggregateRating schema
   const generateConsistentRating = (seed: string) => {

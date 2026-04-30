@@ -5,15 +5,15 @@
  */
 
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { ArrowRight, CheckCircle } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 import { NAPOLI_INTRO_CONTENT } from '@/lib/napoliSeoContent';
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 
 interface NapoliIntroSectionProps {
-  onRequestClick: () => void;
+  onRequestClick?: () => void;
 }
 
-export function NapoliIntroSection({ onRequestClick }: NapoliIntroSectionProps) {
+export function NapoliIntroSection({ onRequestClick: _onRequestClick }: NapoliIntroSectionProps) {
   const content = NAPOLI_INTRO_CONTENT;
 
   return (
@@ -68,16 +68,13 @@ export function NapoliIntroSection({ onRequestClick }: NapoliIntroSectionProps) 
           
           {/* CTA */}
           <div className="text-center">
-            <Button 
-              onClick={onRequestClick}
+            <WhatsAppCTA
+              cityName="Napoli"
+              label="Scrivici su WhatsApp da Napoli"
               size="lg"
-              className="rounded-full text-lg py-6 px-8"
-            >
-              Trova un Idraulico a Napoli Ora
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            />
             <p className="text-muted-foreground text-sm mt-3">
-              Preventivo gratuito • Risposta in 15 minuti • Senza impegno
+              Risposta rapida • Servizio gratuito • Senza impegno
             </p>
           </div>
         </div>

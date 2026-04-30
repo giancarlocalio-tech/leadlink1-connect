@@ -89,7 +89,7 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
       aggregateRating: rating
     },
     isNearMePage ? [] : getKeywordFAQs(pageData.h1), // Don't use generic FAQs for near-me page
-    [{ name: pageData.h1, url: canonicalUrl }]
+    [{ name: displayH1, url: canonicalUrl }]
   );
 
   // For "idraulico-vicino-a-me", add dedicated FAQ schema

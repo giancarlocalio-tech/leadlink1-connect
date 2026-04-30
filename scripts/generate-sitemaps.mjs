@@ -38,11 +38,22 @@ console.log(`Total city×service URLs: ${cities.length * services.length}`);
 const urlEntry = (loc, priority = '0.7', changefreq = 'weekly') =>
   `  <url><loc>${loc}</loc><lastmod>${TODAY}</lastmod><changefreq>${changefreq}</changefreq><priority>${priority}</priority></url>`;
 
+// Anti-cannibalization: master cities have a dedicated ProblemCity master at
+// /pronto-intervento-idraulico-{city}. The city+service variant
+// /{city}-pronto-intervento is therefore SECONDARY → lower priority + monthly.
+const MASTER_CITIES = new Set(['napoli', 'milano', 'roma', 'torino']);
+const isSecondaryCityService = (city, service) =>
+  service === 'pronto-intervento' && MASTER_CITIES.has(city);
+
 // 1) City × Service sitemap
 const csUrls = [];
 for (const city of cities) {
   for (const service of services) {
-    csUrls.push(urlEntry(`${DOMAIN}/${city}-${service}`, '0.7'));
+    if (isSecondaryCityService(city, service)) {
+      csUrls.push(urlEntry(`${DOMAIN}/${city}-${service}`, '0.4', 'monthly'));
+    } else {
+      csUrls.push(urlEntry(`${DOMAIN}/${city}-${service}`, '0.7'));
+    }
   }
 }
 const csXml = `<?xml version="1.0" encoding="UTF-8"?>

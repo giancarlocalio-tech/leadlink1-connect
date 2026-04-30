@@ -488,13 +488,7 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
               </div>
               
               <div className="text-center">
-                <Button 
-                  onClick={() => setShowWizard(true)}
-                  size="lg"
-                  className="rounded-full"
-                >
-                  Trova un Idraulico Ora <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                <WhatsAppCTA cityName="Milano" label={`Contattaci su WhatsApp da Milano`} size="lg" />
               </div>
             </div>
           </div>
@@ -524,13 +518,7 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
               </div>
               
               <div className="text-center">
-                <Button 
-                  onClick={() => setShowWizard(true)}
-                  size="lg"
-                  className="rounded-full"
-                >
-                  Trova un Idraulico Ora <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                <WhatsAppCTA cityName="Roma" label={`Contattaci su WhatsApp da Roma`} size="lg" />
               </div>
             </div>
           </div>
@@ -560,13 +548,7 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
               </div>
               
               <div className="text-center">
-                <Button 
-                  onClick={() => setShowWizard(true)}
-                  size="lg"
-                  className="rounded-full"
-                >
-                  Trova un Idraulico Ora <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                <WhatsAppCTA cityName="Napoli" label={`Contattaci su WhatsApp da Napoli`} size="lg" />
               </div>
             </div>
           </div>
@@ -596,13 +578,7 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
               </div>
               
               <div className="text-center">
-                <Button 
-                  onClick={() => setShowWizard(true)}
-                  size="lg"
-                  className="rounded-full"
-                >
-                  Trova un Idraulico Ora <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                <WhatsAppCTA cityName="Torino" label={`Contattaci su WhatsApp da Torino`} size="lg" />
               </div>
             </div>
           </div>
@@ -632,13 +608,7 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
               </div>
               
               <div className="text-center">
-                <Button 
-                  onClick={() => setShowWizard(true)}
-                  size="lg"
-                  className="rounded-full"
-                >
-                  Trova un Idraulico Ora <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                <WhatsAppCTA cityName="Bologna" label={`Contattaci su WhatsApp da Bologna`} size="lg" />
               </div>
             </div>
           </div>
@@ -668,13 +638,7 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
               </div>
               
               <div className="text-center">
-                <Button 
-                  onClick={() => setShowWizard(true)}
-                  size="lg"
-                  className="rounded-full"
-                >
-                  Trova un Idraulico Ora <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                <WhatsAppCTA cityName="Firenze" label={`Contattaci su WhatsApp da Firenze`} size="lg" />
               </div>
             </div>
           </div>

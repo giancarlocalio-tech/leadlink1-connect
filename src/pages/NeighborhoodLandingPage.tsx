@@ -15,6 +15,7 @@
  * 5) CTA: Trova un idraulico a {Città}
  */
 
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -187,14 +188,7 @@ export default function NeighborhoodLandingPage({ neighborhoodData }: Neighborho
             {description}
           </p>
           
-          <Button 
-            onClick={() => setShowWizard(true)}
-            size="lg"
-            className="text-lg py-6 px-10 rounded-full font-semibold shadow-xl"
-          >
-            Richiedi Preventivo Gratuito
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
+          <WhatsAppCTA cityName={neighborhoodName} label={`Contattaci su WhatsApp da ${neighborhoodName}`} size="lg" />
           
           {/* Trust indicators */}
           <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
@@ -361,10 +355,7 @@ export default function NeighborhoodLandingPage({ neighborhoodData }: Neighborho
                     Vedi Listino Prezzi
                   </Button>
                 </Link>
-                <Button onClick={() => setShowWizard(true)}>
-                  Richiedi Preventivo Gratuito
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
+                <WhatsAppCTA cityName={neighborhoodName} label="Contattaci su WhatsApp" size="md" />
               </div>
             </div>
           </div>
@@ -381,15 +372,7 @@ export default function NeighborhoodLandingPage({ neighborhoodData }: Neighborho
             I nostri professionisti conoscono bene la zona {neighborhoodName} e possono intervenire rapidamente. 
             Confronta preventivi gratuiti e scegli in totale libertà.
           </p>
-          <Button 
-            onClick={() => setShowWizard(true)}
-            size="lg"
-            variant="secondary"
-            className="text-lg py-6 px-10 rounded-full font-semibold"
-          >
-            <Phone className="mr-2 h-5 w-5" />
-            Richiedi Preventivo Gratuito
-          </Button>
+          <WhatsAppCTA cityName={neighborhoodName} label="Scrivici ora su WhatsApp" size="lg" />
         </div>
       </section>
 

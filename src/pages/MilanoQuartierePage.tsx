@@ -3,6 +3,7 @@
  * Ottimizzato per SEO locale
  */
 
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -200,14 +201,7 @@ export default function MilanoQuartierePage() {
             Intervento rapido, preventivo gratuito, professionisti verificati.
           </p>
           
-          <Button 
-            onClick={handleRequestClick}
-            size="lg"
-            className="text-lg py-7 px-12 rounded-full font-semibold shadow-xl"
-          >
-            <Phone className="mr-2 h-5 w-5" />
-            Richiedi Preventivo Gratuito
-          </Button>
+          <WhatsAppCTA cityName={quartiere.nome} label={`Scrivici su WhatsApp da ${quartiere.nome}`} size="lg" />
           
           {/* Trust indicators */}
           <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
@@ -241,10 +235,9 @@ export default function MilanoQuartierePage() {
               {quartiere.problemiComuni}
             </p>
             
-            <Button onClick={handleRequestClick} size="lg" className="mb-8">
-              <Phone className="mr-2 h-5 w-5" />
-              Trova un Idraulico a {quartiere.nome}
-            </Button>
+            <div className="mb-8">
+              <WhatsAppCTA cityName={quartiere.nome} label={`Trova un Idraulico a ${quartiere.nome}`} size="lg" />
+            </div>
           </div>
         </div>
       </section>
@@ -333,15 +326,7 @@ export default function MilanoQuartierePage() {
             Non aspettare che il problema peggiori. Richiedi subito un preventivo gratuito 
             e ricevi una risposta in pochi minuti.
           </p>
-          <Button 
-            onClick={handleRequestClick}
-            size="lg"
-            variant="secondary"
-            className="text-lg py-7 px-10 rounded-full font-semibold"
-          >
-            <Phone className="mr-2 h-5 w-5" />
-            Trova un Idraulico Ora
-          </Button>
+          <WhatsAppCTA cityName={quartiere.nome} label="Scrivici ora su WhatsApp" size="lg" />
           <p className="text-primary-foreground/70 text-sm mt-4">
             ✓ Gratuito ✓ Senza impegno ✓ Risposta in 15 minuti
           </p>

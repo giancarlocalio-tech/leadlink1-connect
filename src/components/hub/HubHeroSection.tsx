@@ -1,3 +1,4 @@
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -39,12 +40,7 @@ export function HubHeroSection({ hub, CategoryIcon }: HubHeroSectionProps) {
           <GuideAuthorBox updatedAt={hub.updatedAt} className="mb-8" />
 
           <div className="flex flex-wrap gap-4">
-            <Link to="/richiesta">
-              <Button size="lg">
-                Richiedi Preventivo Gratuito
-                <ArrowRight className="h-5 w-5 ml-2" />
-              </Button>
-            </Link>
+            <WhatsAppCTA label="Contattaci ora su WhatsApp" size="lg" />
             <a href="#guide-correlate">
               <Button size="lg" variant="outline">
                 Vedi Guide Specifiche

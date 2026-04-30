@@ -1,3 +1,4 @@
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { MapPin, Calendar, Star, Clock, CheckCircle, Shield, Award, ThumbsUp, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -223,15 +224,9 @@ export function ProfessionalsList({ cityName, serviceName, onRequestQuote }: Pro
                   </div>
                 </div>
                 
-                {/* First professional has CTA */}
-                {index === 0 && onRequestQuote && (
+                {index === 0 && (
                   <div className="mt-4 pt-4 border-t border-border">
-                    <Button 
-                      onClick={onRequestQuote}
-                      className="w-full sm:w-auto"
-                    >
-                      Richiedi Preventivo Gratuito
-                    </Button>
+                    <WhatsAppCTA label="Contattaci su WhatsApp" size="md" />
                   </div>
                 )}
               </div>

@@ -1,3 +1,4 @@
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -218,9 +219,7 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
             </div>
           )}
 
-          <Button onClick={() => setShowWizard(true)} size="lg" className="text-lg py-6 px-10 rounded-full font-semibold">
-            Richiedi Preventivo Gratuito <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
+          <WhatsAppCTA label="Contattaci ora su WhatsApp" size="lg" />
           
           <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
             <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">

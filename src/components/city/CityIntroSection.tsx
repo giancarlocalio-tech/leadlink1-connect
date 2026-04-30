@@ -7,6 +7,7 @@
  * - Mentions coverage of entire city and nearby areas
  */
 
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
@@ -97,13 +98,7 @@ export function CityIntroSection({ cityName, citySlug, region, onRequestClick }:
           </div>
           
           <div className="text-center">
-            <Button 
-              onClick={onRequestClick}
-              size="lg"
-              className="rounded-full"
-            >
-              Trova un Idraulico a {cityName} Ora <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            <WhatsAppCTA cityName={cityName} label={`Contattaci su WhatsApp da ${cityName}`} size="lg" />
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@
  * Detailed pricing with local context and Service schema support
  */
 
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { Euro, Clock, AlertTriangle, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -160,13 +161,7 @@ export function NapoliCostSection({ onRequestClick }: NapoliCostSectionProps) {
             <p className="text-muted-foreground mb-4">
               Vuoi sapere esattamente quanto costerà il tuo intervento?
             </p>
-            <Button 
-              onClick={onRequestClick}
-              size="lg"
-              className="rounded-full"
-            >
-              Richiedi Preventivo Gratuito
-            </Button>
+            <WhatsAppCTA cityName="Napoli" label="Contattaci su WhatsApp" size="lg" />
             <p className="text-xs text-muted-foreground mt-2">
               Confronta i prezzi di più idraulici a Napoli senza impegno
             </p>

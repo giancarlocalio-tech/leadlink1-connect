@@ -1,3 +1,4 @@
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -177,12 +178,7 @@ export default function BlogCategoryPage() {
           <p className="text-primary-foreground/80 mb-6">
             Richiedi un preventivo gratuito ai migliori idraulici della tua zona.
           </p>
-          <Link to="/richiesta">
-            <Button variant="secondary" size="lg">
-              Richiedi Preventivo
-              <ArrowRight className="h-5 w-5 ml-2" />
-            </Button>
-          </Link>
+          <WhatsAppCTA label="Contattaci su WhatsApp" size="lg" />
         </div>
       </section>
     </Layout>

@@ -5,6 +5,7 @@
  * Practical, actionable, and printable.
  */
 
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Layout } from '@/components/Layout';
@@ -258,12 +259,7 @@ export default function ChecklistPage() {
           <p className="text-muted-foreground mb-6">
             Se noti problemi durante i controlli, richiedi un preventivo gratuito.
           </p>
-          <Link to="/richiesta">
-            <Button>
-              Richiedi Preventivo
-              <ArrowRight className="h-4 w-4 ml-2" />
-            </Button>
-          </Link>
+          <WhatsAppCTA label="Contattaci su WhatsApp" size="md" />
         </div>
       </section>
     </Layout>

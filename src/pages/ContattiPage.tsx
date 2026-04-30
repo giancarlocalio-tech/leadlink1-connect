@@ -318,12 +318,8 @@ export default function ContattiPage() {
               Se hai un problema idraulico e cerchi un professionista, 
               usa il nostro servizio di richiesta intervento.
             </p>
-            <Link to="/richiesta">
-              <Button size="lg">
-                Richiedi Preventivo Gratuito
-                <ArrowRight className="h-5 w-5 ml-2" />
-              </Button>
-            </Link>
+            <WhatsAppCTA size="lg" label="Contattaci su WhatsApp" />
+
           </div>
         </div>
       </section>

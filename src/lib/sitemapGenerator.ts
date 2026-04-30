@@ -13,6 +13,7 @@
 
 import { CITIES, KEYWORD_PAGES } from './seoData';
 import { TOP_50_CITIES, CORE_SERVICES, CORE_KEYWORD_PAGES, getIndexablePageCounts } from './seoConfig';
+import { isSecondaryToMaster } from './canonicalHierarchy';
 import { NEIGHBORHOOD_PAGES } from './neighborhoodPagesData';
 import { BLOG_ARTICLES, BLOG_CATEGORIES } from './blogData';
 
@@ -101,12 +102,18 @@ export function generateKeywordsSitemap(): string {
     CORE_KEYWORD_PAGES.includes(page.slug as any)
   );
   
-  const keywordUrls: SitemapUrl[] = coreKeywords.map(page => ({
-    loc: `${BASE_URL}/${page.slug}`,
-    lastmod: TODAY,
-    changefreq: 'weekly' as const,
-    priority: 0.9,
-  }));
+  const keywordUrls: SitemapUrl[] = coreKeywords.map(page => {
+    // Anti-cannibalization: /idraulico-{master-city} pages are secondary
+    // to the master city page (e.g. /idraulico-napoli → /napoli).
+    // Lower their priority and changefreq so Google clearly sees the master as the canonical.
+    const isSecondary = isSecondaryToMaster(page.slug);
+    return {
+      loc: `${BASE_URL}/${page.slug}`,
+      lastmod: TODAY,
+      changefreq: (isSecondary ? 'monthly' : 'weekly') as 'monthly' | 'weekly',
+      priority: isSecondary ? 0.4 : 0.9,
+    };
+  });
   
   return generateSitemapXml(keywordUrls);
 }
@@ -141,11 +148,15 @@ export function generateCityServiceSitemaps(): string[] {
   
   for (const city of top50Cities) {
     for (const serviceSlug of CORE_SERVICES) {
+      const slug = `${city.slug}-${serviceSlug}`;
+      // Anti-cannibalization: e.g. /napoli-pronto-intervento canonical to
+      // /pronto-intervento-idraulico-napoli. Lower priority for those.
+      const isSecondary = isSecondaryToMaster(slug);
       allCombinations.push({
-        loc: `${BASE_URL}/${city.slug}-${serviceSlug}`,
+        loc: `${BASE_URL}/${slug}`,
         lastmod: TODAY,
-        changefreq: 'weekly',
-        priority: 0.85,
+        changefreq: isSecondary ? 'monthly' : 'weekly',
+        priority: isSecondary ? 0.4 : 0.85,
       });
     }
   }

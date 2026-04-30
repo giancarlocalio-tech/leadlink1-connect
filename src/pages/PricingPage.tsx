@@ -1,3 +1,4 @@
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Layout } from '@/components/Layout';

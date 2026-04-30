@@ -15,6 +15,7 @@
  * - Enhanced schema markup with "about" (FASE 5)
  */
 
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { useLocation, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Layout } from '@/components/Layout';

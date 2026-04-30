@@ -4,6 +4,7 @@
  * Final conversion section linking to city landing pages.
  */
 
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { MapPin, ArrowRight } from 'lucide-react';

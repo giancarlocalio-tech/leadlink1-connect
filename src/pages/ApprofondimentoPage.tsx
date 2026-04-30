@@ -5,6 +5,7 @@
  * Includes tables, charts, and data that blogs/forums want to cite.
  */
 
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Layout } from '@/components/Layout';

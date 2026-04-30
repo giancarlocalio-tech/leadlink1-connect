@@ -4,6 +4,7 @@
  * Detailed pricing with local context and Service schema support
  */
 
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { Euro, Clock, AlertTriangle, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';

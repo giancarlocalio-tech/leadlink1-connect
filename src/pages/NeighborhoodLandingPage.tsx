@@ -15,6 +15,7 @@
  * 5) CTA: Trova un idraulico a {Città}
  */
 
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';

@@ -3,6 +3,7 @@
  * Ottimizzato per SEO locale
  */
 
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';

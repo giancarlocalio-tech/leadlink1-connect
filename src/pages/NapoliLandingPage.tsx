@@ -6,6 +6,7 @@
  *           internal linking, local reviews, AggregateRating schema
  */
 
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';

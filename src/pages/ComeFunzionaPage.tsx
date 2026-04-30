@@ -260,12 +260,7 @@ export default function ComeFunzionaPage() {
               Descrivi il tuo problema e trova un idraulico nella tua zona. 
               È completamente gratuito e non hai nessun obbligo.
             </p>
-            <Link to="/richiesta">
-              <Button size="lg">
-                Richiedi Preventivo Gratuito
-                <ArrowRight className="h-5 w-5 ml-2" />
-              </Button>
-            </Link>
+            <WhatsAppCTA size="lg" label="Contattaci su WhatsApp" />
           </div>
         </div>
       </section>

@@ -180,8 +180,8 @@ export default function NeighborhoodLandingPage({ neighborhoodData }: Neighborho
           </div>
           
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight drop-shadow-lg">
-            Idraulico {neighborhoodName} {cityName}:<br />
-            <span className="text-primary-foreground/90">Interventi Rapidi</span>
+            Idraulico {neighborhoodName} ({cityName}):<br />
+            <span className="text-primary-foreground/90">Interventi Rapidi nel Quartiere</span>
           </h1>
           
           <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/Layout';
 import { getKeywordPageBySlug, CITIES } from '@/lib/seoData';
 import { generateJsonLd, getKeywordFAQs, BASE_URL } from '@/lib/seoJsonLd';
+import { getKeywordPageCanonical, getDifferentiatedH1 } from '@/lib/canonicalHierarchy';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import InlineWizard from '@/components/InlineWizard';
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
@@ -46,7 +47,15 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
   
   if (!pageData) return null;
 
-  const canonicalUrl = `${BASE_URL}/${pageData.slug}`;
+  const selfUrl = `${BASE_URL}/${pageData.slug}`;
+  // Anti-cannibalization: /idraulico-{master-city} → canonical to /{master-city}
+  const canonicalUrl = getKeywordPageCanonical(pageData.slug, selfUrl);
+  // Differentiate H1 when this page is secondary to a master city page
+  const cityMatch = pageData.slug.match(/^idraulico-([a-z-]+)$/);
+  const differentiatedH1 = cityMatch
+    ? getDifferentiatedH1('keyword-city', { citySlug: cityMatch[1] })
+    : null;
+  const displayH1 = differentiatedH1 || pageData.h1;
 
   // Generate consistent rating based on slug for AggregateRating schema
   const generateConsistentRating = (seed: string) => {
@@ -80,7 +89,7 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
       aggregateRating: rating
     },
     isNearMePage ? [] : getKeywordFAQs(pageData.h1), // Don't use generic FAQs for near-me page
-    [{ name: pageData.h1, url: canonicalUrl }]
+    [{ name: displayH1, url: canonicalUrl }]
   );
 
   // For "idraulico-vicino-a-me", add dedicated FAQ schema
@@ -142,17 +151,17 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
       </Helmet>
 
       {/* Breadcrumb Navigation */}
-      <Breadcrumb items={[{ name: pageData.h1, url: canonicalUrl }]} />
+      <Breadcrumb items={[{ name: displayH1, url: canonicalUrl }]} />
 
       <section className="relative overflow-hidden min-h-[450px] flex items-center justify-center">
         <div className="absolute inset-0">
-          <img src={heroBg} alt={pageData.h1} className="w-full h-full object-cover" />
+          <img src={heroBg} alt={displayH1} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/40" />
         </div>
         
         <div className="container mx-auto px-4 relative z-10 text-center py-16">
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 drop-shadow-lg">
-            {pageData.h1}
+            {displayH1}
           </h1>
           <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
             {pageData.description}

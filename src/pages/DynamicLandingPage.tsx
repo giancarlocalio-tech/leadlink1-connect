@@ -36,6 +36,7 @@ import {
   getKeywordPageBySlug
 } from '@/lib/seoData';
 import { generateJsonLd, getCityFAQs, BASE_URL } from '@/lib/seoJsonLd';
+import { getCityServiceCanonical, getDifferentiatedH1, isMasterCity } from '@/lib/canonicalHierarchy';
 import KeywordLandingPage from './KeywordLandingPage';
 import NeighborhoodLandingPage from './NeighborhoodLandingPage';
 import { getServiceRichContent, generateCityServiceContent } from '@/lib/serviceContent';
@@ -209,9 +210,16 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
   );
   
   // Determine canonical URL based on indexing decision
-  const canonicalUrl = indexingDecision.canonicalUrl || (serviceData 
+  const baseSelfUrl = serviceData 
     ? `${BASE_URL}/${cityData.slug}-${serviceData.slug}`
-    : `${BASE_URL}/${cityData.slug}`);
+    : `${BASE_URL}/${cityData.slug}`;
+  // Anti-cannibalization for master cities: pronto-intervento → ProblemCity master
+  const antiCannibalCanonical = serviceData
+    ? getCityServiceCanonical(cityData.slug, serviceData.slug, baseSelfUrl)
+    : baseSelfUrl;
+  const canonicalUrl = antiCannibalCanonical !== baseSelfUrl
+    ? antiCannibalCanonical
+    : (indexingDecision.canonicalUrl || baseSelfUrl);
 
   // Robots meta based on indexing decision
   const robotsMeta = indexingDecision.shouldIndex 

@@ -38,11 +38,22 @@ console.log(`Total city×service URLs: ${cities.length * services.length}`);
 const urlEntry = (loc, priority = '0.7', changefreq = 'weekly') =>
   `  <url><loc>${loc}</loc><lastmod>${TODAY}</lastmod><changefreq>${changefreq}</changefreq><priority>${priority}</priority></url>`;
 
+// Anti-cannibalization: master cities have a dedicated ProblemCity master at
+// /pronto-intervento-idraulico-{city}. The city+service variant
+// /{city}-pronto-intervento is therefore SECONDARY → lower priority + monthly.
+const MASTER_CITIES = new Set(['napoli', 'milano', 'roma', 'torino']);
+const isSecondaryCityService = (city, service) =>
+  service === 'pronto-intervento' && MASTER_CITIES.has(city);
+
 // 1) City × Service sitemap
 const csUrls = [];
 for (const city of cities) {
   for (const service of services) {
-    csUrls.push(urlEntry(`${DOMAIN}/${city}-${service}`, '0.7'));
+    if (isSecondaryCityService(city, service)) {
+      csUrls.push(urlEntry(`${DOMAIN}/${city}-${service}`, '0.4', 'monthly'));
+    } else {
+      csUrls.push(urlEntry(`${DOMAIN}/${city}-${service}`, '0.7'));
+    }
   }
 }
 const csXml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -53,8 +64,11 @@ ${csUrls.join('\n')}
 `;
 fs.writeFileSync(path.join(PUBLIC, 'sitemap-city-services.xml'), csXml);
 
-// 2) City standalone sitemap (refresh)
-const cityUrls = cities.map(c => urlEntry(`${DOMAIN}/${c}`, '0.8', 'weekly'));
+// 2) City standalone sitemap (refresh) — masters get max priority
+const cityUrls = cities.map(c => {
+  const isMaster = MASTER_CITIES.has(c);
+  return urlEntry(`${DOMAIN}/${c}`, isMaster ? '1.0' : '0.8', 'weekly');
+});
 const citiesXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Auto-generated ${TODAY} — ${cities.length} city pages -->

@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import {
   Accordion,
   AccordionContent,
@@ -259,12 +260,7 @@ export default function ComeFunzionaPage() {
               Descrivi il tuo problema e trova un idraulico nella tua zona. 
               È completamente gratuito e non hai nessun obbligo.
             </p>
-            <Link to="/richiesta">
-              <Button size="lg">
-                Richiedi Preventivo Gratuito
-                <ArrowRight className="h-5 w-5 ml-2" />
-              </Button>
-            </Link>
+            <WhatsAppCTA size="lg" label="Contattaci su WhatsApp" />
           </div>
         </div>
       </section>
@@ -312,12 +308,7 @@ export default function ComeFunzionaPage() {
                   Contattaci
                 </Button>
               </Link>
-              <Link to="/richiesta">
-                <Button>
-                  Richiedi Preventivo
-                  <ArrowRight className="h-5 w-5 ml-2" />
-                </Button>
-              </Link>
+              <WhatsAppCTA label="Contattaci su WhatsApp" />
             </div>
           </div>
         </div>

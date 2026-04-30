@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { 
   Mail, 
   MessageSquare,
@@ -317,12 +318,8 @@ export default function ContattiPage() {
               Se hai un problema idraulico e cerchi un professionista, 
               usa il nostro servizio di richiesta intervento.
             </p>
-            <Link to="/richiesta">
-              <Button size="lg">
-                Richiedi Preventivo Gratuito
-                <ArrowRight className="h-5 w-5 ml-2" />
-              </Button>
-            </Link>
+            <WhatsAppCTA size="lg" label="Contattaci su WhatsApp" />
+
           </div>
         </div>
       </section>

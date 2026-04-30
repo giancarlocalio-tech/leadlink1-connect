@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { 
   Users, 
   Target, 
@@ -312,12 +313,7 @@ export default function ChiSiamoPage() {
                 Descrivi il tuo problema e ricevi il contatto di un professionista 
                 della tua zona. È gratuito e senza impegno.
               </p>
-              <Link to="/richiesta">
-                <Button size="lg">
-                  Richiedi Preventivo Gratuito
-                  <ArrowRight className="h-5 w-5 ml-2" />
-                </Button>
-              </Link>
+              <WhatsAppCTA size="lg" label="Contattaci su WhatsApp" />
             </section>
 
           </div>

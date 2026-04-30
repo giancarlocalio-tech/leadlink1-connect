@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { MapPin, Phone, Flame, Droplets } from 'lucide-react';
 import { CITIES, SERVICES, KEYWORD_PAGES } from '@/lib/seoData';
+import { buildWhatsAppUrl } from '@/lib/whatsappConfig';
 // Use logo from public folder for reliability
 const logo = '/logo.png';
 
@@ -41,9 +42,9 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/richiesta" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-                  Richiedi Preventivo
-                </Link>
+                <a href={buildWhatsAppUrl()} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
+                  Contattaci su WhatsApp
+                </a>
               </li>
               <li>
                 <Link to="/guide" className="text-muted-foreground hover:text-foreground text-sm transition-colors">

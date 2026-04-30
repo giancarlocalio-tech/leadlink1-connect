@@ -42,9 +42,9 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/richiesta" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-                  Richiedi Preventivo
-                </Link>
+                <a href={buildWhatsAppUrl()} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
+                  Contattaci su WhatsApp
+                </a>
               </li>
               <li>
                 <Link to="/guide" className="text-muted-foreground hover:text-foreground text-sm transition-colors">

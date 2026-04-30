@@ -237,12 +237,7 @@ export default function GuideHubPage() {
                     Trova un idraulico professionista nella tua zona in pochi minuti.
                   </p>
                 </div>
-                <Link to="/richiesta">
-                  <Button size="lg">
-                    Richiedi Assistenza
-                    <ArrowRight className="h-5 w-5 ml-2" />
-                  </Button>
-                </Link>
+                <WhatsAppCTA label="Contattaci su WhatsApp" size="lg" />
               </div>
             </div>
 

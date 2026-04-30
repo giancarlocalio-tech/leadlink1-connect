@@ -181,13 +181,7 @@ export default function BlogPage() {
           <p className="text-primary-foreground/80 mb-6 max-w-2xl mx-auto">
             Se il tuo problema richiede l'intervento di un esperto, richiedi un preventivo gratuito ai migliori idraulici della tua zona.
           </p>
-          <Link
-            to="/richiesta"
-            className="inline-flex items-center gap-2 bg-background text-foreground px-8 py-3 rounded-lg font-semibold hover:bg-background/90 transition-colors"
-          >
-            Richiedi Preventivo Gratuito
-            <ArrowRight className="h-5 w-5" />
-          </Link>
+          <WhatsAppCTA label="Contattaci ora su WhatsApp" size="lg" />
         </div>
       </section>
     </Layout>

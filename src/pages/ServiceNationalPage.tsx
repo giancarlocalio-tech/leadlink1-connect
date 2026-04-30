@@ -97,12 +97,7 @@ export default function ServiceNationalPage() {
             <p className="text-lg text-muted-foreground mb-8">
               {service.intro}
             </p>
-            <Link to="/richiesta">
-              <Button size="lg">
-                Richiedi Preventivo Gratuito
-                <ArrowRight className="h-5 w-5 ml-2" />
-              </Button>
-            </Link>
+            <WhatsAppCTA label="Contattaci ora su WhatsApp" size="lg" />
           </div>
         </div>
       </section>
@@ -269,12 +264,7 @@ export default function ServiceNationalPage() {
               })}
             </div>
 
-            <Link to="/richiesta">
-              <Button size="lg">
-                Richiedi Preventivo Gratuito
-                <ArrowRight className="h-5 w-5 ml-2" />
-              </Button>
-            </Link>
+            <WhatsAppCTA label="Contattaci ora su WhatsApp" size="lg" />
           </div>
         </div>
       </section>

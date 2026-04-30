@@ -50,12 +50,7 @@ export default function GuideIndexPage() {
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
             Scopri come affrontare i problemi idraulici più comuni: quanto sono gravi, cosa fare subito, cosa evitare e quando chiamare un professionista.
           </p>
-          <Link to="/richiesta">
-            <Button size="lg">
-              Hai un'Emergenza? Richiedi Assistenza
-              <ArrowRight className="h-5 w-5 ml-2" />
-            </Button>
-          </Link>
+          <WhatsAppCTA label="Hai un'Emergenza? Contattaci su WhatsApp" size="lg" />
         </div>
       </section>
 
@@ -260,12 +255,7 @@ export default function GuideIndexPage() {
           <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
             Contatta direttamente un idraulico professionista nella tua zona per una consulenza personalizzata.
           </p>
-          <Link to="/richiesta">
-            <Button size="lg">
-              Richiedi Preventivo Gratuito
-              <ArrowRight className="h-5 w-5 ml-2" />
-            </Button>
-          </Link>
+          <WhatsAppCTA label="Contattaci ora su WhatsApp" size="lg" />
         </div>
       </section>
     </Layout>

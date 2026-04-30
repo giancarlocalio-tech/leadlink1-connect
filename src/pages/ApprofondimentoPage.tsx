@@ -221,12 +221,7 @@ export default function ApprofondimentoPage() {
                   <p className="text-sm text-muted-foreground mb-4">
                     Trova un professionista disponibile nella tua zona.
                   </p>
-                  <Link to="/richiesta">
-                    <Button>
-                      Richiedi Preventivo Gratuito
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Button>
-                  </Link>
+                  <WhatsAppCTA label="Contattaci su WhatsApp" size="md" />
                 </CardContent>
               </Card>
             </article>

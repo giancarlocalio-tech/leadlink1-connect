@@ -50,12 +50,7 @@ export function GuideCityLinks({ maxCities = 15 }: GuideCityLinksProps) {
       </div>
 
       <div className="text-center">
-        <Link to="/richiesta">
-          <Button size="lg" className="w-full sm:w-auto">
-            Richiedi Preventivo Gratuito
-            <ArrowRight className="h-5 w-5 ml-2" />
-          </Button>
-        </Link>
+        <WhatsAppCTA label="Contattaci ora su WhatsApp" size="lg" fullWidth={false} />
       </div>
     </section>
   );

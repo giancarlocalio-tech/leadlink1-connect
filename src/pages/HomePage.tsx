@@ -38,6 +38,7 @@ import analytics from '@/lib/analytics';
 import { generateJsonLd, BASE_URL } from '@/lib/seoJsonLd';
 import heroBg from '@/assets/hero-bg.avif';
 import { TOP_50_CITIES } from '@/lib/seoConfig';
+import { buildWhatsAppUrl } from '@/lib/whatsappConfig';
 import { CITIES } from '@/lib/seoData';
 
 // Get ALL Top 50 cities data for internal linking (SEO critical)

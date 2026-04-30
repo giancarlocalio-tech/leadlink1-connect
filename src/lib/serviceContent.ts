@@ -773,9 +773,31 @@ export const SERVICE_RICH_CONTENT: Record<string, ServiceRichContent> = {
   },
 };
 
-// Function to get rich content for a service
+// Slug aliases: map alternative slugs used elsewhere in the site to the canonical content key
+const SLUG_ALIASES: Record<string, string> = {
+  'pronto-intervento-idraulico': 'pronto-intervento',
+  'idraulico-24-ore': 'pronto-intervento',
+  'spurgo-fogne': 'disostruzione-fogne',
+  'spurgo-scarichi': 'disostruzione-fogne',
+  'spurgo-fognature': 'autospurgo',
+  'svuotamento-pozzi-neri': 'autospurgo',
+  'ricerca-perdite-acqua': 'ricerca-perdite',
+  'ricerca-perdite-termocamera': 'ricerca-perdite',
+  'ricerca-perdite-gas-tracciante': 'ricerca-perdite',
+  'wc-intasato': 'sturare-wc',
+  'come-sturare-wc': 'sturare-wc',
+  'riparazione-perdite': 'perdita-acqua',
+  'perdita-tubo': 'perdita-acqua',
+  'rubinetto-che-perde': 'rubinetto',
+  'riparazione-caldaia': 'caldaia',
+  'tubazioni-intasate': 'scarico-intasato',
+  'riparazione-termosifone': 'impianto-riscaldamento',
+};
+
+// Function to get rich content for a service (with alias resolution)
 export function getServiceRichContent(serviceSlug: string): ServiceRichContent | undefined {
-  return SERVICE_RICH_CONTENT[serviceSlug];
+  const canonical = SLUG_ALIASES[serviceSlug] || serviceSlug;
+  return SERVICE_RICH_CONTENT[canonical];
 }
 
 // Generate unique paragraphs combining city and service for maximum SEO value

@@ -151,17 +151,17 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
       </Helmet>
 
       {/* Breadcrumb Navigation */}
-      <Breadcrumb items={[{ name: pageData.h1, url: canonicalUrl }]} />
+      <Breadcrumb items={[{ name: displayH1, url: canonicalUrl }]} />
 
       <section className="relative overflow-hidden min-h-[450px] flex items-center justify-center">
         <div className="absolute inset-0">
-          <img src={heroBg} alt={pageData.h1} className="w-full h-full object-cover" />
+          <img src={heroBg} alt={displayH1} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/40" />
         </div>
         
         <div className="container mx-auto px-4 relative z-10 text-center py-16">
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 drop-shadow-lg">
-            {pageData.h1}
+            {displayH1}
           </h1>
           <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
             {pageData.description}

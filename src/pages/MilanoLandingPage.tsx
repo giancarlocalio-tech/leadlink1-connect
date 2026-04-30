@@ -25,6 +25,7 @@ import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/Layout';
 import { BASE_URL } from '@/lib/seoJsonLd';
 import InlineWizard from '@/components/InlineWizard';
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import heroBg from '@/assets/hero-bg.avif';
 
 // Import Milano-specific components

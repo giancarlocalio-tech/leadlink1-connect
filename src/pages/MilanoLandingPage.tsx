@@ -241,14 +241,7 @@ export default function MilanoLandingPage() {
             preventivo gratuito e senza impegno.
           </p>
           
-          <Button 
-            onClick={handleRequestClick}
-            size="lg"
-            className="text-lg py-7 px-12 rounded-full font-semibold shadow-xl"
-          >
-            <Phone className="mr-2 h-5 w-5" />
-            Richiedi Preventivo Gratuito
-          </Button>
+          <WhatsAppCTA cityName="Milano" label="Contattaci su WhatsApp da Milano" size="lg" />
           
           {/* Trust indicators */}
           <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 mt-8">
@@ -402,15 +395,7 @@ export default function MilanoLandingPage() {
             Non aspettare che il problema peggiori. Richiedi subito un preventivo gratuito 
             e ricevi una risposta in pochi minuti da un idraulico della tua zona.
           </p>
-          <Button 
-            onClick={handleRequestClick}
-            size="lg"
-            variant="secondary"
-            className="text-lg py-7 px-10 rounded-full font-semibold"
-          >
-            <Phone className="mr-2 h-5 w-5" />
-            Trova un Idraulico a Milano Ora
-          </Button>
+          <WhatsAppCTA cityName="Milano" label="Scrivici ora su WhatsApp" size="lg" />
           <p className="text-primary-foreground/70 text-sm mt-4">
             ✓ Gratuito ✓ Senza impegno ✓ Risposta in 15 minuti
           </p>

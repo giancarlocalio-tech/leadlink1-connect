@@ -1,13 +1,10 @@
 /**
- * MidArticleCTA - CTA button/box for mid-article placement
- * 
- * Compact CTA that appears between content sections
- * with dynamic city name and problem context
+ * MidArticleCTA - Mid-article WhatsApp CTA
  */
 
-import { Link } from 'react-router-dom';
-import { ArrowRight, Phone } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { MessageCircle } from 'lucide-react';
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
+import { buildWhatsAppUrl } from '@/lib/whatsappConfig';
 
 interface MidArticleCTAProps {
   cityName: string;
@@ -15,57 +12,53 @@ interface MidArticleCTAProps {
   variant?: 'compact' | 'full';
 }
 
-export function MidArticleCTA({ 
-  cityName, 
+export function MidArticleCTA({
+  cityName,
   problemContext,
-  variant = 'compact' 
+  variant = 'compact',
 }: MidArticleCTAProps) {
-  // Construct URL with context
-  const ctaUrl = problemContext 
-    ? `/richiesta?context=${encodeURIComponent(problemContext)}`
-    : '/richiesta';
-
   if (variant === 'compact') {
     return (
-      <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="bg-[#25D366]/5 border border-[#25D366]/30 rounded-xl p-4 md:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 my-6">
         <div className="flex items-center gap-3 text-center sm:text-left">
-          <Phone className="h-5 w-5 text-primary shrink-0 hidden sm:block" />
+          <MessageCircle className="h-5 w-5 text-[#25D366] shrink-0 hidden sm:block fill-[#25D366]" />
           <p className="text-foreground font-medium">
-            Non riesci a risolvere? <span className="text-primary">Trova un idraulico a {cityName}</span>
+            Non riesci a risolvere?{' '}
+            <span className="text-[#1ebe5d]">Scrivici su WhatsApp da {cityName}</span>
           </p>
         </div>
-        <Link to={ctaUrl}>
-          <Button className="shrink-0 w-full sm:w-auto">
-            Richiedi Preventivo
-            <ArrowRight className="h-4 w-4 ml-2" />
-          </Button>
-        </Link>
+        <WhatsAppCTA
+          cityName={cityName}
+          problemContext={problemContext}
+          label="Contattaci"
+          size="sm"
+        />
       </div>
     );
   }
 
-  // Full variant with more details
+  // Full variant
+  const href = buildWhatsAppUrl({ cityName, problemContext });
   return (
-    <div className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-6 md:p-8 text-primary-foreground">
+    <div className="bg-gradient-to-r from-[#25D366] to-[#1ebe5d] rounded-2xl p-6 md:p-8 text-white my-6">
       <div className="flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="text-center md:text-left">
           <h3 className="text-xl md:text-2xl font-bold mb-2">
             Trova un Idraulico a {cityName} Ora
           </h3>
-          <p className="text-primary-foreground/90 max-w-md">
-            Professionisti verificati pronti ad intervenire. Preventivo gratuito e senza impegno.
+          <p className="text-white/90 max-w-md">
+            Scrivici su WhatsApp: ti rispondiamo subito e organizziamo l'intervento.
           </p>
         </div>
-        <Link to={ctaUrl} className="shrink-0">
-          <Button 
-            variant="secondary" 
-            size="lg"
-            className="w-full md:w-auto"
-          >
-            <Phone className="h-5 w-5 mr-2" />
-            Richiedi Intervento
-          </Button>
-        </Link>
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="shrink-0 inline-flex items-center gap-2 bg-white text-[#1ebe5d] font-bold rounded-full px-6 py-3 shadow-lg hover:shadow-xl transition-all"
+        >
+          <MessageCircle className="h-5 w-5 fill-[#1ebe5d]" />
+          Scrivici ora
+        </a>
       </div>
     </div>
   );

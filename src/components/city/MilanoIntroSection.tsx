@@ -5,15 +5,15 @@
  */
 
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { ArrowRight, CheckCircle } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 import { MILANO_INTRO_CONTENT } from '@/lib/milanoSeoContent';
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 
 interface MilanoIntroSectionProps {
-  onRequestClick: () => void;
+  onRequestClick?: () => void;
 }
 
-export function MilanoIntroSection({ onRequestClick }: MilanoIntroSectionProps) {
+export function MilanoIntroSection({ onRequestClick: _onRequestClick }: MilanoIntroSectionProps) {
   const content = MILANO_INTRO_CONTENT;
 
   return (
@@ -71,16 +71,13 @@ export function MilanoIntroSection({ onRequestClick }: MilanoIntroSectionProps) 
           
           {/* CTA */}
           <div className="text-center">
-            <Button 
-              onClick={onRequestClick}
+            <WhatsAppCTA
+              cityName="Milano"
+              label="Scrivici su WhatsApp da Milano"
               size="lg"
-              className="rounded-full text-lg py-6 px-8"
-            >
-              Trova un Idraulico a Milano Ora
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            />
             <p className="text-muted-foreground text-sm mt-3">
-              Preventivo gratuito • Risposta in 15 minuti • Senza impegno
+              Risposta rapida • Servizio gratuito • Senza impegno
             </p>
           </div>
         </div>

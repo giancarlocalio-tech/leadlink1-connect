@@ -18,6 +18,8 @@ import { GuideCostsSection } from '@/components/guide/GuideCostsSection';
 import { GuideCityLinks } from '@/components/guide/GuideCityLinks';
 import { GuideRelatedContent } from '@/components/guide/GuideRelatedContent';
 import { GuideAuthorBox } from '@/components/guide/GuideAuthorBox';
+import { AIAnswerBox } from '@/components/guide/AIAnswerBox';
+import { getGuideQuickAnswer } from '@/lib/guideQuickAnswers';
 
 export default function GuidePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -27,6 +29,7 @@ export default function GuidePage() {
   const guideFAQs = slug ? getGuideFAQs(slug) : [];
   const guideCosts = slug ? getGuideCosts(slug) : [];
   const relatedPricing = slug ? getRelatedPricingPage(slug) : undefined;
+  const quickAnswer = slug ? getGuideQuickAnswer(slug) : undefined;
 
   if (!guide) {
     return (
@@ -103,6 +106,31 @@ export default function GuidePage() {
     }))
   } : null;
 
+  // HowTo JSON-LD — formato che Google AI Overviews usa direttamente
+  // per costruire le risposte "come fare X". Generato dai quick answers.
+  const howToJsonLd = quickAnswer?.steps && quickAnswer.steps.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: guide.h1,
+    description: quickAnswer.answer,
+    ...(quickAnswer.time ? { totalTime: quickAnswer.time } : {}),
+    ...(quickAnswer.cost
+      ? {
+          estimatedCost: {
+            '@type': 'MonetaryAmount',
+            currency: 'EUR',
+            value: quickAnswer.cost,
+          },
+        }
+      : {}),
+    step: quickAnswer.steps.map((text, idx) => ({
+      '@type': 'HowToStep',
+      position: idx + 1,
+      name: `Passo ${idx + 1}`,
+      text,
+    })),
+  } : null;
+
   return (
     <Layout>
       <Helmet>
@@ -120,6 +148,9 @@ export default function GuidePage() {
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
         {faqJsonLd && (
           <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
+        )}
+        {howToJsonLd && (
+          <script type="application/ld+json">{JSON.stringify(howToJsonLd)}</script>
         )}
       </Helmet>
 
@@ -168,6 +199,17 @@ export default function GuidePage() {
           </div>
         </div>
       </section>
+
+      {/* AI Answer Box — ottimizzato per AI Overviews / GEO */}
+      {quickAnswer && (
+        <section className="py-6">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto">
+              <AIAnswerBox quickAnswer={quickAnswer} />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Table of Contents */}
       <section className="py-6">

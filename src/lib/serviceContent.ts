@@ -802,7 +802,8 @@ export function getServiceRichContent(serviceSlug: string): ServiceRichContent |
 
 // Generate unique paragraphs combining city and service for maximum SEO value
 export function generateCityServiceContent(cityName: string, serviceName: string, serviceSlug: string): string {
-  const content = SERVICE_RICH_CONTENT[serviceSlug];
+  const canonical = SLUG_ALIASES[serviceSlug] || serviceSlug;
+  const content = SERVICE_RICH_CONTENT[canonical];
   if (!content) {
     return `Cerchi un professionista per ${serviceName.toLowerCase()} a ${cityName}? Su Idraulici Subito trovi idraulici verificati pronti a intervenire in tutta ${cityName} e provincia. Richiedi un preventivo gratuito e ricevi risposta in 15 minuti.`;
   }

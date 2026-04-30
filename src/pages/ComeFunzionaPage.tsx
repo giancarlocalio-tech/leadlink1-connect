@@ -308,12 +308,7 @@ export default function ComeFunzionaPage() {
                   Contattaci
                 </Button>
               </Link>
-              <Link to="/richiesta">
-                <Button>
-                  Richiedi Preventivo
-                  <ArrowRight className="h-5 w-5 ml-2" />
-                </Button>
-              </Link>
+              <WhatsAppCTA label="Contattaci su WhatsApp" />
             </div>
           </div>
         </div>

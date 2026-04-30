@@ -444,14 +444,7 @@ export default function DynamicLandingPage({ type }: DynamicLandingPageProps) {
             {' '}Preventivi gratuiti e risposta in 15 minuti.
           </p>
           
-          <Button 
-            onClick={() => setShowWizard(true)}
-            size="lg"
-            className="text-lg py-6 px-10 rounded-full font-semibold shadow-xl"
-          >
-            Richiedi Preventivo Gratuito
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
+          <WhatsAppCTA cityName={cityData.name} label={`Contattaci su WhatsApp da ${cityData.name}`} size="lg" />
           
           {/* Trust indicators */}
           <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-8">

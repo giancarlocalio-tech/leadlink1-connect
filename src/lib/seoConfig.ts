@@ -60,7 +60,8 @@ export const TOP_50_CITIES = [
   'arezzo',
   'udine',
   'cesena',
-  'lecce'
+  'lecce',
+  'siena'
 ] as const;
 
 // ============================================

@@ -1223,6 +1223,30 @@ const CITY_LOCAL_CONTENT: Record<string, CityLocalContent> = {
       { type: 'Potenziamento gruppo pompe e accumulo idrico', zone: 'Zona Stadio (Via Giovanni Paolo II)', description: 'Ottimizzazione dell\'autoclave per garantire pressione costante ai piani alti durante i picchi di prelievo estivi.' },
     ]
   },
+  'siena': {
+    buildingTypes: [
+      'Palazzi medievali e gotici del Centro Storico (Patrimonio UNESCO) con murature in mattoni e pietra serena.',
+      'Case-torri delle Contrade (es. Camollia, Pantaneto) con impianti verticali datati e cavedi storici.',
+      'Edifici signorili rinascimentali nei pressi di Piazza del Campo con scarichi originali in cotto.',
+      'Condomini anni \'60-\'80 nei quartieri di Acquacalda, San Miniato e Petriccio con colonne in ghisa.',
+      'Villette e case coloniche nelle zone collinari (Ravacciano, Vico Alto) con pozzi e autoclavi autonome.',
+    ],
+    localProblems: [
+      'Calcare elevato dovuto all\'acqua delle sorgenti delle Crete Senesi che incrosta caldaie e scaldabagni.',
+      'Tubazioni in piombo e ferro zincato ancora presenti nei palazzi storici intra-mura del Terzo di Città.',
+      'Infiltrazioni e umidità di risalita nelle cantine medievali scavate nel tufo del centro.',
+      'Scarichi sottodimensionati nei vicoli pedonali del centro UNESCO con difficoltà di accesso ai mezzi di spurgo.',
+      'Sbalzi termici invernali che causano congelamento e rotture nelle tubazioni esterne delle case collinari.',
+    ],
+    climateImpact: 'Il clima collinare senese, con inverni rigidi (temperature spesso sotto zero) e estati calde e secche, sollecita gli impianti causando rotture da gelo nelle tubazioni esposte e stress termico alle caldaie. L\'acqua particolarmente dura della provincia accelera la formazione di calcare negli impianti termoidraulici.',
+    recentInterventions: [
+      { type: 'Disincrostazione caldaia', zone: 'Acquacalda', description: 'Pulizia chimica scambiatore caldaia a condensazione bloccato dal calcare in appartamento condominiale.' },
+      { type: 'Riparazione perdita occulta', zone: 'Centro Storico (Terzo di Camollia)', description: 'Localizzazione con geofono e riparazione perdita sottotraccia in palazzo medievale di Via Banchi di Sopra.' },
+      { type: 'Spurgo colonna fognaria', zone: 'San Miniato', description: 'Disostruzione colonna di scarico condominiale in ghisa con autospurgo ad alta pressione.' },
+      { type: 'Sostituzione tubature in piombo', zone: 'Pantaneto', description: 'Rifacimento impianto idrico in multistrato in palazzina d\'epoca con vecchi tubi in piombo.' },
+      { type: 'Pronto intervento gelo', zone: 'Ravacciano', description: 'Riparazione tubazione esterna esplosa per gelata invernale e ripristino isolamento termico.' },
+    ]
+  },
 };
 
 // Default content for cities not in the detailed list

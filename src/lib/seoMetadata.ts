@@ -7,6 +7,8 @@
  *  - React components via useDocumentSeo()
  *
  * Designed to be importable in plain Node (no React, no DOM).
+ * 
+ * ✅ OPTIMIZED FOR CTR: Added emojis, urgency language, and character limits
  */
 
 import { CITIES } from './seoData';
@@ -159,66 +161,78 @@ const STATIC: Record<string, RouteSeo> = {
 };
 
 // ---------- KEYWORD PAGES (CTR-optimized) ----------
+// ✅ OPTIMIZED: Added emojis, urgency language, character limits (155 chars max for description)
 const KEYWORD_TITLES: Record<string, { title: string; description: string; h1: string }> = {
   'pronto-intervento-idraulico': {
-    title: 'Pronto Intervento Idraulico 24h ⚡ Risposta in 15 Min | Idraulici Subito',
-    description: 'Pronto intervento idraulico H24 in tutta Italia: perdite, allagamenti, scarichi intasati, caldaie. Risposta garantita in 15 minuti, anche di notte.',
+    title: '🔧 Pronto Intervento Idraulico 24h ⚡ Emergenza Subito',
+    description: '🚨 Pronto intervento idraulico H24 in tutta Italia. Perdite, allagamenti, scarichi, caldaie. Intervento rapido in 30 min. CHIAMA SUBITO!',
     h1: 'Pronto intervento idraulico 24 ore: chiama subito',
   },
   'idraulico-vicino-a-me': {
-    title: 'Idraulico Vicino a Me ⚡ Trova un Idraulico in 5 Min | Idraulici Subito',
-    description: 'Cerchi un idraulico vicino a te? Inserisci la zona e ricevi in 5 minuti i contatti dei migliori idraulici della tua città. Preventivo gratis.',
+    title: '🔍 Idraulico Vicino a Me ⚡ Trova Subito in 5 Min',
+    description: '⚡ Idraulico vicino a te. Inserisci la zona e ricevi in 5 minuti i contatti dei migliori idraulici. Preventivo gratis. CHIAMA SUBITO!',
     h1: 'Idraulico vicino a me: trova un professionista in zona',
   },
   'idraulico-24-ore': {
-    title: 'Idraulico 24 Ore su 24: Pronto Intervento Notturno e Festivo',
-    description: 'Servizio idraulico 24/7 in tutta Italia. Reperibili anche di notte, nei weekend e nei festivi. Risposta garantita in pochi minuti.',
+    title: '⏰ Idraulico 24 Ore: Pronto Intervento H24 ⚡ Subito',
+    description: '24/7 Idraulico H24 in tutta Italia. Disponibili anche di notte, weekend e festivi. Intervento in 30 minuti. CHIAMA SUBITO!',
     h1: 'Idraulico 24 ore su 24: sempre disponibile',
   },
   'perdita-acqua': {
-    title: 'Perdita d’Acqua: Pronto Intervento Idraulico ⚡ Soluzioni Rapide',
-    description: 'Hai una perdita d’acqua in casa? Trova subito un idraulico esperto in riparazione perdite. Intervento rapido, preventivo gratuito.',
-    h1: 'Riparazione perdite d’acqua: intervento rapido',
+    title: '💧 Perdita d\'Acqua ⚡ Pronto Intervento Idraulico Subito',
+    description: '💧 Perdita d\'acqua in casa? Chiama subito un idraulico esperto. Intervento rapido in 30 min. Preventivo gratuito. CHIAMA SUBITO!',
+    h1: 'Riparazione perdite d\'acqua: intervento rapido',
   },
   'scarico-intasato': {
-    title: 'Scarico Intasato: Idraulico Specializzato in Disostruzione | Subito',
-    description: 'Lavandino, doccia, water o scarichi condominiali intasati? Idraulici specializzati in disostruzione. Intervento in giornata, preventivo gratis.',
+    title: '🚰 Scarico Intasato ⚡ Idraulico Specializzato Subito',
+    description: '🚫 Scarico intasato? Lavandino, doccia, water. Idraulico specializzato in disostruzione. Intervento oggi. CHIAMA SUBITO!',
     h1: 'Scarico intasato: come risolvere subito',
   },
   'wc-intasato': {
-    title: 'WC Intasato: Idraulico Pronto Intervento per Disostruzione',
-    description: 'WC intasato che non scarica? Chiama subito un idraulico esperto in disostruzione water. Intervento in 30 minuti, preventivo gratis.',
+    title: '🚽 WC Intasato ⚡ Pronto Intervento per Disostruzione',
+    description: '🚫 WC intasato? Chiama subito un idraulico esperto. Disostruzione rapida in 30 minuti. Preventivo gratis. CHIAMA SUBITO!',
     h1: 'WC intasato: idraulico per disostruzione rapida',
   },
   'allagamento': {
-    title: 'Allagamento Casa: Pronto Intervento Idraulico ⚡ 24/7',
-    description: 'Allagamento in casa o condominio? Idraulici reperibili H24 per emergenze: blocco acqua, asciugatura, riparazioni. Intervento immediato.',
+    title: '🌊 Allagamento Casa ⚡ Pronto Intervento H24 Emergenza',
+    description: '🌊 Allagamento in casa? Idraulici H24 per emergenze. Blocco acqua, asciugatura, riparazioni subito. CHIAMA SUBITO!',
     h1: 'Allagamento in casa: cosa fare subito',
   },
   'rubinetto-che-perde': {
-    title: 'Rubinetto che Perde: Riparazione e Sostituzione Idraulica',
-    description: 'Rubinetto che perde acqua o gocciola? Trova un idraulico specializzato in riparazione e sostituzione rubinetti. Preventivo in 5 minuti.',
+    title: '💧 Rubinetto che Perde ⚡ Riparazione e Sostituzione',
+    description: '💧 Rubinetto che perde o gocciola? Idraulico specializzato in riparazione. Preventivo in 5 minuti. CHIAMA SUBITO!',
     h1: 'Rubinetto che perde: come risolvere',
   },
   'sostituzione-rubinetto': {
-    title: 'Costo Sostituzione Rubinetto: Prezzi 2026 e Idraulico Specialist',
-    description: 'Quanto costa sostituire un rubinetto? Prezzi aggiornati 2026, tipi di rubinetti e idraulici professionisti per l’installazione. Preventivo gratis.',
+    title: '🔧 Costo Sostituzione Rubinetto ⚡ Prezzi 2026 Subito',
+    description: '💰 Quanto costa sostituire un rubinetto? Prezzi 2026, idraulici professionisti, installazione. Preventivo gratis. CHIAMA SUBITO!',
     h1: 'Sostituzione rubinetto: costi e idraulici esperti',
   },
   'riparazione-caldaia': {
-    title: 'Riparazione Caldaia: Tecnico Specialist Pronto Intervento',
-    description: 'Caldaia rotta o che non funziona? Tecnici specializzati in riparazione caldaie di tutte le marche. Intervento in giornata, preventivo gratis.',
+    title: '🔥 Riparazione Caldaia ⚡ Tecnico Specialist Subito',
+    description: '🔥 Caldaia rotta? Tecnici specializzati. Tutte le marche. Intervento in giornata. Preventivo gratis. CHIAMA SUBITO!',
     h1: 'Riparazione caldaia: tecnici esperti pronti',
   },
   'manutenzione-caldaia': {
-    title: 'Manutenzione Caldaia Obbligatoria: Costi 2026 e Tecnici Certificati',
-    description: 'Manutenzione caldaia annuale obbligatoria: costi, normative e tecnici certificati. Prenota subito il controllo, preventivo gratuito.',
+    title: '🔧 Manutenzione Caldaia Obbligatoria ⚡ Costi 2026',
+    description: '📋 Manutenzione caldaia annuale: costi, normative, tecnici certificati. Prenota controllo. CHIAMA SUBITO!',
     h1: 'Manutenzione caldaia: costi e tecnici certificati',
   },
   'sostituzione-caldaia': {
-    title: 'Sostituzione Caldaia: Costi 2026, Bonus e Idraulici Specialist',
-    description: 'Devi sostituire la caldaia? Scopri costi 2026, bonus fiscali e trova idraulici certificati per l’installazione. Preventivo gratuito.',
+    title: '🔥 Sostituzione Caldaia ⚡ Costi 2026, Bonus Subito',
+    description: '🔥 Caldaia rotta? Costi 2026, bonus fiscali, idraulici certificati. Preventivo gratuito. CHIAMA SUBITO!',
     h1: 'Sostituzione caldaia: costi, bonus e installazione',
+  },
+  // ✅ NEW KEYWORDS FROM GSC (High volume, 0 CTR)
+  'sos-idraulico-in-zona': {
+    title: '🚨 SOS Idraulico nella Tua Zona ⚡ H24 Emergenza',
+    description: '🚨 SOS idraulico? Emergenza nella tua zona. H24. Intervento rapido 30 min. CHIAMA SUBITO!',
+    h1: 'SOS Idraulico nella tua zona: emergenza H24',
+  },
+  'urgente-idraulico': {
+    title: '⚠️ Idraulico Urgente ⚡ Emergenza H24 Subito',
+    description: '⚠️ Idraulico urgente? Emergenza idraulica H24. Intervento rapido. CHIAMA SUBITO!',
+    h1: 'Idraulico urgente: emergenza risolta subito',
   },
 };
 
@@ -226,8 +240,8 @@ function getKeywordSeo(slug: string): RouteSeo | null {
   if (!CORE_KEYWORD_PAGES.includes(slug as never)) return null;
   const url = `${BASE_URL}/${slug}`;
   const k = KEYWORD_TITLES[slug] || {
-    title: `${titleCase(slug)} | Idraulici Subito`,
-    description: `Trova un idraulico esperto per ${slug.replace(/-/g, ' ')}. Risposta in 15 minuti, preventivo gratuito senza impegno.`,
+    title: `🔧 ${titleCase(slug)} ⚡ Subito | Idraulici Subito`,
+    description: `⚡ ${titleCase(slug).toLowerCase()}. Idraulico esperto. Intervento rapido 30 min. CHIAMA SUBITO!`,
     h1: titleCase(slug),
   };
   return {
@@ -241,13 +255,14 @@ function getKeywordSeo(slug: string): RouteSeo | null {
 }
 
 // ---------- CITY PAGES ----------
+// ✅ OPTIMIZED: High CTR formulas with emojis and urgency
 function getCitySeo(citySlug: string): RouteSeo | null {
   if (!TOP_50_CITIES.includes(citySlug as never)) return null;
   const city = CITIES.find(c => c.slug === citySlug);
   const cityName = city?.name || titleCase(citySlug);
   const url = `${BASE_URL}/${citySlug}`;
-  const title = `Idraulico ${cityName} ⚡ Pronto Intervento 24h | Risposta in 15 Min`;
-  const description = `Idraulico a ${cityName} disponibile 24/7 per perdite, scarichi intasati, caldaie e emergenze. Professionisti verificati, preventivo gratis in 15 minuti.`;
+  const title = `🔧 Idraulico ${cityName} 24/7 ⚡ Subito | Preventivo Gratis`;
+  const description = `⚡ Idraulico ${cityName} H24. Emergenza? Intervento in 30 min. Perdite, scarichi, caldaie. CHIAMA GRATIS!`;
   const h1 = `Idraulico a ${cityName}: pronto intervento 24h`;
   return {
     title, description, h1, canonical: url,
@@ -259,6 +274,7 @@ function getCitySeo(citySlug: string): RouteSeo | null {
 }
 
 // ---------- CITY + SERVICE PAGES (e.g. /milano-pronto-intervento) ----------
+// ✅ OPTIMIZED: High CTR formulas
 function getCityServiceSeo(path: string): RouteSeo | null {
   // Match /{city}-{service} where service is a CORE_SERVICE
   for (const service of CORE_SERVICES) {
@@ -270,8 +286,8 @@ function getCityServiceSeo(path: string): RouteSeo | null {
         const cityName = city?.name || titleCase(citySlug);
         const serviceName = titleCase(service);
         const url = `${BASE_URL}/${citySlug}-${service}`;
-        const title = `${serviceName} ${cityName} ⚡ Idraulico Specializzato | Preventivo Gratis`;
-        const description = `${serviceName} a ${cityName}: idraulici specializzati con interventi rapidi. Disponibili 24/7, preventivo gratuito senza impegno.`;
+        const title = `🔧 ${serviceName} ${cityName} ⚡ Subito | Preventivo Gratis`;
+        const description = `⚡ ${serviceName} a ${cityName}. Idraulici specializzati H24. Intervento 30 min. CHIAMA GRATIS!`;
         const h1 = `${serviceName} a ${cityName}: idraulici specializzati`;
         return {
           title, description, h1, canonical: url,
@@ -376,8 +392,8 @@ function getNeighborhoodSeo(path: string): RouteSeo | null {
       `/${n.citySlug}-${n.neighborhoodSlug}-idraulico`,
     ];
     if (candidates.includes(path)) {
-      const title = `Idraulico ${n.cityName} ${n.neighborhoodName} ⚡ Pronto Intervento Locale`;
-      const description = `Idraulico nel quartiere ${n.neighborhoodName} di ${n.cityName}: interventi rapidi (${n.interventionTimes.urgent}) per perdite, scarichi e caldaie. Preventivo gratis.`;
+      const title = `🔧 Idraulico ${n.neighborhoodName}, ${n.cityName} ⚡ Subito`;
+      const description = `⚡ Idraulico a ${n.neighborhoodName}, ${n.cityName}. Intervento locale rapido 30 min. CHIAMA GRATIS!`;
       const h1 = `Idraulico a ${n.cityName} ${n.neighborhoodName}`;
       return {
         title, description, h1, canonical: url,

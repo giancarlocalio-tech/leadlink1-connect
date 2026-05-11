@@ -32,8 +32,28 @@ const aliasBlock = aliasSrc.match(/SLUG_ALIASES[\s\S]*?\};/)[0];
 const aliases = new Set([...aliasBlock.matchAll(/'([a-z0-9-]+)':\s*'/g)].map(m => m[1]));
 const services = allServices.filter(s => !aliases.has(s));
 
-console.log(`Cities: ${cities.length}, Canonical services: ${services.length} (excluded ${aliases.size} aliases)`);
-console.log(`Total city×service URLs: ${cities.length * services.length}`);
+// ============================================================
+// SEO consolidation (May 2026): match src/lib/seoConfig.ts whitelist.
+// Only Top 50 cities × 5 core services are sitemap-indexable.
+// Other combinations are noindexed at runtime — must NOT appear in sitemap.
+// ============================================================
+const TOP_50_CITIES = new Set([
+  'roma','milano','napoli','torino','palermo','genova','bologna','firenze','bari','catania',
+  'venezia','verona','messina','padova','trieste','taranto','brescia','parma','prato','modena',
+  'reggio-calabria','reggio-emilia','perugia','ravenna','livorno','cagliari','foggia','rimini','salerno','ferrara',
+  'sassari','latina','giugliano','monza','siracusa','pescara','bergamo','forlì','trento','vicenza',
+  'terni','bolzano','novara','piacenza','ancona','andria','arezzo','udine','cesena','lecce','siena'
+]);
+const CORE_SERVICES = new Set([
+  'pronto-intervento','manutenzione-caldaie','spurgo-scarichi','riparazione-perdite','installazione-sanitari'
+]);
+
+const indexableCities = cities.filter(c => TOP_50_CITIES.has(c));
+const indexableServices = services.filter(s => CORE_SERVICES.has(s));
+
+console.log(`Cities: ${cities.length} total → ${indexableCities.length} indexable (Top50)`);
+console.log(`Services: ${services.length} total → ${indexableServices.length} indexable (core)`);
+console.log(`City × Service indexable URLs: ${indexableCities.length * indexableServices.length}`);
 
 const urlEntry = (loc, priority = '0.7', changefreq = 'weekly') =>
   `  <url><loc>${loc}</loc><lastmod>${TODAY}</lastmod><changefreq>${changefreq}</changefreq><priority>${priority}</priority></url>`;

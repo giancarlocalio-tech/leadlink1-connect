@@ -36,7 +36,10 @@ import { CATEGORY_FLOWS, getNextQuestionId, type WizardQuestion } from '@/lib/wi
 import { CityAutocomplete, type ItalianCity } from '@/components/CityAutocomplete';
 import analytics from '@/lib/analytics';
 import { generateJsonLd, BASE_URL } from '@/lib/seoJsonLd';
-import heroBg from '@/assets/hero-bg.avif';
+import heroPlumber from '@/assets/hero-plumber-2026.jpg';
+import plumberMarco from '@/assets/plumber-marco.jpg';
+import plumberGiuseppe from '@/assets/plumber-giuseppe.jpg';
+import plumberLuca from '@/assets/plumber-luca.jpg';
 import { TOP_50_CITIES } from '@/lib/seoConfig';
 import { buildWhatsAppUrl } from '@/lib/whatsappConfig';
 import { CITIES } from '@/lib/seoData';

@@ -70,9 +70,11 @@ export const TOP_50_CITIES = [
 export const CORE_SERVICES = [
   'pronto-intervento',      // Emergency plumbing
   'manutenzione-caldaie',   // Boiler maintenance
-  'spurgo-scarichi',        // Drain cleaning
-  'riparazione-perdite',    // Leak repair
-  'installazione-sanitari'  // Sanitary installation
+  'sostituzione-caldaia',   // Boiler replacement
+  'perdita-acqua',          // Leak repair (canonical slug in serviceContent.ts)
+  'scarico-intasato',       // Drain unclog (canonical slug in serviceContent.ts)
+  'ricerca-perdite',        // Leak detection
+  'disostruzione-fogne'     // Sewer cleaning
 ] as const;
 
 // ============================================

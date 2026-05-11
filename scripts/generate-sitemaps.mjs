@@ -45,7 +45,8 @@ const TOP_50_CITIES = new Set([
   'terni','bolzano','novara','piacenza','ancona','andria','arezzo','udine','cesena','lecce','siena'
 ]);
 const CORE_SERVICES = new Set([
-  'pronto-intervento','manutenzione-caldaie','spurgo-scarichi','riparazione-perdite','installazione-sanitari'
+  'pronto-intervento','manutenzione-caldaie','sostituzione-caldaia',
+  'perdita-acqua','scarico-intasato','ricerca-perdite','disostruzione-fogne'
 ]);
 
 const indexableCities = cities.filter(c => TOP_50_CITIES.has(c));

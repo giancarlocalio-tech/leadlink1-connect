@@ -76,7 +76,8 @@ export const CORE_SERVICES = [
 ] as const;
 
 // ============================================
-// CORE KEYWORD PAGES (MAX 20 INDEXABLE)
+// CORE KEYWORD PAGES (MAX 30 INDEXABLE)
+// ✅ Added new high-volume keywords from GSC
 // ============================================
 export const CORE_KEYWORD_PAGES = [
   'pronto-intervento-idraulico',
@@ -98,7 +99,10 @@ export const CORE_KEYWORD_PAGES = [
   'sostituzione-rubinetto',
   'riparazione-termosifone',
   'addolcitore-acqua',
-  'depuratore-acqua'
+  'depuratore-acqua',
+  // ✅ NEW KEYWORDS FROM GSC (high volume, 0 CTR)
+  'sos-idraulico-in-zona',          // 546 impressioni
+  'urgente-idraulico',              // 243 impressioni
 ] as const;
 
 // ============================================
@@ -133,10 +137,6 @@ export function isCoreKeywordPage(slug: string): boolean {
   return CORE_KEYWORD_PAGES.includes(slug as CoreKeywordPage);
 }
 
-/**
- * Determine if a page should be indexed
- * Returns: { shouldIndex: boolean, canonicalUrl?: string }
- */
 /**
  * Determine if a page should be indexed
  * Returns: { shouldIndex: boolean, canonicalUrl: string }

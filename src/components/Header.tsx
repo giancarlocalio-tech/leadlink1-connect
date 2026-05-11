@@ -27,15 +27,15 @@ export function Header() {
     <header className="bg-card border-b border-border sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2.5">
+          <Link to="/" className="flex items-center gap-2.5 min-w-0">
             <img 
               src={logoIcon} 
               alt="Idraulici Subito" 
-              className="h-9 w-auto object-contain"
+              className="h-9 w-auto object-contain shrink-0"
               width={72}
               height={72}
             />
-            <span className="text-xl font-extrabold tracking-tight text-foreground hidden sm:inline">Idraulici Subito</span>
+            <span className="text-sm sm:text-xl font-extrabold tracking-tight text-foreground truncate">Idraulici Subito</span>
           </Link>
           
           <nav className="flex items-center gap-2 sm:gap-4">

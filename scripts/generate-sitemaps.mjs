@@ -32,8 +32,29 @@ const aliasBlock = aliasSrc.match(/SLUG_ALIASES[\s\S]*?\};/)[0];
 const aliases = new Set([...aliasBlock.matchAll(/'([a-z0-9-]+)':\s*'/g)].map(m => m[1]));
 const services = allServices.filter(s => !aliases.has(s));
 
-console.log(`Cities: ${cities.length}, Canonical services: ${services.length} (excluded ${aliases.size} aliases)`);
-console.log(`Total city×service URLs: ${cities.length * services.length}`);
+// ============================================================
+// SEO consolidation (May 2026): match src/lib/seoConfig.ts whitelist.
+// Only Top 50 cities × 5 core services are sitemap-indexable.
+// Other combinations are noindexed at runtime — must NOT appear in sitemap.
+// ============================================================
+const TOP_50_CITIES = new Set([
+  'roma','milano','napoli','torino','palermo','genova','bologna','firenze','bari','catania',
+  'venezia','verona','messina','padova','trieste','taranto','brescia','parma','prato','modena',
+  'reggio-calabria','reggio-emilia','perugia','ravenna','livorno','cagliari','foggia','rimini','salerno','ferrara',
+  'sassari','latina','giugliano','monza','siracusa','pescara','bergamo','forlì','trento','vicenza',
+  'terni','bolzano','novara','piacenza','ancona','andria','arezzo','udine','cesena','lecce','siena'
+]);
+const CORE_SERVICES = new Set([
+  'pronto-intervento','manutenzione-caldaie','sostituzione-caldaia',
+  'perdita-acqua','scarico-intasato','ricerca-perdite','disostruzione-fogne'
+]);
+
+const indexableCities = cities.filter(c => TOP_50_CITIES.has(c));
+const indexableServices = services.filter(s => CORE_SERVICES.has(s));
+
+console.log(`Cities: ${cities.length} total → ${indexableCities.length} indexable (Top50)`);
+console.log(`Services: ${services.length} total → ${indexableServices.length} indexable (core)`);
+console.log(`City × Service indexable URLs: ${indexableCities.length * indexableServices.length}`);
 
 const urlEntry = (loc, priority = '0.7', changefreq = 'weekly') =>
   `  <url><loc>${loc}</loc><lastmod>${TODAY}</lastmod><changefreq>${changefreq}</changefreq><priority>${priority}</priority></url>`;
@@ -45,10 +66,10 @@ const MASTER_CITIES = new Set(['napoli', 'milano', 'roma', 'torino']);
 const isSecondaryCityService = (city, service) =>
   service === 'pronto-intervento' && MASTER_CITIES.has(city);
 
-// 1) City × Service sitemap
+// 1) City × Service sitemap — Top50 cities × core services only
 const csUrls = [];
-for (const city of cities) {
-  for (const service of services) {
+for (const city of indexableCities) {
+  for (const service of indexableServices) {
     if (isSecondaryCityService(city, service)) {
       csUrls.push(urlEntry(`${DOMAIN}/${city}-${service}`, '0.4', 'monthly'));
     } else {
@@ -58,20 +79,20 @@ for (const city of cities) {
 }
 const csXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Auto-generated ${TODAY} — ${cities.length} cities × ${services.length} canonical services = ${csUrls.length} URLs -->
+  <!-- Auto-generated ${TODAY} — ${indexableCities.length} Top50 cities × ${indexableServices.length} core services = ${csUrls.length} URLs -->
 ${csUrls.join('\n')}
 </urlset>
 `;
 fs.writeFileSync(path.join(PUBLIC, 'sitemap-city-services.xml'), csXml);
 
-// 2) City standalone sitemap (refresh) — masters get max priority
-const cityUrls = cities.map(c => {
+// 2) City standalone sitemap — Top50 cities only; masters get max priority
+const cityUrls = indexableCities.map(c => {
   const isMaster = MASTER_CITIES.has(c);
   return urlEntry(`${DOMAIN}/${c}`, isMaster ? '1.0' : '0.8', 'weekly');
 });
 const citiesXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Auto-generated ${TODAY} — ${cities.length} city pages -->
+  <!-- Auto-generated ${TODAY} — ${indexableCities.length} Top50 city pages -->
 ${cityUrls.join('\n')}
 </urlset>
 `;

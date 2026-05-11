@@ -8,6 +8,7 @@ import { Layout } from '@/components/Layout';
 import { getKeywordPageBySlug, CITIES } from '@/lib/seoData';
 import { generateJsonLd, getKeywordFAQs, BASE_URL } from '@/lib/seoJsonLd';
 import { getKeywordPageCanonical, getDifferentiatedH1 } from '@/lib/canonicalHierarchy';
+import { isCoreKeywordPage } from '@/lib/seoConfig';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import InlineWizard from '@/components/InlineWizard';
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
@@ -74,6 +75,11 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
   
   const rating = generateConsistentRating(pageData.slug);
 
+  // SEO: decide if this keyword page should be indexed (whitelist of core keywords only)
+  const robotsMeta = isCoreKeywordPage(pageData.slug)
+    ? "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    : "noindex, follow";
+
   // Generate structured data using utility
   const baseStructuredData = generateJsonLd(
     {
@@ -107,7 +113,7 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
         <Helmet>
           <title>{pageData.title}</title>
           <meta name="description" content={pageData.description} />
-          <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+          <meta name="robots" content={robotsMeta} />
           <link rel="canonical" href={canonicalUrl} />
           <meta property="og:title" content={pageData.title} />
           <meta property="og:description" content={pageData.description} />
@@ -135,7 +141,7 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
       <Helmet>
         <title>{pageData.title}</title>
         <meta name="description" content={pageData.description} />
-        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="robots" content={robotsMeta} />
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content={pageData.title} />
         <meta property="og:description" content={pageData.description} />

@@ -113,7 +113,7 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
         <Helmet>
           <title>{pageData.title}</title>
           <meta name="description" content={pageData.description} />
-          <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+          <meta name="robots" content={robotsMeta} />
           <link rel="canonical" href={canonicalUrl} />
           <meta property="og:title" content={pageData.title} />
           <meta property="og:description" content={pageData.description} />
@@ -141,7 +141,7 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
       <Helmet>
         <title>{pageData.title}</title>
         <meta name="description" content={pageData.description} />
-        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="robots" content={robotsMeta} />
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content={pageData.title} />
         <meta property="og:description" content={pageData.description} />

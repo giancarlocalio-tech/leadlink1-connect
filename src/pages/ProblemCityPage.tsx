@@ -22,6 +22,7 @@ import { ProblemCityMistakesSection } from "@/components/seo/ProblemCityMistakes
 import { ProblemCityDIYLimitations } from "@/components/seo/ProblemCityDIYLimitations";
 import { MapPin, AlertCircle, Wrench, Home, ListChecks, Ban, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
+import { isTop50City } from "@/lib/seoConfig";
 
 const ProblemCityPage = () => {
   const location = useLocation();
@@ -152,7 +153,7 @@ const ProblemCityPage = () => {
       <Helmet>
         <title>{pageData.metaTitle}</title>
         <meta name="description" content={pageData.metaDescription} />
-        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <meta name="robots" content={isTop50City(pageData.citySlug) ? "index, follow, max-image-preview:large" : "noindex, follow"} />
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content={pageData.metaTitle} />
         <meta property="og:description" content={pageData.metaDescription} />

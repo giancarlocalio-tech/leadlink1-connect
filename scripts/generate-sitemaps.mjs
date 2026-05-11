@@ -65,10 +65,10 @@ const MASTER_CITIES = new Set(['napoli', 'milano', 'roma', 'torino']);
 const isSecondaryCityService = (city, service) =>
   service === 'pronto-intervento' && MASTER_CITIES.has(city);
 
-// 1) City × Service sitemap
+// 1) City × Service sitemap — Top50 cities × core services only
 const csUrls = [];
-for (const city of cities) {
-  for (const service of services) {
+for (const city of indexableCities) {
+  for (const service of indexableServices) {
     if (isSecondaryCityService(city, service)) {
       csUrls.push(urlEntry(`${DOMAIN}/${city}-${service}`, '0.4', 'monthly'));
     } else {
@@ -78,20 +78,20 @@ for (const city of cities) {
 }
 const csXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Auto-generated ${TODAY} — ${cities.length} cities × ${services.length} canonical services = ${csUrls.length} URLs -->
+  <!-- Auto-generated ${TODAY} — ${indexableCities.length} Top50 cities × ${indexableServices.length} core services = ${csUrls.length} URLs -->
 ${csUrls.join('\n')}
 </urlset>
 `;
 fs.writeFileSync(path.join(PUBLIC, 'sitemap-city-services.xml'), csXml);
 
-// 2) City standalone sitemap (refresh) — masters get max priority
-const cityUrls = cities.map(c => {
+// 2) City standalone sitemap — Top50 cities only; masters get max priority
+const cityUrls = indexableCities.map(c => {
   const isMaster = MASTER_CITIES.has(c);
   return urlEntry(`${DOMAIN}/${c}`, isMaster ? '1.0' : '0.8', 'weekly');
 });
 const citiesXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Auto-generated ${TODAY} — ${cities.length} city pages -->
+  <!-- Auto-generated ${TODAY} — ${indexableCities.length} Top50 city pages -->
 ${cityUrls.join('\n')}
 </urlset>
 `;

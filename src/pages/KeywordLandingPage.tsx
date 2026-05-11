@@ -75,6 +75,11 @@ export default function KeywordLandingPage({ slug }: KeywordLandingPageProps) {
   
   const rating = generateConsistentRating(pageData.slug);
 
+  // SEO: decide if this keyword page should be indexed (whitelist of core keywords only)
+  const robotsMeta = isCoreKeywordPage(pageData.slug)
+    ? "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    : "noindex, follow";
+
   // Generate structured data using utility
   const baseStructuredData = generateJsonLd(
     {

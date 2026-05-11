@@ -67,7 +67,7 @@ function generateService(options: LocalBusinessOptions) {
       "@id": `${BASE_URL}#organization`,
       "name": "Idraulici Subito",
       "url": BASE_URL,
-      "logo": `${BASE_URL}/favicon.png`,
+      "logo": `${BASE_URL}/logo.png`,
     },
   };
 
@@ -164,7 +164,7 @@ export function generateServiceWithOffer(options: {
       "@id": `${BASE_URL}#organization`,
       "name": "Idraulici Subito",
       "url": BASE_URL,
-      "logo": `${BASE_URL}/favicon.png`
+      "logo": `${BASE_URL}/logo.png`
     },
     "hasOfferCatalog": {
       "@type": "OfferCatalog",

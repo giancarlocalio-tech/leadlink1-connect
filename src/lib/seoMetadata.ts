@@ -334,7 +334,7 @@ function getBlogSeo(path: string): RouteSeo | null {
           '@context': 'https://schema.org', '@type': 'Article',
           headline: a.h1, description: a.metaDescription, datePublished: a.publishedAt, dateModified: a.updatedAt || a.publishedAt,
           author: { '@type': 'Organization', name: 'Idraulici Subito' },
-          publisher: { '@type': 'Organization', name: 'Idraulici Subito', logo: { '@type': 'ImageObject', url: `${BASE_URL}/favicon.png` } },
+          publisher: { '@type': 'Organization', name: 'Idraulici Subito', logo: { '@type': 'ImageObject', url: `${BASE_URL}/logo.png` } },
           mainEntityOfPage: url,
         },
       ],

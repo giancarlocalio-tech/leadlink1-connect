@@ -36,7 +36,10 @@ import { CATEGORY_FLOWS, getNextQuestionId, type WizardQuestion } from '@/lib/wi
 import { CityAutocomplete, type ItalianCity } from '@/components/CityAutocomplete';
 import analytics from '@/lib/analytics';
 import { generateJsonLd, BASE_URL } from '@/lib/seoJsonLd';
-import heroBg from '@/assets/hero-bg.avif';
+import heroPlumber from '@/assets/hero-plumber-2026.jpg';
+import plumberMarco from '@/assets/plumber-marco.jpg';
+import plumberGiuseppe from '@/assets/plumber-giuseppe.jpg';
+import plumberLuca from '@/assets/plumber-luca.jpg';
 import { TOP_50_CITIES } from '@/lib/seoConfig';
 import { buildWhatsAppUrl } from '@/lib/whatsappConfig';
 import { CITIES } from '@/lib/seoData';
@@ -319,97 +322,160 @@ export default function HomePage() {
           {JSON.stringify(structuredData)}
         </script>
       </Helmet>
-      {/* Hero Section - Conversion Optimized */}
-      <section className="relative overflow-hidden min-h-[550px] md:min-h-[600px] flex items-center justify-center">
-        {/* Background Image */}
-        <div className="absolute inset-0">
-          <img 
-            src={heroBg} 
-            alt="" 
-            className="w-full h-full object-cover object-[25%_center] md:object-center"
-          />
-          {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/60" />
+      {/* Hero Section 2026 - Split layout, light bg, photo dx */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-background via-background to-muted/30">
+        {/* Subtle decorative blobs */}
+        <div aria-hidden className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
+        <div aria-hidden className="pointer-events-none absolute -bottom-40 -right-20 h-[28rem] w-[28rem] rounded-full bg-secondary/10 blur-3xl" />
+
+        <div className="container mx-auto px-4 relative z-10 py-10 md:py-20">
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            {/* LEFT: Text + CTA */}
+            <div className="lg:col-span-7 text-center lg:text-left">
+              {/* LIVE Badge */}
+              <div className="inline-flex items-center gap-2 bg-success/10 text-success border border-success/20 px-3.5 py-1.5 rounded-full text-xs md:text-sm font-semibold mb-6">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
+                </span>
+                <span>12 idraulici disponibili ORA nella tua zona</span>
+              </div>
+
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-foreground mb-5 leading-[1.05] tracking-tight">
+                Idraulico a casa tua
+                <span className="block text-primary">in 30 minuti.</span>
+              </h1>
+
+              <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0">
+                Preventivo gratis in 30 secondi. Nessun obbligo. Solo professionisti verificati.
+              </p>
+
+              {/* CTA Stack */}
+              <div className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto lg:mx-0 mb-6">
+                <a
+                  href={buildWhatsAppUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 group bg-[#25D366] hover:bg-[#1fb455] text-white text-lg font-bold py-4 px-6 rounded-2xl shadow-[0_10px_30px_-10px_rgba(37,211,102,0.5)] hover:shadow-[0_15px_40px_-10px_rgba(37,211,102,0.6)] transition-all hover:-translate-y-0.5 flex items-center justify-center gap-3"
+                >
+                  <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current" aria-hidden="true">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                  </svg>
+                  <span>Scrivi su WhatsApp</span>
+                </a>
+                <button
+                  onClick={() => openWizard()}
+                  className="flex-1 group bg-foreground hover:bg-foreground/90 text-background text-lg font-bold py-4 px-6 rounded-2xl transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                >
+                  Preventivo gratis
+                  <ArrowRight className="h-5 w-5 group-hover:translate-x-0.5 transition-transform" />
+                </button>
+              </div>
+
+              {/* Quick chips */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-8">
+                <span className="text-xs text-muted-foreground mr-1">Problemi più richiesti:</span>
+                <a href={buildWhatsAppUrl({ interventionType: 'perdita' })} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 bg-background border border-border hover:border-primary/50 hover:bg-primary/5 text-foreground px-3 py-1.5 rounded-full text-xs font-medium transition-all">
+                  <Droplets className="h-3.5 w-3.5 text-primary" /> Perdita d'acqua
+                </a>
+                <a href={buildWhatsAppUrl({ interventionType: 'caldaia' })} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 bg-background border border-border hover:border-primary/50 hover:bg-primary/5 text-foreground px-3 py-1.5 rounded-full text-xs font-medium transition-all">
+                  <Flame className="h-3.5 w-3.5 text-primary" /> Caldaia
+                </a>
+                <a href={buildWhatsAppUrl({ interventionType: 'scarico' })} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 bg-background border border-border hover:border-primary/50 hover:bg-primary/5 text-foreground px-3 py-1.5 rounded-full text-xs font-medium transition-all">
+                  <Trash2 className="h-3.5 w-3.5 text-primary" /> Scarico intasato
+                </a>
+              </div>
+
+              {/* Trust row */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-2 text-sm text-muted-foreground">
+                <div className="flex items-center gap-1.5">
+                  <Shield className="h-4 w-4 text-success" />
+                  <span className="font-medium text-foreground">Verificati</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+                  <span><span className="font-bold text-foreground">4.8/5</span> · 500+ recensioni</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle className="h-4 w-4 text-success" />
+                  <span>Senza impegno</span>
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT: Photo */}
+            <div className="lg:col-span-5 relative">
+              <div className="relative mx-auto max-w-md lg:max-w-none">
+                {/* Main photo card */}
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-foreground/5 aspect-[4/5]">
+                  <img
+                    src={heroPlumber}
+                    alt="Idraulico professionista al lavoro in una cucina italiana"
+                    className="w-full h-full object-cover"
+                    width={1024}
+                    height={1280}
+                    fetchPriority="high"
+                  />
+                  {/* Gradient overlay bottom */}
+                  <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/50 to-transparent" />
+                  {/* Caption inside */}
+                  <div className="absolute bottom-4 left-4 right-4 text-white">
+                    <p className="text-xs uppercase tracking-wider opacity-80">In azione ora</p>
+                    <p className="text-base font-semibold">Marco · Idraulico verificato</p>
+                  </div>
+                </div>
+
+                {/* Floating card: rating */}
+                <div className="hidden sm:flex absolute -left-4 lg:-left-8 top-8 bg-background rounded-2xl shadow-xl border border-border p-3 items-center gap-3 animate-fade-in">
+                  <div className="flex -space-x-2">
+                    <img src={plumberMarco} alt="" className="h-9 w-9 rounded-full ring-2 ring-background object-cover" loading="lazy" />
+                    <img src={plumberGiuseppe} alt="" className="h-9 w-9 rounded-full ring-2 ring-background object-cover" loading="lazy" />
+                    <img src={plumberLuca} alt="" className="h-9 w-9 rounded-full ring-2 ring-background object-cover" loading="lazy" />
+                  </div>
+                  <div className="text-left">
+                    <div className="flex items-center gap-0.5">
+                      {[...Array(5)].map((_, i) => <Star key={i} className="h-3 w-3 fill-yellow-500 text-yellow-500" />)}
+                    </div>
+                    <p className="text-xs font-semibold text-foreground">12.000+ richieste gestite</p>
+                  </div>
+                </div>
+
+                {/* Floating card: live */}
+                <div className="hidden sm:flex absolute -right-3 lg:-right-6 bottom-12 bg-background rounded-2xl shadow-xl border border-border px-4 py-3 items-center gap-3 animate-fade-in">
+                  <div className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-success"></span>
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs text-muted-foreground">Tempo medio risposta</p>
+                    <p className="text-sm font-bold text-foreground">~ 8 minuti</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        
-        <div className="container mx-auto px-4 relative z-10 text-center py-12 md:py-20">
-          {/* Urgency Badge */}
-          <div className="inline-flex items-center gap-2 bg-success text-white px-4 py-2 rounded-full text-sm font-semibold mb-6 animate-pulse shadow-lg">
-            <Phone className="h-4 w-4" />
-            <span>12 idraulici disponibili ORA nella tua zona</span>
-          </div>
-          
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 animate-fade-in leading-tight drop-shadow-lg">
-            Idraulico in <span className="text-primary">30 minuti</span>
-          </h1>
-          
-          <p className="text-lg md:text-xl text-white/90 mb-8 max-w-xl mx-auto">
-            Preventivo GRATIS in 30 secondi. Nessun obbligo.
-          </p>
-          
-          {/* GIANT CTA Button - WhatsApp */}
-          <div className="max-w-md mx-auto mb-6">
-            <a
-              href={buildWhatsAppUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full group relative bg-[#25D366] hover:bg-[#20bd5a] text-white text-xl md:text-2xl font-bold py-5 md:py-6 px-8 rounded-2xl shadow-[0_10px_40px_-10px_rgba(37,211,102,0.6)] hover:shadow-[0_15px_50px_-10px_rgba(37,211,102,0.7)] transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3"
-            >
-              <svg viewBox="0 0 24 24" className="h-6 w-6 md:h-7 md:w-7 fill-current" aria-hidden="true">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-              </svg>
-              <span>Contattaci su WhatsApp</span>
-            </a>
-            <p className="text-white/80 text-sm mt-3 flex items-center justify-center gap-2">
-              <Clock className="h-4 w-4" />
-              Risposta rapida • 100% Gratuito
-            </p>
-          </div>
-          
-          {/* Secondary quick actions - WhatsApp con problema precompilato */}
-          <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
-            <a 
-              href={buildWhatsAppUrl({ interventionType: 'perdita' })}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium transition-colors"
-            >
-              <Droplets className="h-4 w-4" />
-              Perdita d'acqua
-            </a>
-            <a 
-              href={buildWhatsAppUrl({ interventionType: 'caldaia' })}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium transition-colors"
-            >
-              <Flame className="h-4 w-4" />
-              Caldaia
-            </a>
-            <a 
-              href={buildWhatsAppUrl({ interventionType: 'scarico' })}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium transition-colors"
-            >
-              <Trash2 className="h-4 w-4" />
-              Scarico intasato
-            </a>
-          </div>
-          
-          {/* Trust indicators */}
-          <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
-            <div className="flex items-center gap-2 text-white/90">
-              <Shield className="h-5 w-5 text-success" />
-              <span className="text-sm font-medium">Professionisti Verificati</span>
+      </section>
+
+      {/* Trust Bar - numeri grossi */}
+      <section className="border-y border-border bg-muted/30">
+        <div className="container mx-auto px-4 py-8 md:py-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4">
+            <div className="text-center">
+              <p className="text-3xl md:text-4xl font-black text-foreground">12.000+</p>
+              <p className="text-xs md:text-sm text-muted-foreground mt-1">Richieste gestite</p>
             </div>
-            <div className="flex items-center gap-2 text-white/90">
-              <CheckCircle className="h-5 w-5 text-success" />
-              <span className="text-sm font-medium">Senza impegno</span>
+            <div className="text-center">
+              <p className="text-3xl md:text-4xl font-black text-foreground">4.8<span className="text-primary">★</span></p>
+              <p className="text-xs md:text-sm text-muted-foreground mt-1">Recensioni verificate</p>
             </div>
-            <div className="flex items-center gap-2 text-white/90">
-              <Star className="h-5 w-5 text-yellow-400 fill-yellow-400" />
-              <span className="text-sm font-medium">4.8/5 (500+ recensioni)</span>
+            <div className="text-center">
+              <p className="text-3xl md:text-4xl font-black text-foreground">800+</p>
+              <p className="text-xs md:text-sm text-muted-foreground mt-1">Idraulici partner</p>
+            </div>
+            <div className="text-center">
+              <p className="text-3xl md:text-4xl font-black text-foreground">~8 min</p>
+              <p className="text-xs md:text-sm text-muted-foreground mt-1">Tempo medio risposta</p>
             </div>
           </div>
         </div>

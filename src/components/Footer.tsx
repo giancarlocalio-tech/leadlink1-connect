@@ -64,13 +64,13 @@ export function Footer() {
           <div>
             <h3 className="font-bold text-background mb-5 text-sm uppercase tracking-wider">Risorse</h3>
             <ul className="space-y-3">
-              <li><Link to="/" className="text-background/60 hover:text-background text-sm transition-colors">Home</Link></li>
-              <li><a href={buildWhatsAppUrl()} target="_blank" rel="noopener noreferrer" className="text-background/60 hover:text-background text-sm transition-colors">Contattaci su WhatsApp</a></li>
-              <li><Link to="/guide" className="text-background/60 hover:text-background text-sm transition-colors">Guide e Consigli</Link></li>
-              <li><Link to="/per-idraulici" className="text-background/60 hover:text-background text-sm transition-colors">Sei un idraulico?</Link></li>
+              <li><Link to="/" className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">Home</Link></li>
+              <li><a href={buildWhatsAppUrl()} target="_blank" rel="noopener noreferrer" className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">Contattaci su WhatsApp</a></li>
+              <li><Link to="/guide" className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">Guide e Consigli</Link></li>
+              <li><Link to="/per-idraulici" className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">Sei un idraulico?</Link></li>
               {KEYWORD_PAGES.slice(0, 4).map((page) => (
                 <li key={page.slug}>
-                  <Link to={`/${page.slug}`} className="text-background/60 hover:text-background text-sm transition-colors">
+                  <Link to={`/${page.slug}`} className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">
                     {page.h1.replace('Trova un ', '').replace(' - Intervento Immediato', '').replace(' Professionale', '').replace(' Gratuito', '')}
                   </Link>
                 </li>
@@ -82,11 +82,11 @@ export function Footer() {
           <div>
             <h3 className="font-bold text-background mb-5 text-sm uppercase tracking-wider">Azienda</h3>
             <ul className="space-y-3">
-              <li><Link to="/chi-siamo" className="text-background/60 hover:text-background text-sm transition-colors">Chi siamo</Link></li>
-              <li><Link to="/come-funziona" className="text-background/60 hover:text-background text-sm transition-colors">Come funziona</Link></li>
-              <li><Link to="/contatti" className="text-background/60 hover:text-background text-sm transition-colors">Contatti</Link></li>
-              <li><Link to="/privacy" className="text-background/60 hover:text-background text-sm transition-colors">Privacy Policy</Link></li>
-              <li><Link to="/termini" className="text-background/60 hover:text-background text-sm transition-colors">Termini di utilizzo</Link></li>
+              <li><Link to="/chi-siamo" className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">Chi siamo</Link></li>
+              <li><Link to="/come-funziona" className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">Come funziona</Link></li>
+              <li><Link to="/contatti" className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">Contatti</Link></li>
+              <li><Link to="/privacy" className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">Privacy Policy</Link></li>
+              <li><Link to="/termini" className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">Termini di utilizzo</Link></li>
             </ul>
           </div>
 
@@ -98,7 +98,7 @@ export function Footer() {
             <ul className="space-y-3">
               {TOP_SERVICES.map((service) => (
                 <li key={service.slug}>
-                  <Link to={`/milano-${service.slug}`} className="text-background/60 hover:text-background text-sm transition-colors inline-flex items-center gap-1 group">
+                  <Link to={`/milano-${service.slug}`} className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground inline-flex items-center gap-1 group">
                     {service.shortName}
                     <ArrowUpRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </Link>
@@ -115,7 +115,7 @@ export function Footer() {
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-4 gap-y-2.5">
             {TOP_CITIES.map((city) => (
-              <Link key={city.slug} to={`/${city.slug}`} className="text-background/60 hover:text-background text-sm transition-colors">
+              <Link key={city.slug} to={`/${city.slug}`} className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">
                 Idraulico {city.name}
               </Link>
             ))}
@@ -133,7 +133,7 @@ export function Footer() {
                 <Link
                   key={`${city.slug}-${service.slug}`}
                   to={`/${city.slug}-${service.slug}`}
-                  className="text-background/60 hover:text-background text-sm transition-colors"
+                  className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground"
                 >
                   {service.shortName} {city.name}
                 </Link>

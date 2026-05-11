@@ -374,7 +374,7 @@ function getGuideSeo(path: string): RouteSeo | null {
           '@context': 'https://schema.org', '@type': 'Article',
           headline: g.h1, description: g.metaDescription, datePublished: g.publishedAt, dateModified: g.updatedAt || g.publishedAt,
           author: { '@type': 'Organization', name: 'Idraulici Subito' },
-          publisher: { '@type': 'Organization', name: 'Idraulici Subito', logo: { '@type': 'ImageObject', url: `${BASE_URL}/favicon.png` } },
+          publisher: { '@type': 'Organization', name: 'Idraulici Subito', logo: { '@type': 'ImageObject', url: `${BASE_URL}/logo.png` } },
           mainEntityOfPage: url,
         },
       ],

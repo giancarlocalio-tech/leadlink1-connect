@@ -2,8 +2,7 @@ import { Link } from 'react-router-dom';
 import { MapPin, Flame, Droplets, ArrowUpRight, Shield, Clock, Star } from 'lucide-react';
 import { CITIES, SERVICES, KEYWORD_PAGES } from '@/lib/seoData';
 import { buildWhatsAppUrl } from '@/lib/whatsappConfig';
-
-const logo = '/logo.png';
+import logoIcon from '@/assets/logo-icon.png';
 const TOP_CITIES = CITIES.slice(0, 12);
 const TOP_SERVICES = SERVICES.slice(0, 6);
 
@@ -49,9 +48,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <img src={logo} alt="Idraulici Subito" className="h-9 w-auto object-contain brightness-0 invert" />
-              <span className="text-lg font-black">Idraulici Subito</span>
+            <div className="flex items-center gap-2.5 mb-4">
+              <img src={logoIcon} alt="Idraulici Subito" className="h-8 w-auto object-contain brightness-0 invert" width={64} height={64} />
+              <span className="text-lg font-extrabold tracking-tight">Idraulici Subito</span>
             </div>
             <p className="text-background/60 text-sm leading-relaxed mb-6">
               Il marketplace che mette in contatto clienti e idraulici professionisti verificati in tutta Italia. Senza commissioni, senza intermediari.

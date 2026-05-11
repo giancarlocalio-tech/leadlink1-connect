@@ -88,7 +88,7 @@ function serviceJsonLd(name: string, description: string, url: string, areaName?
       '@id': `${BASE_URL}#organization`,
       name: 'Idraulici Subito',
       url: BASE_URL,
-      logo: `${BASE_URL}/favicon.png`,
+      logo: `${BASE_URL}/logo.png`,
     },
     aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.8', reviewCount: '1247', bestRating: '5', worstRating: '1' },
   };

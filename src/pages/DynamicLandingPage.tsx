@@ -41,7 +41,7 @@ import KeywordLandingPage from './KeywordLandingPage';
 import NeighborhoodLandingPage from './NeighborhoodLandingPage';
 import { getServiceRichContent, generateCityServiceContent } from '@/lib/serviceContent';
 import InlineWizard from '@/components/InlineWizard';
-import heroBg from '@/assets/hero-bg.avif';
+import heroPlumber from '@/assets/hero-plumber-2026.jpg';
 
 // SEO Config & Rich Content
 import { getIndexingDecision, isTop50City, isCoreService } from '@/lib/seoConfig';

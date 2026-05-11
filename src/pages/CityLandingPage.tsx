@@ -18,7 +18,7 @@ import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/Layout';
 import { generateJsonLd, BASE_URL } from '@/lib/seoJsonLd';
 import InlineWizard from '@/components/InlineWizard';
-import heroBg from '@/assets/hero-bg.avif';
+import heroPlumber from '@/assets/hero-plumber-2026.jpg';
 
 // Import all city SEO components
 import {

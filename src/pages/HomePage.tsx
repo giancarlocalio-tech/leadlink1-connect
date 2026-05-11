@@ -623,84 +623,132 @@ export default function HomePage() {
       )}
 
       {/* How it works Section */}
-      <section className="py-20 bg-muted/50">
+      {/* Come funziona - Bento Grid 2026 */}
+      <section className="py-20 md:py-28 bg-background">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-14">
-            <span className="text-primary font-semibold text-sm uppercase tracking-wide">Semplice e veloce</span>
-            <h2 className="text-3xl md:text-4xl font-bold mt-2">Come funziona</h2>
+          <div className="max-w-3xl mb-12 md:mb-16">
+            <span className="inline-block text-primary font-bold text-xs uppercase tracking-widest mb-3">Semplice e veloce</span>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-foreground leading-[1.05] tracking-tight">
+              Tre passi.<br />
+              <span className="text-muted-foreground">Zero complicazioni.</span>
+            </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-10 max-w-5xl mx-auto">
-            {/* Step 1 */}
-            <div className="relative bg-card rounded-2xl p-8 shadow-lg border border-border hover:shadow-xl transition-shadow">
-              <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-primary rounded-full w-10 h-10 flex items-center justify-center shadow-md">
-                <span className="text-lg font-bold text-primary-foreground">1</span>
-              </div>
-              <div className="mt-4 text-center">
-                <div className="bg-primary/10 rounded-xl w-14 h-14 flex items-center justify-center mx-auto mb-4">
-                  <Search className="h-7 w-7 text-primary" />
+
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-4 md:gap-5">
+            {/* Step 1 — wide card */}
+            <div className="md:col-span-3 lg:col-span-4 group relative bg-card rounded-3xl border border-border p-8 md:p-10 overflow-hidden hover:border-primary/40 transition-all">
+              <div className="absolute top-6 right-6 text-7xl md:text-8xl font-black text-muted/40 leading-none select-none">01</div>
+              <div className="relative">
+                <div className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-primary/10 text-primary mb-5">
+                  <Search className="h-6 w-6" />
                 </div>
-                <h3 className="font-bold text-lg mb-2">Scegli il servizio</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  Seleziona il tipo di intervento di cui hai bisogno dal nostro wizard guidato
+                <h3 className="text-2xl md:text-3xl font-black text-foreground mb-3">Descrivi il problema</h3>
+                <p className="text-muted-foreground text-base leading-relaxed max-w-md">
+                  Rispondi a poche domande veloci. Il nostro wizard capisce subito di cosa hai bisogno e in che fascia di prezzo sei.
                 </p>
               </div>
             </div>
-            
-            {/* Step 2 */}
-            <div className="relative bg-card rounded-2xl p-8 shadow-lg border border-border hover:shadow-xl transition-shadow">
-              <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-primary rounded-full w-10 h-10 flex items-center justify-center shadow-md">
-                <span className="text-lg font-bold text-primary-foreground">2</span>
-              </div>
-              <div className="mt-4 text-center">
-                <div className="bg-primary/10 rounded-xl w-14 h-14 flex items-center justify-center mx-auto mb-4">
-                  <CheckCircle className="h-7 w-7 text-primary" />
+
+            {/* Step 2 — compact card */}
+            <div className="md:col-span-3 lg:col-span-2 group relative bg-foreground text-background rounded-3xl p-8 md:p-10 overflow-hidden hover:scale-[1.01] transition-all">
+              <div className="absolute top-6 right-6 text-7xl md:text-8xl font-black text-background/10 leading-none select-none">02</div>
+              <div className="relative">
+                <div className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-background/10 text-background mb-5">
+                  <CheckCircle className="h-6 w-6" />
                 </div>
-                <h3 className="font-bold text-lg mb-2">Descrivi il problema</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  Rispondi a poche domande per dettagliare al meglio la tua richiesta
+                <h3 className="text-2xl md:text-3xl font-black mb-3">Ti mettiamo<br />in contatto</h3>
+                <p className="text-background/70 text-base leading-relaxed">
+                  Avvisiamo subito gli idraulici verificati della tua zona.
                 </p>
               </div>
             </div>
-            
-            {/* Step 3 */}
-            <div className="relative bg-card rounded-2xl p-8 shadow-lg border border-border hover:shadow-xl transition-shadow">
-              <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-primary rounded-full w-10 h-10 flex items-center justify-center shadow-md">
-                <span className="text-lg font-bold text-primary-foreground">3</span>
-              </div>
-              <div className="mt-4 text-center">
-                <div className="bg-primary/10 rounded-xl w-14 h-14 flex items-center justify-center mx-auto mb-4">
-                  <Phone className="h-7 w-7 text-primary" />
+
+            {/* Step 3 — full width card with CTA */}
+            <div className="md:col-span-6 group relative bg-gradient-to-br from-primary/15 via-primary/5 to-background rounded-3xl border border-primary/20 p-8 md:p-10 overflow-hidden">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="flex-1 max-w-2xl">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-primary text-primary-foreground">
+                      <Phone className="h-6 w-6" />
+                    </div>
+                    <span className="text-7xl md:text-8xl font-black text-primary/20 leading-none select-none">03</span>
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-black text-foreground mb-2">Ti chiamano loro. Tu scegli.</h3>
+                  <p className="text-muted-foreground text-base leading-relaxed">
+                    Ricevi più contatti diretti — confronti, decidi, e prenoti. <span className="text-foreground font-semibold">Senza commissioni, senza obblighi.</span>
+                  </p>
                 </div>
-                <h3 className="font-bold text-lg mb-2">Vieni contattato</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  Gli idraulici della tua zona ti contatteranno direttamente
-                </p>
+                <a
+                  href={buildWhatsAppUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shrink-0 inline-flex items-center justify-center gap-2 bg-foreground hover:bg-foreground/90 text-background font-bold px-6 py-4 rounded-2xl transition-all hover:-translate-y-0.5"
+                >
+                  Inizia ora
+                  <ArrowRight className="h-5 w-5" />
+                </a>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16">
+      {/* Idraulici verificati - Showcase */}
+      <section className="py-20 md:py-24 bg-muted/30 border-y border-border">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto text-center">
-            <div>
-              <p className="text-3xl font-bold text-primary">500+</p>
-              <p className="text-sm text-muted-foreground">Idraulici attivi</p>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+            <div className="max-w-2xl">
+              <span className="inline-block text-primary font-bold text-xs uppercase tracking-widest mb-3">Professionisti verificati</span>
+              <h2 className="text-4xl md:text-5xl font-black text-foreground leading-[1.05] tracking-tight">
+                Persone vere.<br />
+                <span className="text-muted-foreground">Lavori veri.</span>
+              </h2>
             </div>
-            <div>
-              <p className="text-3xl font-bold text-primary">10k+</p>
-              <p className="text-sm text-muted-foreground">Richieste gestite</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-primary">4.8</p>
-              <p className="text-sm text-muted-foreground">Rating medio</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-primary">15min</p>
-              <p className="text-sm text-muted-foreground">Tempo medio risposta</p>
-            </div>
+            <p className="text-muted-foreground max-w-md md:text-right">
+              Ogni idraulico è verificato manualmente: partita IVA, certificazioni e recensioni reali.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+            {[
+              { name: 'Marco R.', city: 'Roma', img: plumberMarco, rating: 4.9, reviews: 187, specialty: 'Caldaie & condizionatori', years: 12 },
+              { name: 'Giuseppe T.', city: 'Milano', img: plumberGiuseppe, rating: 4.8, reviews: 243, specialty: 'Perdite & idraulica civile', years: 24 },
+              { name: 'Luca B.', city: 'Napoli', img: plumberLuca, rating: 5.0, reviews: 94, specialty: 'Scarichi & disostruzioni', years: 6 },
+            ].map((p) => (
+              <article key={p.name} className="group relative bg-card rounded-3xl border border-border overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div className="aspect-[4/3] overflow-hidden bg-muted">
+                  <img src={p.img} alt={`${p.name} idraulico a ${p.city}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" width={640} height={480} />
+                </div>
+                <div className="p-6">
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <div>
+                      <h3 className="text-lg font-black text-foreground">{p.name}</h3>
+                      <p className="text-sm text-muted-foreground flex items-center gap-1">
+                        <MapPin className="h-3.5 w-3.5" /> {p.city}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1 bg-foreground text-background px-2.5 py-1 rounded-full text-xs font-bold">
+                      <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                      {p.rating}
+                    </div>
+                  </div>
+                  <p className="text-sm text-foreground font-medium mb-3">{p.specialty}</p>
+                  <div className="flex items-center justify-between pt-3 border-t border-border text-xs text-muted-foreground">
+                    <span><span className="font-bold text-foreground">{p.reviews}</span> recensioni</span>
+                    <span><span className="font-bold text-foreground">{p.years}</span> anni di esperienza</span>
+                    <span className="inline-flex items-center gap-1 text-success font-semibold">
+                      <Shield className="h-3 w-3" /> Verificato
+                    </span>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="text-center mt-10">
+            <p className="text-sm text-muted-foreground">
+              + <span className="font-bold text-foreground">800 idraulici</span> attivi in oltre <span className="font-bold text-foreground">50 città italiane</span>
+            </p>
           </div>
         </div>
       </section>

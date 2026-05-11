@@ -8,6 +8,7 @@ import { Layout } from '@/components/Layout';
 import { getKeywordPageBySlug, CITIES } from '@/lib/seoData';
 import { generateJsonLd, getKeywordFAQs, BASE_URL } from '@/lib/seoJsonLd';
 import { getKeywordPageCanonical, getDifferentiatedH1 } from '@/lib/canonicalHierarchy';
+import { isCoreKeywordPage } from '@/lib/seoConfig';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import InlineWizard from '@/components/InlineWizard';
 import { Breadcrumb } from '@/components/seo/Breadcrumb';

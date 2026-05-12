@@ -1,12 +1,13 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
+import { AbsoluteFill, useCurrentFrame, spring, useVideoConfig } from "remotion";
 import { COLORS } from "../MainVideo";
+import { Icon } from "../Icon";
 
 const STATS = [
-  { icon: "✅", value: "Verificati", label: "Idraulici controllati" },
-  { icon: "⚡", value: "10 min", label: "Tempo medio risposta" },
-  { icon: "🏠", value: "Tutta Italia", label: "Copertura nazionale" },
-  { icon: "💸", value: "Gratis", label: "Servizio per te" },
+  { icon: "check", value: "Verificati", label: "Idraulici controllati", iconColor: COLORS.green },
+  { icon: "bolt", value: "10 min", label: "Tempo medio risposta", iconColor: "#FFB300" },
+  { icon: "home", value: "Tutta Italia", label: "Copertura nazionale", iconColor: COLORS.blue },
+  { icon: "euro", value: "Gratis", label: "Servizio per te", iconColor: COLORS.greenDark },
 ];
 
 export const Scene4Trust: React.FC = () => {
@@ -55,13 +56,17 @@ export const Scene4Trust: React.FC = () => {
                 textAlign: "center",
                 boxShadow: `0 8px 0 ${COLORS.blueDark}`,
                 border: `4px solid ${COLORS.yellow}`,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 8,
               }}
             >
-              <div style={{ fontSize: 80, marginBottom: 8 }}>{s.icon}</div>
-              <div style={{ fontSize: 44, fontWeight: 900, color: COLORS.green, lineHeight: 1 }}>
+              <Icon name={s.icon} size={80} color={s.iconColor} />
+              <div style={{ fontSize: 44, fontWeight: 900, color: COLORS.green, lineHeight: 1, marginTop: 8 }}>
                 {s.value}
               </div>
-              <div style={{ fontSize: 26, fontWeight: 700, color: COLORS.ink, marginTop: 8 }}>
+              <div style={{ fontSize: 26, fontWeight: 700, color: COLORS.ink }}>
                 {s.label}
               </div>
             </div>

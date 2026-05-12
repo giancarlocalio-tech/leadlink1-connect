@@ -1,6 +1,7 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
 import { COLORS } from "../MainVideo";
+import { Icon } from "../Icon";
 
 export const Scene1Hook: React.FC = () => {
   const frame = useCurrentFrame();
@@ -93,9 +94,13 @@ export const Scene1Hook: React.FC = () => {
           fontWeight: 700,
           color: COLORS.white,
           textAlign: "center",
+          display: "flex",
+          alignItems: "center",
+          gap: 20,
         }}
       >
-        🚨 Non aspettare i danni
+        <Icon name="siren" size={60} color={COLORS.yellow} />
+        Non aspettare i danni
       </div>
     </AbsoluteFill>
   );

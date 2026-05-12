@@ -1,18 +1,18 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
+import { AbsoluteFill, useCurrentFrame, spring, useVideoConfig } from "remotion";
 import { COLORS } from "../MainVideo";
+import { Icon } from "../Icon";
 
 const PROBLEMS = [
-  { icon: "💧", text: "Tubo che perde" },
-  { icon: "🚽", text: "WC otturato" },
-  { icon: "🔥", text: "Caldaia rotta" },
-  { icon: "🚿", text: "Scarico bloccato" },
+  { icon: "drop", text: "Tubo che perde", color: COLORS.blue },
+  { icon: "toilet", text: "WC otturato", color: COLORS.greenDark },
+  { icon: "flame", text: "Caldaia rotta", color: "#E53935" },
+  { icon: "shower", text: "Scarico bloccato", color: COLORS.blue },
 ];
 
 export const Scene2Problem: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-
   const titleIn = spring({ frame, fps, config: { damping: 14 } });
 
   return (
@@ -60,7 +60,7 @@ export const Scene2Problem: React.FC = () => {
                 border: `4px solid ${COLORS.green}`,
               }}
             >
-              <div style={{ fontSize: 80 }}>{p.icon}</div>
+              <Icon name={p.icon} size={80} color={p.color} />
               <div style={{ fontSize: 56, fontWeight: 800, color: COLORS.ink }}>{p.text}</div>
             </div>
           );

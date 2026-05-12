@@ -1,6 +1,7 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
+import { AbsoluteFill, useCurrentFrame, spring, useVideoConfig } from "remotion";
 import { COLORS } from "../MainVideo";
+import { Icon } from "../Icon";
 
 export const Scene3Solution: React.FC = () => {
   const frame = useCurrentFrame();
@@ -75,10 +76,9 @@ export const Scene3Solution: React.FC = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: 36,
             }}
           >
-            🔧
+            <Icon name="drop" size={36} color={COLORS.blue} />
           </div>
           <div>
             <div style={{ fontSize: 32, fontWeight: 800, color: COLORS.white }}>
@@ -105,7 +105,7 @@ export const Scene3Solution: React.FC = () => {
             fontWeight: 600,
           }}
         >
-          Ho una perdita sotto al lavandino 😟
+          Ho una perdita sotto al lavandino...
         </div>
         <div
           style={{
@@ -119,9 +119,13 @@ export const Scene3Solution: React.FC = () => {
             fontSize: 30,
             color: COLORS.ink,
             fontWeight: 600,
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
           }}
         >
-          Ti contattiamo subito un idraulico nella tua zona ✅
+          <Icon name="check" size={32} color={COLORS.green} />
+          Ti contattiamo subito un idraulico nella tua zona
         </div>
         <div
           style={{
@@ -135,9 +139,13 @@ export const Scene3Solution: React.FC = () => {
             fontSize: 30,
             color: COLORS.ink,
             fontWeight: 700,
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
           }}
         >
-          📞 Mario, idraulico verificato — ti chiama in 10 min
+          <Icon name="phone" size={32} color={COLORS.green} />
+          Mario, idraulico verificato — ti chiama in 10 min
         </div>
       </div>
     </AbsoluteFill>

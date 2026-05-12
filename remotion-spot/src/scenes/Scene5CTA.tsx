@@ -1,6 +1,7 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
 import { COLORS } from "../MainVideo";
+import { Icon } from "../Icon";
 
 export const Scene5CTA: React.FC = () => {
   const frame = useCurrentFrame();
@@ -71,7 +72,7 @@ export const Scene5CTA: React.FC = () => {
           marginBottom: 50,
         }}
       >
-        <div style={{ fontSize: 64 }}>💬</div>
+        <Icon name="chat" size={64} color={COLORS.white} />
         <div style={{ fontSize: 52, fontWeight: 900, color: COLORS.white }}>
           Scrivici ORA
         </div>

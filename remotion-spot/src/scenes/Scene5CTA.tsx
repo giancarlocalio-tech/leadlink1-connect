@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
-import { COLORS } from "../MainVideo";
+import { COLORS } from "../colors";
 import { Icon } from "../Icon";
 
 export const Scene5CTA: React.FC = () => {

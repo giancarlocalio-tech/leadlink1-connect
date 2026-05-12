@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame, spring, useVideoConfig } from "remotion";
-import { COLORS } from "../MainVideo";
+import { COLORS } from "../colors";
 import { Icon } from "../Icon";
 
 const PROBLEMS = [

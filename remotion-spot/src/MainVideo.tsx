@@ -14,7 +14,7 @@ import { Scene5CTA } from "./scenes/Scene5CTA";
 loadFont("normal", { weights: ["400", "700", "800", "900"], subsets: ["latin"] });
 
 // Brand palette (Super Mario green & blue)
-export const COLORS = {
+const COLORS_LOCAL_REMOVED = {
   green: "#43B047",
   greenDark: "#2E7D32",
   blue: "#1E88E5",

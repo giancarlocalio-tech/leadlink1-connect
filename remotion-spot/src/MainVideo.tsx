@@ -10,20 +10,9 @@ import { Scene2Problem } from "./scenes/Scene2Problem";
 import { Scene3Solution } from "./scenes/Scene3Solution";
 import { Scene4Trust } from "./scenes/Scene4Trust";
 import { Scene5CTA } from "./scenes/Scene5CTA";
+import { COLORS } from "./colors";
 
 loadFont("normal", { weights: ["400", "700", "800", "900"], subsets: ["latin"] });
-
-// Brand palette (Super Mario green & blue)
-const COLORS_LOCAL_REMOVED = {
-  green: "#43B047",
-  greenDark: "#2E7D32",
-  blue: "#1E88E5",
-  blueDark: "#0D47A1",
-  yellow: "#FFD54F",
-  white: "#FFFFFF",
-  ink: "#0B1B2B",
-  whatsapp: "#25D366",
-};
 
 export const MainVideo: React.FC = () => {
   return (

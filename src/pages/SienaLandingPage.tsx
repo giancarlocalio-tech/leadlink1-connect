@@ -219,7 +219,9 @@ export default function SienaLandingPage() {
             <strong> 40+ tecnici verificati</strong>, arrivo medio in 35 minuti, preventivo gratuito e senza impegno.
           </p>
 
-          <WhatsAppCTA cityName="Siena" label="Contattaci su WhatsApp da Siena" size="lg" />
+          <Button size="lg" onClick={handleRequestClick} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6 h-auto shadow-lg">
+            Richiedi un idraulico a Siena
+          </Button>
 
           <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 mt-8">
             <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">

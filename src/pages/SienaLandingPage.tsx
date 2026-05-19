@@ -541,7 +541,9 @@ export default function SienaLandingPage() {
             Non aspettare che il problema peggiori. Richiedi subito un preventivo gratuito e ricevi una risposta in
             pochi minuti da un idraulico della tua zona di Siena.
           </p>
-          <WhatsAppCTA cityName="Siena" label="Scrivici ora su WhatsApp" size="lg" />
+          <Button size="lg" onClick={handleRequestClick} className="bg-white hover:bg-white/90 text-primary font-bold text-lg px-8 py-6 h-auto shadow-lg">
+            Richiedi intervento ora
+          </Button>
           <p className="text-primary-foreground/70 text-sm mt-4">
             ✓ Gratuito ✓ Senza impegno ✓ Risposta in 15 minuti
           </p>

@@ -27,7 +27,7 @@ import {
 import { Layout } from '@/components/Layout';
 import { BASE_URL } from '@/lib/seoJsonLd';
 import InlineWizard from '@/components/InlineWizard';
-import { WhatsAppCTA } from '@/components/WhatsAppCTA';
+import { Button } from '@/components/ui/button';
 import heroBg from '@/assets/hero-bg.avif';
 
 // Generic city sections that already take cityName/citySlug
@@ -219,7 +219,9 @@ export default function SienaLandingPage() {
             <strong> 40+ tecnici verificati</strong>, arrivo medio in 35 minuti, preventivo gratuito e senza impegno.
           </p>
 
-          <WhatsAppCTA cityName="Siena" label="Contattaci su WhatsApp da Siena" size="lg" />
+          <Button size="lg" onClick={handleRequestClick} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6 h-auto shadow-lg">
+            Richiedi un idraulico a Siena
+          </Button>
 
           <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 mt-8">
             <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
@@ -283,7 +285,9 @@ export default function SienaLandingPage() {
             </p>
           </div>
           <div className="text-center">
-            <WhatsAppCTA cityName="Siena" label="Richiedi un idraulico a Siena" size="lg" />
+            <Button size="lg" onClick={handleRequestClick} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6 h-auto shadow-lg">
+              Richiedi un idraulico a Siena
+            </Button>
           </div>
         </div>
       </section>
@@ -537,7 +541,9 @@ export default function SienaLandingPage() {
             Non aspettare che il problema peggiori. Richiedi subito un preventivo gratuito e ricevi una risposta in
             pochi minuti da un idraulico della tua zona di Siena.
           </p>
-          <WhatsAppCTA cityName="Siena" label="Scrivici ora su WhatsApp" size="lg" />
+          <Button size="lg" onClick={handleRequestClick} className="bg-white hover:bg-white/90 text-primary font-bold text-lg px-8 py-6 h-auto shadow-lg">
+            Richiedi intervento ora
+          </Button>
           <p className="text-primary-foreground/70 text-sm mt-4">
             ✓ Gratuito ✓ Senza impegno ✓ Risposta in 15 minuti
           </p>

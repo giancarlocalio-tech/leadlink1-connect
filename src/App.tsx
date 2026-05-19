@@ -49,6 +49,7 @@ import NapoliLandingPage from "./pages/NapoliLandingPage";
 import NapoliQuartierePage from "./pages/NapoliQuartierePage";
 import MilanoQuartierePage from "./pages/MilanoQuartierePage";
 import MilanoLandingPage from "./pages/MilanoLandingPage";
+import SienaLandingPage from "./pages/SienaLandingPage";
 
 const queryClient = new QueryClient();
 
@@ -736,6 +737,9 @@ const App = () => (
             
             {/* MILANO - Ultra-optimized landing page for top 3 ranking */}
             <Route path="/milano" element={<MilanoLandingPage />} />
+
+            {/* SIENA - Ultra-optimized landing page targeting top 1 (KD 11) */}
+            <Route path="/siena" element={<SienaLandingPage />} />
             
             {/* NAPOLI QUARTIERI - Local SEO pages */}
             <Route path="/idraulico-napoli-centro-storico" element={<NapoliQuartierePage />} />

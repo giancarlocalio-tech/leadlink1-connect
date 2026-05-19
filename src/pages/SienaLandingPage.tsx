@@ -27,7 +27,7 @@ import {
 import { Layout } from '@/components/Layout';
 import { BASE_URL } from '@/lib/seoJsonLd';
 import InlineWizard from '@/components/InlineWizard';
-import { WhatsAppCTA } from '@/components/WhatsAppCTA';
+import { Button } from '@/components/ui/button';
 import heroBg from '@/assets/hero-bg.avif';
 
 // Generic city sections that already take cityName/citySlug

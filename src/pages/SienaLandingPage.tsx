@@ -285,7 +285,9 @@ export default function SienaLandingPage() {
             </p>
           </div>
           <div className="text-center">
-            <WhatsAppCTA cityName="Siena" label="Richiedi un idraulico a Siena" size="lg" />
+            <Button size="lg" onClick={handleRequestClick} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6 h-auto shadow-lg">
+              Richiedi un idraulico a Siena
+            </Button>
           </div>
         </div>
       </section>

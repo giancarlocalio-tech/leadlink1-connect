@@ -436,6 +436,33 @@ export default function RequestPage() {
           </div>
         );
 
+      case 'password':
+        return (
+          <div className="space-y-5">
+            <p className="text-sm text-muted-foreground">
+              Crea una password per accedere alla tua area cliente, vedere lo stato della richiesta e chattare con gli idraulici che ti risponderanno.
+            </p>
+            <div>
+              <Label htmlFor="password" className="text-base font-medium mb-2 block">
+                Password *
+              </Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Almeno 6 caratteri"
+                value={formData.password}
+                onChange={(e) => updateFormData('password' as any, e.target.value)}
+                className="text-base"
+                autoFocus
+                minLength={6}
+              />
+              <p className="text-xs text-muted-foreground mt-2">
+                Useremo questa password per farti accedere all'area cliente con l'email <strong>{formData.clientEmail}</strong>.
+              </p>
+            </div>
+          </div>
+        );
+
       default:
         return null;
     }

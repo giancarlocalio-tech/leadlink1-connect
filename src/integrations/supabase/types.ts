@@ -457,6 +457,27 @@ export type Database = {
           },
         ]
       }
+      intervention_pricing: {
+        Row: {
+          intervention_type: Database["public"]["Enums"]["intervention_type"]
+          multiplier: number
+          tier: string
+          updated_at: string
+        }
+        Insert: {
+          intervention_type: Database["public"]["Enums"]["intervention_type"]
+          multiplier?: number
+          tier: string
+          updated_at?: string
+        }
+        Update: {
+          intervention_type?: Database["public"]["Enums"]["intervention_type"]
+          multiplier?: number
+          tier?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       italian_cities: {
         Row: {
           cap: string[]

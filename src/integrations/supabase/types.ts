@@ -194,6 +194,74 @@ export type Database = {
           },
         ]
       }
+      conversation_messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          read_by_recipient: boolean
+          sender_type: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          read_by_recipient?: boolean
+          sender_type: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          read_by_recipient?: boolean
+          sender_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          client_access_token: string
+          created_at: string
+          id: string
+          last_message_at: string
+          plumber_id: string
+          quote_amount_cents: number | null
+          request_id: string
+          updated_at: string
+        }
+        Insert: {
+          client_access_token?: string
+          created_at?: string
+          id?: string
+          last_message_at?: string
+          plumber_id: string
+          quote_amount_cents?: number | null
+          request_id: string
+          updated_at?: string
+        }
+        Update: {
+          client_access_token?: string
+          created_at?: string
+          id?: string
+          last_message_at?: string
+          plumber_id?: string
+          quote_amount_cents?: number | null
+          request_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       credit_packages: {
         Row: {
           amount_cents: number

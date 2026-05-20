@@ -274,6 +274,8 @@ export default function RequestPage() {
         return 'Accessibilità della zona';
       case 'contact':
         return 'I tuoi dati di contatto';
+      case 'password':
+        return 'Crea la tua password';
       default:
         return '';
     }

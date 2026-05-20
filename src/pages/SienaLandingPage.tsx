@@ -216,19 +216,20 @@ export default function SienaLandingPage() {
           </div>
 
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-lg">
-            Idraulico a Siena
+            Ricevi più preventivi
             <br />
-            <span className="text-white/90">Pronto Intervento in Centro Storico e Provincia</span>
+            <span className="text-white/90">da idraulici verificati a Siena — Gratis</span>
           </h1>
 
           <p className="text-lg md:text-xl text-white/90 mb-8 max-w-3xl mx-auto">
-            Trova subito un idraulico professionista a Siena, nelle contrade del centro UNESCO e in tutta la provincia.
-            <strong> 40+ tecnici verificati</strong>, arrivo medio in 35 minuti, preventivo gratuito e senza impegno.
+            Invia <strong>una sola richiesta</strong>: ricevi più preventivi da idraulici della tua Contrada o del tuo quartiere,
+            confronti i prezzi e scegli il migliore. <strong>100% gratuito</strong>, senza impegno, risposta in 15 minuti.
           </p>
 
           <Button size="lg" onClick={handleRequestClick} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6 h-auto shadow-lg">
-            Richiedi un idraulico a Siena
+            Ricevi preventivi gratis a Siena →
           </Button>
+          <p className="text-white/80 text-sm mt-3">Compila in 60 secondi · Nessuna registrazione</p>
 
           <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 mt-8">
             <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">

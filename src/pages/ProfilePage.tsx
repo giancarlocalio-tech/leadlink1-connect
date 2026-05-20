@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ArrowLeft, Save, X, CreditCard, ArrowUpCircle, XCircle, Loader2 } from 'lucide-react';
+import { ArrowLeft, Save, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,21 +10,11 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Layout } from '@/components/Layout';
 import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
-import { useSubscription } from '@/hooks/useSubscription';
-import { useStripeSubscription } from '@/hooks/useStripeSubscription';
-import { STRIPE_PLANS, type StripePlanType } from '@/lib/stripeConfig';
 import { toast } from 'sonner';
 import type { InterventionType, AvailabilityType } from '@/lib/types';
 import { INTERVENTION_LABELS, AVAILABILITY_LABELS } from '@/lib/types';
 import { CityAutocomplete, type ItalianCity } from '@/components/CityAutocomplete';
-import { Badge } from '@/components/ui/badge';
-import { supabase } from '@/integrations/supabase/client';
 
-const PLAN_LABELS: Record<string, string> = {
-  basic: 'Base',
-  medium: 'Medium',
-  premium: 'Premium',
-};
 
 const INTERVENTION_TYPES: InterventionType[] = [
   'installazione_sostituzione',
@@ -59,14 +49,8 @@ export default function ProfilePage() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const { profile, loading: profileLoading, updateProfile } = usePlumberProfile();
-  const { subscription, loading: subscriptionLoading } = useSubscription();
-  const { createCheckout } = useStripeSubscription();
-  const { session } = useAuth();
   const [isSaving, setIsSaving] = useState(false);
   const [newAreaValue, setNewAreaValue] = useState('');
-  const [isManagingSubscription, setIsManagingSubscription] = useState(false);
-  const [isUpgrading, setIsUpgrading] = useState(false);
-  const [isCancelling, setIsCancelling] = useState(false);
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -182,89 +166,6 @@ export default function ProfilePage() {
       toast.success('Profilo aggiornato');
       navigate('/dashboard');
     }
-  };
-
-  const handleOpenCustomerPortal = async () => {
-    setIsManagingSubscription(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('customer-portal', {
-        headers: {
-          Authorization: `Bearer ${session?.access_token}`,
-        },
-      });
-
-      if (error) {
-        toast.error('Errore nell\'apertura del portale');
-        return;
-      }
-
-      if (data?.url) {
-        window.open(data.url, '_blank');
-      }
-    } catch (err) {
-      console.error('Error opening portal:', err);
-      toast.error('Errore nell\'apertura del portale');
-    } finally {
-      setIsManagingSubscription(false);
-    }
-  };
-
-  const handleUpgradePlan = async (planType: StripePlanType) => {
-    setIsUpgrading(true);
-    try {
-      const url = await createCheckout(planType);
-      if (url) {
-        window.open(url, '_blank');
-      }
-    } finally {
-      setIsUpgrading(false);
-    }
-  };
-
-  const handleCancelSubscription = async () => {
-    if (!confirm('Sei sicuro di voler annullare il tuo abbonamento? Manterrai l\'accesso fino alla fine del periodo di fatturazione.')) {
-      return;
-    }
-
-    setIsCancelling(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('cancel-subscription', {
-        headers: {
-          Authorization: `Bearer ${session?.access_token}`,
-        },
-      });
-
-      if (error) {
-        toast.error('Errore durante la cancellazione dell\'abbonamento');
-        return;
-      }
-
-      if (data?.success) {
-        const cancelDate = data.cancel_at ? new Date(data.cancel_at).toLocaleDateString('it-IT') : '';
-        toast.success(`Abbonamento cancellato. Avrai accesso fino al ${cancelDate}`);
-        // Refresh page to update subscription status
-        window.location.reload();
-      }
-    } catch (err) {
-      console.error('Error cancelling subscription:', err);
-      toast.error('Errore durante la cancellazione dell\'abbonamento');
-    } finally {
-      setIsCancelling(false);
-    }
-  };
-
-  const getCurrentPlanType = (): StripePlanType | null => {
-    if (!subscription) return null;
-    return subscription.plan_type as StripePlanType;
-  };
-
-  const getAvailableUpgrades = (): StripePlanType[] => {
-    const currentPlan = getCurrentPlanType();
-    if (!currentPlan) return ['basic', 'medium', 'premium'];
-    
-    const planOrder: StripePlanType[] = ['basic', 'medium', 'premium'];
-    const currentIndex = planOrder.indexOf(currentPlan);
-    return planOrder.slice(currentIndex + 1);
   };
 
   if (authLoading || profileLoading) {
@@ -446,114 +347,6 @@ export default function ProfilePage() {
                     </div>
                   ))}
                 </div>
-              </div>
-
-              {/* Subscription Management */}
-              <div className="space-y-4 pt-4 border-t border-border">
-                <div className="flex items-center gap-2">
-                  <CreditCard className="h-5 w-5 text-primary" />
-                  <h2 className="font-semibold text-foreground">Gestione Abbonamento</h2>
-                </div>
-
-                {subscriptionLoading ? (
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    <span>Caricamento abbonamento...</span>
-                  </div>
-                ) : subscription ? (
-                  <div className="space-y-4">
-                    {/* Current plan info */}
-                    <div className="bg-accent/50 rounded-lg p-4 space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-muted-foreground">Piano attuale</span>
-                        <Badge variant="default" className="bg-primary">
-                          {PLAN_LABELS[subscription.plan_type] || subscription.plan_type}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-muted-foreground">Stato</span>
-                        <Badge variant={subscription.status === 'active' ? 'default' : 'secondary'}>
-                          {subscription.status === 'active' ? 'Attivo' : subscription.status === 'pending' ? 'In attesa' : subscription.status}
-                        </Badge>
-                      </div>
-                      {subscription.current_period_end && (
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-muted-foreground">Prossimo rinnovo</span>
-                          <span className="text-sm font-medium">
-                            {new Date(subscription.current_period_end).toLocaleDateString('it-IT')}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Upgrade options */}
-                    {getAvailableUpgrades().length > 0 && (
-                      <div className="space-y-2">
-                        <p className="text-sm text-muted-foreground">Passa a un piano superiore:</p>
-                        <div className="flex flex-wrap gap-2">
-                          {getAvailableUpgrades().map((planType) => (
-                            <Button
-                              key={planType}
-                              variant="outline"
-                              size="sm"
-                              disabled={isUpgrading}
-                              onClick={() => handleUpgradePlan(planType)}
-                              className="gap-2"
-                            >
-                              <ArrowUpCircle className="h-4 w-4" />
-                              {PLAN_LABELS[planType]} - €{STRIPE_PLANS[planType].price_monthly}/mese
-                            </Button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Manage subscription button */}
-                    <div className="flex flex-col sm:flex-row gap-2">
-                      <Button
-                        variant="outline"
-                        onClick={handleOpenCustomerPortal}
-                        disabled={isManagingSubscription}
-                        className="gap-2"
-                      >
-                        {isManagingSubscription ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <CreditCard className="h-4 w-4" />
-                        )}
-                        Gestisci Pagamento
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        onClick={handleCancelSubscription}
-                        disabled={isCancelling || subscription.status === 'cancelled'}
-                        className="gap-2"
-                      >
-                        {isCancelling ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <XCircle className="h-4 w-4" />
-                        )}
-                        {subscription.status === 'cancelled' ? 'Abbonamento Cancellato' : 'Annulla Abbonamento'}
-                      </Button>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      {subscription.status === 'cancelled' 
-                        ? 'Il tuo abbonamento è stato cancellato. Avrai accesso fino alla fine del periodo di fatturazione.'
-                        : 'Gestisci il tuo metodo di pagamento tramite il portale Stripe.'}
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <p className="text-sm text-muted-foreground">
-                      Non hai un abbonamento attivo.
-                    </p>
-                    <Button onClick={() => navigate('/abbonamento')} className="gap-2">
-                      <CreditCard className="h-4 w-4" />
-                      Scegli un piano
-                    </Button>
-                  </div>
-                )}
               </div>
 
               {/* Save button */}

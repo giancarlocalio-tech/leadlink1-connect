@@ -630,13 +630,13 @@ export default function SienaLandingPage() {
       {/* FINAL CTA */}
       <section className="py-20 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-4xl font-bold mb-4">Hai bisogno di un idraulico a Siena adesso?</h2>
+          <h2 className="text-2xl md:text-4xl font-bold mb-4">Pronto a ricevere i tuoi preventivi gratis?</h2>
           <p className="text-primary-foreground/90 text-lg mb-8 max-w-2xl mx-auto">
-            Non aspettare che il problema peggiori. Richiedi subito un preventivo gratuito e ricevi una risposta in
-            pochi minuti da un idraulico della tua zona di Siena.
+            Compila la richiesta in 60 secondi: ti contattano più idraulici verificati della tua zona di Siena,
+            confronti i preventivi e scegli senza impegno.
           </p>
           <Button size="lg" onClick={handleRequestClick} className="bg-white hover:bg-white/90 text-primary font-bold text-lg px-8 py-6 h-auto shadow-lg">
-            Richiedi intervento ora
+            Ricevi preventivi gratis →
           </Button>
           <p className="text-primary-foreground/70 text-sm mt-4">
             ✓ Gratuito ✓ Senza impegno ✓ Risposta in 15 minuti

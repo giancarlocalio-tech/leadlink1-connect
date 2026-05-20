@@ -41,6 +41,8 @@ const initials = (name?: string | null) =>
 
 export default function ClientChatPage() {
   const { token } = useParams<{ token: string }>();
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [info, setInfo] = useState<ConversationInfo | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);

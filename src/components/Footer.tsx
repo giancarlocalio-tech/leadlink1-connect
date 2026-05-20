@@ -18,9 +18,15 @@ export function Footer() {
                 Hai un'emergenza idraulica?
               </h2>
               <p className="text-background/70 mt-2 max-w-xl">
-                Scrivici su WhatsApp. Risposta media in 8 minuti, preventivo gratis e nessun obbligo.
+                Invia la tua richiesta e ricevi più preventivi gratis da idraulici verificati della tua zona. Senza impegno, risposta in pochi minuti.
               </p>
             </div>
+            <Link
+              to="/richiesta"
+              className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-6 py-4 rounded-2xl transition-all hover:-translate-y-0.5 shadow-[0_10px_30px_-10px_hsl(var(--primary)/0.5)] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-foreground"
+            >
+              Ricevi preventivi gratis →
+            </Link>
           </div>
 
           {/* Trust micro-row */}

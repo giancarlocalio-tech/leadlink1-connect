@@ -170,7 +170,9 @@ export function TrialRequestCard({
     }
   };
 
-  const unlockCostCents = UNLOCK_COSTS_CENTS[request.urgency];
+  const baseUnlockCostCents = UNLOCK_COSTS_CENTS[request.urgency];
+  const phoneAllowed = request.phone_contact_allowed !== false;
+  const unlockCostCents = phoneAllowed ? baseUnlockCostCents : Math.round(baseUnlockCostCents * 0.7);
   const trialExhausted = freeRequestsRemaining <= 0;
   const hasInsufficientBalance = trialExhausted && balanceCents < unlockCostCents;
   const isProcessing = claiming || unlocking;

@@ -60,7 +60,7 @@ export function Footer() {
             <h3 className="font-bold text-background mb-5 text-sm uppercase tracking-wider">Risorse</h3>
             <ul className="space-y-3">
               <li><Link to="/" className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">Home</Link></li>
-              <li><a href={buildWhatsAppUrl()} target="_blank" rel="noopener noreferrer" className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">Contattaci su WhatsApp</a></li>
+              <li><Link to="/contatti" className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">Contattaci</Link></li>
               <li><Link to="/guide" className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">Guide e Consigli</Link></li>
               <li><Link to="/per-idraulici" className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">Sei un idraulico?</Link></li>
               {KEYWORD_PAGES.slice(0, 4).map((page) => (

@@ -196,6 +196,7 @@ export type Database = {
       }
       credit_packages: {
         Row: {
+          amount_cents: number
           created_at: string
           credits: number
           id: string
@@ -208,6 +209,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          amount_cents?: number
           created_at?: string
           credits: number
           id?: string
@@ -220,6 +222,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          amount_cents?: number
           created_at?: string
           credits?: number
           id?: string
@@ -236,7 +239,9 @@ export type Database = {
       credit_transactions: {
         Row: {
           amount_cents: number | null
+          amount_cents_delta: number
           balance_after: number
+          balance_after_cents: number
           created_at: string
           credits: number
           description: string | null
@@ -250,7 +255,9 @@ export type Database = {
         }
         Insert: {
           amount_cents?: number | null
+          amount_cents_delta?: number
           balance_after: number
+          balance_after_cents?: number
           created_at?: string
           credits: number
           description?: string | null
@@ -264,7 +271,9 @@ export type Database = {
         }
         Update: {
           amount_cents?: number | null
+          amount_cents_delta?: number
           balance_after?: number
+          balance_after_cents?: number
           created_at?: string
           credits?: number
           description?: string | null
@@ -413,29 +422,38 @@ export type Database = {
       plumber_credits: {
         Row: {
           balance: number
+          balance_cents: number
           created_at: string
           id: string
           plumber_id: string
           total_purchased: number
+          total_purchased_cents: number
           total_spent: number
+          total_spent_cents: number
           updated_at: string
         }
         Insert: {
           balance?: number
+          balance_cents?: number
           created_at?: string
           id?: string
           plumber_id: string
           total_purchased?: number
+          total_purchased_cents?: number
           total_spent?: number
+          total_spent_cents?: number
           updated_at?: string
         }
         Update: {
           balance?: number
+          balance_cents?: number
           created_at?: string
           id?: string
           plumber_id?: string
           total_purchased?: number
+          total_purchased_cents?: number
           total_spent?: number
+          total_spent_cents?: number
           updated_at?: string
         }
         Relationships: [
@@ -782,6 +800,7 @@ export type Database = {
       }
       unlock_costs: {
         Row: {
+          cost_cents: number
           created_at: string
           credits_cost: number
           id: string
@@ -789,6 +808,7 @@ export type Database = {
           urgency: string
         }
         Insert: {
+          cost_cents?: number
           created_at?: string
           credits_cost: number
           id?: string
@@ -796,6 +816,7 @@ export type Database = {
           urgency: string
         }
         Update: {
+          cost_cents?: number
           created_at?: string
           credits_cost?: number
           id?: string
@@ -1016,6 +1037,18 @@ export type Database = {
         Args: { p_plumber_id: string; p_request_id: string }
         Returns: boolean
       }
+      add_balance: {
+        Args: {
+          p_amount_cents: number
+          p_description?: string
+          p_plumber_id: string
+          p_stripe_payment_id: string
+        }
+        Returns: {
+          new_balance_cents: number
+          success: boolean
+        }[]
+      }
       assign_request_to_plumber: {
         Args: { p_plumber_id: string; p_request_id: string }
         Returns: boolean
@@ -1072,6 +1105,18 @@ export type Database = {
           client_name: string
           client_phone: string
           message: string
+          success: boolean
+        }[]
+      }
+      unlock_contact_with_balance: {
+        Args: { p_plumber_id: string; p_request_id: string }
+        Returns: {
+          amount_spent_cents: number
+          client_email: string
+          client_name: string
+          client_phone: string
+          message: string
+          new_balance_cents: number
           success: boolean
         }[]
       }

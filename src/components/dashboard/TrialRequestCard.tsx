@@ -287,15 +287,15 @@ export function TrialRequestCard({
                     <Lock className="h-3.5 w-3.5" />
                     Contatto bloccato
                   </span>
-                  {hasInsufficientCredits ? (
+                  {hasInsufficientBalance ? (
                     <p className="text-xs flex items-center gap-1 mt-0.5 text-destructive">
                       <Coins className="h-3 w-3" />
-                      Crediti insufficienti ({creditBalance}/{unlockCost})
+                      Saldo insufficiente ({formatEuroFromCents(creditBalance)} / {formatEuroFromCents(unlockCostCents)})
                     </p>
                   ) : (
                     <p className="text-xs flex items-center gap-1 mt-0.5">
                       <Coins className="h-3 w-3" />
-                      Servono <span className="font-semibold text-primary">{unlockCost} crediti</span> per sbloccare
+                      Servono <span className="font-semibold text-primary">{formatEuroFromCents(unlockCostCents)}</span> per sbloccare
                     </p>
                   )}
                 </>
@@ -308,10 +308,10 @@ export function TrialRequestCard({
             </div>
             <Button
               onClick={trialExhausted ? handleUnlockWithCredits : handleClaim}
-              disabled={isProcessing || (trialExhausted && (!onUnlockWithCredits || hasInsufficientCredits))}
+              disabled={isProcessing || (trialExhausted && (!onUnlockWithCredits || hasInsufficientBalance))}
               size="sm"
               className="gap-2 shrink-0"
-              variant={hasInsufficientCredits ? "outline" : "default"}
+              variant={hasInsufficientBalance ? "outline" : "default"}
             >
               {isProcessing ? (
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -320,10 +320,10 @@ export function TrialRequestCard({
               ) : (
                 <Zap className="h-4 w-4" />
               )}
-              {hasInsufficientCredits 
-                ? 'Crediti insufficienti' 
+              {hasInsufficientBalance 
+                ? 'Saldo insufficiente' 
                 : trialExhausted 
-                  ? `Sblocca (${unlockCost} crediti)` 
+                  ? `Sblocca (${formatEuroFromCents(unlockCostCents)})` 
                   : 'Accetta ora'}
             </Button>
           </div>

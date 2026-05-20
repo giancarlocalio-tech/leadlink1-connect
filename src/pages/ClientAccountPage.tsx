@@ -181,8 +181,11 @@ export default function ClientAccountPage() {
     toast.success('Disconnesso');
   };
 
-  // Role-resolution skeleton: avoid flashing the wrong UI before role is known.
-  if (authLoading || (user && !plumberFetched) || (user && plumberProfile)) {
+  // Only block on auth resolution. If the user turns out to be a plumber, the
+  // redirect effect above will navigate them away — we don't want to wait on
+  // that lookup here because on mobile it sometimes hangs and leaves the page
+  // stuck on the spinner.
+  if (authLoading || !user || plumberProfile) {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">

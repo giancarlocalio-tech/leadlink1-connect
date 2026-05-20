@@ -1,6 +1,5 @@
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import {
-  LayoutDashboard,
   Inbox,
   MessageSquare,
   Wallet,
@@ -28,7 +27,6 @@ import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import { formatEuro } from '@/lib/currency';
 
 const menuItems = [
-  { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
   { title: 'Opportunità', url: '/dashboard/richieste', icon: Inbox },
   { title: 'Preventivi', url: '/dashboard/preventivi', icon: MessageSquare },
   { title: 'Profilo', url: '/dashboard/profilo', icon: User },

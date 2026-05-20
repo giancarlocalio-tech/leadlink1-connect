@@ -68,9 +68,13 @@ export function TrialRequestCard({
   balanceCents = 0,
   onAccepted
 }: TrialRequestCardProps) {
+  const navigate = useNavigate();
   const [claimResult, setClaimResult] = useState<ClaimResult | null>(null);
   const [creditUnlockResult, setCreditUnlockResult] = useState<UnlockWithCreditsResult | null>(null);
   const [unlocking, setUnlocking] = useState(false);
+  const [showQuoteForm, setShowQuoteForm] = useState(false);
+  const [priceStr, setPriceStr] = useState('');
+  const [quoteMessage, setQuoteMessage] = useState('');
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('it-IT', {
@@ -100,20 +104,48 @@ export function TrialRequestCard({
     }
   };
 
-  const handleUnlockWithCredits = async () => {
+  // Parse "12,50" or "12.50" → 1250 cents
+  const parsePriceCents = (s: string): number | null => {
+    const cleaned = s.replace(/\s/g, '').replace(',', '.');
+    if (!/^\d+(\.\d{1,2})?$/.test(cleaned)) return null;
+    const n = parseFloat(cleaned);
+    if (!isFinite(n) || n <= 0) return null;
+    return Math.round(n * 100);
+  };
+
+  const priceCents = parsePriceCents(priceStr);
+  const quoteValid = !!priceCents && quoteMessage.trim().length >= 10;
+
+  const handleSendQuote = async () => {
     if (!onUnlockWithCredits) return;
-    
+    if (!priceCents) {
+      toast.error('Inserisci un prezzo valido (es. 120 o 89,50)');
+      return;
+    }
+    if (quoteMessage.trim().length < 10) {
+      toast.error('Il preventivo deve contenere almeno 10 caratteri');
+      return;
+    }
+
     setUnlocking(true);
     try {
-      const result = await onUnlockWithCredits(request.id);
-      if (result.success) {
-        setCreditUnlockResult(result);
-        onAccepted?.();
-      } else {
-        // Show error via toast (imported from sonner)
-        const { toast } = await import('sonner');
+      // 1) Unlock the contact (debits balance)
+      const result = await onUnlockWithCredits(request.id, {
+        quote_amount_cents: priceCents,
+        quote_message: quoteMessage.trim(),
+      });
+
+      if (!result.success) {
         toast.error(result.message);
+        return;
       }
+
+      setCreditUnlockResult(result);
+      onAccepted?.();
+      toast.success('Preventivo inviato al cliente!');
+
+      // 2) Redirect to Preventivi to continue conversation
+      setTimeout(() => navigate('/dashboard/preventivi'), 1200);
     } finally {
       setUnlocking(false);
     }

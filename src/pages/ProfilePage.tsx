@@ -15,11 +15,6 @@ import type { InterventionType, AvailabilityType } from '@/lib/types';
 import { INTERVENTION_LABELS, AVAILABILITY_LABELS } from '@/lib/types';
 import { CityAutocomplete, type ItalianCity } from '@/components/CityAutocomplete';
 
-const PLAN_LABELS: Record<string, string> = {
-  basic: 'Base',
-  medium: 'Medium',
-  premium: 'Premium',
-};
 
 const INTERVENTION_TYPES: InterventionType[] = [
   'installazione_sostituzione',
@@ -54,14 +49,8 @@ export default function ProfilePage() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const { profile, loading: profileLoading, updateProfile } = usePlumberProfile();
-  const { subscription, loading: subscriptionLoading } = useSubscription();
-  const { createCheckout } = useStripeSubscription();
-  const { session } = useAuth();
   const [isSaving, setIsSaving] = useState(false);
   const [newAreaValue, setNewAreaValue] = useState('');
-  const [isManagingSubscription, setIsManagingSubscription] = useState(false);
-  const [isUpgrading, setIsUpgrading] = useState(false);
-  const [isCancelling, setIsCancelling] = useState(false);
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -177,89 +166,6 @@ export default function ProfilePage() {
       toast.success('Profilo aggiornato');
       navigate('/dashboard');
     }
-  };
-
-  const handleOpenCustomerPortal = async () => {
-    setIsManagingSubscription(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('customer-portal', {
-        headers: {
-          Authorization: `Bearer ${session?.access_token}`,
-        },
-      });
-
-      if (error) {
-        toast.error('Errore nell\'apertura del portale');
-        return;
-      }
-
-      if (data?.url) {
-        window.open(data.url, '_blank');
-      }
-    } catch (err) {
-      console.error('Error opening portal:', err);
-      toast.error('Errore nell\'apertura del portale');
-    } finally {
-      setIsManagingSubscription(false);
-    }
-  };
-
-  const handleUpgradePlan = async (planType: StripePlanType) => {
-    setIsUpgrading(true);
-    try {
-      const url = await createCheckout(planType);
-      if (url) {
-        window.open(url, '_blank');
-      }
-    } finally {
-      setIsUpgrading(false);
-    }
-  };
-
-  const handleCancelSubscription = async () => {
-    if (!confirm('Sei sicuro di voler annullare il tuo abbonamento? Manterrai l\'accesso fino alla fine del periodo di fatturazione.')) {
-      return;
-    }
-
-    setIsCancelling(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('cancel-subscription', {
-        headers: {
-          Authorization: `Bearer ${session?.access_token}`,
-        },
-      });
-
-      if (error) {
-        toast.error('Errore durante la cancellazione dell\'abbonamento');
-        return;
-      }
-
-      if (data?.success) {
-        const cancelDate = data.cancel_at ? new Date(data.cancel_at).toLocaleDateString('it-IT') : '';
-        toast.success(`Abbonamento cancellato. Avrai accesso fino al ${cancelDate}`);
-        // Refresh page to update subscription status
-        window.location.reload();
-      }
-    } catch (err) {
-      console.error('Error cancelling subscription:', err);
-      toast.error('Errore durante la cancellazione dell\'abbonamento');
-    } finally {
-      setIsCancelling(false);
-    }
-  };
-
-  const getCurrentPlanType = (): StripePlanType | null => {
-    if (!subscription) return null;
-    return subscription.plan_type as StripePlanType;
-  };
-
-  const getAvailableUpgrades = (): StripePlanType[] => {
-    const currentPlan = getCurrentPlanType();
-    if (!currentPlan) return ['basic', 'medium', 'premium'];
-    
-    const planOrder: StripePlanType[] = ['basic', 'medium', 'premium'];
-    const currentIndex = planOrder.indexOf(currentPlan);
-    return planOrder.slice(currentIndex + 1);
   };
 
   if (authLoading || profileLoading) {

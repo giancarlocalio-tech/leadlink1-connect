@@ -281,15 +281,9 @@ function DashboardContent() {
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
       <div className="space-y-6">
-        {/* Trial Paywall - Show when trial requests are exhausted */}
-        {trialExhausted && (
-          <TrialPaywall freeRequestsRemaining={0} />
-        )}
+        {/* Low Balance Paywall */}
+        <TrialPaywall balanceCents={credits?.balance_cents ?? 0} />
 
-        {/* Trial Progress Banner - Show when user still has free requests */}
-        {isInTrialMode && !trialExhausted && (
-          <TrialPaywall freeRequestsRemaining={freeRequestsRemaining} />
-        )}
 
         {/* Assigned Requests - Priority Section (FIRST - requires immediate action) */}
         {!trialExhausted && assignedRequests.length > 0 && (
@@ -376,10 +370,8 @@ function DashboardContent() {
           {/* Credits Card */}
           <div className="lg:col-span-1">
             <CreditsCard
-              balance={credits?.balance ?? 0}
-              freeRequestsRemaining={freeRequestsRemaining}
-              isTrial={isInTrialMode}
-              onBuyCredits={() => navigate('/dashboard/crediti')}
+              balanceCents={credits?.balance_cents ?? 0}
+              onBuyCredits={() => navigate('/dashboard/crediti/ricarica')}
             />
           </div>
 

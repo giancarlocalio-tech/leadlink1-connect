@@ -53,10 +53,10 @@ export function Header() {
                     </Button>
                   </Link>
                 )}
-                <Link to="/dashboard">
+                <Link to={dashboardHref}>
                   <Button variant="ghost" size="sm">
                     <User className="h-4 w-4 sm:mr-2" />
-                    <span className="hidden sm:inline">Dashboard</span>
+                    <span className="hidden sm:inline">{dashboardLabel}</span>
                   </Button>
                 </Link>
                 <Button variant="outline" size="sm" onClick={handleSignOut}>

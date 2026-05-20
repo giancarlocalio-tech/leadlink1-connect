@@ -1,7 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Wrench, Mail, Lock, User, Phone, Building, Users, Clock, Shield, Star, Zap, X, MapPin, Check, ArrowLeft, Briefcase, CalendarDays } from 'lucide-react';
+import {
+  Wrench, Mail, Lock, User, Phone, Building, Users, Clock, Shield,
+  Star, Zap, X, MapPin, Check, ArrowLeft, ArrowRight, Briefcase,
+  CalendarDays, Sparkles, CheckCircle2,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,74 +13,30 @@ import { Layout } from '@/components/Layout';
 import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import { toast } from 'sonner';
-import { CityAutocomplete, ItalianCity } from '@/components/CityAutocomplete';
+import { CityAutocomplete } from '@/components/CityAutocomplete';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { supabase } from '@/integrations/supabase/client';
 import type { InterventionType, AvailabilityType } from '@/lib/types';
 import { INTERVENTION_LABELS, AVAILABILITY_LABELS } from '@/lib/types';
 
+type AuthMode = 'register' | 'login' | 'forgot-password' | 'reset-password';
 
-type AuthMode = 'login' | 'register' | 'select-plan' | 'register-form' | 'forgot-password' | 'reset-password';
-type PlanType = 'basic' | 'medium' | 'premium';
+// Siena palette (azzurro acqua) — applied locally via CSS vars override
+const SIENA_THEME = {
+  ['--primary' as any]: '199 89% 48%',
+  ['--primary-foreground' as any]: '0 0% 100%',
+  ['--accent' as any]: '199 89% 94%',
+  ['--accent-foreground' as any]: '215 55% 20%',
+  ['--ring' as any]: '199 89% 48%',
+  ['--secondary' as any]: '199 70% 96%',
+  ['--secondary-foreground' as any]: '215 55% 20%',
+};
 
-interface PlanInfo {
-  id: PlanType;
-  name: string;
-  price: number;
-  trialPrice: number;
-  trialLabel?: string;
-  description: string;
-  features: string[];
-  recommended?: boolean;
-}
-
-const PLANS: PlanInfo[] = [
-  {
-    id: 'basic',
-    name: 'Basic',
-    price: 29.99,
-    trialPrice: null,
-    trialLabel: null,
-    description: 'Per iniziare a ricevere clienti',
-    features: [
-      'Fino a 3 contatti al mese',
-      'Richieste in tempo reale',
-      'Notifiche email',
-      'Profilo professionale'
-    ]
-  },
-  {
-    id: 'medium',
-    name: 'Medium',
-    price: 49.99,
-    trialPrice: 9.99,
-    description: 'Per professionisti in crescita',
-    features: [
-      '5 contatti esclusivi al mese',
-      'Tutte le urgenze',
-      'Priorità sulle richieste',
-      'Notifiche istantanee',
-      'Badge "Verificato"'
-    ],
-    recommended: true
-  },
-  {
-    id: 'premium',
-    name: 'Premium',
-    price: 99.99,
-    trialPrice: 19.99,
-    description: 'Per i migliori professionisti',
-    features: [
-      'Contatti illimitati',
-      'Massima priorità',
-      'Esclusività totale',
-      'Supporto dedicato',
-      'Statistiche avanzate',
-      'Badge "Top Pro"'
-    ]
-  }
+const PERKS = [
+  { icon: Zap, label: 'Notifiche istantanee' },
+  { icon: MapPin, label: 'Solo nella tua zona' },
+  { icon: Shield, label: 'Paghi solo i contatti che sblocchi' },
+  { icon: Star, label: 'Costruisci la tua reputazione' },
 ];
 
 export default function AuthPage() {
@@ -84,8 +44,7 @@ export default function AuthPage() {
   const [searchParams] = useSearchParams();
   const { user, loading: authLoading, signIn, signUp, resetPassword, updatePassword } = useAuth();
   const { profile, loading: profileLoading, createProfile } = usePlumberProfile();
-  
-  // Determine initial mode from URL
+
   const getInitialMode = (): AuthMode => {
     const urlMode = searchParams.get('mode');
     if (urlMode === 'login') return 'login';
@@ -93,19 +52,20 @@ export default function AuthPage() {
     if (urlMode === 'reset-password') return 'reset-password';
     return 'register';
   };
-  
+
   const [mode, setMode] = useState<AuthMode>(getInitialMode());
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Login form
+  // Multi-step register: 1 = account, 2 = servizi/zone
+  const [step, setStep] = useState<1 | 2>(1);
+
+  // Login
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
-  
-  // Forgot password form
+
+  // Forgot/reset
   const [forgotEmail, setForgotEmail] = useState('');
   const [emailSent, setEmailSent] = useState(false);
-  
-  // Reset password form
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
@@ -121,43 +81,26 @@ export default function AuthPage() {
     interventionTypes: [] as InterventionType[],
     availability: [] as AvailabilityType[],
   });
-
-  
-  // Selected plan for registration
-  const [selectedPlan, setSelectedPlan] = useState<PlanType>('medium');
-
-  // Service areas (cities) for registration
   const [serviceAreas, setServiceAreas] = useState<string[]>([]);
 
   useEffect(() => {
-    // Don't redirect if user is resetting password
     if (mode === 'reset-password') return;
-    
     if (user && !authLoading && !profileLoading) {
-      // Check for returnUrl parameter to redirect back to original page
       const returnUrl = searchParams.get('returnUrl');
-      if (returnUrl) {
-        navigate(decodeURIComponent(returnUrl));
-      } else {
-        navigate('/dashboard');
-      }
+      if (returnUrl) navigate(decodeURIComponent(returnUrl));
+      else navigate('/dashboard');
     }
   }, [user, profile, authLoading, profileLoading, navigate, mode, searchParams]);
 
+  // --- Handlers ---
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!forgotEmail) {
-      toast.error('Inserisci la tua email');
-      return;
-    }
-
+    if (!forgotEmail) return toast.error('Inserisci la tua email');
     setIsSubmitting(true);
     const { error } = await resetPassword(forgotEmail);
     setIsSubmitting(false);
-
-    if (error) {
-      toast.error('Errore durante l\'invio dell\'email');
-    } else {
+    if (error) toast.error("Errore durante l'invio dell'email");
+    else {
       setEmailSent(true);
       toast.success('Email inviata! Controlla la tua casella di posta');
     }
@@ -165,38 +108,17 @@ export default function AuthPage() {
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!newPassword || !confirmNewPassword) {
-      toast.error('Compila tutti i campi');
-      return;
+    if (!newPassword || !confirmNewPassword) return toast.error('Compila tutti i campi');
+    if (newPassword !== confirmNewPassword) return toast.error('Le password non corrispondono');
+    if (newPassword.length < 12) return toast.error('La password deve essere di almeno 12 caratteri');
+    if (!/[A-Z]/.test(newPassword) || !/[a-z]/.test(newPassword) || !/[0-9]/.test(newPassword)) {
+      return toast.error('La password deve includere maiuscole, minuscole e numeri');
     }
-
-    if (newPassword !== confirmNewPassword) {
-      toast.error('Le password non corrispondono');
-      return;
-    }
-
-    if (newPassword.length < 12) {
-      toast.error('La password deve essere di almeno 12 caratteri');
-      return;
-    }
-
-    const hasUpper = /[A-Z]/.test(newPassword);
-    const hasLower = /[a-z]/.test(newPassword);
-    const hasNumber = /[0-9]/.test(newPassword);
-
-    if (!(hasUpper && hasLower && hasNumber)) {
-      toast.error('La password deve includere maiuscole, minuscole e numeri');
-      return;
-    }
-
     setIsSubmitting(true);
     const { error } = await updatePassword(newPassword);
     setIsSubmitting(false);
-
-    if (error) {
-      toast.error('Errore durante l\'aggiornamento della password');
-    } else {
+    if (error) toast.error("Errore durante l'aggiornamento della password");
+    else {
       toast.success('Password aggiornata con successo!');
       navigate('/dashboard');
     }
@@ -204,25 +126,16 @@ export default function AuthPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!loginEmail || !loginPassword) {
-      toast.error('Inserisci email e password');
-      return;
-    }
-
+    if (!loginEmail || !loginPassword) return toast.error('Inserisci email e password');
     setIsSubmitting(true);
     const { error } = await signIn(loginEmail, loginPassword);
     setIsSubmitting(false);
-
     if (error) {
-      if (error.message.includes('Invalid login credentials')) {
-        toast.error('Credenziali non valide');
-      } else {
-        toast.error('Errore durante il login');
-      }
+      if (error.message.includes('Invalid login credentials')) toast.error('Credenziali non valide');
+      else toast.error('Errore durante il login');
     }
   };
 
-  // Store pending profile data to create after auth state updates
   const [pendingProfileData, setPendingProfileData] = useState<{
     full_name: string;
     business_name: string;
@@ -233,16 +146,14 @@ export default function AuthPage() {
     intervention_types: InterventionType[];
     availability: AvailabilityType[];
     service_areas: string[];
-    plan_type: PlanType;
+    plan_type: 'basic';
   } | null>(null);
 
-
   useEffect(() => {
-    const createPendingProfile = async () => {
+    const run = async () => {
       if (user && pendingProfileData && !profile) {
         const { plan_type, ...profileData } = pendingProfileData;
-        const { error: profileError, data: newProfile } = await createProfile(profileData);
-        
+        const { error: profileError } = await createProfile(profileData);
         if (profileError) {
           console.error('Profile creation error:', profileError);
           toast.error('Errore durante la creazione del profilo');
@@ -250,72 +161,48 @@ export default function AuthPage() {
           setIsSubmitting(false);
           return;
         }
-
-        // Welcome email is now sent automatically inside createProfile
-
         setPendingProfileData(null);
         setIsSubmitting(false);
-        
-        // Redirect to dashboard
-        toast.success('Registrazione completata! Ricarica il tuo saldo per iniziare a sbloccare contatti.');
+        toast.success('Registrazione completata! Ricarica il saldo per iniziare a sbloccare contatti.');
         navigate('/dashboard');
       }
     };
-
-    createPendingProfile();
+    run();
   }, [user, pendingProfileData, profile, createProfile, navigate]);
 
-  const handleRegister = async (e?: React.FormEvent | React.MouseEvent) => {
-    if (e) e.preventDefault();
-    
-    // Validation already done in register-form step, but double check
-    if (!registerData.fullName || !registerData.businessName || !registerData.email || 
-        !registerData.password || !registerData.phone || !registerData.mainCity) {
+  const validateStep1 = (): boolean => {
+    if (!registerData.fullName || !registerData.businessName || !registerData.email ||
+        !registerData.phone || !registerData.mainCity) {
       toast.error('Compila tutti i campi obbligatori');
-      return;
+      return false;
     }
-
-    if (serviceAreas.length === 0) {
-      toast.error('Aggiungi almeno una città di lavoro');
-      return;
+    if (!registerData.password || !registerData.confirmPassword) {
+      toast.error('Inserisci e conferma la password');
+      return false;
     }
-
-    if (registerData.interventionTypes.length === 0) {
-      toast.error('Seleziona almeno un tipo di intervento');
-      return;
-    }
-
-    if (registerData.availability.length === 0) {
-      toast.error('Seleziona almeno una disponibilità');
-      return;
-    }
-
-
     if (registerData.password !== registerData.confirmPassword) {
       toast.error('Le password non corrispondono');
-      return;
+      return false;
     }
+    if (registerData.password.length < 12) {
+      toast.error('La password deve essere di almeno 12 caratteri');
+      return false;
+    }
+    if (!/[A-Z]/.test(registerData.password) || !/[a-z]/.test(registerData.password) || !/[0-9]/.test(registerData.password)) {
+      toast.error('La password deve includere maiuscole, minuscole e numeri');
+      return false;
+    }
+    return true;
+  };
 
-     if (registerData.password.length < 12) {
-       toast.error('La password deve essere di almeno 12 caratteri');
-       return;
-     }
-
-     const hasUpper = /[A-Z]/.test(registerData.password);
-     const hasLower = /[a-z]/.test(registerData.password);
-     const hasNumber = /[0-9]/.test(registerData.password);
-
-     if (!(hasUpper && hasLower && hasNumber)) {
-       toast.error('La password deve includere maiuscole, minuscole e numeri');
-       return;
-     }
+  const handleRegister = async () => {
+    if (!validateStep1()) { setStep(1); return; }
+    if (registerData.interventionTypes.length === 0) return toast.error('Seleziona almeno un tipo di intervento');
+    if (registerData.availability.length === 0) return toast.error('Seleziona almeno una disponibilità');
 
     setIsSubmitting(true);
-
-    // Store the profile data to be created after auth state updates
-    // Ensure main_city is always included in service_areas
-    const finalServiceAreas = serviceAreas.includes(registerData.mainCity) 
-      ? serviceAreas 
+    const finalServiceAreas = serviceAreas.includes(registerData.mainCity)
+      ? serviceAreas
       : [registerData.mainCity, ...serviceAreas];
 
     setPendingProfileData({
@@ -328,32 +215,26 @@ export default function AuthPage() {
       intervention_types: registerData.interventionTypes,
       availability: registerData.availability,
       service_areas: finalServiceAreas,
-      plan_type: selectedPlan,
+      plan_type: 'basic',
     });
 
-
-    // Create the auth user
     const { error: signUpError } = await signUp(registerData.email, registerData.password);
-
     if (signUpError) {
       setIsSubmitting(false);
       setPendingProfileData(null);
-      if (signUpError.message.includes('already registered')) {
-        toast.error('Questa email è già registrata');
-      } else {
-        toast.error('Errore durante la registrazione');
-      }
-      return;
+      if (signUpError.message.includes('already registered')) toast.error('Questa email è già registrata');
+      else toast.error('Errore durante la registrazione');
     }
-    
-    // The profile will be created by the useEffect when auth state updates
   };
+
+  const allInterventions = useMemo(() => Object.entries(INTERVENTION_LABELS), []);
+  const allAvailability = useMemo(() => Object.entries(AVAILABILITY_LABELS), []);
 
   if (authLoading) {
     return (
       <Layout>
         <div className="py-16 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
         </div>
       </Layout>
     );
@@ -367,684 +248,390 @@ export default function AuthPage() {
         <link rel="canonical" href="https://www.idraulicisubito.com/auth" />
         <meta name="robots" content="noindex, follow" />
       </Helmet>
-      <div className="py-8 md:py-12">
-        <div className="container mx-auto px-4">
+
+      <div style={SIENA_THEME} className="relative">
+        {/* Soft background gradient */}
+        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-secondary/40 via-background to-accent/30 pointer-events-none" />
+
+        <div className="container mx-auto px-4 py-8 md:py-14">
+          {/* ============ REGISTER ============ */}
           {mode === 'register' && (
-            <div className="max-w-4xl mx-auto">
-              {/* Hero section for registration */}
-              <div className="text-center mb-10">
-                <div className="inline-flex items-center gap-2 bg-primary/20 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
-                  <Zap className="h-4 w-4" />
-                  Iscrizione gratuita
-                </div>
-                <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                  Sei un idraulico? Trova subito nuovi clienti
-                </h1>
-                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  Iscrizione gratuita. Ricarichi il saldo quando vuoi e paghi solo i contatti che sblocchi.
-                </p>
-              </div>
-
-              {/* Benefits grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
-                <div className="bg-card border border-border rounded-xl p-5 hover:shadow-lg transition-shadow">
-                  <div className="bg-primary/10 rounded-lg w-10 h-10 flex items-center justify-center mb-3">
-                    <Users className="h-5 w-5 text-primary" />
-                  </div>
-                  <h3 className="font-semibold text-foreground mb-1 text-sm">Clienti qualificati</h3>
-                  <p className="text-xs text-muted-foreground">
-                    Ricevi solo richieste di clienti reali nella tua zona.
-                  </p>
-                </div>
-
-                <div className="bg-card border border-border rounded-xl p-5 hover:shadow-lg transition-shadow">
-                  <div className="bg-primary/10 rounded-lg w-10 h-10 flex items-center justify-center mb-3">
-                    <MapPin className="h-5 w-5 text-primary" />
-                  </div>
-                  <h3 className="font-semibold text-foreground mb-1 text-sm">Solo nella tua zona</h3>
-                  <p className="text-xs text-muted-foreground">
-                    Definisci le aree in cui lavori e ricevi richieste pertinenti.
-                  </p>
-                </div>
-
-                <div className="bg-card border border-border rounded-xl p-5 hover:shadow-lg transition-shadow">
-                  <div className="bg-primary/10 rounded-lg w-10 h-10 flex items-center justify-center mb-3">
-                    <Clock className="h-5 w-5 text-primary" />
-                  </div>
-                  <h3 className="font-semibold text-foreground mb-1 text-sm">Notifiche istantanee</h3>
-                  <p className="text-xs text-muted-foreground">
-                    Ricevi le richieste in tempo reale e rispondi prima degli altri.
-                  </p>
-                </div>
-
-                <div className="bg-card border border-border rounded-xl p-5 hover:shadow-lg transition-shadow">
-                  <div className="bg-primary/10 rounded-lg w-10 h-10 flex items-center justify-center mb-3">
-                    <Shield className="h-5 w-5 text-primary" />
-                  </div>
-                  <h3 className="font-semibold text-foreground mb-1 text-sm">Contatti esclusivi</h3>
-                  <p className="text-xs text-muted-foreground">
-                    Con i piani premium, sei l'unico a ricevere il contatto.
-                  </p>
-                </div>
-
-                <div className="bg-card border border-border rounded-xl p-5 hover:shadow-lg transition-shadow">
-                  <div className="bg-primary/10 rounded-lg w-10 h-10 flex items-center justify-center mb-3">
-                    <Star className="h-5 w-5 text-primary" />
-                  </div>
-                  <h3 className="font-semibold text-foreground mb-1 text-sm">Costruisci la reputazione</h3>
-                  <p className="text-xs text-muted-foreground">
-                    Raccogli recensioni verificate e migliora il posizionamento.
-                  </p>
-                </div>
-
-                <div className="bg-card border border-border rounded-xl p-5 hover:shadow-lg transition-shadow">
-                  <div className="bg-primary/10 rounded-lg w-10 h-10 flex items-center justify-center mb-3">
-                    <Zap className="h-5 w-5 text-primary" />
-                  </div>
-                  <h3 className="font-semibold text-foreground mb-1 text-sm">Zero pensieri</h3>
-                  <p className="text-xs text-muted-foreground">
-                    Nessun contratto, disdici quando vuoi.
-                  </p>
-                </div>
-              </div>
-
-              {/* CTA Button */}
-              <div className="text-center mb-10">
-                <Button 
-                  size="lg" 
-                  onClick={() => setMode('register-form')}
-                  className="text-lg px-8 py-6"
-                >
-                  Inizia la registrazione
-                </Button>
-                <p className="text-sm text-muted-foreground mt-4">
-                  Hai già un account?{' '}
-                  <Link to="/login" className="text-primary hover:underline font-medium">
-                    Accedi qui
-                  </Link>
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Plan Selection Step - Now shown AFTER form data */}
-          {mode === 'select-plan' && (
             <div className="max-w-5xl mx-auto">
+              {/* Header */}
               <div className="text-center mb-8">
-                <Button 
-                  variant="ghost" 
-                  onClick={() => setMode('register-form')}
-                  className="mb-4"
-                >
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Modifica dati
-                </Button>
-                <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-                  Scegli il piano più adatto a te
-                </h2>
-                <p className="text-muted-foreground">
-                  Prezzi promozionali per il primo mese. Nessun impegno.
+                <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary px-4 py-1.5 rounded-full text-sm font-semibold mb-4">
+                  <Sparkles className="h-4 w-4" />
+                  Iscrizione gratuita · 2 minuti
+                </div>
+                <h1 className="text-3xl md:text-5xl font-extrabold text-foreground tracking-tight leading-[1.05] mb-3">
+                  Diventa <span className="text-primary">idraulico verificato</span>
+                </h1>
+                <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+                  Ricevi richieste reali nella tua zona. Ricarica il saldo quando vuoi, paghi solo i contatti che sblocchi.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                {PLANS.map((plan) => (
-                  <Card 
-                    key={plan.id}
-                    className={`relative cursor-pointer transition-all hover:shadow-lg ${
-                      selectedPlan === plan.id 
-                        ? 'ring-2 ring-primary border-primary' 
-                        : 'border-border hover:border-primary/50'
-                    } ${plan.recommended ? 'md:-mt-4 md:mb-4' : ''}`}
-                    onClick={() => setSelectedPlan(plan.id)}
-                  >
-                    {plan.recommended && (
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                        <Badge className="bg-primary text-primary-foreground">
-                          Consigliato
-                        </Badge>
-                      </div>
-                    )}
-                    {(plan.id === 'medium' || plan.id === 'premium') && (
-                      <div className="absolute -top-3 right-3">
-                        <Badge className="bg-orange-500 text-white animate-pulse">
-                          🔥 PROMO
-                        </Badge>
-                      </div>
-                    )}
-                    <CardHeader className="text-center pb-2">
-                      <CardTitle className="text-xl">{plan.name}</CardTitle>
-                      <CardDescription>{plan.description}</CardDescription>
-                      <div className="mt-4">
-                        <span className="text-4xl font-bold text-primary">
-                          {plan.trialPrice === 0 ? '€0' : `€${plan.trialPrice}`}
-                        </span>
-                        <span className="text-muted-foreground">/mese</span>
-                        <div className="text-sm text-muted-foreground mt-1">
-                          {plan.trialLabel || `poi €${plan.price}/mese`}
-                        </div>
-                        {plan.trialLabel && (
-                          <div className="text-xs text-muted-foreground">
-                            poi €{plan.price}/mese
-                          </div>
-                        )}
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <ul className="space-y-3">
-                        {plan.features.map((feature, index) => (
-                          <li key={index} className="flex items-start gap-2 text-sm">
-                            <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                            <span>{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      <Button 
-                        className="w-full mt-6" 
-                        variant={selectedPlan === plan.id ? 'default' : 'outline'}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedPlan(plan.id);
-                        }}
-                      >
-                        {selectedPlan === plan.id ? 'Selezionato' : 'Seleziona'}
-                      </Button>
-                    </CardContent>
-                  </Card>
+              {/* Perk strip */}
+              <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mb-8">
+                {PERKS.map((p) => (
+                  <div key={p.label} className="flex items-center gap-2 bg-card/80 backdrop-blur border border-border rounded-full px-3.5 py-1.5 shadow-sm">
+                    <p.icon className="h-3.5 w-3.5 text-primary" />
+                    <span className="text-xs md:text-sm font-medium text-foreground">{p.label}</span>
+                  </div>
                 ))}
               </div>
 
-              <div className="text-center">
-                <Button 
-                  size="lg" 
-                  onClick={handleRegister}
-                  disabled={isSubmitting}
-                  className="px-8"
-                >
-                  {isSubmitting ? 'Registrazione...' : `Completa registrazione con ${PLANS.find(p => p.id === selectedPlan)?.name}`}
-                </Button>
-                <p className="text-xs text-muted-foreground mt-4">
-                  Potrai cambiare piano in qualsiasi momento
-                </p>
+              {/* Card form */}
+              <div className="max-w-2xl mx-auto bg-card border border-border rounded-3xl shadow-xl shadow-primary/5 overflow-hidden">
+                {/* Stepper */}
+                <div className="px-6 md:px-8 pt-6 pb-4 border-b border-border bg-gradient-to-b from-secondary/30 to-transparent">
+                  <div className="flex items-center gap-3">
+                    <StepDot active={step >= 1} done={step > 1} num={1} label="Account" />
+                    <div className={`flex-1 h-1 rounded-full transition-all ${step > 1 ? 'bg-primary' : 'bg-border'}`} />
+                    <StepDot active={step >= 2} done={false} num={2} label="Servizi" />
+                  </div>
+                </div>
+
+                <div className="p-6 md:p-8">
+                  {step === 1 && (
+                    <form
+                      onSubmit={(e) => { e.preventDefault(); if (validateStep1()) setStep(2); }}
+                      className="space-y-5"
+                    >
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FieldIcon icon={User} label="Nome e Cognome *">
+                          <Input value={registerData.fullName} onChange={(e) => setRegisterData(p => ({ ...p, fullName: e.target.value }))} placeholder="Mario Rossi" className="h-12 pl-10 rounded-xl" />
+                        </FieldIcon>
+                        <FieldIcon icon={Building} label="Nome attività *">
+                          <Input value={registerData.businessName} onChange={(e) => setRegisterData(p => ({ ...p, businessName: e.target.value }))} placeholder="Idraulica Rossi" className="h-12 pl-10 rounded-xl" />
+                        </FieldIcon>
+                        <FieldIcon icon={Mail} label="Email *">
+                          <Input type="email" value={registerData.email} onChange={(e) => setRegisterData(p => ({ ...p, email: e.target.value }))} placeholder="mario@example.com" className="h-12 pl-10 rounded-xl" />
+                        </FieldIcon>
+                        <FieldIcon icon={Phone} label="Telefono *">
+                          <Input type="tel" value={registerData.phone} onChange={(e) => setRegisterData(p => ({ ...p, phone: e.target.value }))} placeholder="+39 333 1234567" className="h-12 pl-10 rounded-xl" />
+                        </FieldIcon>
+                      </div>
+
+                      <div>
+                        <Label className="mb-2 block text-sm font-semibold">Città principale di lavoro *</Label>
+                        <CityAutocomplete
+                          value={registerData.mainCity}
+                          onChange={(city, displayValue) => {
+                            setRegisterData(prev => ({ ...prev, mainCity: displayValue }));
+                            if (city && !serviceAreas.includes(displayValue)) setServiceAreas(prev => [...prev, displayValue]);
+                          }}
+                          placeholder="Cerca la tua città..."
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-border">
+                        <FieldIcon icon={Lock} label="Password *">
+                          <Input type="password" value={registerData.password} onChange={(e) => setRegisterData(p => ({ ...p, password: e.target.value }))} placeholder="Min. 12 caratteri" className="h-12 pl-10 rounded-xl" />
+                        </FieldIcon>
+                        <FieldIcon icon={Lock} label="Conferma password *">
+                          <Input type="password" value={registerData.confirmPassword} onChange={(e) => setRegisterData(p => ({ ...p, confirmPassword: e.target.value }))} placeholder="Ripeti la password" className="h-12 pl-10 rounded-xl" />
+                        </FieldIcon>
+                      </div>
+                      <p className="text-xs text-muted-foreground -mt-2">
+                        Almeno 12 caratteri, con maiuscole, minuscole e numeri.
+                      </p>
+
+                      <Button type="submit" size="lg" className="w-full h-12 text-base font-bold rounded-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 transition-all">
+                        Continua <ArrowRight className="h-4 w-4 ml-2" />
+                      </Button>
+
+                      <p className="text-sm text-center text-muted-foreground">
+                        Hai già un account?{' '}
+                        <button type="button" onClick={() => setMode('login')} className="text-primary font-semibold hover:underline">
+                          Accedi
+                        </button>
+                      </p>
+                    </form>
+                  )}
+
+                  {step === 2 && (
+                    <div className="space-y-6">
+                      <button
+                        type="button"
+                        onClick={() => setStep(1)}
+                        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition"
+                      >
+                        <ArrowLeft className="h-4 w-4" /> Indietro
+                      </button>
+
+                      {/* Service areas */}
+                      <div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <MapPin className="h-4 w-4 text-primary" />
+                          <Label className="text-sm font-semibold">Altre città in cui lavori (opzionale)</Label>
+                        </div>
+                        <CityAutocomplete
+                          value=""
+                          onChange={(city, displayValue) => {
+                            if (city && !serviceAreas.includes(displayValue)) setServiceAreas(prev => [...prev, displayValue]);
+                          }}
+                          placeholder="Aggiungi altre città..."
+                        />
+                        {serviceAreas.length > 0 && (
+                          <div className="flex flex-wrap gap-2 mt-3">
+                            {serviceAreas.map((area, i) => (
+                              <Badge key={i} variant={area === registerData.mainCity ? 'default' : 'secondary'} className="flex items-center gap-1 py-1.5 px-3 rounded-full">
+                                <MapPin className="h-3 w-3" />
+                                {area}
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setServiceAreas(prev => prev.filter((_, idx) => idx !== i));
+                                    if (area === registerData.mainCity) setRegisterData(p => ({ ...p, mainCity: '' }));
+                                  }}
+                                  className="ml-1 hover:text-destructive"
+                                ><X className="h-3 w-3" /></button>
+                              </Badge>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Intervention types */}
+                      <div className="pt-5 border-t border-border">
+                        <div className="flex items-center justify-between mb-3 gap-3 flex-wrap">
+                          <div className="flex items-center gap-2">
+                            <Briefcase className="h-4 w-4 text-primary" />
+                            <Label className="text-sm font-semibold">Tipi di intervento *</Label>
+                            {registerData.interventionTypes.length > 0 && (
+                              <Badge variant="secondary" className="rounded-full">{registerData.interventionTypes.length}</Badge>
+                            )}
+                          </div>
+                          <div className="flex gap-2">
+                            <Button type="button" variant="outline" size="sm" className="h-7 text-xs rounded-full"
+                              onClick={() => setRegisterData(p => ({ ...p, interventionTypes: allInterventions.map(([k]) => k as InterventionType) }))}>
+                              Tutti
+                            </Button>
+                            <Button type="button" variant="outline" size="sm" className="h-7 text-xs rounded-full"
+                              onClick={() => setRegisterData(p => ({ ...p, interventionTypes: [] }))}>
+                              Nessuno
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-56 overflow-y-auto pr-1">
+                          {allInterventions.map(([key, label]) => {
+                            const checked = registerData.interventionTypes.includes(key as InterventionType);
+                            return (
+                              <button
+                                type="button"
+                                key={key}
+                                onClick={() => setRegisterData(p => ({
+                                  ...p,
+                                  interventionTypes: checked
+                                    ? p.interventionTypes.filter(t => t !== key)
+                                    : [...p.interventionTypes, key as InterventionType],
+                                }))}
+                                className={`flex items-center gap-2 text-left px-3 py-2.5 rounded-xl border transition-all ${
+                                  checked ? 'border-primary bg-primary/5 text-foreground' : 'border-border bg-background hover:border-primary/40'
+                                }`}
+                              >
+                                <span className={`h-4 w-4 rounded-md border flex items-center justify-center flex-shrink-0 ${checked ? 'bg-primary border-primary' : 'border-border'}`}>
+                                  {checked && <Check className="h-3 w-3 text-primary-foreground" />}
+                                </span>
+                                <span className="text-sm">{label}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Availability */}
+                      <div className="pt-5 border-t border-border">
+                        <div className="flex items-center justify-between mb-3 gap-3 flex-wrap">
+                          <div className="flex items-center gap-2">
+                            <CalendarDays className="h-4 w-4 text-primary" />
+                            <Label className="text-sm font-semibold">Quando sei disponibile? *</Label>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button type="button" variant="outline" size="sm" className="h-7 text-xs rounded-full"
+                              onClick={() => setRegisterData(p => ({ ...p, availability: allAvailability.map(([k]) => k as AvailabilityType) }))}>
+                              Tutti
+                            </Button>
+                            <Button type="button" variant="outline" size="sm" className="h-7 text-xs rounded-full"
+                              onClick={() => setRegisterData(p => ({ ...p, availability: [] }))}>
+                              Nessuno
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {allAvailability.map(([key, label]) => {
+                            const checked = registerData.availability.includes(key as AvailabilityType);
+                            return (
+                              <button
+                                type="button"
+                                key={key}
+                                onClick={() => setRegisterData(p => ({
+                                  ...p,
+                                  availability: checked
+                                    ? p.availability.filter(t => t !== key)
+                                    : [...p.availability, key as AvailabilityType],
+                                }))}
+                                className={`flex items-center gap-2 text-left px-3 py-2.5 rounded-xl border transition-all ${
+                                  checked ? 'border-primary bg-primary/5 text-foreground' : 'border-border bg-background hover:border-primary/40'
+                                }`}
+                              >
+                                <span className={`h-4 w-4 rounded-md border flex items-center justify-center flex-shrink-0 ${checked ? 'bg-primary border-primary' : 'border-border'}`}>
+                                  {checked && <Check className="h-3 w-3 text-primary-foreground" />}
+                                </span>
+                                <span className="text-sm">{label}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      <Button
+                        type="button"
+                        size="lg"
+                        onClick={handleRegister}
+                        disabled={isSubmitting}
+                        className="w-full h-12 text-base font-bold rounded-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 transition-all"
+                      >
+                        {isSubmitting ? 'Creazione account...' : (
+                          <>Completa registrazione <CheckCircle2 className="h-5 w-5 ml-2" /></>
+                        )}
+                      </Button>
+
+                      <p className="text-xs text-center text-muted-foreground">
+                        Cliccando su "Completa registrazione" accetti i termini di servizio e l'informativa privacy.
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}
 
-          {(mode === 'login' || mode === 'register-form' || mode === 'forgot-password' || mode === 'reset-password') && (
-          <div className="max-w-md mx-auto">
-            {mode === 'register-form' && (
-              <Button 
-                variant="ghost" 
-                onClick={() => setMode('register')}
-                className="mb-4"
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Indietro
-              </Button>
-            )}
-            <div className="text-center mb-8">
-              <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Wrench className="h-8 w-8 text-primary" />
+          {/* ============ LOGIN / FORGOT / RESET ============ */}
+          {(mode === 'login' || mode === 'forgot-password' || mode === 'reset-password') && (
+            <div className="max-w-md mx-auto">
+              <div className="text-center mb-6">
+                <div className="bg-primary/10 rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <Wrench className="h-8 w-8 text-primary" />
+                </div>
+                <h2 className="text-2xl md:text-3xl font-bold text-foreground">
+                  {mode === 'login' && 'Bentornato'}
+                  {mode === 'forgot-password' && 'Recupera password'}
+                  {mode === 'reset-password' && 'Nuova password'}
+                </h2>
+                <p className="text-muted-foreground mt-2 text-sm">
+                  {mode === 'login' && 'Accedi per gestire richieste e saldo'}
+                  {mode === 'forgot-password' && 'Ti invieremo un link per reimpostare la password'}
+                  {mode === 'reset-password' && 'Inserisci la tua nuova password'}
+                </p>
               </div>
-              <h2 className="text-2xl font-bold text-foreground">
-                {mode === 'login' && 'Accedi come Idraulico'}
-                {mode === 'register-form' && 'Inserisci i tuoi dati'}
-                {mode === 'forgot-password' && 'Recupera password'}
-                {mode === 'reset-password' && 'Nuova password'}
-              </h2>
-              <p className="text-muted-foreground mt-2">
-                {mode === 'login' && 'Accedi per visualizzare le richieste nella tua zona'}
-                {mode === 'register-form' && 'Dopo potrai scegliere il piano più adatto a te'}
-                {mode === 'forgot-password' && 'Ti invieremo un link per reimpostare la password'}
-                {mode === 'reset-password' && 'Inserisci la tua nuova password'}
-              </p>
-            </div>
 
-            <div className="bg-card rounded-lg border border-border p-6 shadow-sm">
-
-              {mode === 'forgot-password' && (
-                emailSent ? (
-                  <div className="text-center space-y-4">
-                    <div className="bg-success/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto">
-                      <Mail className="h-8 w-8 text-success" />
+              <div className="bg-card rounded-3xl border border-border shadow-xl shadow-primary/5 p-6 md:p-8">
+                {mode === 'login' && (
+                  <form onSubmit={handleLogin} className="space-y-4">
+                    <FieldIcon icon={Mail} label="Email">
+                      <Input type="email" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} placeholder="La tua email" className="h-12 pl-10 rounded-xl" />
+                    </FieldIcon>
+                    <FieldIcon icon={Lock} label="Password">
+                      <Input type="password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} placeholder="La tua password" className="h-12 pl-10 rounded-xl" />
+                    </FieldIcon>
+                    <div className="text-right">
+                      <button type="button" onClick={() => setMode('forgot-password')} className="text-sm text-primary hover:underline font-medium">
+                        Password dimenticata?
+                      </button>
                     </div>
-                    <h3 className="font-semibold text-foreground">Email inviata!</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Controlla la tua casella di posta e clicca sul link per reimpostare la password.
-                    </p>
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setMode('login');
-                        setEmailSent(false);
-                      }}
-                      className="w-full"
-                    >
-                      Torna al login
+                    <Button type="submit" size="lg" className="w-full h-12 font-bold rounded-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all" disabled={isSubmitting}>
+                      {isSubmitting ? 'Accesso...' : 'Accedi'}
                     </Button>
-                  </div>
-                ) : (
-                  <form onSubmit={handleForgotPassword} className="space-y-4">
-                    <div>
-                      <Label htmlFor="forgot-email" className="mb-2 block">Email</Label>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          id="forgot-email"
-                          type="email"
-                          placeholder="La tua email"
-                          value={forgotEmail}
-                          onChange={(e) => setForgotEmail(e.target.value)}
-                          className="pl-10"
-                        />
-                      </div>
-                    </div>
-
-                    <Button type="submit" className="w-full" disabled={isSubmitting}>
-                      {isSubmitting ? 'Invio...' : 'Invia link di recupero'}
-                    </Button>
-
-                    <p className="text-sm text-center text-muted-foreground mt-4">
-                      <button
-                        type="button"
-                        onClick={() => setMode('login')}
-                        className="text-primary hover:underline font-medium"
-                      >
-                        Torna al login
+                    <p className="text-sm text-center text-muted-foreground pt-2">
+                      Non hai un account?{' '}
+                      <button type="button" onClick={() => setMode('register')} className="text-primary font-semibold hover:underline">
+                        Registrati gratis
                       </button>
                     </p>
                   </form>
-                )
-              )}
+                )}
 
-              {mode === 'reset-password' && (
-                <form onSubmit={handleResetPassword} className="space-y-4">
-                  <div>
-                    <Label htmlFor="new-password" className="mb-2 block">Nuova password</Label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="new-password"
-                        type="password"
-                        placeholder="Minimo 6 caratteri"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="confirm-new-password" className="mb-2 block">Conferma password</Label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="confirm-new-password"
-                        type="password"
-                        placeholder="Ripeti la password"
-                        value={confirmNewPassword}
-                        onChange={(e) => setConfirmNewPassword(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
-                  </div>
-
-                  <Button type="submit" className="w-full" disabled={isSubmitting}>
-                    {isSubmitting ? 'Aggiornamento...' : 'Aggiorna password'}
-                  </Button>
-                </form>
-              )}
-
-              {mode === 'login' && (
-                <form onSubmit={handleLogin} className="space-y-4">
-                  <div>
-                    <Label htmlFor="login-email" className="mb-2 block">Email</Label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="login-email"
-                        type="email"
-                        placeholder="La tua email"
-                        value={loginEmail}
-                        onChange={(e) => setLoginEmail(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="login-password" className="mb-2 block">Password</Label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="login-password"
-                        type="password"
-                        placeholder="La tua password"
-                        value={loginPassword}
-                        onChange={(e) => setLoginPassword(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="text-right">
-                    <button
-                      type="button"
-                      onClick={() => setMode('forgot-password')}
-                      className="text-sm text-primary hover:underline"
-                    >
-                      Password dimenticata?
-                    </button>
-                  </div>
-
-                  <Button type="submit" className="w-full" disabled={isSubmitting}>
-                    {isSubmitting ? 'Accesso...' : 'Accedi'}
-                  </Button>
-
-                  <p className="text-sm text-center text-muted-foreground mt-4">
-                    Non hai un account?{' '}
-                    <button 
-                      type="button"
-                      onClick={() => setMode('register')}
-                      className="text-primary hover:underline font-medium"
-                    >
-                      Registrati qui
-                    </button>
-                  </p>
-                </form>
-              )}
-
-              {mode === 'register-form' && (
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="reg-name" className="mb-2 block">Nome e Cognome</Label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="reg-name"
-                        type="text"
-                        placeholder="Mario Rossi"
-                        value={registerData.fullName}
-                        onChange={(e) => setRegisterData(prev => ({ ...prev, fullName: e.target.value }))}
-                        className="pl-10"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="reg-business" className="mb-2 block">Nome Attività</Label>
-                    <div className="relative">
-                      <Building className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="reg-business"
-                        type="text"
-                        placeholder="Idraulica Rossi"
-                        value={registerData.businessName}
-                        onChange={(e) => setRegisterData(prev => ({ ...prev, businessName: e.target.value }))}
-                        className="pl-10"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="reg-email" className="mb-2 block">Email</Label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="reg-email"
-                        type="email"
-                        placeholder="mario@example.com"
-                        value={registerData.email}
-                        onChange={(e) => setRegisterData(prev => ({ ...prev, email: e.target.value }))}
-                        className="pl-10"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="reg-phone" className="mb-2 block">Telefono</Label>
-                    <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="reg-phone"
-                        type="tel"
-                        placeholder="+39 333 1234567"
-                        value={registerData.phone}
-                        onChange={(e) => setRegisterData(prev => ({ ...prev, phone: e.target.value }))}
-                        className="pl-10"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="reg-city" className="mb-2 block">Città principale di lavoro</Label>
-                    <CityAutocomplete
-                      value={registerData.mainCity}
-                      onChange={(city, displayValue) => {
-                        setRegisterData(prev => ({ ...prev, mainCity: displayValue }));
-                        if (city && !serviceAreas.includes(displayValue)) {
-                          setServiceAreas(prev => [...prev, displayValue]);
-                        }
-                      }}
-                      placeholder="Cerca la tua città principale..."
-                    />
-                  </div>
-
-                  <div>
-                    <Label className="mb-2 block">Altre città in cui lavori (opzionale)</Label>
-                    <CityAutocomplete
-                      value=""
-                      onChange={(city, displayValue) => {
-                        if (city && !serviceAreas.includes(displayValue)) {
-                          setServiceAreas(prev => [...prev, displayValue]);
-                        }
-                      }}
-                      placeholder="Aggiungi altre città..."
-                    />
-                    {serviceAreas.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mt-3">
-                        {serviceAreas.map((area, index) => (
-                          <Badge 
-                            key={index} 
-                            variant={area === registerData.mainCity ? "default" : "secondary"}
-                            className="flex items-center gap-1 py-1 px-2"
-                          >
-                            <MapPin className="h-3 w-3" />
-                            {area}
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setServiceAreas(prev => prev.filter((_, i) => i !== index));
-                                if (area === registerData.mainCity) {
-                                  setRegisterData(prev => ({ ...prev, mainCity: '' }));
-                                }
-                              }}
-                              className="ml-1 hover:text-destructive"
-                            >
-                              <X className="h-3 w-3" />
-                            </button>
-                          </Badge>
-                        ))}
+                {mode === 'forgot-password' && (
+                  emailSent ? (
+                    <div className="text-center space-y-4">
+                      <div className="bg-success/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto">
+                        <Mail className="h-8 w-8 text-success" />
                       </div>
-                    )}
-                  </div>
-
-                  {/* Intervention Types */}
-                  <div className="pt-4 border-t border-border">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <Briefcase className="h-4 w-4 text-primary" />
-                        <Label className="font-semibold">Tipi di intervento *</Label>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          className="text-xs h-7 px-2"
-                          onClick={() => {
-                            const allTypes = Object.keys(INTERVENTION_LABELS) as InterventionType[];
-                            setRegisterData(prev => ({ ...prev, interventionTypes: allTypes }));
-                          }}
-                        >
-                          Seleziona tutto
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          className="text-xs h-7 px-2"
-                          onClick={() => {
-                            setRegisterData(prev => ({ ...prev, interventionTypes: [] }));
-                          }}
-                        >
-                          Deseleziona tutto
-                        </Button>
-                      </div>
-                    </div>
-                    <p className="text-xs text-muted-foreground mb-3">
-                      Seleziona i servizi che offri
-                    </p>
-                    <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-2">
-                      {Object.entries(INTERVENTION_LABELS).map(([key, label]) => (
-                        <div key={key} className="flex items-center gap-2">
-                          <Checkbox
-                            id={`intervention-${key}`}
-                            checked={registerData.interventionTypes.includes(key as InterventionType)}
-                            onCheckedChange={(checked) => {
-                              setRegisterData(prev => ({
-                                ...prev,
-                                interventionTypes: checked
-                                  ? [...prev.interventionTypes, key as InterventionType]
-                                  : prev.interventionTypes.filter(t => t !== key)
-                              }));
-                            }}
-                          />
-                          <Label htmlFor={`intervention-${key}`} className="text-xs font-normal cursor-pointer">
-                            {label}
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
-                    {registerData.interventionTypes.length > 0 && (
-                      <p className="text-xs text-primary mt-2">
-                        {registerData.interventionTypes.length} serviz{registerData.interventionTypes.length === 1 ? 'io' : 'i'} selezionat{registerData.interventionTypes.length === 1 ? 'o' : 'i'}
+                      <h3 className="font-semibold text-foreground">Email inviata!</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Controlla la tua casella di posta e clicca sul link per reimpostare la password.
                       </p>
-                    )}
-                  </div>
-
-                  {/* Availability */}
-                  <div className="pt-4 border-t border-border">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <CalendarDays className="h-4 w-4 text-primary" />
-                        <Label className="font-semibold">Disponibilità *</Label>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          className="text-xs h-7 px-2"
-                          onClick={() => {
-                            const allAvailability = Object.keys(AVAILABILITY_LABELS) as AvailabilityType[];
-                            setRegisterData(prev => ({ ...prev, availability: allAvailability }));
-                          }}
-                        >
-                          Seleziona tutto
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          className="text-xs h-7 px-2"
-                          onClick={() => {
-                            setRegisterData(prev => ({ ...prev, availability: [] }));
-                          }}
-                        >
-                          Deseleziona tutto
-                        </Button>
-                      </div>
+                      <Button variant="outline" onClick={() => { setMode('login'); setEmailSent(false); }} className="w-full rounded-xl">
+                        Torna al login
+                      </Button>
                     </div>
-                    <p className="text-xs text-muted-foreground mb-3">
-                      Quando sei disponibile per lavorare?
-                    </p>
-                    <div className="space-y-2">
-                      {Object.entries(AVAILABILITY_LABELS).map(([key, label]) => (
-                        <div key={key} className="flex items-center gap-2">
-                          <Checkbox
-                            id={`availability-${key}`}
-                            checked={registerData.availability.includes(key as AvailabilityType)}
-                            onCheckedChange={(checked) => {
-                              setRegisterData(prev => ({
-                                ...prev,
-                                availability: checked
-                                  ? [...prev.availability, key as AvailabilityType]
-                                  : prev.availability.filter(t => t !== key)
-                              }));
-                            }}
-                          />
-                          <Label htmlFor={`availability-${key}`} className="text-sm font-normal cursor-pointer">
-                            {label}
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  ) : (
+                    <form onSubmit={handleForgotPassword} className="space-y-4">
+                      <FieldIcon icon={Mail} label="Email">
+                        <Input type="email" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} placeholder="La tua email" className="h-12 pl-10 rounded-xl" />
+                      </FieldIcon>
+                      <Button type="submit" size="lg" className="w-full h-12 font-bold rounded-xl" disabled={isSubmitting}>
+                        {isSubmitting ? 'Invio...' : 'Invia link di recupero'}
+                      </Button>
+                      <p className="text-sm text-center text-muted-foreground">
+                        <button type="button" onClick={() => setMode('login')} className="text-primary hover:underline font-medium">
+                          Torna al login
+                        </button>
+                      </p>
+                    </form>
+                  )
+                )}
 
-                  <div className="pt-4 border-t border-border">
-                    <Label htmlFor="reg-password" className="mb-2 block">Password</Label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="reg-password"
-                        type="password"
-                        placeholder="Minimo 12 caratteri"
-                        value={registerData.password}
-                        onChange={(e) => setRegisterData(prev => ({ ...prev, password: e.target.value }))}
-                        className="pl-10"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="reg-confirm" className="mb-2 block">Conferma Password</Label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="reg-confirm"
-                        type="password"
-                        placeholder="Ripeti la password"
-                        value={registerData.confirmPassword}
-                        onChange={(e) => setRegisterData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                        className="pl-10"
-                      />
-                    </div>
-                  </div>
-
-
-                  <Button 
-                    type="button" 
-                    className="w-full" 
-                    onClick={handleRegister}
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? 'Registrazione in corso...' : 'Completa registrazione'}
-                  </Button>
-
-                  <p className="text-sm text-center text-muted-foreground mt-4">
-                    Hai già un account?{' '}
-                    <Link to="/auth?mode=login" className="text-primary hover:underline font-medium">
-                      Accedi qui
-                    </Link>
-                  </p>
-                </div>
-              )}
+                {mode === 'reset-password' && (
+                  <form onSubmit={handleResetPassword} className="space-y-4">
+                    <FieldIcon icon={Lock} label="Nuova password">
+                      <Input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Min. 12 caratteri" className="h-12 pl-10 rounded-xl" />
+                    </FieldIcon>
+                    <FieldIcon icon={Lock} label="Conferma password">
+                      <Input type="password" value={confirmNewPassword} onChange={(e) => setConfirmNewPassword(e.target.value)} placeholder="Ripeti la password" className="h-12 pl-10 rounded-xl" />
+                    </FieldIcon>
+                    <Button type="submit" size="lg" className="w-full h-12 font-bold rounded-xl" disabled={isSubmitting}>
+                      {isSubmitting ? 'Aggiornamento...' : 'Aggiorna password'}
+                    </Button>
+                  </form>
+                )}
+              </div>
             </div>
-          </div>
           )}
         </div>
       </div>
     </Layout>
+  );
+}
+
+// --- Helpers ---
+function StepDot({ active, done, num, label }: { active: boolean; done: boolean; num: number; label: string }) {
+  return (
+    <div className="flex items-center gap-2">
+      <div className={`h-9 w-9 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-all ${
+        done ? 'bg-primary border-primary text-primary-foreground' :
+        active ? 'bg-primary/10 border-primary text-primary' :
+        'bg-background border-border text-muted-foreground'
+      }`}>
+        {done ? <Check className="h-4 w-4" /> : num}
+      </div>
+      <span className={`text-sm font-medium hidden sm:inline ${active ? 'text-foreground' : 'text-muted-foreground'}`}>
+        {label}
+      </span>
+    </div>
+  );
+}
+
+function FieldIcon({ icon: Icon, label, children }: { icon: any; label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <Label className="mb-2 block text-sm font-semibold">{label}</Label>
+      <div className="relative">
+        <Icon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none z-10" />
+        {children}
+      </div>
+    </div>
   );
 }

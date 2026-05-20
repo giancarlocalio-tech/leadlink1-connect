@@ -275,7 +275,7 @@ export default function SienaLandingPage() {
       </section>
 
       {/* TABLE OF CONTENTS */}
-      <section className="py-8 bg-muted/30 border-b border-border">
+      <section className="py-8 bg-white border-b border-border">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-lg font-bold mb-3 flex items-center gap-2">
             <ChevronDown className="h-5 w-5 text-primary" /> Indice della pagina
@@ -291,7 +291,7 @@ export default function SienaLandingPage() {
       </section>
 
       {/* INTRO — long-form, Siena-specific */}
-      <section id="intro" className="py-12 bg-background">
+      <section id="intro" className="py-12 bg-white">
         <div className="container mx-auto px-4 max-w-3xl">
           <div className="bg-accent/30 border-l-4 border-primary p-6 rounded-r-lg mb-6">
             <p className="text-lg leading-relaxed">
@@ -321,7 +321,7 @@ export default function SienaLandingPage() {
       </section>
 
       {/* WHY US — Google Ads conversion block */}
-      <section id="perche-noi" className="py-14 bg-gradient-to-b from-primary/5 to-background">
+      <section id="perche-noi" className="py-14 bg-white">
         <div className="container mx-auto px-4 max-w-5xl">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
             Perché scegliere IdrauliciSubito invece di cercare su Google?
@@ -358,7 +358,7 @@ export default function SienaLandingPage() {
       </section>
 
       {/* CONTRADE — Siena-friendly section */}
-      <section id="contrade" className="py-14 bg-background">
+      <section id="contrade" className="py-14 bg-white">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="flex items-center justify-center gap-2 mb-3">
             <Heart className="h-6 w-6 text-primary" />
@@ -407,7 +407,7 @@ export default function SienaLandingPage() {
       </section>
 
       {/* STATS */}
-      <section id="statistiche" className="py-12 bg-primary/5">
+      <section id="statistiche" className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">I numeri del nostro servizio a Siena</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
@@ -422,7 +422,7 @@ export default function SienaLandingPage() {
       </section>
 
       {/* WHY PROBLEMS */}
-      <section id="perche-problemi" className="py-12 bg-background">
+      <section id="perche-problemi" className="py-12 bg-white">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
             Perché a Siena i problemi idraulici sono frequenti
@@ -452,7 +452,7 @@ export default function SienaLandingPage() {
       </section>
 
       {/* NEIGHBORHOODS */}
-      <section id="quartieri" className="py-12 bg-muted/30">
+      <section id="quartieri" className="py-12 bg-white">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
             Quartieri, Terzi e Contrade di Siena serviti
@@ -488,7 +488,7 @@ export default function SienaLandingPage() {
       </section>
 
       {/* BUILDING TYPES */}
-      <section id="tipologie-edifici" className="py-12 bg-background">
+      <section id="tipologie-edifici" className="py-12 bg-white">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">Tipologie di edifici a Siena</h2>
           <p className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto">
@@ -533,7 +533,7 @@ export default function SienaLandingPage() {
       </div>
 
       {/* COSTS */}
-      <section id="costi" className="py-12 bg-muted/30">
+      <section id="costi" className="py-12 bg-white">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">Quanto costa un idraulico a Siena</h2>
           <p className="text-center text-muted-foreground mb-8 max-w-2xl mx-auto">
@@ -550,7 +550,7 @@ export default function SienaLandingPage() {
               </thead>
               <tbody>
                 {SIENA_COSTS.map((c, i) => (
-                  <tr key={i} className={i % 2 === 0 ? 'bg-background' : 'bg-muted/20'}>
+                  <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
                     <td className="p-4">{c.service}</td>
                     <td className="p-4 text-right font-semibold text-primary">{c.priceRange}</td>
                   </tr>
@@ -566,7 +566,7 @@ export default function SienaLandingPage() {
       </section>
 
       {/* SERVICES */}
-      <section className="py-12 bg-background">
+      <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">Servizi idraulici a Siena</h2>
           <p className="text-muted-foreground text-center mb-10 max-w-2xl mx-auto">
@@ -588,7 +588,7 @@ export default function SienaLandingPage() {
       </section>
 
       {/* REVIEWS */}
-      <section id="recensioni" className="py-12 bg-primary/5">
+      <section id="recensioni" className="py-12 bg-white">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">Recensioni dei clienti a Siena</h2>
           <div className="flex items-center justify-center gap-2 mb-10">
@@ -621,7 +621,7 @@ export default function SienaLandingPage() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="py-12 bg-background">
+      <section id="faq" className="py-12 bg-white">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">Domande frequenti — Idraulico Siena</h2>
           <p className="text-center text-muted-foreground mb-10">

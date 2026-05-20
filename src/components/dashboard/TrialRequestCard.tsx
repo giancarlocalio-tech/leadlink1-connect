@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   MapPin, 
   Clock, 
@@ -9,12 +10,19 @@ import {
   Zap,
   CheckCircle2,
   Coins,
-  Lock
+  Lock,
+  Euro,
+  Send
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 import { formatEuroFromCents } from '@/lib/currency';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 import type { UrgencyType } from '@/lib/types';
 import { 
   INTERVENTION_LABELS, 
@@ -41,10 +49,15 @@ export interface UnlockWithCreditsResult {
   client_email?: string;
 }
 
+export interface QuoteSubmission {
+  quote_amount_cents: number;
+  quote_message: string;
+}
+
 interface TrialRequestCardProps {
   request: TrialRequest;
-  onClaim: (requestId: string) => Promise<ClaimResult>;
-  onUnlockWithCredits?: (requestId: string) => Promise<UnlockWithCreditsResult>;
+  onClaim: (requestId: string, quote?: QuoteSubmission) => Promise<ClaimResult>;
+  onUnlockWithCredits?: (requestId: string, quote?: QuoteSubmission) => Promise<UnlockWithCreditsResult>;
   claiming: boolean;
   freeRequestsRemaining: number;
   balanceCents?: number;
@@ -60,9 +73,13 @@ export function TrialRequestCard({
   balanceCents = 0,
   onAccepted
 }: TrialRequestCardProps) {
+  const navigate = useNavigate();
   const [claimResult, setClaimResult] = useState<ClaimResult | null>(null);
   const [creditUnlockResult, setCreditUnlockResult] = useState<UnlockWithCreditsResult | null>(null);
   const [unlocking, setUnlocking] = useState(false);
+  const [showQuoteForm, setShowQuoteForm] = useState(false);
+  const [priceStr, setPriceStr] = useState('');
+  const [quoteMessage, setQuoteMessage] = useState('');
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('it-IT', {
@@ -92,20 +109,62 @@ export function TrialRequestCard({
     }
   };
 
-  const handleUnlockWithCredits = async () => {
-    if (!onUnlockWithCredits) return;
-    
+  // Parse "12,50" or "12.50" → 1250 cents
+  const parsePriceCents = (s: string): number | null => {
+    const cleaned = s.replace(/\s/g, '').replace(',', '.');
+    if (!/^\d+(\.\d{1,2})?$/.test(cleaned)) return null;
+    const n = parseFloat(cleaned);
+    if (!isFinite(n) || n <= 0) return null;
+    return Math.round(n * 100);
+  };
+
+  const priceCents = parsePriceCents(priceStr);
+  const quoteValid = !!priceCents && quoteMessage.trim().length >= 10;
+
+  const handleSendQuote = async () => {
+    if (!priceCents) {
+      toast.error('Inserisci un prezzo valido (es. 120 o 89,50)');
+      return;
+    }
+    if (quoteMessage.trim().length < 10) {
+      toast.error('Il preventivo deve contenere almeno 10 caratteri');
+      return;
+    }
+
+    const quote: QuoteSubmission = {
+      quote_amount_cents: priceCents,
+      quote_message: quoteMessage.trim(),
+    };
+
     setUnlocking(true);
     try {
-      const result = await onUnlockWithCredits(request.id);
-      if (result.success) {
-        setCreditUnlockResult(result);
-        onAccepted?.();
+      // If user still has trial requests, use the trial flow (free).
+      // Otherwise debit balance via paid unlock.
+      const useTrial = freeRequestsRemaining > 0;
+
+      if (useTrial) {
+        const result = await onClaim(request.id, quote);
+        if (!result.success) {
+          toast.error(result.message);
+          return;
+        }
+        setClaimResult(result);
       } else {
-        // Show error via toast (imported from sonner)
-        const { toast } = await import('sonner');
-        toast.error(result.message);
+        if (!onUnlockWithCredits) {
+          toast.error('Sblocco non disponibile');
+          return;
+        }
+        const result = await onUnlockWithCredits(request.id, quote);
+        if (!result.success) {
+          toast.error(result.message);
+          return;
+        }
+        setCreditUnlockResult(result);
       }
+
+      onAccepted?.();
+      toast.success('Preventivo inviato al cliente!');
+      setTimeout(() => navigate('/dashboard/preventivi'), 1200);
     } finally {
       setUnlocking(false);
     }
@@ -277,56 +336,107 @@ export function TrialRequestCard({
           </div>
         </div>
 
-        {/* Action section */}
-        <div className="p-4 border-t border-border">
-          <div className="flex items-center justify-between gap-4">
-            <div className="text-sm text-muted-foreground">
-              {trialExhausted ? (
-                <>
-                  <span className="font-medium text-foreground flex items-center gap-1">
-                    <Lock className="h-3.5 w-3.5" />
-                    {hasInsufficientBalance ? 'Contatto bloccato' : 'Contatto da sbloccare'}
-                  </span>
-                  {hasInsufficientBalance ? (
-                    <p className="text-xs flex items-center gap-1 mt-0.5 text-destructive">
-                      <Coins className="h-3 w-3" />
-                      Saldo insufficiente ({formatEuroFromCents(balanceCents)} / {formatEuroFromCents(unlockCostCents)})
-                    </p>
-                  ) : (
-                    <p className="text-xs flex items-center gap-1 mt-0.5">
-                      <Coins className="h-3 w-3" />
-                      Servono <span className="font-semibold text-primary">{formatEuroFromCents(unlockCostCents)}</span> per sbloccare
-                    </p>
-                  )}
-                </>
-              ) : (
-                <>
-                  <span className="font-medium text-foreground">Chi prima arriva, meglio alloggia!</span>
-                  <p className="text-xs">Accetta per primo per ottenere i dati del cliente</p>
-                </>
-              )}
+        {/* Action section — ProntoPro style: price + quote text + "Rispondi (€X)" */}
+        <div className="p-4 border-t border-border space-y-4">
+          {hasInsufficientBalance ? (
+            <div className="flex items-center justify-between gap-4">
+              <div className="text-sm">
+                <span className="font-medium text-foreground flex items-center gap-1">
+                  <Lock className="h-3.5 w-3.5" />
+                  Saldo insufficiente
+                </span>
+                <p className="text-xs text-destructive mt-0.5">
+                  Hai {formatEuroFromCents(balanceCents)}, servono {formatEuroFromCents(unlockCostCents)}.
+                </p>
+              </div>
+              <Button onClick={() => navigate('/dashboard/crediti/ricarica')} size="sm" variant="default">
+                Ricarica saldo
+              </Button>
             </div>
-            <Button
-              onClick={trialExhausted ? handleUnlockWithCredits : handleClaim}
-              disabled={isProcessing || (trialExhausted && (!onUnlockWithCredits || hasInsufficientBalance))}
-              size="sm"
-              className="gap-2 shrink-0"
-              variant={hasInsufficientBalance ? "outline" : "default"}
-            >
-              {isProcessing ? (
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-              ) : trialExhausted ? (
-                <Coins className="h-4 w-4" />
-              ) : (
+          ) : !showQuoteForm ? (
+            <div className="flex items-center justify-between gap-4">
+              <div className="text-sm text-muted-foreground">
+                <span className="font-medium text-foreground">Invia il tuo preventivo</span>
+                <p className="text-xs mt-0.5">
+                  {freeRequestsRemaining > 0 ? (
+                    <>Hai <span className="font-semibold text-primary">{freeRequestsRemaining}</span> risposte gratuite</>
+                  ) : (
+                    <>Costo risposta: <span className="font-semibold text-primary">{formatEuroFromCents(unlockCostCents)}</span></>
+                  )}
+                </p>
+              </div>
+              <Button onClick={() => setShowQuoteForm(true)} size="sm" className="gap-2 shrink-0">
                 <Zap className="h-4 w-4" />
-              )}
-              {hasInsufficientBalance 
-                ? 'Saldo insufficiente' 
-                : trialExhausted 
-                  ? `Sblocca (${formatEuroFromCents(unlockCostCents)})` 
-                  : 'Accetta ora'}
-            </Button>
-          </div>
+                Rispondi
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-[160px_1fr] gap-3">
+                <div>
+                  <Label htmlFor={`price-${request.id}`} className="text-xs font-semibold mb-1.5 block">
+                    Prezzo (€) *
+                  </Label>
+                  <div className="relative">
+                    <Euro className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id={`price-${request.id}`}
+                      type="text"
+                      inputMode="decimal"
+                      placeholder="120"
+                      value={priceStr}
+                      onChange={(e) => setPriceStr(e.target.value)}
+                      className="pl-9"
+                      disabled={isProcessing}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor={`msg-${request.id}`} className="text-xs font-semibold mb-1.5 block">
+                    Messaggio per il cliente *
+                  </Label>
+                  <Textarea
+                    id={`msg-${request.id}`}
+                    placeholder="Es. Salve, posso intervenire domani mattina alle 9. Il prezzo include manodopera e materiali standard..."
+                    value={quoteMessage}
+                    onChange={(e) => setQuoteMessage(e.target.value)}
+                    rows={3}
+                    maxLength={1000}
+                    disabled={isProcessing}
+                    className="resize-none"
+                  />
+                  <p className="text-[11px] text-muted-foreground mt-1">
+                    {quoteMessage.length}/1000 — min. 10 caratteri
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <Button
+                  onClick={() => setShowQuoteForm(false)}
+                  size="sm"
+                  variant="ghost"
+                  disabled={isProcessing}
+                >
+                  Annulla
+                </Button>
+                <Button
+                  onClick={handleSendQuote}
+                  size="sm"
+                  className="gap-2"
+                  disabled={isProcessing || !quoteValid}
+                >
+                  {isProcessing ? (
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                  ) : (
+                    <Send className="h-4 w-4" />
+                  )}
+                  {freeRequestsRemaining > 0
+                    ? 'Rispondi (gratis)'
+                    : `Rispondi (${formatEuroFromCents(unlockCostCents)})`}
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>

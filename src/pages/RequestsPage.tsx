@@ -73,7 +73,10 @@ function RequestsContent() {
   }, [highlightedRequestId, trialLoading]);
 
   // Function to unlock a request using credits (for trial exhausted users)
-  const handleUnlockWithCredits = async (requestId: string): Promise<UnlockWithCreditsResult> => {
+  const handleUnlockWithCredits = async (
+    requestId: string,
+    quote?: { quote_amount_cents: number; quote_message: string }
+  ): Promise<UnlockWithCreditsResult> => {
     if (!profile) {
       return { success: false, message: 'Profilo non trovato' };
     }
@@ -91,10 +94,46 @@ function RequestsContent() {
     if (data && data.length > 0) {
       const result = data[0];
       if (result.success) {
-        // Notify client (email + WhatsApp con link alla chat)
+        // Attach quote message to the (trigger-created) conversation
+        if (quote) {
+          try {
+            const { data: conv } = await supabase
+              .from('conversations')
+              .select('id')
+              .eq('plumber_id', profile.id)
+              .eq('request_id', requestId)
+              .maybeSingle();
+            if (conv) {
+              const euros = (quote.quote_amount_cents / 100).toLocaleString('it-IT', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              });
+              await Promise.all([
+                supabase.from('conversation_messages').insert({
+                  conversation_id: conv.id,
+                  sender_type: 'plumber',
+                  content: `💶 Preventivo: € ${euros}\n\n${quote.quote_message}`,
+                }),
+                supabase
+                  .from('conversations')
+                  .update({ quote_amount_cents: quote.quote_amount_cents })
+                  .eq('id', conv.id),
+              ]);
+            }
+          } catch (e) {
+            console.error('attach quote failed', e);
+          }
+        }
+
+        // Notify client (email + WhatsApp con link alla chat, include preventivo)
         try {
           await supabase.functions.invoke('notify-client-chat', {
-            body: { request_id: requestId, plumber_id: profile.id },
+            body: {
+              request_id: requestId,
+              plumber_id: profile.id,
+              quote_amount_cents: quote?.quote_amount_cents,
+              quote_message: quote?.quote_message,
+            },
           });
         } catch (e) {
           console.error('notify-client-chat failed', e);

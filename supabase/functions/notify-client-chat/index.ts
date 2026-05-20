@@ -15,7 +15,7 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { request_id, plumber_id } = await req.json();
+    const { request_id, plumber_id, quote_amount_cents, quote_message } = await req.json();
     if (!request_id || !plumber_id) {
       return new Response(JSON.stringify({ error: "Missing params" }), {
         status: 400,
@@ -68,6 +68,19 @@ serve(async (req) => {
     const chatUrl = `${SITE}/chat/${conv.client_access_token}`;
     const plumberLabel = plumber.business_name || plumber.full_name || "L'idraulico";
 
+    // Format quote price if provided
+    const hasQuote = typeof quote_amount_cents === "number" && quote_amount_cents > 0;
+    const priceFormatted = hasQuote
+      ? new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(quote_amount_cents / 100)
+      : "";
+    const quoteHtml = hasQuote
+      ? `<div style="background:#fff8ef;border:2px solid ${SIENA};padding:18px 20px;border-radius:8px;margin:20px 0">
+<p style="margin:0 0 6px;color:${SIENA_DARK};font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Preventivo inviato</p>
+<p style="margin:0 0 12px;font-size:28px;font-weight:700;color:${SIENA_DARK}">${priceFormatted}</p>
+${quote_message ? `<p style="margin:0;white-space:pre-wrap;color:#444;font-size:14px;line-height:1.5">${String(quote_message).replace(/</g, "&lt;")}</p>` : ""}
+</div>`
+      : "";
+
     // ---- EMAIL ----
     let emailSent = false;
     if (request.client_email) {
@@ -77,7 +90,9 @@ serve(async (req) => {
           from: "IdrauliciSubito <conferma@idraulicisubito.com>",
           reply_to: "supporto@idraulicisubito.com",
           to: [request.client_email],
-          subject: `${plumberLabel} ti ha inviato un preventivo`,
+          subject: hasQuote
+            ? `${plumberLabel} ti ha inviato un preventivo di ${priceFormatted}`
+            : `${plumberLabel} ti ha inviato un preventivo`,
           html: `<!DOCTYPE html><html lang="it"><body style="margin:0;padding:0;font-family:Arial,sans-serif;background:#f5f1ec;color:#333">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f1ec"><tr><td style="padding:24px">
 <table width="600" cellpadding="0" cellspacing="0" align="center" style="background:#fff;border-radius:10px;overflow:hidden;border:1px solid #e7ddd1">
@@ -86,7 +101,8 @@ serve(async (req) => {
 </td></tr>
 <tr><td style="padding:28px">
 <p style="margin:0 0 16px">Ciao <strong>${request.client_name || ""}</strong>,</p>
-<p style="margin:0 0 16px"><strong>${plumberLabel}</strong> ha preso in carico la tua richiesta a <strong>${request.city}</strong> e ti ha aperto una chat dedicata per inviarti il preventivo e rispondere alle tue domande.</p>
+<p style="margin:0 0 16px"><strong>${plumberLabel}</strong> ha preso in carico la tua richiesta a <strong>${request.city}</strong>${hasQuote ? " e ti ha inviato il preventivo qui sotto" : " e ti ha aperto una chat dedicata"}.</p>
+${quoteHtml}
 <table width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0"><tr><td align="center">
 <a href="${chatUrl}" style="display:inline-block;background:${SIENA};color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:600">Apri la chat e rispondi</a>
 </td></tr></table>

@@ -1153,6 +1153,19 @@ export type Database = {
         Args: never
         Returns: Database["public"]["Enums"]["subscription_plan"]
       }
+      get_my_unlocked_requests: {
+        Args: never
+        Returns: {
+          city: string
+          client_email: string
+          client_name: string
+          client_phone: string
+          description: string
+          id: string
+          intervention_type: Database["public"]["Enums"]["intervention_type"]
+          phone_contact_allowed: boolean
+        }[]
+      }
       get_next_eligible_plumber: {
         Args: {
           p_city: string

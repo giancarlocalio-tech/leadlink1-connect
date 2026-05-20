@@ -14,6 +14,7 @@ import DashboardPage from "./pages/DashboardPage";
 import RequestsPage from "./pages/RequestsPage";
 import PreventiviPage from "./pages/PreventiviPage";
 import ClientChatPage from "./pages/ClientChatPage";
+import ClientAccountPage from "./pages/ClientAccountPage";
 import SubscriptionPage from "./pages/SubscriptionPage";
 import CreditsPage from "./pages/CreditsPage";
 import TopUpPage from "./pages/TopUpPage";
@@ -74,6 +75,7 @@ const App = () => (
             <Route path="/dashboard/opportunita" element={<Navigate to="/dashboard/richieste" replace />} />
             <Route path="/dashboard/preventivi" element={<PreventiviPage />} />
             <Route path="/chat/:token" element={<ClientChatPage />} />
+            <Route path="/account" element={<ClientAccountPage />} />
             <Route path="/dashboard/abbonamento" element={<Navigate to="/dashboard/crediti" replace />} />
             <Route path="/dashboard/crediti" element={<CreditsPage />} />
             <Route path="/dashboard/crediti/ricarica" element={<TopUpPage />} />

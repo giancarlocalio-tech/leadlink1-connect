@@ -47,7 +47,7 @@ interface TrialRequestCardProps {
   onUnlockWithCredits?: (requestId: string) => Promise<UnlockWithCreditsResult>;
   claiming: boolean;
   freeRequestsRemaining: number;
-  creditBalance?: number;
+  balanceCents?: number;
   onAccepted?: () => void;
 }
 
@@ -57,7 +57,7 @@ export function TrialRequestCard({
   onUnlockWithCredits,
   claiming, 
   freeRequestsRemaining,
-  creditBalance = 0,
+  balanceCents = 0,
   onAccepted
 }: TrialRequestCardProps) {
   const [claimResult, setClaimResult] = useState<ClaimResult | null>(null);
@@ -113,7 +113,7 @@ export function TrialRequestCard({
 
   const unlockCostCents = UNLOCK_COSTS_CENTS[request.urgency];
   const trialExhausted = freeRequestsRemaining <= 0;
-  const hasInsufficientBalance = trialExhausted && creditBalance < unlockCostCents;
+  const hasInsufficientBalance = trialExhausted && balanceCents < unlockCostCents;
   const isProcessing = claiming || unlocking;
 
   // Show unlocked state with client info (credit unlock)
@@ -290,7 +290,7 @@ export function TrialRequestCard({
                   {hasInsufficientBalance ? (
                     <p className="text-xs flex items-center gap-1 mt-0.5 text-destructive">
                       <Coins className="h-3 w-3" />
-                      Saldo insufficiente ({formatEuroFromCents(creditBalance)} / {formatEuroFromCents(unlockCostCents)})
+                      Saldo insufficiente ({formatEuroFromCents(balanceCents)} / {formatEuroFromCents(unlockCostCents)})
                     </p>
                   ) : (
                     <p className="text-xs flex items-center gap-1 mt-0.5">

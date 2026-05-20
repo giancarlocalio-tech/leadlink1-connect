@@ -226,11 +226,23 @@ const handler = async (req: Request): Promise<Response> => {
                             <li>L'idraulico ti contatterà direttamente per fissare l'appuntamento</li>
                           </ul>
                           
+                          <!-- CTA Button -->
+                          <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin:20px 0 24px 0;">
+                            <tr>
+                              <td align="center">
+                                <a href="https://www.idraulicisubito.com/account" style="display:inline-block;background-color:#0284c7;color:#ffffff;padding:14px 28px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:15px;">
+                                  Controlla la richiesta e vedi i preventivi
+                                </a>
+                              </td>
+                            </tr>
+                          </table>
+
                           <p style="margin:0;font-size:14px;color:#666666;line-height:1.6;">
                             Se hai domande, rispondi a questa email o contattaci a <a href="mailto:supporto@idraulicisubito.com" style="color:#0284c7;">supporto@idraulicisubito.com</a>
                           </p>
                         </td>
                       </tr>
+                      
                       
                       <!-- Footer -->
                       <tr>

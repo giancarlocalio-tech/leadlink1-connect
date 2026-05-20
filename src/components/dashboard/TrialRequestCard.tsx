@@ -164,9 +164,13 @@ export function TrialRequestCard({
     }
   };
 
-  const baseUnlockCostCents = UNLOCK_COSTS_CENTS[request.urgency];
+  const priceBreakdown = computeUnlockPriceCents({
+    urgency: request.urgency,
+    intervention_type: request.intervention_type,
+    phone_contact_allowed: request.phone_contact_allowed,
+  });
   const phoneAllowed = request.phone_contact_allowed !== false;
-  const unlockCostCents = phoneAllowed ? baseUnlockCostCents : Math.round(baseUnlockCostCents * 0.7);
+  const unlockCostCents = priceBreakdown.finalCents;
   const trialExhausted = freeRequestsRemaining <= 0;
   const hasInsufficientBalance = trialExhausted && balanceCents < unlockCostCents;
   const isProcessing = claiming || unlocking;

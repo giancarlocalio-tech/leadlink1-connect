@@ -119,6 +119,7 @@ const handler = async (req: Request): Promise<Response> => {
         .insert({
           ...parsed,
           client_email: parsed.client_email ?? null,
+          client_user_id: parsed.client_user_id ?? null,
           wizard_answers: parsed.wizard_answers ?? null,
         })
         .select("*")

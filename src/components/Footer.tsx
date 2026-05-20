@@ -50,7 +50,7 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2.5 mb-4">
-              <img src={logoIcon} alt="Idraulici Subito" className="h-8 w-auto object-contain brightness-0 invert" width={64} height={64} />
+              <img src={logoIcon} alt="Idraulici Subito" className="h-10 w-auto object-contain" width={64} height={64} />
               <span className="text-lg font-extrabold tracking-tight">Idraulici Subito</span>
             </div>
             <p className="text-background/60 text-sm leading-relaxed mb-6">

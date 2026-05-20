@@ -1,14 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { MapPin, Filter, Search, CheckCircle } from 'lucide-react';
+import { MapPin, Search, CheckCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
-import { RequestCard } from '@/components/dashboard/RequestCard';
 import { TrialPaywall } from '@/components/dashboard/TrialPaywall';
 import { TrialRequestCard } from '@/components/dashboard/TrialRequestCard';
 import type { UnlockWithCreditsResult } from '@/components/dashboard/TrialRequestCard';
@@ -16,11 +15,9 @@ import { AcceptedTrialRequestCard } from '@/components/dashboard/AcceptedTrialRe
 import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import { useCredits } from '@/hooks/useCredits';
-import { SubscriptionProvider, useSubscriptionContext } from '@/contexts/SubscriptionContext';
+import { SubscriptionProvider } from '@/contexts/SubscriptionContext';
 import { useTrialRequests } from '@/hooks/useTrialRequests';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
-import type { ServiceRequest, InterventionType, UrgencyType, PropertyType, AccessibilityType } from '@/lib/types';
 import { INTERVENTION_LABELS, URGENCY_LABELS } from '@/lib/types';
 
 // Wrapper component to provide subscription context
@@ -38,28 +35,18 @@ function RequestsContent() {
   const highlightedRequestId = searchParams.get('id');
   const { user, loading: authLoading } = useAuth();
   const { profile, loading: profileLoading } = usePlumberProfile();
-  const { 
-    isRequestUnlocked,
-    canUnlockContact,
-    unlockContact,
-    getCurrentPlan,
-    subscription
-  } = useSubscriptionContext();
   
   const {
     requests: trialRequests,
     acceptedRequests: trialAcceptedRequests,
     loading: trialLoading,
     claiming,
-    isTrial,
     freeRequestsRemaining,
     claimRequest,
   } = useTrialRequests(profile);
 
   const { credits, refreshCredits, refreshTransactions } = useCredits();
   
-  const [requests, setRequests] = useState<ServiceRequest[]>([]);
-  const [loadingRequests, setLoadingRequests] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [urgencyFilter, setUrgencyFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');

@@ -139,7 +139,7 @@ function RequestsContent() {
       return { success: false, message: 'Profilo non trovato' };
     }
 
-    const { data, error } = await supabase.rpc('unlock_contact_with_credits', {
+    const { data, error } = await supabase.rpc('unlock_contact_with_balance', {
       p_plumber_id: profile.id,
       p_request_id: requestId,
     });
@@ -165,8 +165,8 @@ function RequestsContent() {
         return {
           success: true,
           message: result.message,
-          credits_spent: result.credits_spent,
-          new_balance: result.new_balance,
+          amount_spent_cents: result.amount_spent_cents,
+          new_balance_cents: result.new_balance_cents,
           client_name: result.client_name,
           client_phone: result.client_phone,
           client_email: result.client_email,
@@ -319,7 +319,7 @@ function RequestsContent() {
                     onUnlockWithCredits={handleUnlockWithCredits}
                     claiming={claiming === request.id}
                     freeRequestsRemaining={freeRequestsRemaining}
-                    creditBalance={credits?.balance ?? 0}
+                    creditBalance={credits?.balance_cents ?? 0}
                   />
                 </div>
               ))

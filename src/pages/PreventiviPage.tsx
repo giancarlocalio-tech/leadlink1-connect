@@ -92,14 +92,11 @@ export default function PreventiviPage() {
       return;
     }
 
-    const ids = (convs || []).map((c) => c.request_id);
     const [{ data: reqs }, { data: lastMsgs }] = await Promise.all([
-      ids.length
-        ? supabase
-            .from('service_requests')
-            .select('id, client_name, client_phone, intervention_type, city, description')
-            .in('id', ids)
-        : Promise.resolve({ data: [] as any[] }),
+      // Use SECURITY DEFINER RPC so plumbers who unlocked a contact (shared lead model,
+      // no assigned_plumber_id) can still see client name + phone. Phone is auto-redacted
+      // server-side when the client did NOT authorise phone contact.
+      supabase.rpc('get_my_unlocked_requests'),
       (convs || []).length
         ? supabase
             .from('conversation_messages')

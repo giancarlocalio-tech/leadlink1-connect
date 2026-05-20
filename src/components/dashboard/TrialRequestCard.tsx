@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   MapPin, 
   Clock, 
@@ -9,12 +10,19 @@ import {
   Zap,
   CheckCircle2,
   Coins,
-  Lock
+  Lock,
+  Euro,
+  Send
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 import { formatEuroFromCents } from '@/lib/currency';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 import type { UrgencyType } from '@/lib/types';
 import { 
   INTERVENTION_LABELS, 

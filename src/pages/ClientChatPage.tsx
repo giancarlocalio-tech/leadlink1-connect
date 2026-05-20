@@ -144,6 +144,23 @@ export default function ClientChatPage() {
         {/* Header */}
         <header className="bg-card border-b border-border sticky top-0 z-10">
           <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="-ml-2 shrink-0"
+              aria-label="Indietro"
+              onClick={() => {
+                if (user) {
+                  navigate('/account');
+                } else if (window.history.length > 1) {
+                  navigate(-1);
+                } else {
+                  navigate('/');
+                }
+              }}
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
             <Avatar className="h-11 w-11">
               {info.plumber_photo && <AvatarImage src={info.plumber_photo} alt={info.plumber_name} />}
               <AvatarFallback className="bg-primary/10 text-primary font-semibold">

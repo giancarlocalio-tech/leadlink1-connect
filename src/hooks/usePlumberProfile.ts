@@ -91,6 +91,8 @@ export function usePlumberProfile() {
         availability: (data.availability as AvailabilityType[]) || [],
         service_areas: (data.service_areas as string[]) || [],
       });
+      setFetchedUserId(user.id);
+      setHasFetched(true);
 
       // Send welcome email immediately after profile creation
       // Fire and forget - don't block the registration flow

@@ -14,6 +14,7 @@ import DashboardPage from "./pages/DashboardPage";
 import RequestsPage from "./pages/RequestsPage";
 import PreventiviPage from "./pages/PreventiviPage";
 import ClientChatPage from "./pages/ClientChatPage";
+import ClientAccountPage from "./pages/ClientAccountPage";
 import SubscriptionPage from "./pages/SubscriptionPage";
 import CreditsPage from "./pages/CreditsPage";
 import TopUpPage from "./pages/TopUpPage";

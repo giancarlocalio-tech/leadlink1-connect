@@ -124,6 +124,8 @@ export default function RequestPage() {
                formData.clientPhone.trim().length > 0 && 
                formData.clientEmail.trim().length > 0 &&
                formData.privacyAccepted;
+      case 'password':
+        return formData.password.length >= 6;
       default:
         return false;
     }

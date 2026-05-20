@@ -69,7 +69,10 @@ function RequestsContent() {
     if (!authLoading && !user) {
       // Preserve the current URL with query params so user returns here after login
       const returnUrl = window.location.pathname + window.location.search;
-      navigate(`/auth?returnUrl=${encodeURIComponent(returnUrl)}`);
+      const urlParams = new URLSearchParams(window.location.search);
+      const emailParam = urlParams.get('email');
+      const emailQuery = emailParam ? `&email=${encodeURIComponent(emailParam)}` : '';
+      navigate(`/login?returnUrl=${encodeURIComponent(returnUrl)}${emailQuery}`);
     }
   }, [user, authLoading, navigate]);
 

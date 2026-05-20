@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { MessageSquare, Plus, MapPin, Clock, LogOut } from 'lucide-react';
+import { MessageSquare, Plus, MapPin, Clock, LogOut, Loader2 } from 'lucide-react';
 import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import { INTERVENTION_LABELS } from '@/lib/types';
 import { formatDistanceToNow } from 'date-fns';
 import { it } from 'date-fns/locale';
@@ -28,54 +29,148 @@ type Conv = {
   request_id: string;
   client_access_token: string;
   last_message_at: string;
+  plumber_name: string;
+  last_message_preview: string | null;
+  last_sender: 'plumber' | 'client' | null;
 };
 
 export default function ClientAccountPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, loading: authLoading } = useAuth();
+  const { profile: plumberProfile, loading: plumberLoading, hasFetched: plumberFetched } = usePlumberProfile() as any;
   const [requests, setRequests] = useState<Req[]>([]);
   const [convsByReq, setConvsByReq] = useState<Record<string, Conv[]>>({});
   const [loading, setLoading] = useState(true);
   const justRegistered = (location.state as any)?.justRegistered;
 
+  // Redirect not-logged-in users to login
   useEffect(() => {
     if (!authLoading && !user) {
       navigate('/auth?returnUrl=' + encodeURIComponent('/account'));
     }
   }, [user, authLoading, navigate]);
 
+  // Role guard: if this auth user is also a plumber, the proper area is the plumber dashboard.
+  // Avoid loading client UI for them to prevent the "Saldo insufficiente" misidentification.
   useEffect(() => {
-    if (!user) return;
+    if (!authLoading && user && plumberFetched && plumberProfile) {
+      navigate('/dashboard/richieste', { replace: true });
+    }
+  }, [authLoading, user, plumberFetched, plumberProfile, navigate]);
+
+  useEffect(() => {
+    // Wait for auth + role check to complete; only fetch for confirmed clients
+    if (!user || authLoading || plumberLoading || !plumberFetched) return;
+    if (plumberProfile) return; // plumber — handled by redirect
+
+    let cancelled = false;
     (async () => {
       setLoading(true);
-      const { data: reqs } = await supabase
+
+      // 1) Fetch this client's requests
+      const { data: reqs, error: reqErr } = await supabase
         .from('service_requests')
         .select('id, intervention_type, city, description, urgency, status, created_at')
         .eq('client_user_id', user.id)
         .order('created_at', { ascending: false });
-      setRequests((reqs as Req[]) || []);
-      if (reqs && reqs.length > 0) {
-        const ids = reqs.map((r: any) => r.id);
-        const { data: convs } = await supabase
-          .from('conversations')
-          .select('id, request_id, client_access_token, last_message_at')
-          .in('request_id', ids);
-        const map: Record<string, Conv[]> = {};
-        (convs || []).forEach((c: any) => {
-          (map[c.request_id] ||= []).push(c);
-        });
-        setConvsByReq(map);
+
+      if (reqErr) {
+        console.error('Error loading client requests:', reqErr);
       }
-      setLoading(false);
+      if (cancelled) return;
+      const reqList = (reqs as Req[]) || [];
+      setRequests(reqList);
+
+      // 2) Fetch all conversations on those requests (visible via RLS: client_user_id = auth.uid())
+      if (reqList.length > 0) {
+        const ids = reqList.map((r) => r.id);
+        const { data: convs, error: convErr } = await supabase
+          .from('conversations')
+          .select(`
+            id, request_id, plumber_id, client_access_token, last_message_at,
+            plumber:plumber_profiles!conversations_plumber_id_fkey ( full_name, business_name )
+          `)
+          .in('request_id', ids)
+          .order('last_message_at', { ascending: false });
+
+        // Fallback without FK relationship name
+        let convRows: any[] = convs || [];
+        if (convErr || !convs) {
+          const { data: c2 } = await supabase
+            .from('conversations')
+            .select('id, request_id, plumber_id, client_access_token, last_message_at')
+            .in('request_id', ids)
+            .order('last_message_at', { ascending: false });
+          convRows = c2 || [];
+          if (convRows.length > 0) {
+            const plumberIds = Array.from(new Set(convRows.map((c) => c.plumber_id)));
+            const { data: plumbers } = await supabase
+              .from('plumber_profiles')
+              .select('id, full_name, business_name')
+              .in('id', plumberIds);
+            const byId: Record<string, any> = {};
+            (plumbers || []).forEach((p: any) => { byId[p.id] = p; });
+            convRows = convRows.map((c) => ({ ...c, plumber: byId[c.plumber_id] }));
+          }
+        }
+
+        // 3) Fetch the latest message per conversation (visible via RLS for the client)
+        let lastByConv: Record<string, { content: string; sender_type: 'plumber' | 'client' }> = {};
+        if (convRows.length > 0) {
+          const convIds = convRows.map((c) => c.id);
+          const { data: msgs } = await supabase
+            .from('conversation_messages')
+            .select('conversation_id, content, sender_type, created_at')
+            .in('conversation_id', convIds)
+            .order('created_at', { ascending: false });
+          (msgs || []).forEach((m: any) => {
+            if (!lastByConv[m.conversation_id]) {
+              lastByConv[m.conversation_id] = { content: m.content, sender_type: m.sender_type };
+            }
+          });
+        }
+
+        const map: Record<string, Conv[]> = {};
+        convRows.forEach((c: any) => {
+          const last = lastByConv[c.id];
+          (map[c.request_id] ||= []).push({
+            id: c.id,
+            request_id: c.request_id,
+            client_access_token: c.client_access_token,
+            last_message_at: c.last_message_at,
+            plumber_name: c.plumber?.business_name || c.plumber?.full_name || 'Idraulico',
+            last_message_preview: last?.content ?? null,
+            last_sender: last?.sender_type ?? null,
+          });
+        });
+        if (cancelled) return;
+        setConvsByReq(map);
+      } else {
+        setConvsByReq({});
+      }
+      if (!cancelled) setLoading(false);
     })();
-  }, [user]);
+
+    return () => { cancelled = true; };
+  }, [user, authLoading, plumberLoading, plumberFetched, plumberProfile]);
 
   const logout = async () => {
     await supabase.auth.signOut();
     navigate('/');
     toast.success('Disconnesso');
   };
+
+  // Role-resolution skeleton: avoid flashing the wrong UI before role is known.
+  if (authLoading || (user && !plumberFetched) || (user && plumberProfile)) {
+    return (
+      <Layout>
+        <div className="min-h-[60vh] flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -137,15 +232,38 @@ export default function ClientAccountPage() {
                     {convs.length > 0 ? (
                       <div className="space-y-2 pt-3 border-t">
                         <p className="text-xs font-medium text-muted-foreground">
-                          {convs.length} {convs.length === 1 ? 'idraulico ti ha risposto' : 'idraulici ti hanno risposto'}
+                          {convs.length} {convs.length === 1 ? 'preventivo ricevuto' : 'preventivi ricevuti'}
                         </p>
                         {convs.map((c) => (
-                          <Button key={c.id} asChild variant="outline" size="sm" className="w-full justify-start">
-                            <Link to={`/chat/${c.client_access_token}`}>
-                              <MessageSquare className="h-4 w-4 mr-2" />
-                              Apri chat
-                            </Link>
-                          </Button>
+                          <Link
+                            key={c.id}
+                            to={`/chat/${c.client_access_token}`}
+                            className="block rounded-lg border border-border hover:border-primary/40 hover:bg-muted/50 transition p-3"
+                          >
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <MessageSquare className="h-4 w-4 text-primary shrink-0" />
+                                  <p className="font-semibold text-sm truncate">{c.plumber_name}</p>
+                                </div>
+                                {c.last_message_preview ? (
+                                  <p className="text-xs text-muted-foreground line-clamp-1">
+                                    <span className="font-medium">
+                                      {c.last_sender === 'client' ? 'Tu: ' : ''}
+                                    </span>
+                                    {c.last_message_preview}
+                                  </p>
+                                ) : (
+                                  <p className="text-xs text-muted-foreground italic">
+                                    Nessun messaggio ancora — apri per scrivere
+                                  </p>
+                                )}
+                              </div>
+                              <span className="text-[10px] text-muted-foreground shrink-0">
+                                {formatDistanceToNow(new Date(c.last_message_at), { addSuffix: false, locale: it })}
+                              </span>
+                            </div>
+                          </Link>
                         ))}
                       </div>
                     ) : (

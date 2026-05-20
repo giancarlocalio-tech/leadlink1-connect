@@ -23,6 +23,9 @@ import {
   Landmark,
   Snowflake,
   ChevronDown,
+  Users,
+  Zap,
+  Heart,
 } from 'lucide-react';
 import { Layout } from '@/components/Layout';
 import { BASE_URL } from '@/lib/seoJsonLd';

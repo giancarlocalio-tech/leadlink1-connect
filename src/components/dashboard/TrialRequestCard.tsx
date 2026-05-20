@@ -423,7 +423,7 @@ export function TrialRequestCard({
                   onClick={handleSendQuote}
                   size="sm"
                   className="gap-2"
-                  disabled={isProcessing || !quoteValid}
+                  disabled={isProcessing}
                 >
                   {isProcessing ? (
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

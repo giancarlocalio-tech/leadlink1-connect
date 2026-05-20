@@ -46,6 +46,8 @@ import {
   SIENA_STATS,
   SIENA_RATING,
   SIENA_REVIEWS,
+  SIENA_CONTRADE,
+  SIENA_WHY_US,
 } from '@/lib/sienaSeoContent';
 
 const SERVICES = [

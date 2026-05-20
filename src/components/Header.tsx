@@ -71,7 +71,7 @@ export function Header() {
                 )}
                 {!isRegisterPage && (
                   <Link to="/auth">
-                    <Button size="sm" className="text-xs sm:text-sm px-2 sm:px-4">
+                    <Button size="sm" className="text-xs sm:text-sm px-2 sm:px-4 bg-sky-500 hover:bg-sky-600 text-white">
                       Registrati come idraulico
                     </Button>
                   </Link>

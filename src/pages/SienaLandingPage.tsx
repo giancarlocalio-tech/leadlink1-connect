@@ -31,7 +31,7 @@ import { Layout } from '@/components/Layout';
 import { BASE_URL } from '@/lib/seoJsonLd';
 import InlineWizard from '@/components/InlineWizard';
 import { Button } from '@/components/ui/button';
-import heroBg from '@/assets/hero-bg.avif';
+import sienaSkyline from '@/assets/siena-skyline.png';
 
 // Generic city sections that already take cityName/citySlug
 import { CityCommonProblemsSection } from '@/components/city/CityCommonProblemsSection';
@@ -197,58 +197,68 @@ export default function SienaLandingPage() {
         ))}
       </Helmet>
 
-      {/* HERO */}
-      <section className="relative overflow-hidden min-h-[500px] md:min-h-[550px] flex items-center justify-center">
-        <div className="absolute inset-0">
+      {/* HERO — clean white background + Siena skyline silhouette */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-background via-background to-primary/5 border-b border-border">
+        {/* Decorative skyline at bottom */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 opacity-[0.10] md:opacity-[0.13]">
           <img
-            src={heroBg}
-            alt="Idraulico Siena - Pronto intervento in centro storico, contrade e provincia"
-            className="w-full h-full object-cover object-[25%_center] md:object-center"
+            src={sienaSkyline}
+            alt=""
+            aria-hidden="true"
+            className="w-full h-auto select-none"
             loading="eager"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/60" />
         </div>
+        {/* Subtle radial brand glow */}
+        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.08),transparent_60%)]" />
 
-        <div className="container mx-auto px-4 relative z-10 text-center py-16">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <MapPin className="h-5 w-5 text-white" />
-            <span className="text-white/90 font-medium">Siena, Toscana • Pronto Intervento 24/7</span>
+        <div className="container mx-auto px-4 relative z-10 text-center pt-14 md:pt-20 pb-32 md:pb-40">
+          <div className="inline-flex items-center gap-2 mb-5 bg-primary/10 border border-primary/20 rounded-full px-4 py-1.5">
+            <MapPin className="h-4 w-4 text-primary" />
+            <span className="text-primary text-sm font-bold">Siena, Toscana • Pronto Intervento 24/7</span>
           </div>
 
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-lg">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-foreground mb-6 leading-[1.05] tracking-tight">
             Ricevi più preventivi
             <br />
-            <span className="text-white/90">da idraulici verificati a Siena — Gratis</span>
+            <span className="text-primary">da idraulici verificati a Siena</span>
+            <br />
+            <span className="text-foreground">— Gratis</span>
           </h1>
 
-          <p className="text-lg md:text-xl text-white/90 mb-8 max-w-3xl mx-auto">
-            Invia <strong>una sola richiesta</strong>: ricevi più preventivi da idraulici della tua Contrada o del tuo quartiere,
-            confronti i prezzi e scegli il migliore. <strong>100% gratuito</strong>, senza impegno, risposta in 15 minuti.
+          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
+            Invia <strong className="text-foreground">una sola richiesta</strong>: ricevi più preventivi da idraulici della tua
+            Contrada o del tuo quartiere, confronti i prezzi e scegli il migliore.{' '}
+            <strong className="text-foreground">100% gratuito</strong>, senza impegno, risposta in 15 minuti.
           </p>
 
-          <Button size="lg" onClick={handleRequestClick} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6 h-auto shadow-lg">
+          <Button
+            size="lg"
+            onClick={handleRequestClick}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6 h-auto shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 transition-all hover:-translate-y-0.5"
+          >
             Ricevi preventivi gratis a Siena →
           </Button>
-          <p className="text-white/80 text-sm mt-3">Compila in 60 secondi · Nessuna registrazione</p>
+          <p className="text-muted-foreground text-sm mt-3">Compila in 60 secondi · Nessuna registrazione</p>
 
           <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 mt-8">
-            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-              <Shield className="h-4 w-4 text-white" />
-              <span className="text-white text-sm font-medium">100% Gratuito</span>
+            <div className="flex items-center gap-2 bg-card border border-border rounded-full px-4 py-2 shadow-sm">
+              <Shield className="h-4 w-4 text-primary" />
+              <span className="text-foreground text-sm font-medium">100% Gratuito</span>
             </div>
-            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-              <Clock className="h-4 w-4 text-white" />
-              <span className="text-white text-sm font-medium">Arrivo in 35 min</span>
+            <div className="flex items-center gap-2 bg-card border border-border rounded-full px-4 py-2 shadow-sm">
+              <Clock className="h-4 w-4 text-primary" />
+              <span className="text-foreground text-sm font-medium">Arrivo in 35 min</span>
             </div>
-            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-              <Star className="h-4 w-4 text-white fill-white" />
-              <span className="text-white text-sm font-medium">
+            <div className="flex items-center gap-2 bg-card border border-border rounded-full px-4 py-2 shadow-sm">
+              <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+              <span className="text-foreground text-sm font-medium">
                 {SIENA_RATING.ratingValue}/5 ({SIENA_RATING.reviewCount} recensioni)
               </span>
             </div>
-            <div className="flex items-center gap-2 bg-primary/80 backdrop-blur-sm rounded-full px-4 py-2">
-              <CheckCircle className="h-4 w-4 text-white" />
-              <span className="text-white text-sm font-medium">40+ Idraulici Siena</span>
+            <div className="flex items-center gap-2 bg-primary text-primary-foreground rounded-full px-4 py-2 shadow-sm">
+              <CheckCircle className="h-4 w-4" />
+              <span className="text-sm font-bold">40+ Idraulici Siena</span>
             </div>
           </div>
         </div>

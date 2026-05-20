@@ -71,6 +71,9 @@ const App = () => (
             <Route path="/auth/confirm" element={<AuthConfirmPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/dashboard/richieste" element={<RequestsPage />} />
+            <Route path="/dashboard/opportunita" element={<Navigate to="/dashboard/richieste" replace />} />
+            <Route path="/dashboard/preventivi" element={<PreventiviPage />} />
+            <Route path="/chat/:token" element={<ClientChatPage />} />
             <Route path="/dashboard/abbonamento" element={<Navigate to="/dashboard/crediti" replace />} />
             <Route path="/dashboard/crediti" element={<CreditsPage />} />
             <Route path="/dashboard/crediti/ricarica" element={<TopUpPage />} />

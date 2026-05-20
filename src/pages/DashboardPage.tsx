@@ -335,8 +335,8 @@ function DashboardContent() {
           </Card>
         )}
 
-        {/* Trial Accepted Requests - Show client contact details (for trial users) */}
-        {isInTrialMode && trialAcceptedRequests.length > 0 && (
+        {/* Accepted unlocked requests - Show client contact details */}
+        {trialAcceptedRequests.length > 0 && (
           <Card className="border-green-500/50 bg-green-500/5">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-green-700 dark:text-green-400">

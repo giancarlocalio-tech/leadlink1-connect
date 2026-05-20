@@ -61,6 +61,7 @@ export default function RequestPage() {
     privacyAccepted: false,
     password: '',
   });
+  const [noPhoneContact, setNoPhoneContact] = useState(false);
 
   const currentStep = STEPS[currentStepIndex];
   const progress = ((currentStepIndex + 1) / STEPS.length) * 100;

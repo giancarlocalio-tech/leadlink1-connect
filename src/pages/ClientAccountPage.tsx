@@ -60,16 +60,17 @@ export default function ClientAccountPage() {
   }, [authLoading, user, plumberFetched, plumberProfile, navigate]);
 
   useEffect(() => {
-    // Wait for auth + role check to complete; only fetch for confirmed clients
-    if (!user || authLoading || plumberLoading || !plumberFetched) return;
-    if (plumberProfile) return; // plumber — handled by redirect
+    // Fetch as soon as auth is ready. Don't block on the plumber-profile lookup
+    // (it runs in parallel for the role-redirect effect above). On mobile/flaky
+    // networks the plumber query could hang and leave this page stuck on the
+    // loading skeleton.
+    if (authLoading || !user) return;
+    if (plumberProfile) return; // plumber — redirect effect will navigate away
 
     let cancelled = false;
     (async () => {
       setLoading(true);
       try {
-        // 1) Fetch this client's requests — two queries unioned client-side
-        // (safer than .or() which can break on email special chars / commas).
         const ownEmail = user.email?.toLowerCase() || '';
         const [byUserIdRes, byEmailRes] = await Promise.all([
           supabase
@@ -172,7 +173,7 @@ export default function ClientAccountPage() {
     })();
 
     return () => { cancelled = true; };
-  }, [user, authLoading, plumberLoading, plumberFetched, plumberProfile]);
+  }, [user, authLoading, plumberProfile]);
 
   const logout = async () => {
     await supabase.auth.signOut();
@@ -180,8 +181,11 @@ export default function ClientAccountPage() {
     toast.success('Disconnesso');
   };
 
-  // Role-resolution skeleton: avoid flashing the wrong UI before role is known.
-  if (authLoading || (user && !plumberFetched) || (user && plumberProfile)) {
+  // Only block on auth resolution. If the user turns out to be a plumber, the
+  // redirect effect above will navigate them away — we don't want to wait on
+  // that lookup here because on mobile it sometimes hangs and leaves the page
+  // stuck on the spinner.
+  if (authLoading || !user || plumberProfile) {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">

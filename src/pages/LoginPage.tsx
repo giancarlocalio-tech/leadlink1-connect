@@ -35,6 +35,11 @@ export default function LoginPage() {
     if (urlParams.get('mode') === 'reset-password') {
       setMode('reset-password');
     }
+    // Prefill email if provided (e.g. from email notification deep-link)
+    const emailParam = urlParams.get('email');
+    if (emailParam) {
+      setLoginEmail(emailParam);
+    }
   }, []);
 
   useEffect(() => {

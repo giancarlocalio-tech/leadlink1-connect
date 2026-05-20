@@ -163,7 +163,9 @@ export default function RequestPage() {
     if (!formData.accessibility) missingFields.push('accessibility');
     if (!formData.clientName.trim()) missingFields.push('clientName');
     if (!formData.clientPhone.trim()) missingFields.push('clientPhone');
+    if (!formData.clientEmail.trim()) missingFields.push('clientEmail');
     if (!formData.privacyAccepted) missingFields.push('privacyAccepted');
+    if (formData.password.length < 6) missingFields.push('password');
 
     if (missingFields.length > 0) {
       analytics.leadFormValidationFail(currentStep, missingFields);
@@ -172,13 +174,45 @@ export default function RequestPage() {
     }
 
     setIsSubmitting(true);
-    
-    // Track form submission
+
     analytics.leadFormSubmit(
       formData.interventionType,
       formData.city,
       formData.urgency
     );
+
+    // 1) Create client account (or sign in if already exists)
+    let clientUserId: string | null = null;
+    const email = formData.clientEmail.trim();
+    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+      email,
+      password: formData.password,
+      options: {
+        emailRedirectTo: window.location.origin + '/account',
+        data: {
+          full_name: formData.clientName.trim(),
+          phone: formData.clientPhone.trim(),
+          role: 'client',
+        },
+      },
+    });
+
+    if (signUpError) {
+      // If user exists, try sign in with provided password
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password: formData.password,
+      });
+      if (signInError) {
+        toast.error('Email già registrata: la password inserita non corrisponde. Accedi per continuare.');
+        setIsSubmitting(false);
+        navigate('/auth?returnUrl=' + encodeURIComponent('/account'));
+        return;
+      }
+      clientUserId = signInData.user?.id ?? null;
+    } else {
+      clientUserId = signUpData.user?.id ?? null;
+    }
 
     const requestPayload = {
       intervention_type: formData.interventionType,
@@ -189,7 +223,8 @@ export default function RequestPage() {
       accessibility: formData.accessibility,
       client_name: formData.clientName.trim(),
       client_phone: formData.clientPhone.trim(),
-      client_email: formData.clientEmail?.trim() || null,
+      client_email: email,
+      client_user_id: clientUserId,
       privacy_accepted: formData.privacyAccepted,
       wizard_answers: wizardAnswers.length > 0 ? wizardAnswers : null,
     };
@@ -206,7 +241,6 @@ export default function RequestPage() {
       const errorMessage = error?.message || (data as any)?.error || 'Unknown error';
       console.error('Error submitting request:', errorMessage);
       
-      // Track submission error
       analytics.leadFormError(
         submissionTime > 10 ? 'timeout' : 'api_error',
         errorMessage,
@@ -219,8 +253,9 @@ export default function RequestPage() {
     }
 
     setIsSubmitting(false);
-    navigate('/conferma', {
+    navigate('/account', {
       state: {
+        justRegistered: true,
         interventionType: formData.interventionType,
         city: formData.city,
       }

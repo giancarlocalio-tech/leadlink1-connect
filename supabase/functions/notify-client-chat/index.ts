@@ -15,7 +15,7 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { request_id, plumber_id } = await req.json();
+    const { request_id, plumber_id, quote_amount_cents, quote_message } = await req.json();
     if (!request_id || !plumber_id) {
       return new Response(JSON.stringify({ error: "Missing params" }), {
         status: 400,

@@ -221,3 +221,49 @@ export const SIENA_QUARTIERI_SLUGS = [
   'san-miniato',
   'costalpino'
 ];
+
+// 17 Contrade di Siena con colori araldici tradizionali ed emoji simbolo
+// Usato per rendere la pagina "amichevole" e riconoscibile dai senesi
+export const SIENA_CONTRADE = [
+  { name: 'Aquila',        symbol: '🦅', terzo: 'Città',       colors: ['#FACC15', '#000000', '#1E3A8A'] },
+  { name: 'Chiocciola',    symbol: '🐌', terzo: 'Città',       colors: ['#FACC15', '#DC2626', '#1E3A8A'] },
+  { name: 'Onda',          symbol: '🌊', terzo: 'Città',       colors: ['#FFFFFF', '#2563EB', '#FFFFFF'] },
+  { name: 'Pantera',       symbol: '🐆', terzo: 'Città',       colors: ['#DC2626', '#2563EB', '#FFFFFF'] },
+  { name: 'Selva',         symbol: '🌳', terzo: 'Città',       colors: ['#F97316', '#16A34A', '#FFFFFF'] },
+  { name: 'Tartuca',       symbol: '🐢', terzo: 'Città',       colors: ['#FACC15', '#1E40AF', '#FACC15'] },
+  { name: 'Bruco',         symbol: '🐛', terzo: 'Camollia',    colors: ['#FACC15', '#16A34A', '#FACC15'] },
+  { name: 'Drago',         symbol: '🐉', terzo: 'Camollia',    colors: ['#DC2626', '#16A34A', '#FACC15'] },
+  { name: 'Giraffa',       symbol: '🦒', terzo: 'Camollia',    colors: ['#DC2626', '#FFFFFF', '#DC2626'] },
+  { name: 'Istrice',       symbol: '🦔', terzo: 'Camollia',    colors: ['#DC2626', '#FFFFFF', '#1E40AF'] },
+  { name: 'Lupa',          symbol: '🐺', terzo: 'Camollia',    colors: ['#FFFFFF', '#000000', '#F97316'] },
+  { name: 'Oca',           symbol: '🦢', terzo: 'Camollia',    colors: ['#FFFFFF', '#16A34A', '#DC2626'] },
+  { name: 'Civetta',       symbol: '🦉', terzo: 'San Martino', colors: ['#DC2626', '#000000', '#FFFFFF'] },
+  { name: 'Leocorno',      symbol: '🦄', terzo: 'San Martino', colors: ['#FFFFFF', '#F97316', '#1E40AF'] },
+  { name: 'Nicchio',       symbol: '🐚', terzo: 'San Martino', colors: ['#1E40AF', '#DC2626', '#FACC15'] },
+  { name: 'Torre',         symbol: '🏰', terzo: 'San Martino', colors: ['#7C3AED', '#FFFFFF', '#DC2626'] },
+  { name: 'Valdimontone',  symbol: '🐏', terzo: 'San Martino', colors: ['#DC2626', '#FACC15', '#FFFFFF'] }
+];
+
+// Value props "perché scegliere IdrauliciSubito invece di Google"
+export const SIENA_WHY_US = [
+  {
+    icon: 'compare',
+    title: 'Confronta più preventivi gratis',
+    description: 'Invece di chiamare 5 idraulici diversi, ne ricevi più di uno con un\'unica richiesta. Confronti prezzi e scegli il migliore.'
+  },
+  {
+    icon: 'check',
+    title: 'Solo idraulici verificati a Siena',
+    description: 'P.IVA, recensioni e zona di lavoro controllate. Niente sorprese, niente "tuttofare" senza esperienza sui palazzi del centro UNESCO.'
+  },
+  {
+    icon: 'clock',
+    title: 'Risposta in 15 minuti',
+    description: 'Il primo idraulico libero a Siena ti contatta direttamente. Niente attesa al telefono o caselle vocali.'
+  },
+  {
+    icon: 'shield',
+    title: '100% gratuito e senza impegno',
+    description: 'Nessun pagamento per ricevere i preventivi. Decidi tu se accettare o no. Nessuna commissione nascosta.'
+  }
+];

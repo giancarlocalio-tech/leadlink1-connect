@@ -433,8 +433,8 @@ export function TrialRequestCard({
                     <Send className="h-4 w-4" />
                   )}
                   {freeRequestsRemaining > 0
-                    ? 'Rispondi (gratis)'
-                    : `Rispondi (${formatEuroFromCents(unlockCostCents)})`}
+                    ? 'Invia preventivo (gratis)'
+                    : `Invia preventivo (${formatEuroFromCents(unlockCostCents)})`}
                 </Button>
               </div>
             </div>

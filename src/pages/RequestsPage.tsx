@@ -319,7 +319,7 @@ function RequestsContent() {
                     onUnlockWithCredits={handleUnlockWithCredits}
                     claiming={claiming === request.id}
                     freeRequestsRemaining={freeRequestsRemaining}
-                    creditBalance={credits?.balance_cents ?? 0}
+                    balanceCents={credits?.balance_cents ?? 0}
                   />
                 </div>
               ))

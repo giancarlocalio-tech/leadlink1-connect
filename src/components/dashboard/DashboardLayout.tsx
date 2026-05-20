@@ -29,6 +29,9 @@ const SIENA_THEME = {
   ['--sidebar-primary' as any]: '199 89% 48%',
   ['--sidebar-primary-foreground' as any]: '0 0% 100%',
   ['--sidebar-ring' as any]: '199 89% 48%',
+  ['--sidebar-accent' as any]: '199 89% 94%',
+  ['--sidebar-accent-foreground' as any]: '199 89% 28%',
+  ['--sidebar-border' as any]: '199 40% 88%',
 };
 
 export function DashboardLayout({ children, title, breadcrumbs }: DashboardLayoutProps) {

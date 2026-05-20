@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ArrowLeft, Save, X, CreditCard, ArrowUpCircle, XCircle, Loader2 } from 'lucide-react';
+import { ArrowLeft, Save, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,15 +10,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Layout } from '@/components/Layout';
 import { useAuth } from '@/hooks/useAuth';
 import { usePlumberProfile } from '@/hooks/usePlumberProfile';
-import { useSubscription } from '@/hooks/useSubscription';
-import { useStripeSubscription } from '@/hooks/useStripeSubscription';
-import { STRIPE_PLANS, type StripePlanType } from '@/lib/stripeConfig';
 import { toast } from 'sonner';
 import type { InterventionType, AvailabilityType } from '@/lib/types';
 import { INTERVENTION_LABELS, AVAILABILITY_LABELS } from '@/lib/types';
 import { CityAutocomplete, type ItalianCity } from '@/components/CityAutocomplete';
-import { Badge } from '@/components/ui/badge';
-import { supabase } from '@/integrations/supabase/client';
 
 const PLAN_LABELS: Record<string, string> = {
   basic: 'Base',

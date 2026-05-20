@@ -69,10 +69,11 @@ export default function ClientAccountPage() {
       setLoading(true);
 
       // 1) Fetch this client's requests
+      const ownEmail = user.email?.toLowerCase() || '';
       const { data: reqs, error: reqErr } = await supabase
         .from('service_requests')
         .select('id, intervention_type, city, description, urgency, status, created_at')
-        .eq('client_user_id', user.id)
+        .or(`client_user_id.eq.${user.id}${ownEmail ? `,client_email.eq.${ownEmail}` : ''}`)
         .order('created_at', { ascending: false });
 
       if (reqErr) {

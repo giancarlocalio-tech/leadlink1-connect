@@ -190,7 +190,7 @@ export default function SienaLandingPage() {
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
-        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <meta name="robots" content="noindex,nofollow" />
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
@@ -274,54 +274,61 @@ export default function SienaLandingPage() {
         </div>
       </section>
 
-      {/* TABLE OF CONTENTS */}
-      <section className="py-8 bg-white border-b border-border">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <h2 className="text-lg font-bold mb-3 flex items-center gap-2">
-            <ChevronDown className="h-5 w-5 text-primary" /> Indice della pagina
+      {/* HOW IT WORKS — 3 step process */}
+      <section id="come-funziona" className="py-14 bg-white border-t border-border">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
+            Come funziona — 3 passi, 60 secondi
           </h2>
-          <nav className="grid sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
-            {TOC.map((item) => (
-              <a key={item.id} href={`#${item.id}`} className="text-primary hover:underline">
-                → {item.label}
-              </a>
+          <p className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto">
+            Niente registrazione, niente carta di credito. Solo un modo veloce per avere più preventivi di idraulici a Siena nello stesso momento.
+          </p>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                step: '1',
+                title: 'Descrivi il problema',
+                desc: 'Rispondi a 4-5 domande veloci sul tipo di intervento (perdita, scaldabagno, scarico, ecc.) e sulla zona di Siena.',
+                icon: Wrench,
+              },
+              {
+                step: '2',
+                title: 'Ricevi più preventivi',
+                desc: 'Avvisiamo subito gli idraulici verificati della tua zona di Siena. In genere ricevi le prime risposte in 15 minuti.',
+                icon: Users,
+              },
+              {
+                step: '3',
+                title: 'Scegli e risparmia',
+                desc: 'Confronti i preventivi, leggi le recensioni e scegli l\'idraulico che preferisci. 100% gratuito, senza impegno.',
+                icon: CheckCircle,
+              },
+            ].map((s) => (
+              <div key={s.step} className="relative bg-card border border-border rounded-xl p-6 text-center shadow-sm">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground w-9 h-9 rounded-full flex items-center justify-center font-bold text-lg shadow-md">
+                  {s.step}
+                </div>
+                <div className="bg-primary/10 rounded-full w-14 h-14 flex items-center justify-center mx-auto mt-2 mb-4">
+                  <s.icon className="h-7 w-7 text-primary" />
+                </div>
+                <h3 className="font-bold text-lg mb-2">{s.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{s.desc}</p>
+              </div>
             ))}
-          </nav>
-        </div>
-      </section>
-
-      {/* INTRO — long-form, Siena-specific */}
-      <section id="intro" className="py-12 bg-white">
-        <div className="container mx-auto px-4 max-w-3xl">
-          <div className="bg-accent/30 border-l-4 border-primary p-6 rounded-r-lg mb-6">
-            <p className="text-lg leading-relaxed">
-              Cerchi un <strong>idraulico a Siena</strong> per un'emergenza o una riparazione programmata? Siena è una città unica
-              in Italia: un centro storico medievale tutelato dall'UNESCO dal 1995, organizzato nei tre <em>Terzi</em>
-              (Città, Camollia, San Martino) e nelle 17 Contrade, circondato da quartieri residenziali e frazioni
-              collinari. Ogni zona ha le sue specificità idrauliche, e serve un tecnico che le conosca.
-            </p>
-            <p className="text-lg leading-relaxed mt-4">
-              Con <strong>IdrauliciSubito</strong> trovi rapidamente un idraulico professionista a Siena e in tutta la
-              provincia — dai vicoli pedonali del centro UNESCO ai condomini di Acquacalda, San Prospero e San
-              Miniato, fino alle ville collinari di Ravacciano e Vico Alto, alle frazioni della Val d'Arbia e ai
-              comuni del Chianti senese, della Val d'Orcia e delle Crete Senesi.
-            </p>
-            <p className="text-lg leading-relaxed mt-4">
-              Pronto intervento idraulico Siena <strong>24 ore su 24, 7 giorni su 7</strong>, anche di notte, nei
-              weekend, nei festivi e nei giorni di Palio. Preventivo gratuito prima dell'intervento, tecnici
-              residenti in zona, fattura regolare e nessun costo nascosto.
-            </p>
           </div>
-          <div className="text-center">
+          <div className="text-center mt-10">
             <Button size="lg" onClick={handleRequestClick} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6 h-auto shadow-lg">
-              Ricevi preventivi gratis a Siena →
+              Inizia ora — Ricevi preventivi gratis →
             </Button>
+            <p className="text-muted-foreground text-sm mt-3">
+              ✓ Compili in 60 secondi · ✓ Nessuna registrazione · ✓ 100% gratis
+            </p>
           </div>
         </div>
       </section>
 
       {/* WHY US — Google Ads conversion block */}
-      <section id="perche-noi" className="py-14 bg-white">
+      <section id="perche-noi" className="py-14 bg-white border-t border-border">
         <div className="container mx-auto px-4 max-w-5xl">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
             Perché scegliere IdrauliciSubito invece di cercare su Google?
@@ -357,238 +364,22 @@ export default function SienaLandingPage() {
         </div>
       </section>
 
-      {/* CONTRADE — Siena-friendly section */}
-      <section id="contrade" className="py-14 bg-white">
-        <div className="container mx-auto px-4 max-w-5xl">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <Heart className="h-6 w-6 text-primary" />
-            <span className="uppercase text-sm font-bold tracking-wide text-primary">Made in Siena</span>
-          </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
-            Serviamo tutte le 17 Contrade di Siena
-          </h2>
-          <p className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto">
-            Dai vicoli dell'<strong>Oca</strong> e della <strong>Selva</strong> alle case-torri della <strong>Torre</strong>,
-            fino ai palazzi di <strong>Pantera</strong>, <strong>Tartuca</strong> e <strong>Onda</strong>:
-            i nostri idraulici conoscono ogni Terzo, ogni vicolo e ogni Contrada del centro UNESCO.
-          </p>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-8">
-            {SIENA_CONTRADE.map((c) => (
-              <div
-                key={c.name}
-                className="group bg-card border border-border rounded-xl overflow-hidden hover:border-primary/50 hover:shadow-md transition-all"
-              >
-                <div
-                  className="h-2 w-full"
-                  style={{
-                    background: `linear-gradient(90deg, ${c.colors[0]} 0%, ${c.colors[0]} 33%, ${c.colors[1]} 33%, ${c.colors[1]} 66%, ${c.colors[2]} 66%, ${c.colors[2]} 100%)`,
-                  }}
-                  aria-hidden="true"
-                />
-                <div className="p-3 text-center">
-                  <div className="text-2xl mb-1" aria-hidden="true">{c.symbol}</div>
-                  <div className="font-bold text-sm leading-tight">{c.name}</div>
-                  <div className="text-[10px] uppercase tracking-wide text-muted-foreground mt-0.5">
-                    Terzo di {c.terzo}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="bg-accent/30 border-l-4 border-primary p-5 rounded-r-lg text-sm leading-relaxed">
-            <strong>Idraulici locali, non call center.</strong> I tecnici della rete IdrauliciSubito vivono e lavorano a Siena:
-            sanno cosa significa intervenire in un vicolo della Chiocciola con il furgone che non passa, riparare una colonna
-            di scarico in un palazzo dell'Aquila con vincoli della Soprintendenza, o gestire la pressione idrica in una
-            casa-torre del Bruco. <em>Forza e Onore</em> a chi lavora bene. 🏇
-          </div>
-        </div>
-      </section>
-
-      {/* STATS */}
-      <section id="statistiche" className="py-12 bg-white">
+      {/* TRUST STRIP — quick stats */}
+      <section className="py-10 bg-primary/5 border-y border-border">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">I numeri del nostro servizio a Siena</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             {SIENA_STATS.map((stat, i) => (
-              <div key={i} className="text-center bg-card border border-border rounded-xl p-6">
-                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
+              <div key={i} className="text-center">
+                <div className="text-3xl md:text-4xl font-bold text-primary mb-1">{stat.value}</div>
+                <div className="text-xs md:text-sm text-muted-foreground">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* WHY PROBLEMS */}
-      <section id="perche-problemi" className="py-12 bg-white">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
-            Perché a Siena i problemi idraulici sono frequenti
-          </h2>
-          <p className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto">
-            La combinazione di acqua durissima, palazzi medievali e clima collinare crea problematiche tipicamente
-            senesi.
-          </p>
-          <div className="space-y-4">
-            {SIENA_WHY_PROBLEMS.map((item, i) => (
-              <div key={i} className="bg-card border border-border rounded-xl p-6 flex gap-4">
-                <div className="bg-primary/10 rounded-full w-12 h-12 flex items-center justify-center flex-shrink-0">
-                  {i === 0 ? <Droplets className="h-6 w-6 text-primary" /> :
-                   i === 1 ? <Landmark className="h-6 w-6 text-primary" /> :
-                   i === 2 ? <Shield className="h-6 w-6 text-primary" /> :
-                   i === 3 ? <Snowflake className="h-6 w-6 text-primary" /> :
-                             <AlertTriangle className="h-6 w-6 text-primary" />}
-                </div>
-                <div>
-                  <h3 className="font-bold text-lg mb-1">{item.title}</h3>
-                  <p className="text-muted-foreground">{item.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* NEIGHBORHOODS */}
-      <section id="quartieri" className="py-12 bg-white">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
-            Quartieri, Terzi e Contrade di Siena serviti
-          </h2>
-          <p className="text-center text-muted-foreground mb-8">
-            Interveniamo in tutta la città e nei comuni limitrofi della provincia di Siena.
-          </p>
-          <div className="bg-card border border-border rounded-xl p-6 mb-6">
-            <h3 className="font-bold mb-3 flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-primary" /> Zone della città
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {SIENA_NEIGHBORHOODS.map((n) => (
-                <span key={n} className="bg-primary/10 text-primary text-sm rounded-full px-3 py-1">
-                  {n}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="bg-card border border-border rounded-xl p-6">
-            <h3 className="font-bold mb-3 flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-primary" /> Comuni della provincia
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {SIENA_NEARBY_AREAS.map((n) => (
-                <span key={n} className="bg-secondary/10 text-secondary-foreground text-sm rounded-full px-3 py-1 border border-border">
-                  {n}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* BUILDING TYPES */}
-      <section id="tipologie-edifici" className="py-12 bg-white">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">Tipologie di edifici a Siena</h2>
-          <p className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto">
-            Ogni tipo di edificio senese ha sfide idrauliche specifiche: i nostri tecnici sanno come affrontarle.
-          </p>
-          <div className="grid md:grid-cols-2 gap-6">
-            {SIENA_BUILDING_TYPES.map((b, i) => (
-              <div key={i} className="bg-card border border-border rounded-xl p-6">
-                <div className="flex items-start gap-3 mb-3">
-                  <Building2 className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-                  <h3 className="font-bold text-lg">{b.type}</h3>
-                </div>
-                <p className="text-muted-foreground mb-4">{b.description}</p>
-                <div className="mb-3">
-                  <div className="text-xs uppercase font-bold text-muted-foreground mb-2">Sfide tipiche</div>
-                  <ul className="space-y-1">
-                    {b.challenges.map((c) => (
-                      <li key={c} className="text-sm flex items-start gap-2">
-                        <CheckCircle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
-                        <span>{c}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="text-xs text-muted-foreground">
-                  Zone: <span className="font-medium">{b.neighborhoods.join(', ')}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* COMMON PROBLEMS (generic component) */}
-      <div id="problemi-comuni">
-        <CityCommonProblemsSection cityName="Siena" citySlug="siena" />
-      </div>
-
-      {/* RESPONSE TIMES (generic component) */}
-      <div id="tempi-risposta">
-        <CityResponseTimesSection cityName="Siena" citySlug="siena" />
-      </div>
-
-      {/* COSTS */}
-      <section id="costi" className="py-12 bg-white">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">Quanto costa un idraulico a Siena</h2>
-          <p className="text-center text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Prezzi indicativi per i principali interventi a Siena e provincia. Il preventivo definitivo è sempre
-            gratuito e calcolato dopo aver visto il problema.
-          </p>
-          <div className="bg-card border border-border rounded-xl overflow-hidden">
-            <table className="w-full text-sm md:text-base">
-              <thead className="bg-primary/10">
-                <tr>
-                  <th className="text-left p-4 font-bold">Intervento</th>
-                  <th className="text-right p-4 font-bold">Prezzo indicativo</th>
-                </tr>
-              </thead>
-              <tbody>
-                {SIENA_COSTS.map((c, i) => (
-                  <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
-                    <td className="p-4">{c.service}</td>
-                    <td className="p-4 text-right font-semibold text-primary">{c.priceRange}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="text-xs text-muted-foreground mt-4 text-center">
-            I prezzi sono medie di mercato Siena 2025 e possono variare per accessibilità (vicoli del centro UNESCO,
-            piani alti senza ascensore) e materiali. Il preventivo IdrauliciSubito è sempre gratuito.
-          </p>
-        </div>
-      </section>
-
-      {/* SERVICES */}
-      <section className="py-12 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">Servizi idraulici a Siena</h2>
-          <p className="text-muted-foreground text-center mb-10 max-w-2xl mx-auto">
-            I nostri idraulici a Siena offrono una gamma completa di servizi per abitazioni, palazzi storici,
-            condomini, B&B e attività commerciali del centro UNESCO.
-          </p>
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {SERVICES.map((s, i) => (
-              <div key={i} className="bg-card rounded-xl p-6 shadow-md border border-border text-center">
-                <div className="bg-primary/10 rounded-full w-14 h-14 flex items-center justify-center mx-auto mb-4">
-                  <s.icon className="h-7 w-7 text-primary" />
-                </div>
-                <h3 className="font-bold text-lg mb-2">{s.title}</h3>
-                <p className="text-muted-foreground text-sm">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* REVIEWS */}
-      <section id="recensioni" className="py-12 bg-white">
+      {/* REVIEWS — social proof */}
+      <section id="recensioni" className="py-14 bg-white">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">Recensioni dei clienti a Siena</h2>
           <div className="flex items-center justify-center gap-2 mb-10">
@@ -600,7 +391,7 @@ export default function SienaLandingPage() {
             </span>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
-            {SIENA_REVIEWS.map((r, i) => (
+            {SIENA_REVIEWS.slice(0, 4).map((r, i) => (
               <div key={i} className="bg-card border border-border rounded-xl p-6">
                 <div className="flex items-center gap-1 mb-3">
                   {[...Array(r.rating)].map((_, idx) => (
@@ -617,18 +408,20 @@ export default function SienaLandingPage() {
               </div>
             ))}
           </div>
+          <div className="text-center mt-10">
+            <Button size="lg" onClick={handleRequestClick} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6 h-auto shadow-lg">
+              Ricevi preventivi gratis →
+            </Button>
+          </div>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section id="faq" className="py-12 bg-white">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">Domande frequenti — Idraulico Siena</h2>
-          <p className="text-center text-muted-foreground mb-10">
-            Le risposte alle domande più comuni dei nostri clienti senesi.
-          </p>
+      {/* FAQ — short, conversion-focused */}
+      <section id="faq" className="py-14 bg-white border-t border-border">
+        <div className="container mx-auto px-4 max-w-3xl">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">Domande frequenti</h2>
           <div className="space-y-3">
-            {SIENA_EXTENDED_FAQS.map((faq, i) => (
+            {SIENA_EXTENDED_FAQS.slice(0, 6).map((faq, i) => (
               <details
                 key={i}
                 className="group bg-card border border-border rounded-xl p-5 [&_summary::-webkit-details-marker]:hidden"
@@ -644,8 +437,6 @@ export default function SienaLandingPage() {
         </div>
       </section>
 
-      {/* INTERNAL LINKS (generic component) */}
-      <CityInternalLinksSection cityName="Siena" citySlug="siena" />
 
       {/* FINAL CTA */}
       <section className="py-20 bg-primary text-primary-foreground">

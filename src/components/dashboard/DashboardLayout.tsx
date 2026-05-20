@@ -1,7 +1,10 @@
 import { ReactNode } from 'react';
+import { Navigate } from 'react-router-dom';
 import { SidebarProvider, SidebarTrigger, SidebarInset } from '@/components/ui/sidebar';
 import { DashboardSidebar } from './DashboardSidebar';
 import { Separator } from '@/components/ui/separator';
+import { useAuth } from '@/hooks/useAuth';
+import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -35,6 +38,13 @@ const SIENA_THEME = {
 };
 
 export function DashboardLayout({ children, title, breadcrumbs }: DashboardLayoutProps) {
+  const { user, loading: authLoading } = useAuth();
+  const { profile, loading: profileLoading, hasFetched } = usePlumberProfile();
+
+  if (user && hasFetched && !profile) {
+    return <Navigate to="/account" replace />;
+  }
+
   return (
     <SidebarProvider style={SIENA_THEME as React.CSSProperties}>
       <div className="min-h-screen flex w-full bg-background">
@@ -68,7 +78,11 @@ export function DashboardLayout({ children, title, breadcrumbs }: DashboardLayou
                 {title}
               </h1>
             </div>
-            {children}
+            {authLoading || profileLoading || (user && !hasFetched) ? (
+              <div className="py-16 flex items-center justify-center text-sm text-muted-foreground">
+                Caricamento…
+              </div>
+            ) : children}
           </main>
         </SidebarInset>
       </div>

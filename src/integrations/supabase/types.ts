@@ -1162,7 +1162,7 @@ export type Database = {
           client_phone: string
           description: string
           id: string
-          intervention_type: Database["public"]["Enums"]["intervention_type"]
+          intervention_type: string
           phone_contact_allowed: boolean
         }[]
       }

@@ -17,7 +17,7 @@ export default function TopUpPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!authLoading && !user) navigate('/auth?returnUrl=/dashboard/conto/ricarica');
+    if (!authLoading && !user) navigate('/auth?returnUrl=/dashboard/crediti/ricarica');
   }, [user, authLoading, navigate]);
 
   useEffect(() => {

@@ -13,9 +13,12 @@ export function usePlumberProfile() {
     if (!user) {
       setProfile(null);
       setLoading(false);
+      setHasFetched(true);
       return;
     }
 
+    setProfile(null);
+    setHasFetched(false);
     setLoading(true);
     try {
       const { data, error } = await supabase
@@ -157,6 +160,7 @@ export function usePlumberProfile() {
   return {
     profile,
     loading,
+    hasFetched,
     createProfile,
     updateProfile,
     refreshProfile: fetchProfile,

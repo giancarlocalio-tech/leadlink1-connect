@@ -272,7 +272,7 @@ function RequestsContent() {
               <div 
                 key={request.id}
                 ref={request.id === highlightedRequestId ? highlightedRef : undefined}
-                className={request.id === highlightedRequestId ? 'ring-2 ring-primary ring-offset-2 rounded-lg animate-pulse' : ''}
+                className={request.id === highlightedRequestId ? 'ring-2 ring-primary ring-offset-2 rounded-lg' : ''}
               >
                 <TrialRequestCard
                   request={request}

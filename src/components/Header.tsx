@@ -13,9 +13,9 @@ export function Header() {
   const isRegisterPage = location.pathname === '/auth';
   const { user, signOut } = useAuth();
   const { isAdmin } = useAdmin(user);
-  const { profile: plumberProfile } = usePlumberProfile();
-  const dashboardHref = plumberProfile ? '/dashboard' : '/account';
-  const dashboardLabel = plumberProfile ? 'Dashboard' : 'Le mie richieste';
+  const { profile: plumberProfile, hasFetched } = usePlumberProfile();
+  const dashboardHref = hasFetched && plumberProfile ? '/dashboard' : '/account';
+  const dashboardLabel = hasFetched && plumberProfile ? 'Dashboard' : 'Le mie richieste';
 
   const handleSignOut = async () => {
     const { error } = await signOut();

@@ -73,7 +73,7 @@ export default function ClientAccountPage() {
       const { data: reqs, error: reqErr } = await supabase
         .from('service_requests')
         .select('id, intervention_type, city, description, urgency, status, created_at')
-        .or(`client_user_id.eq.${user.id}${ownEmail ? `,client_email.eq.${ownEmail}` : ''}`)
+        .or(`client_user_id.eq.${user.id}${ownEmail ? `,client_email.ilike.${ownEmail}` : ''}`)
         .order('created_at', { ascending: false });
 
       if (reqErr) {

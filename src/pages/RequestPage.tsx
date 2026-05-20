@@ -36,7 +36,8 @@ const STEPS = [
   'urgency', 
   'propertyType',
   'accessibility',
-  'contact'
+  'contact',
+  'password'
 ] as const;
 
 type StepType = typeof STEPS[number];

@@ -436,7 +436,7 @@ const handler = async (req: Request): Promise<Response> => {
             reply_to: "supporto@idraulicisubito.com",
             to: [plumber.email],
             subject: `Hai 1 nuova opportunità di lavoro a ${serviceRequest.city}`,
-            text: `Ciao ${plumber.full_name || plumber.business_name},\n\nHai 1 nuova opportunità di lavoro!\n\n${interventionLabel}\nDove: ${serviceRequest.city}\nQuando: ${urgencyLabel}\nContatto: Sblocca per chiamare il cliente\n\nDettagli: ${serviceRequest.description}\n\nSblocca subito: https://www.idraulicisubito.com/dashboard/richieste?id=${serviceRequest.id}&email=${encodeURIComponent(plumber.email)}\n\nChi risponde per primo ha più probabilità di ottenere il lavoro!`,
+            text: `Ciao ${plumber.full_name || plumber.business_name},\n\nHai 1 nuova opportunità di lavoro!\n\n${interventionLabel}\nDove: ${serviceRequest.city}\nQuando: ${urgencyLabel}\nContatto: ${contactLine}\n\nDettagli: ${serviceRequest.description}\n\nInvia preventivo: https://www.idraulicisubito.com/dashboard/richieste?id=${serviceRequest.id}&email=${encodeURIComponent(plumber.email)}\n\nChi risponde per primo ha più probabilità di ottenere il lavoro!`,
             headers: {
               "List-Unsubscribe": "<mailto:supporto@idraulicisubito.com?subject=unsubscribe>",
             },

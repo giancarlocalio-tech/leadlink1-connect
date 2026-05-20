@@ -122,7 +122,6 @@ export function TrialRequestCard({
   const quoteValid = !!priceCents && quoteMessage.trim().length >= 10;
 
   const handleSendQuote = async () => {
-    if (!onUnlockWithCredits) return;
     if (!priceCents) {
       toast.error('Inserisci un prezzo valido (es. 120 o 89,50)');
       return;
@@ -132,24 +131,39 @@ export function TrialRequestCard({
       return;
     }
 
+    const quote: QuoteSubmission = {
+      quote_amount_cents: priceCents,
+      quote_message: quoteMessage.trim(),
+    };
+
     setUnlocking(true);
     try {
-      // 1) Unlock the contact (debits balance)
-      const result = await onUnlockWithCredits(request.id, {
-        quote_amount_cents: priceCents,
-        quote_message: quoteMessage.trim(),
-      });
+      // If user still has trial requests, use the trial flow (free).
+      // Otherwise debit balance via paid unlock.
+      const useTrial = freeRequestsRemaining > 0;
 
-      if (!result.success) {
-        toast.error(result.message);
-        return;
+      if (useTrial) {
+        const result = await onClaim(request.id, quote);
+        if (!result.success) {
+          toast.error(result.message);
+          return;
+        }
+        setClaimResult(result);
+      } else {
+        if (!onUnlockWithCredits) {
+          toast.error('Sblocco non disponibile');
+          return;
+        }
+        const result = await onUnlockWithCredits(request.id, quote);
+        if (!result.success) {
+          toast.error(result.message);
+          return;
+        }
+        setCreditUnlockResult(result);
       }
 
-      setCreditUnlockResult(result);
       onAccepted?.();
       toast.success('Preventivo inviato al cliente!');
-
-      // 2) Redirect to Preventivi to continue conversation
       setTimeout(() => navigate('/dashboard/preventivi'), 1200);
     } finally {
       setUnlocking(false);

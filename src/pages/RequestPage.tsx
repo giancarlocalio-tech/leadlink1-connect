@@ -61,6 +61,7 @@ export default function RequestPage() {
     privacyAccepted: false,
     password: '',
   });
+  const [noPhoneContact, setNoPhoneContact] = useState(false);
 
   const currentStep = STEPS[currentStepIndex];
   const progress = ((currentStepIndex + 1) / STEPS.length) * 100;
@@ -226,6 +227,7 @@ export default function RequestPage() {
       client_email: email,
       client_user_id: clientUserId,
       privacy_accepted: formData.privacyAccepted,
+      phone_contact_allowed: !noPhoneContact,
       wizard_answers: wizardAnswers.length > 0 ? wizardAnswers : null,
     };
 
@@ -398,6 +400,16 @@ export default function RequestPage() {
                 onBlur={(e) => analytics.leadFormFieldBlur('clientPhone', 'contact', !!e.target.value)}
                 className="text-base"
               />
+              <div className="flex items-start gap-2 mt-2">
+                <Checkbox
+                  id="no-phone-contact"
+                  checked={noPhoneContact}
+                  onCheckedChange={(checked) => setNoPhoneContact(checked === true)}
+                />
+                <Label htmlFor="no-phone-contact" className="text-sm leading-relaxed cursor-pointer text-muted-foreground">
+                  Non desidero essere contattato telefonicamente (solo via chat/email)
+                </Label>
+              </div>
             </div>
 
             <div>

@@ -15,6 +15,7 @@ export interface TrialRequest {
   description: string;
   created_at: string;
   is_exclusive: boolean;
+  phone_contact_allowed?: boolean;
 }
 
 export interface ClaimResult {

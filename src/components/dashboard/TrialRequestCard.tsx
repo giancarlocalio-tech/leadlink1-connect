@@ -170,7 +170,9 @@ export function TrialRequestCard({
     }
   };
 
-  const unlockCostCents = UNLOCK_COSTS_CENTS[request.urgency];
+  const baseUnlockCostCents = UNLOCK_COSTS_CENTS[request.urgency];
+  const phoneAllowed = request.phone_contact_allowed !== false;
+  const unlockCostCents = phoneAllowed ? baseUnlockCostCents : Math.round(baseUnlockCostCents * 0.7);
   const trialExhausted = freeRequestsRemaining <= 0;
   const hasInsufficientBalance = trialExhausted && balanceCents < unlockCostCents;
   const isProcessing = claiming || unlocking;
@@ -361,13 +363,13 @@ export function TrialRequestCard({
                   {freeRequestsRemaining > 0 ? (
                     <>Hai <span className="font-semibold text-primary">{freeRequestsRemaining}</span> risposte gratuite</>
                   ) : (
-                    <>Costo risposta: <span className="font-semibold text-primary">{formatEuroFromCents(unlockCostCents)}</span></>
+                    <>Costo invio: <span className="font-semibold text-primary">{formatEuroFromCents(unlockCostCents)}</span>{!phoneAllowed && <span className="ml-1 text-green-600">(solo chat, -30%)</span>}</>
                   )}
                 </p>
               </div>
               <Button onClick={() => setShowQuoteForm(true)} size="sm" className="gap-2 shrink-0">
                 <Zap className="h-4 w-4" />
-                Rispondi
+                Invia preventivo
               </Button>
             </div>
           ) : (
@@ -431,8 +433,8 @@ export function TrialRequestCard({
                     <Send className="h-4 w-4" />
                   )}
                   {freeRequestsRemaining > 0
-                    ? 'Rispondi (gratis)'
-                    : `Rispondi (${formatEuroFromCents(unlockCostCents)})`}
+                    ? 'Invia preventivo (gratis)'
+                    : `Invia preventivo (${formatEuroFromCents(unlockCostCents)})`}
                 </Button>
               </div>
             </div>

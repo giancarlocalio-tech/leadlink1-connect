@@ -75,6 +75,7 @@ const handler = async (req: Request): Promise<Response> => {
         client_email: z.string().trim().email().nullable().optional(),
         client_user_id: z.string().uuid().nullable().optional(),
         privacy_accepted: z.literal(true),
+        phone_contact_allowed: z.boolean().optional(),
         wizard_answers: z.array(z.object({
           questionId: z.string(),
           questionTitle: z.string(),
@@ -419,6 +420,10 @@ const handler = async (req: Request): Promise<Response> => {
         const plumber = matchingPlumbers[i];
         const interventionLabel = INTERVENTION_LABELS[serviceRequest.intervention_type] || serviceRequest.intervention_type;
         const urgencyLabel = URGENCY_LABELS[serviceRequest.urgency] || serviceRequest.urgency;
+        const phoneAllowed = serviceRequest.phone_contact_allowed !== false;
+        const contactLine = phoneAllowed
+          ? "Contattabile via chat e telefono"
+          : "Contattabile solo via chat/email";
 
         try {
           // Add delay between emails to respect Resend rate limit (2 emails/second)
@@ -431,7 +436,7 @@ const handler = async (req: Request): Promise<Response> => {
             reply_to: "supporto@idraulicisubito.com",
             to: [plumber.email],
             subject: `Hai 1 nuova opportunità di lavoro a ${serviceRequest.city}`,
-            text: `Ciao ${plumber.full_name || plumber.business_name},\n\nHai 1 nuova opportunità di lavoro!\n\n${interventionLabel}\nDove: ${serviceRequest.city}\nQuando: ${urgencyLabel}\nContatto: Sblocca per chiamare il cliente\n\nDettagli: ${serviceRequest.description}\n\nSblocca subito: https://www.idraulicisubito.com/dashboard/richieste?id=${serviceRequest.id}&email=${encodeURIComponent(plumber.email)}\n\nChi risponde per primo ha più probabilità di ottenere il lavoro!`,
+            text: `Ciao ${plumber.full_name || plumber.business_name},\n\nHai 1 nuova opportunità di lavoro!\n\n${interventionLabel}\nDove: ${serviceRequest.city}\nQuando: ${urgencyLabel}\nContatto: ${contactLine}\n\nDettagli: ${serviceRequest.description}\n\nInvia preventivo: https://www.idraulicisubito.com/dashboard/richieste?id=${serviceRequest.id}&email=${encodeURIComponent(plumber.email)}\n\nChi risponde per primo ha più probabilità di ottenere il lavoro!`,
             headers: {
               "List-Unsubscribe": "<mailto:supporto@idraulicisubito.com?subject=unsubscribe>",
             },
@@ -478,7 +483,7 @@ const handler = async (req: Request): Promise<Response> => {
                                     <span style="color:#6b7280;">📅 <strong style="color:#111827;">Quando:</strong></span> ${urgencyLabel}
                                   </p>
                                   <p style="margin:0 0 8px 0;font-size:14px;color:#374151;">
-                                    <span style="color:#6b7280;">📞 <strong style="color:#111827;">Contatto:</strong></span> Sblocca per chiamare il cliente
+                                    <span style="color:#6b7280;">📞 <strong style="color:#111827;">Contatto:</strong></span> ${contactLine}
                                   </p>
                                   <p style="margin:0 0 14px 0;font-size:14px;color:#374151;">
                                     <span style="color:#6b7280;">🕒 <strong style="color:#111827;">Richiesta creata:</strong></span> pochi minuti fa
@@ -491,7 +496,7 @@ const handler = async (req: Request): Promise<Response> => {
                                   <div style="text-align:center;margin:22px 0 4px 0;">
                                     <a href="https://www.idraulicisubito.com/dashboard/richieste?id=${serviceRequest.id}&email=${encodeURIComponent(plumber.email)}" 
                                        style="display:block;background-color:#1e40af;color:#ffffff;text-decoration:none;padding:16px 24px;border-radius:8px;font-size:16px;font-weight:700;">
-                                      Sblocca contatto
+                                      Invia preventivo
                                     </a>
                                   </div>
                                 </td>

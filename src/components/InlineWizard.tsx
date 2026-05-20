@@ -121,6 +121,7 @@ export default function InlineWizard({ onClose, defaultCity = '' }: InlineWizard
   const [clientPhone, setClientPhone] = useState('');
   const [clientEmail, setClientEmail] = useState('');
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const [noPhoneContact, setNoPhoneContact] = useState(false);
 
   const filteredTypes = ALL_INTERVENTION_TYPES.filter(type =>
     INTERVENTION_LABELS[type].toLowerCase().includes(searchFilter.toLowerCase())
@@ -219,6 +220,7 @@ export default function InlineWizard({ onClose, defaultCity = '' }: InlineWizard
       client_phone: clientPhone.trim(),
       client_email: clientEmail?.trim() || null,
       privacy_accepted: privacyAccepted,
+      phone_contact_allowed: !noPhoneContact,
       wizard_answers: answers.length > 0 ? answers : null,
     };
 
@@ -656,6 +658,16 @@ export default function InlineWizard({ onClose, defaultCity = '' }: InlineWizard
                   value={clientPhone}
                   onChange={(e) => setClientPhone(e.target.value)}
                 />
+                <div className="flex items-start gap-2 mt-2">
+                  <Checkbox
+                    id="inline-no-phone"
+                    checked={noPhoneContact}
+                    onCheckedChange={(checked) => setNoPhoneContact(checked === true)}
+                  />
+                  <Label htmlFor="inline-no-phone" className="text-xs leading-relaxed cursor-pointer text-muted-foreground">
+                    Non desidero essere contattato telefonicamente (solo via chat/email)
+                  </Label>
+                </div>
               </div>
 
               <div>

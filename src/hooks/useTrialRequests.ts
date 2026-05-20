@@ -147,7 +147,10 @@ export function useTrialRequests(profileOverride?: PlumberProfile | null) {
     return () => clearInterval(interval);
   }, [profile, fetchAvailableRequests, fetchAcceptedRequests]);
 
-  const claimRequest = async (requestId: string): Promise<ClaimResult> => {
+  const claimRequest = async (
+    requestId: string,
+    quote?: { quote_amount_cents: number; quote_message: string }
+  ): Promise<ClaimResult> => {
     if (!profile) {
       return { success: false, message: 'Profilo non trovato' };
     }
@@ -175,8 +178,37 @@ export function useTrialRequests(profileOverride?: PlumberProfile | null) {
       const result = data?.[0] as ClaimResult | undefined;
 
       if (result?.success) {
-        toast.success(result.message);
-        
+        // Attach quote message to the conversation (auto-created by DB trigger on contact_unlocks)
+        if (quote) {
+          try {
+            const { data: conv } = await supabase
+              .from('conversations')
+              .select('id')
+              .eq('plumber_id', profile.id)
+              .eq('request_id', requestId)
+              .maybeSingle();
+            if (conv) {
+              const euros = (quote.quote_amount_cents / 100).toLocaleString('it-IT', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              });
+              await Promise.all([
+                supabase.from('conversation_messages').insert({
+                  conversation_id: conv.id,
+                  sender_type: 'plumber',
+                  content: `💶 Preventivo: € ${euros}\n\n${quote.quote_message}`,
+                }),
+                supabase
+                  .from('conversations')
+                  .update({ quote_amount_cents: quote.quote_amount_cents })
+                  .eq('id', conv.id),
+              ]);
+            }
+          } catch (e) {
+            console.error('attach quote failed', e);
+          }
+        }
+
         // Move the request from available to accepted (with client data)
         if (requestData) {
           const acceptedRequest: AcceptedTrialRequest = {
@@ -199,25 +231,18 @@ export function useTrialRequests(profileOverride?: PlumberProfile | null) {
         // Always sync accepted requests from DB (so they're visible on dashboard/other pages)
         await fetchAcceptedRequests();
 
-        // Send confirmation email to the client
-        if (result.client_email && requestData) {
-          try {
-            await supabase.functions.invoke('send-client-confirmation', {
-              body: {
-                client_email: result.client_email,
-                client_name: result.client_name,
-                plumber_name: profile.full_name,
-                plumber_phone: profile.phone,
-                plumber_business: profile.business_name,
-                intervention_type: requestData.intervention_type,
-                city: requestData.city
-              }
-            });
-            console.log('Client confirmation email sent');
-          } catch (emailError) {
-            console.error('Error sending client confirmation email:', emailError);
-            // Don't fail the whole operation if email fails
-          }
+        // Notify client with quote info (email + WhatsApp + chat link)
+        try {
+          await supabase.functions.invoke('notify-client-chat', {
+            body: {
+              request_id: requestId,
+              plumber_id: profile.id,
+              quote_amount_cents: quote?.quote_amount_cents,
+              quote_message: quote?.quote_message,
+            },
+          });
+        } catch (e) {
+          console.error('notify-client-chat failed', e);
         }
 
         return {
@@ -228,7 +253,6 @@ export function useTrialRequests(profileOverride?: PlumberProfile | null) {
           client_email: result.client_email
         };
       } else {
-        toast.error(result?.message || 'Errore durante l\'accettazione');
         // Refresh requests in case someone else claimed it
         await fetchAvailableRequests();
         return { success: false, message: result?.message || 'Errore sconosciuto' };

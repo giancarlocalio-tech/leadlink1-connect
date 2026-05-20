@@ -48,7 +48,7 @@ export default function RequestPage() {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [formData, setFormData] = useState<RequestFormData>({
+  const [formData, setFormData] = useState<RequestFormData & { password: string }>({
     interventionType: '',
     city: '',
     description: '',
@@ -59,6 +59,7 @@ export default function RequestPage() {
     clientPhone: '',
     clientEmail: '',
     privacyAccepted: false,
+    password: '',
   });
 
   const currentStep = STEPS[currentStepIndex];

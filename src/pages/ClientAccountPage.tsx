@@ -67,90 +67,108 @@ export default function ClientAccountPage() {
     let cancelled = false;
     (async () => {
       setLoading(true);
+      try {
+        // 1) Fetch this client's requests — two queries unioned client-side
+        // (safer than .or() which can break on email special chars / commas).
+        const ownEmail = user.email?.toLowerCase() || '';
+        const [byUserIdRes, byEmailRes] = await Promise.all([
+          supabase
+            .from('service_requests')
+            .select('id, intervention_type, city, description, urgency, status, created_at')
+            .eq('client_user_id', user.id)
+            .order('created_at', { ascending: false }),
+          ownEmail
+            ? supabase
+                .from('service_requests')
+                .select('id, intervention_type, city, description, urgency, status, created_at')
+                .ilike('client_email', ownEmail)
+                .order('created_at', { ascending: false })
+            : Promise.resolve({ data: [] as Req[], error: null } as any),
+        ]);
 
-      // 1) Fetch this client's requests
-      const ownEmail = user.email?.toLowerCase() || '';
-      const { data: reqs, error: reqErr } = await supabase
-        .from('service_requests')
-        .select('id, intervention_type, city, description, urgency, status, created_at')
-        .or(`client_user_id.eq.${user.id}${ownEmail ? `,client_email.ilike.${ownEmail}` : ''}`)
-        .order('created_at', { ascending: false });
+        if (byUserIdRes.error) console.error('Error loading client requests:', byUserIdRes.error);
+        if ((byEmailRes as any).error) console.error('Error loading client requests by email:', (byEmailRes as any).error);
 
-      if (reqErr) {
-        console.error('Error loading client requests:', reqErr);
-      }
-      if (cancelled) return;
-      const reqList = (reqs as Req[]) || [];
-      setRequests(reqList);
+        const merged: Record<string, Req> = {};
+        ([...(byUserIdRes.data || []), ...(((byEmailRes as any).data) || [])] as Req[]).forEach((r) => {
+          merged[r.id] = r;
+        });
+        const reqList = Object.values(merged).sort(
+          (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
 
-      // 2) Fetch all conversations on those requests (visible via RLS: client_user_id = auth.uid())
-      if (reqList.length > 0) {
-        const ids = reqList.map((r) => r.id);
-        const { data: convs, error: convErr } = await supabase
-          .from('conversations')
-          .select(`
-            id, request_id, plumber_id, client_access_token, last_message_at,
-            plumber:plumber_profiles!conversations_plumber_id_fkey ( full_name, business_name )
-          `)
-          .in('request_id', ids)
-          .order('last_message_at', { ascending: false });
+        if (cancelled) return;
+        setRequests(reqList);
 
-        // Fallback without FK relationship name
-        let convRows: any[] = convs || [];
-        if (convErr || !convs) {
-          const { data: c2 } = await supabase
+        if (reqList.length > 0) {
+          const ids = reqList.map((r) => r.id);
+          const { data: convs, error: convErr } = await supabase
             .from('conversations')
-            .select('id, request_id, plumber_id, client_access_token, last_message_at')
+            .select(`
+              id, request_id, plumber_id, client_access_token, last_message_at,
+              plumber:plumber_profiles!conversations_plumber_id_fkey ( full_name, business_name )
+            `)
             .in('request_id', ids)
             .order('last_message_at', { ascending: false });
-          convRows = c2 || [];
-          if (convRows.length > 0) {
-            const plumberIds = Array.from(new Set(convRows.map((c) => c.plumber_id)));
-            const { data: plumbers } = await supabase
-              .from('plumber_profiles')
-              .select('id, full_name, business_name')
-              .in('id', plumberIds);
-            const byId: Record<string, any> = {};
-            (plumbers || []).forEach((p: any) => { byId[p.id] = p; });
-            convRows = convRows.map((c) => ({ ...c, plumber: byId[c.plumber_id] }));
-          }
-        }
 
-        // 3) Fetch the latest message per conversation (visible via RLS for the client)
-        let lastByConv: Record<string, { content: string; sender_type: 'plumber' | 'client' }> = {};
-        if (convRows.length > 0) {
-          const convIds = convRows.map((c) => c.id);
-          const { data: msgs } = await supabase
-            .from('conversation_messages')
-            .select('conversation_id, content, sender_type, created_at')
-            .in('conversation_id', convIds)
-            .order('created_at', { ascending: false });
-          (msgs || []).forEach((m: any) => {
-            if (!lastByConv[m.conversation_id]) {
-              lastByConv[m.conversation_id] = { content: m.content, sender_type: m.sender_type };
+          let convRows: any[] = convs || [];
+          if (convErr || !convs) {
+            const { data: c2 } = await supabase
+              .from('conversations')
+              .select('id, request_id, plumber_id, client_access_token, last_message_at')
+              .in('request_id', ids)
+              .order('last_message_at', { ascending: false });
+            convRows = c2 || [];
+            if (convRows.length > 0) {
+              const plumberIds = Array.from(new Set(convRows.map((c) => c.plumber_id)));
+              const { data: plumbers } = await supabase
+                .from('plumber_profiles')
+                .select('id, full_name, business_name')
+                .in('id', plumberIds);
+              const byId: Record<string, any> = {};
+              (plumbers || []).forEach((p: any) => { byId[p.id] = p; });
+              convRows = convRows.map((c) => ({ ...c, plumber: byId[c.plumber_id] }));
             }
-          });
-        }
+          }
 
-        const map: Record<string, Conv[]> = {};
-        convRows.forEach((c: any) => {
-          const last = lastByConv[c.id];
-          (map[c.request_id] ||= []).push({
-            id: c.id,
-            request_id: c.request_id,
-            client_access_token: c.client_access_token,
-            last_message_at: c.last_message_at,
-            plumber_name: c.plumber?.business_name || c.plumber?.full_name || 'Idraulico',
-            last_message_preview: last?.content ?? null,
-            last_sender: last?.sender_type ?? null,
+          let lastByConv: Record<string, { content: string; sender_type: 'plumber' | 'client' }> = {};
+          if (convRows.length > 0) {
+            const convIds = convRows.map((c) => c.id);
+            const { data: msgs } = await supabase
+              .from('conversation_messages')
+              .select('conversation_id, content, sender_type, created_at')
+              .in('conversation_id', convIds)
+              .order('created_at', { ascending: false });
+            (msgs || []).forEach((m: any) => {
+              if (!lastByConv[m.conversation_id]) {
+                lastByConv[m.conversation_id] = { content: m.content, sender_type: m.sender_type };
+              }
+            });
+          }
+
+          const map: Record<string, Conv[]> = {};
+          convRows.forEach((c: any) => {
+            const last = lastByConv[c.id];
+            (map[c.request_id] ||= []).push({
+              id: c.id,
+              request_id: c.request_id,
+              client_access_token: c.client_access_token,
+              last_message_at: c.last_message_at,
+              plumber_name: c.plumber?.business_name || c.plumber?.full_name || 'Idraulico',
+              last_message_preview: last?.content ?? null,
+              last_sender: last?.sender_type ?? null,
+            });
           });
-        });
-        if (cancelled) return;
-        setConvsByReq(map);
-      } else {
-        setConvsByReq({});
+          if (cancelled) return;
+          setConvsByReq(map);
+        } else {
+          setConvsByReq({});
+        }
+      } catch (err) {
+        console.error('Unexpected error loading client account:', err);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-      if (!cancelled) setLoading(false);
     })();
 
     return () => { cancelled = true; };

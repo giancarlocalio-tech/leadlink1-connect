@@ -15,13 +15,15 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import type { ServiceRequest, UrgencyType } from '@/lib/types';
-import { 
-  INTERVENTION_LABELS, 
-  URGENCY_LABELS, 
-  PROPERTY_LABELS, 
-  ACCESSIBILITY_LABELS 
+import {
+  INTERVENTION_LABELS,
+  URGENCY_LABELS,
+  PROPERTY_LABELS,
+  ACCESSIBILITY_LABELS,
 } from '@/lib/types';
 import { WizardAnswersSection } from './WizardAnswersSection';
+import { useCredits } from '@/hooks/useCredits';
+import { formatEuro } from '@/lib/currency';
 
 interface RequestCardProps {
   request: ServiceRequest;
@@ -33,6 +35,8 @@ interface RequestCardProps {
 export function RequestCard({ request, isUnlocked, canUnlock, onUnlock }: RequestCardProps) {
   const [unlocking, setUnlocking] = useState(false);
   const [showDetails, setShowDetails] = useState(isUnlocked);
+  const { getUnlockCostCents } = useCredits();
+  const unlockCostCents = getUnlockCostCents(request.urgency);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('it-IT', {
@@ -174,7 +178,7 @@ export function RequestCard({ request, isUnlocked, canUnlock, onUnlock }: Reques
                 ) : (
                   <Lock className="h-4 w-4" />
                 )}
-                Sblocca
+                Sblocca — {formatEuro(unlockCostCents)}
               </Button>
             </div>
           )}

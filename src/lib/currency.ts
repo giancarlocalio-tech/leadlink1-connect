@@ -11,6 +11,9 @@ export function formatEuroFromCents(cents: number | null | undefined): string {
   })} €`;
 }
 
+/** Alias breve. */
+export const formatEuro = formatEuroFromCents;
+
 /**
  * Formatta un importo in centesimi come solo numero "X,XX" (senza €).
  */

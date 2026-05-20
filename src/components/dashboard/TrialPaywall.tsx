@@ -1,35 +1,38 @@
 import { useNavigate } from 'react-router-dom';
-import { Lock, ArrowRight, Star, Shield, Zap, Coins } from 'lucide-react';
+import { Wallet, ArrowRight, Star, Shield, Zap, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { formatEuro } from '@/lib/currency';
 
-interface TrialPaywallProps {
-  freeRequestsRemaining: number;
+interface LowBalancePaywallProps {
+  balanceCents: number;
+  /** Soglia sotto la quale mostrare il paywall pieno (default 400 = 4 €) */
+  thresholdCents?: number;
 }
 
-export function TrialPaywall({ freeRequestsRemaining }: TrialPaywallProps) {
+export function TrialPaywall({ balanceCents, thresholdCents = 400 }: LowBalancePaywallProps) {
   const navigate = useNavigate();
+  const isLow = balanceCents < thresholdCents;
 
-  if (freeRequestsRemaining > 0) {
-    // Show trial progress banner instead of full paywall
+  if (!isLow) {
     return (
       <Card className="border-primary/30 bg-gradient-to-r from-primary/5 to-primary/10">
         <CardContent className="py-4">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <Zap className="h-5 w-5 text-primary" />
+                <Wallet className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="font-semibold text-foreground">Prova gratuita attiva</p>
+                <p className="font-semibold text-foreground">Saldo disponibile</p>
                 <p className="text-sm text-muted-foreground">
-                  Hai ancora <span className="font-bold text-primary">{freeRequestsRemaining}</span> richieste gratuite
+                  Hai <span className="font-bold text-primary">{formatEuro(balanceCents)}</span> sul tuo conto
                 </p>
               </div>
             </div>
-            <Button variant="outline" size="sm" onClick={() => navigate('/dashboard/crediti')}>
-              <Coins className="h-4 w-4 mr-1" />
-              Acquista crediti
+            <Button variant="outline" size="sm" onClick={() => navigate('/dashboard/crediti/ricarica')}>
+              <Plus className="h-4 w-4 mr-1" />
+              Ricarica
             </Button>
           </div>
         </CardContent>
@@ -37,20 +40,18 @@ export function TrialPaywall({ freeRequestsRemaining }: TrialPaywallProps) {
     );
   }
 
-  // Full paywall when trial is exhausted
   return (
     <Card className="border-destructive/50 bg-gradient-to-br from-destructive/5 via-background to-destructive/10">
       <CardHeader className="text-center pb-4">
         <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center mx-auto mb-4">
-          <Lock className="h-8 w-8 text-destructive" />
+          <Wallet className="h-8 w-8 text-destructive" />
         </div>
-        <CardTitle className="text-2xl">Le tue richieste gratuite sono terminate</CardTitle>
+        <CardTitle className="text-2xl">Saldo insufficiente</CardTitle>
         <CardDescription className="text-base">
-          Per continuare a ricevere nuovi clienti, acquista crediti
+          Hai {formatEuro(balanceCents)}. Ricarica per continuare a sbloccare i contatti dei clienti.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Benefits reminder */}
         <div className="grid gap-3">
           <div className="flex items-center gap-3 p-3 rounded-lg bg-card border border-border">
             <Star className="h-5 w-5 text-warning flex-shrink-0" />
@@ -66,19 +67,18 @@ export function TrialPaywall({ freeRequestsRemaining }: TrialPaywallProps) {
           </div>
         </div>
 
-        {/* CTA */}
         <div className="text-center space-y-3">
-          <Button 
-            size="lg" 
+          <Button
+            size="lg"
             className="w-full text-lg"
-            onClick={() => navigate('/dashboard/crediti')}
+            onClick={() => navigate('/dashboard/crediti/ricarica')}
           >
-            <Coins className="mr-2 h-5 w-5" />
-            Acquista crediti
+            <Plus className="mr-2 h-5 w-5" />
+            Ricarica saldo
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
           <p className="text-xs text-muted-foreground">
-            A partire da €100 per ~34 crediti • Nessuna scadenza
+            Ricariche da 20 €. Il saldo non scade mai.
           </p>
         </div>
       </CardContent>

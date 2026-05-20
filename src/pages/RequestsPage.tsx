@@ -231,9 +231,8 @@ function RequestsContent() {
           </Card>
         )}
 
-        {isTrial && (
-          <TrialPaywall freeRequestsRemaining={freeRequestsRemaining} />
-        )}
+        <TrialPaywall balanceCents={credits?.balance_cents ?? 0} />
+
 
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-4">

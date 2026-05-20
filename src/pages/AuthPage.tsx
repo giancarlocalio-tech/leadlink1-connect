@@ -256,8 +256,8 @@ export default function AuthPage() {
         setPendingProfileData(null);
         setIsSubmitting(false);
         
-        // Redirect to dashboard - new trial-by-value model
-        toast.success('Registrazione completata! Hai 3 richieste gratuite per iniziare.');
+        // Redirect to dashboard
+        toast.success('Registrazione completata! Ricarica il tuo saldo per iniziare a sbloccare contatti.');
         navigate('/dashboard');
       }
     };
@@ -375,13 +375,13 @@ export default function AuthPage() {
               <div className="text-center mb-10">
                 <div className="inline-flex items-center gap-2 bg-primary/20 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
                   <Zap className="h-4 w-4" />
-                  3 richieste gratuite
+                  Iscrizione gratuita
                 </div>
                 <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                  Sei un idraulico? Prova gratuitamente!
+                  Sei un idraulico? Trova subito nuovi clienti
                 </h1>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  Trova subito nuovi clienti nella tua zona. Nessun costo iniziale, nessun impegno.
+                  Iscrizione gratuita. Ricarichi il saldo quando vuoi e paghi solo i contatti che sblocchi.
                 </p>
               </div>
 

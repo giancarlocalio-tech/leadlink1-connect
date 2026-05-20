@@ -61,6 +61,8 @@ const SERVICES = [
 
 const TOC = [
   { id: 'intro', label: 'Idraulico a Siena: panoramica' },
+  { id: 'perche-noi', label: 'Perché scegliere IdrauliciSubito' },
+  { id: 'contrade', label: 'Serviamo tutte le 17 Contrade' },
   { id: 'statistiche', label: 'Numeri del servizio' },
   { id: 'perche-problemi', label: 'Perché a Siena i problemi sono frequenti' },
   { id: 'quartieri', label: 'Quartieri, Terzi e Contrade serviti' },

@@ -65,19 +65,19 @@
     --popover: 220 30% 12%;
     --popover-foreground: 140 20% 95%;
 
-    /* Luigi Green - Primary */
-    --primary: 142 65% 45%;
+    /* Siena Blue - Primary */
+    --primary: 199 89% 55%;
     --primary-foreground: 0 0% 100%;
 
-    /* Luigi Blue - Secondary */
-    --secondary: 220 60% 45%;
+    /* Siena light blue - Secondary */
+    --secondary: 215 40% 22%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 220 25% 18%;
-    --muted-foreground: 140 15% 55%;
+    --muted: 215 25% 18%;
+    --muted-foreground: 199 15% 65%;
 
-    --accent: 142 40% 20%;
-    --accent-foreground: 142 65% 65%;
+    --accent: 199 60% 22%;
+    --accent-foreground: 199 89% 75%;
 
     --destructive: 0 65% 45%;
     --destructive-foreground: 0 0% 100%;
@@ -88,17 +88,17 @@
     --warning: 38 92% 45%;
     --warning-foreground: 0 0% 100%;
 
-    --border: 220 25% 20%;
-    --input: 220 25% 20%;
-    --ring: 142 65% 45%;
+    --border: 215 25% 20%;
+    --input: 215 25% 20%;
+    --ring: 199 89% 55%;
 
     /* Sidebar colors - dark mode */
-    --sidebar: 220 30% 12%;
-    --sidebar-foreground: 140 20% 95%;
-    --sidebar-border: 220 25% 20%;
-    --sidebar-accent: 142 40% 25%;
-    --sidebar-accent-foreground: 142 65% 75%;
-    --sidebar-ring: 142 65% 45%;
+    --sidebar: 215 30% 12%;
+    --sidebar-foreground: 199 20% 95%;
+    --sidebar-border: 215 25% 20%;
+    --sidebar-accent: 199 60% 25%;
+    --sidebar-accent-foreground: 199 89% 80%;
+    --sidebar-ring: 199 89% 55%;
   }
 }
 

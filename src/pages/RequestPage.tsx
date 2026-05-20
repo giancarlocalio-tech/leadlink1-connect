@@ -528,7 +528,7 @@ export default function RequestPage() {
                   Indietro
                 </Button>
 
-                {currentStep === 'contact' ? (
+                {currentStep === 'password' ? (
                   <Button
                     onClick={handleSubmit}
                     disabled={!canProceed() || isSubmitting}
@@ -536,6 +536,15 @@ export default function RequestPage() {
                   >
                     {isSubmitting ? 'Invio...' : 'Invia richiesta'}
                     {!isSubmitting && <Check className="h-4 w-4 ml-2" />}
+                  </Button>
+                ) : currentStep === 'contact' ? (
+                  <Button
+                    onClick={goNext}
+                    disabled={!canProceed()}
+                    className="flex-1"
+                  >
+                    Continua
+                    <ArrowRight className="h-4 w-4 ml-2" />
                   </Button>
                 ) : currentStep === 'description' ? (
                   <Button

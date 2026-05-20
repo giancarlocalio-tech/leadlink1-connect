@@ -77,9 +77,9 @@ const TOC = [
 export default function SienaLandingPage() {
   const [showWizard, setShowWizard] = useState(false);
 
-  const pageTitle = 'Idraulico a Siena | Pronto Intervento 24h ⭐ 4.8/5';
+  const pageTitle = 'Idraulico Siena: Ricevi Preventivi Gratis | Pronto Intervento 24h';
   const pageDescription =
-    'Idraulico a Siena 24/7: pronto intervento in centro storico, Acquacalda, San Prospero, Ravacciano e provincia. 40+ tecnici verificati, arrivo medio 35 min, preventivo gratuito.';
+    'Ricevi più preventivi gratis da idraulici verificati a Siena in 15 minuti. Centro storico, contrade UNESCO, Acquacalda, Ravacciano e provincia. 24/7, senza impegno.';
   const canonicalUrl = `${BASE_URL}/siena`;
 
   const structuredData = [

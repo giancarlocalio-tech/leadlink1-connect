@@ -483,7 +483,7 @@ const handler = async (req: Request): Promise<Response> => {
                                     <span style="color:#6b7280;">📅 <strong style="color:#111827;">Quando:</strong></span> ${urgencyLabel}
                                   </p>
                                   <p style="margin:0 0 8px 0;font-size:14px;color:#374151;">
-                                    <span style="color:#6b7280;">📞 <strong style="color:#111827;">Contatto:</strong></span> Sblocca per chiamare il cliente
+                                    <span style="color:#6b7280;">📞 <strong style="color:#111827;">Contatto:</strong></span> ${contactLine}
                                   </p>
                                   <p style="margin:0 0 14px 0;font-size:14px;color:#374151;">
                                     <span style="color:#6b7280;">🕒 <strong style="color:#111827;">Richiesta creata:</strong></span> pochi minuti fa
@@ -496,7 +496,7 @@ const handler = async (req: Request): Promise<Response> => {
                                   <div style="text-align:center;margin:22px 0 4px 0;">
                                     <a href="https://www.idraulicisubito.com/dashboard/richieste?id=${serviceRequest.id}&email=${encodeURIComponent(plumber.email)}" 
                                        style="display:block;background-color:#1e40af;color:#ffffff;text-decoration:none;padding:16px 24px;border-radius:8px;font-size:16px;font-weight:700;">
-                                      Sblocca contatto
+                                      Invia preventivo
                                     </a>
                                   </div>
                                 </td>

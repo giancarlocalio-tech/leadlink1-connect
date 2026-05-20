@@ -412,7 +412,7 @@ function DashboardContent() {
                       onUnlockWithCredits={handleUnlockWithCredits}
                       claiming={claimingTrialRequestId === request.id}
                       freeRequestsRemaining={trialFreeRequestsRemaining}
-                      creditBalance={credits?.balance_cents ?? 0}
+                      balanceCents={credits?.balance_cents ?? 0}
                       onAccepted={() => fetchAssignedRequests()}
                     />
                   ))

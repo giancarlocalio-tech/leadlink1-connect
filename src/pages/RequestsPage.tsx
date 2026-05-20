@@ -34,7 +34,7 @@ function RequestsContent() {
   const [searchParams] = useSearchParams();
   const highlightedRequestId = searchParams.get('id');
   const { user, loading: authLoading } = useAuth();
-  const { profile, loading: profileLoading } = usePlumberProfile();
+  const { profile, loading: profileLoading, hasFetched } = usePlumberProfile();
   
   const {
     requests: trialRequests,
@@ -62,6 +62,12 @@ function RequestsContent() {
       navigate(`/login?returnUrl=${encodeURIComponent(returnUrl)}${emailQuery}`);
     }
   }, [user, authLoading, navigate]);
+
+  useEffect(() => {
+    if (!authLoading && user && hasFetched && !profile) {
+      navigate('/account', { replace: true });
+    }
+  }, [authLoading, user, hasFetched, profile, navigate]);
 
   // Scroll to highlighted request when loaded
   useEffect(() => {
@@ -168,7 +174,7 @@ function RequestsContent() {
     return matchesSearch && matchesUrgency && matchesType;
   });
 
-  if (authLoading || profileLoading) {
+  if (authLoading || profileLoading || (user && !hasFetched) || (user && hasFetched && !profile)) {
     return (
       <DashboardLayout title="Richieste" breadcrumbs={[{ label: 'Richieste' }]}>
         <div className="py-16 flex items-center justify-center">

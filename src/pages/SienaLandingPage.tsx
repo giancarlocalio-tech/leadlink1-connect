@@ -23,6 +23,9 @@ import {
   Landmark,
   Snowflake,
   ChevronDown,
+  Users,
+  Zap,
+  Heart,
 } from 'lucide-react';
 import { Layout } from '@/components/Layout';
 import { BASE_URL } from '@/lib/seoJsonLd';
@@ -46,6 +49,8 @@ import {
   SIENA_STATS,
   SIENA_RATING,
   SIENA_REVIEWS,
+  SIENA_CONTRADE,
+  SIENA_WHY_US,
 } from '@/lib/sienaSeoContent';
 
 const SERVICES = [
@@ -56,6 +61,8 @@ const SERVICES = [
 
 const TOC = [
   { id: 'intro', label: 'Idraulico a Siena: panoramica' },
+  { id: 'perche-noi', label: 'Perché scegliere IdrauliciSubito' },
+  { id: 'contrade', label: 'Serviamo tutte le 17 Contrade' },
   { id: 'statistiche', label: 'Numeri del servizio' },
   { id: 'perche-problemi', label: 'Perché a Siena i problemi sono frequenti' },
   { id: 'quartieri', label: 'Quartieri, Terzi e Contrade serviti' },
@@ -70,9 +77,9 @@ const TOC = [
 export default function SienaLandingPage() {
   const [showWizard, setShowWizard] = useState(false);
 
-  const pageTitle = 'Idraulico a Siena | Pronto Intervento 24h ⭐ 4.8/5';
+  const pageTitle = 'Idraulico Siena: Ricevi Preventivi Gratis | Pronto Intervento 24h';
   const pageDescription =
-    'Idraulico a Siena 24/7: pronto intervento in centro storico, Acquacalda, San Prospero, Ravacciano e provincia. 40+ tecnici verificati, arrivo medio 35 min, preventivo gratuito.';
+    'Ricevi più preventivi gratis da idraulici verificati a Siena in 15 minuti. Centro storico, contrade UNESCO, Acquacalda, Ravacciano e provincia. 24/7, senza impegno.';
   const canonicalUrl = `${BASE_URL}/siena`;
 
   const structuredData = [
@@ -209,19 +216,20 @@ export default function SienaLandingPage() {
           </div>
 
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-lg">
-            Idraulico a Siena
+            Ricevi più preventivi
             <br />
-            <span className="text-white/90">Pronto Intervento in Centro Storico e Provincia</span>
+            <span className="text-white/90">da idraulici verificati a Siena — Gratis</span>
           </h1>
 
           <p className="text-lg md:text-xl text-white/90 mb-8 max-w-3xl mx-auto">
-            Trova subito un idraulico professionista a Siena, nelle contrade del centro UNESCO e in tutta la provincia.
-            <strong> 40+ tecnici verificati</strong>, arrivo medio in 35 minuti, preventivo gratuito e senza impegno.
+            Invia <strong>una sola richiesta</strong>: ricevi più preventivi da idraulici della tua Contrada o del tuo quartiere,
+            confronti i prezzi e scegli il migliore. <strong>100% gratuito</strong>, senza impegno, risposta in 15 minuti.
           </p>
 
           <Button size="lg" onClick={handleRequestClick} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6 h-auto shadow-lg">
-            Richiedi un idraulico a Siena
+            Ricevi preventivi gratis a Siena →
           </Button>
+          <p className="text-white/80 text-sm mt-3">Compila in 60 secondi · Nessuna registrazione</p>
 
           <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 mt-8">
             <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
@@ -286,8 +294,94 @@ export default function SienaLandingPage() {
           </div>
           <div className="text-center">
             <Button size="lg" onClick={handleRequestClick} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6 h-auto shadow-lg">
-              Richiedi un idraulico a Siena
+              Ricevi preventivi gratis a Siena →
             </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* WHY US — Google Ads conversion block */}
+      <section id="perche-noi" className="py-14 bg-gradient-to-b from-primary/5 to-background">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
+            Perché scegliere IdrauliciSubito invece di cercare su Google?
+          </h2>
+          <p className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto">
+            Su Google chiami un idraulico alla volta, aspetti che ti richiami, e non sai mai se il prezzo è giusto.
+            Con noi, in 60 secondi, ricevi <strong>più preventivi a confronto</strong> da idraulici verificati di Siena.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-5 mb-10">
+            {SIENA_WHY_US.map((w, i) => {
+              const Icon = w.icon === 'compare' ? Users : w.icon === 'check' ? CheckCircle : w.icon === 'clock' ? Zap : Shield;
+              return (
+                <div key={i} className="bg-card border border-border rounded-xl p-6 flex gap-4 shadow-sm">
+                  <div className="bg-primary/10 rounded-full w-12 h-12 flex items-center justify-center flex-shrink-0">
+                    <Icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg mb-1">{w.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{w.description}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="text-center">
+            <Button size="lg" onClick={handleRequestClick} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6 h-auto shadow-lg">
+              Ricevi i miei preventivi gratis →
+            </Button>
+            <p className="text-muted-foreground text-sm mt-3">
+              ✓ Più preventivi a confronto · ✓ Idraulici verificati · ✓ Risposta in 15 minuti
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* CONTRADE — Siena-friendly section */}
+      <section id="contrade" className="py-14 bg-background">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <Heart className="h-6 w-6 text-primary" />
+            <span className="uppercase text-sm font-bold tracking-wide text-primary">Made in Siena</span>
+          </div>
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
+            Serviamo tutte le 17 Contrade di Siena
+          </h2>
+          <p className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto">
+            Dai vicoli dell'<strong>Oca</strong> e della <strong>Selva</strong> alle case-torri della <strong>Torre</strong>,
+            fino ai palazzi di <strong>Pantera</strong>, <strong>Tartuca</strong> e <strong>Onda</strong>:
+            i nostri idraulici conoscono ogni Terzo, ogni vicolo e ogni Contrada del centro UNESCO.
+          </p>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-8">
+            {SIENA_CONTRADE.map((c) => (
+              <div
+                key={c.name}
+                className="group bg-card border border-border rounded-xl overflow-hidden hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <div
+                  className="h-2 w-full"
+                  style={{
+                    background: `linear-gradient(90deg, ${c.colors[0]} 0%, ${c.colors[0]} 33%, ${c.colors[1]} 33%, ${c.colors[1]} 66%, ${c.colors[2]} 66%, ${c.colors[2]} 100%)`,
+                  }}
+                  aria-hidden="true"
+                />
+                <div className="p-3 text-center">
+                  <div className="text-2xl mb-1" aria-hidden="true">{c.symbol}</div>
+                  <div className="font-bold text-sm leading-tight">{c.name}</div>
+                  <div className="text-[10px] uppercase tracking-wide text-muted-foreground mt-0.5">
+                    Terzo di {c.terzo}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="bg-accent/30 border-l-4 border-primary p-5 rounded-r-lg text-sm leading-relaxed">
+            <strong>Idraulici locali, non call center.</strong> I tecnici della rete IdrauliciSubito vivono e lavorano a Siena:
+            sanno cosa significa intervenire in un vicolo della Chiocciola con il furgone che non passa, riparare una colonna
+            di scarico in un palazzo dell'Aquila con vincoli della Soprintendenza, o gestire la pressione idrica in una
+            casa-torre del Bruco. <em>Forza e Onore</em> a chi lavora bene. 🏇
           </div>
         </div>
       </section>
@@ -536,13 +630,13 @@ export default function SienaLandingPage() {
       {/* FINAL CTA */}
       <section className="py-20 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-4xl font-bold mb-4">Hai bisogno di un idraulico a Siena adesso?</h2>
+          <h2 className="text-2xl md:text-4xl font-bold mb-4">Pronto a ricevere i tuoi preventivi gratis?</h2>
           <p className="text-primary-foreground/90 text-lg mb-8 max-w-2xl mx-auto">
-            Non aspettare che il problema peggiori. Richiedi subito un preventivo gratuito e ricevi una risposta in
-            pochi minuti da un idraulico della tua zona di Siena.
+            Compila la richiesta in 60 secondi: ti contattano più idraulici verificati della tua zona di Siena,
+            confronti i preventivi e scegli senza impegno.
           </p>
           <Button size="lg" onClick={handleRequestClick} className="bg-white hover:bg-white/90 text-primary font-bold text-lg px-8 py-6 h-auto shadow-lg">
-            Richiedi intervento ora
+            Ricevi preventivi gratis →
           </Button>
           <p className="text-primary-foreground/70 text-sm mt-4">
             ✓ Gratuito ✓ Senza impegno ✓ Risposta in 15 minuti

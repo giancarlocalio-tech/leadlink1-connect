@@ -3,6 +3,7 @@ import { User, LogOut, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { useAdmin } from '@/hooks/useAdmin';
+import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import logoIcon from '@/assets/logo-icon.png';
 
 export function Header() {
@@ -12,6 +13,9 @@ export function Header() {
   const isRegisterPage = location.pathname === '/auth';
   const { user, signOut } = useAuth();
   const { isAdmin } = useAdmin(user);
+  const { profile: plumberProfile } = usePlumberProfile();
+  const dashboardHref = plumberProfile ? '/dashboard' : '/account';
+  const dashboardLabel = plumberProfile ? 'Dashboard' : 'Le mie richieste';
 
   const handleSignOut = async () => {
     const { error } = await signOut();

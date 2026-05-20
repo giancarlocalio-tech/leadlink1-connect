@@ -12,6 +12,8 @@ import AuthConfirmPage from "./pages/AuthConfirmPage";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import RequestsPage from "./pages/RequestsPage";
+import PreventiviPage from "./pages/PreventiviPage";
+import ClientChatPage from "./pages/ClientChatPage";
 import SubscriptionPage from "./pages/SubscriptionPage";
 import CreditsPage from "./pages/CreditsPage";
 import TopUpPage from "./pages/TopUpPage";
@@ -69,6 +71,9 @@ const App = () => (
             <Route path="/auth/confirm" element={<AuthConfirmPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/dashboard/richieste" element={<RequestsPage />} />
+            <Route path="/dashboard/opportunita" element={<Navigate to="/dashboard/richieste" replace />} />
+            <Route path="/dashboard/preventivi" element={<PreventiviPage />} />
+            <Route path="/chat/:token" element={<ClientChatPage />} />
             <Route path="/dashboard/abbonamento" element={<Navigate to="/dashboard/crediti" replace />} />
             <Route path="/dashboard/crediti" element={<CreditsPage />} />
             <Route path="/dashboard/crediti/ricarica" element={<TopUpPage />} />

@@ -1,131 +1,107 @@
-## Obiettivo
-Trasformare il sistema attuale (crediti + 3 prove gratuite) in un sistema **saldo in euro** sul modello ProntoPro, con restyle completo della dashboard idraulico e della pagina /auth.
 
----
+# Piano: Opportunità + Preventivi + Chat stile ProntoPro
 
-## 1. Modello economico — da Crediti a Saldo €
+## 1. Sidebar idraulico — 2 sezioni
 
-**Cosa cambia per l'idraulico:**
-- Niente più "3 prove gratuite" alla registrazione → saldo iniziale **0,00 €**
-- Niente più "crediti" → saldo in euro reali (es. 9,74 €)
-- Pacchetti ricarica: **20 € / 40 € / 80 € / 200 € / 300 €** (IVA inclusa, come ProntoPro)
-- Costo sblocco contatto in euro (non più crediti). Esempio mapping proposto:
-  - Urgenza "Subito" → **6,00 €**
-  - Urgenza "Entro 24h" → **4,00 €**
-  - Urgenza "Prossimi giorni" → **2,50 €**
-  - (valori modificabili da admin nella tabella `unlock_costs`)
+In `DashboardSidebar.tsx` sostituisco la voce unica "Richieste" con:
 
-**Saldo memorizzato in centesimi (`integer`)** per evitare problemi di arrotondamento float.
+- **Opportunità** → `/dashboard/opportunita` — richieste matchate **non ancora sbloccate** dall'idraulico loggato. Card grandi stile ProntoPro: nome cliente con iniziale (es. "Mario M."), titolo servizio + città + scadenza, descrizione troncata, tag categorie, badge "telefono disponibile", pulsante **Rispondi (X €)** dove X = costo crediti.
+- **Preventivi** → `/dashboard/preventivi` — richieste **già sbloccate** (presenti in `contact_unlocks` per quel plumber). Lista a sinistra (nome cliente, titolo, prezzo offerto, data), dettaglio + chat a destra. Click → apre conversazione.
 
----
+Rinomino l'attuale "Richieste" → "Opportunità" e creo la pagina nuova "Preventivi".
 
-## 2. Modifiche database (migration)
+## 2. Flusso pagamento (invariato)
 
-```text
-plumber_credits
-  + balance_cents (int, default 0)
-  + total_purchased_cents (int, default 0)
-  + total_spent_cents (int, default 0)
-  (le vecchie colonne balance/total_purchased/total_spent restano per ora,
-   non vengono lette ma migrate via copia iniziale × 100 come fallback)
+Il pulsante "Rispondi (X €)" nella card Opportunità chiama `unlock_contact_with_balance` (già esistente). Allo sblocco:
+- la richiesta sparisce da Opportunità e appare in Preventivi
+- si crea automaticamente una **conversation** (vedi sotto) tra plumber e client
+- al cliente viene inviata email + WhatsApp con un **magic link** per accedere alla chat
 
-credit_packages
-  + amount_cents (int)   -- importo della ricarica (es. 2000, 4000, 8000)
-  (price_cents resta = stesso valore, credits diventa irrilevante)
-  → inserire 5 nuovi pacchetti: 20/40/80/200/300 €
+Nessuna modifica al sistema crediti.
 
-unlock_costs
-  + cost_cents (int)
-  (credits_cost resta per retrocompatibilità, non più usato)
-  → aggiornare 3 righe con i nuovi importi
+## 3. Chat in-app bidirezionale
 
-plumber_subscriptions
-  → free_requests_remaining e is_trial restano in tabella ma vengono ignorati
-    dalla logica (default forzato a is_trial=false, free_requests_remaining=0
-    per i nuovi iscritti). Trigger handle_new_plumber_subscription aggiornato.
+### Modello dati (nuova migration)
 
-credit_transactions
-  + amount_cents_delta (int)  -- variazione saldo in centesimi (+/-)
-  + balance_after_cents (int)
+```sql
+-- una conversazione per coppia (richiesta, idraulico)
+conversations (
+  id uuid PK,
+  request_id uuid,
+  plumber_id uuid,
+  client_access_token text UNIQUE,  -- per magic link cliente
+  quote_amount_cents integer,        -- prezzo offerto dall'idraulico
+  created_at, updated_at
+)
+
+conversation_messages (
+  id uuid PK,
+  conversation_id uuid,
+  sender_type text CHECK ('plumber','client'),
+  sender_id uuid,                    -- plumber_id se plumber, null se client
+  content text,
+  created_at
+)
 ```
 
-**Nuove funzioni SQL (sostituiscono `unlock_contact_with_credits` e `trial_claim_request`):**
-- `unlock_contact_with_balance(p_plumber_id, p_request_id)` — scala euro dal saldo, niente più trial path
-- `add_balance(p_plumber_id, p_amount_cents, p_stripe_payment_id, p_description)` — accredito post-pagamento
+RLS:
+- plumber legge/scrive solo conversazioni dove `plumber_id` è il suo
+- client accede via edge function pubblica con `client_access_token` (no auth Supabase)
+- abilito Realtime su `conversation_messages`
 
----
+### Edge function `client-chat`
+Endpoint pubblico parametrizzato da `?token=xxx`. Operazioni:
+- `GET messages` → lista messaggi della conversazione
+- `POST message` → inserisce messaggio come client
 
-## 3. Edge functions
+### Pagina pubblica cliente
+Nuova route `/chat/:token` (no auth richiesta). Layout semplice:
+- header: nome idraulico + servizio richiesto
+- thread messaggi (bolla dx = cliente, bolla sx = idraulico)
+- input + bottone invia
 
-- `create-credit-checkout` → diventa `create-topup-checkout`: riceve `package_id`, crea Stripe Checkout con `amount` in centesimi
-- `verify-credit-purchase` → diventa `verify-topup`: legge la sessione Stripe, chiama `add_balance()`
-- Resto invariato
+Polling ogni 3s o Supabase Realtime tramite token.
 
----
+### Pagina Preventivi idraulico
+Layout 2 colonne (responsive: lista sopra, chat sotto su mobile):
+- **Sinistra:** lista conversazioni ordinate per `updated_at DESC`. Card con avatar iniziali, nome cliente, snippet ultimo messaggio, data.
+- **Destra:** header (nome cliente + "Dettagli" che apre sheet con tutti i dati richiesta), thread messaggi, input in basso. Realtime su `conversation_messages`.
 
-## 4. Frontend — Restyle stile ProntoPro
+## 4. Notifiche cliente
 
-### 4.1 Sidebar dashboard (`DashboardSidebar.tsx`)
-Look ProntoPro: logo in alto, voci con icona a sinistra, voce attiva con pill grigio chiaro, profilo utente in basso.
-Voci: Opportunità (richieste), Lavori ottenuti, Profilo, **Saldo: X,XX €** (pillola evidenziata).
+Allo sblocco → invio:
+- **Email** (via `send-welcome-email` riusato/nuova edge function `notify-client-quote`): "L'idraulico X ha risposto alla tua richiesta. [Apri chat]"
+- **WhatsApp** (via Respond.io): stesso link
 
-### 4.2 Pagina "Il mio conto" (`/dashboard/crediti` → rinominata "Conto")
-Layout ProntoPro:
-- H1 "Il mio conto"
-- Card "Ricarica il conto" (titolo + sottotitolo + chevron)
-- Card "Preferenze di pagamento"
-- Card "Saldo" (storico transazioni)
+## 5. Stile
 
-### 4.3 Pagina "Ricarica" (`/dashboard/conto/ricarica`)
-- Saldo corrente in cima
-- Sezione "Importo": 5 radio-card (20/40/80/200/300 €)
-- Sezione "Metodo di pagamento": Carta / PayPal / Altri (per ora solo Carta, gli altri "in arrivo")
-- Sezione "Indirizzo di fatturazione"
-- CTA sticky in basso "Procedi con la carta" + badge "Pagamenti sicuri tramite stripe"
+Colori Siena (azzurro `199 89% 48%`) già attivi. Card ProntoPro-style: bordi arrotondati `rounded-2xl`, shadow leggera, hover, tag pill grigi. Bottone "Rispondi (X €)" full-width primario blu.
 
-### 4.4 Pagina "Preferenze di pagamento"
-- Empty state "Nessuna carta salvata" + illustrazione + bottone "Aggiungi carta"
-- (Gestione carte salvate fuori scope di questo round, link a Stripe Customer Portal)
+## File toccati
 
-### 4.5 Pagina /auth
-- Restyle con palette **Siena** (blu/verde brand già definiti, ma look moderno tipo SaaS 2025: card con shadow morbida, input arrotondati grandi, micro-animazioni, gradient sottile)
-- Rimossi tutti i copy "3 prove gratuite" / "trial gratuito" → sostituiti con: *"Ricevi richieste verificate dai clienti della tua zona. Paghi solo i contatti che sblocchi."*
-- Form multi-step: progress bar in alto, step più ariosi, input con label flottante, bottoni grandi con icona
+**Nuovi:**
+- `supabase/migrations/` (conversations + messages + RLS)
+- `supabase/functions/client-chat/index.ts`
+- `supabase/functions/notify-client-quote/index.ts`
+- `src/pages/dashboard/OpportunitaPage.tsx` (rinomina/refactor di RichiestePage)
+- `src/pages/dashboard/PreventiviPage.tsx`
+- `src/pages/ClientChatPage.tsx` (route pubblica `/chat/:token`)
+- `src/components/dashboard/OpportunityCard.tsx`
+- `src/components/dashboard/ConversationList.tsx`
+- `src/components/dashboard/ChatWindow.tsx`
 
-### 4.6 Componenti dashboard da aggiornare
-- `CreditsCard.tsx` → mostra "Saldo: X,XX €" invece di "X crediti"
-- `TrialPaywall.tsx` → diventa `LowBalancePaywall.tsx` ("Saldo insufficiente — ricarica per sbloccare")
-- `RequestCard.tsx` → bottone "Sblocca contatto — 4,00 €" invece di "3 crediti"
-- Rimuovere `TrialRequestCard.tsx` / `AcceptedTrialRequestCard.tsx` o unificarli con la versione paid
-- `useTrialRequests.ts` → deprecato, rimosso dalla dashboard
+**Modificati:**
+- `src/components/dashboard/DashboardSidebar.tsx` (2 voci nuove)
+- `src/App.tsx` (route nuove)
+- `unlock_contact_with_balance` RPC (aggiunta: crea conversazione + token al successo) — oppure trigger su `contact_unlocks` INSERT
 
----
+## Aggiornamenti memoria
 
-## 5. Copy & marketing da ripulire (rimozione "prove gratuite")
+Aggiorno `mem://constraints/platform-model` rimuovendo "no chat / no quotes" perché il modello cambia: ora la piattaforma **ospita la chat e il preventivo** dopo lo sblocco a crediti.
 
-File da scandire e aggiornare:
-- `AuthPage.tsx`, `PlumberLandingPage.tsx`, `PlumberPlanSelectionPage.tsx`
-- `LandingPage.tsx`, `LandingComeFunzionaPage.tsx`
-- `Footer.tsx`, `Header.tsx`, qualsiasi badge "Prova gratis"
-- Email di benvenuto (`send-welcome-email`) se menziona trial
+## Cosa NON faccio
 
-Nuovo messaggio standard: *"Iscrizione gratuita · Ricarica quando vuoi · Paghi solo i contatti che sblocchi"*
-
----
-
-## 6. Aggiornamento memoria progetto
-Aggiornare `mem://index.md` core rule e `mem://business/monetization-model-credits` → nuovo modello "Saldo €".
-
----
-
-## 7. Cosa NON è incluso in questo round (per non esplodere lo scope)
-- Salvataggio carte di credito permanente (Stripe Setup Intents) → per ora solo checkout one-shot
-- PayPal e Google Pay come metodi di pagamento → mostrati disabilitati "in arrivo"
-- Migrazione dati storici dei crediti esistenti di idraulici già registrati → verrà fatta come script separato dopo conferma (se preferisci, posso convertire 1 credito = 1 € come default)
-
-## Domande aperte prima di procedere
-1. **Conversione idraulici esistenti**: 1 credito attuale = quanti euro nel nuovo saldo? Proposta: **1 credito = 1 €** (semplice). Confermi?
-2. **Costo sblocco**: vanno bene 6 / 4 / 2,50 € per subito/24h/giorni? O preferisci altri valori?
-3. **Pacchetti ricarica**: confermo esattamente 20/40/80/200/300 € come ProntoPro?
-
-Rispondimi a queste 3 domande (anche solo "ok a tutto") e parto con migration + codice.
+- Niente account cliente completo (uso magic link via token).
+- Niente Stripe per singola risposta (resta sistema crediti).
+- Niente file upload nella chat (solo testo per MVP).
+- Niente notifiche push real-time al cliente (solo email + WhatsApp iniziale + polling/realtime quando apre la chat).

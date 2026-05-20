@@ -1,7 +1,8 @@
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import {
   LayoutDashboard,
-  FileText,
+  Inbox,
+  MessageSquare,
   Wallet,
   User,
   Shield,
@@ -28,7 +29,8 @@ import { formatEuro } from '@/lib/currency';
 
 const menuItems = [
   { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
-  { title: 'Opportunità', url: '/dashboard/richieste', icon: FileText },
+  { title: 'Opportunità', url: '/dashboard/richieste', icon: Inbox },
+  { title: 'Preventivi', url: '/dashboard/preventivi', icon: MessageSquare },
   { title: 'Profilo', url: '/dashboard/profilo', icon: User },
 ];
 

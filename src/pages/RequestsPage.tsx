@@ -212,8 +212,8 @@ function RequestsContent() {
     );
   }
 
-  const isLoading = isTrial ? trialLoading : loadingRequests;
-  const displayRequests = isTrial ? filteredTrialRequests : filteredRequests;
+  const isLoading = trialLoading;
+  const displayRequests = filteredTrialRequests;
   return (
     <DashboardLayout title="Richieste" breadcrumbs={[{ label: 'Richieste' }]}>
       <Helmet>
@@ -297,49 +297,27 @@ function RequestsContent() {
             <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="font-semibold mb-2">Nessuna richiesta trovata</h3>
             <p className="text-muted-foreground text-sm">
-              {isTrial 
-                ? 'Non ci sono richieste disponibili nella tua zona al momento. Controlla più tardi!'
-                : 'Prova a modificare i filtri o aggiungi altre zone di servizio nel tuo profilo.'
-              }
+              Non ci sono richieste disponibili nella tua zona al momento. Controlla più tardi!
             </p>
           </div>
         ) : (
           <div className="space-y-4">
-            {isTrial ? (
-              // Show trial request cards
-              filteredTrialRequests.map((request) => (
-                <div 
-                  key={request.id}
-                  ref={request.id === highlightedRequestId ? highlightedRef : undefined}
-                  className={request.id === highlightedRequestId ? 'ring-2 ring-primary ring-offset-2 rounded-lg animate-pulse' : ''}
-                >
-                  <TrialRequestCard
-                    request={request}
-                    onClaim={claimRequest}
-                    onUnlockWithCredits={handleUnlockWithCredits}
-                    claiming={claiming === request.id}
-                    freeRequestsRemaining={freeRequestsRemaining}
-                    balanceCents={credits?.balance_cents ?? 0}
-                  />
-                </div>
-              ))
-            ) : (
-              // Show regular request cards for paid users
-              filteredRequests.map((request) => (
-                <div 
-                  key={request.id}
-                  ref={request.id === highlightedRequestId ? highlightedRef : undefined}
-                  className={request.id === highlightedRequestId ? 'ring-2 ring-primary ring-offset-2 rounded-lg animate-pulse' : ''}
-                >
-                  <RequestCard
-                    request={request}
-                    isUnlocked={(request as any).is_contact_unlocked || isRequestUnlocked(request.id)}
-                    canUnlock={canUnlockContact()}
-                    onUnlock={handleUnlock}
-                  />
-                </div>
-              ))
-            )}
+            {filteredTrialRequests.map((request) => (
+              <div 
+                key={request.id}
+                ref={request.id === highlightedRequestId ? highlightedRef : undefined}
+                className={request.id === highlightedRequestId ? 'ring-2 ring-primary ring-offset-2 rounded-lg animate-pulse' : ''}
+              >
+                <TrialRequestCard
+                  request={request}
+                  onClaim={claimRequest}
+                  onUnlockWithCredits={handleUnlockWithCredits}
+                  claiming={claiming === request.id}
+                  freeRequestsRemaining={freeRequestsRemaining}
+                  balanceCents={credits?.balance_cents ?? 0}
+                />
+              </div>
+            ))}
           </div>
         )}
       </div>

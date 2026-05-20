@@ -175,6 +175,18 @@ export default function SienaLandingPage() {
 
   return (
     <Layout>
+      <div
+        style={{
+          // Override design tokens locally on /siena to match the blue water-drop logo
+          ['--primary' as any]: '199 89% 48%',
+          ['--primary-foreground' as any]: '0 0% 100%',
+          ['--accent' as any]: '199 89% 94%',
+          ['--accent-foreground' as any]: '215 55% 20%',
+          ['--ring' as any]: '199 89% 48%',
+          ['--secondary' as any]: '199 70% 96%',
+          ['--secondary-foreground' as any]: '215 55% 20%',
+        }}
+      >
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />

@@ -63,62 +63,14 @@ function RequestsContent() {
     }
   }, [user, authLoading, navigate]);
 
-  useEffect(() => {
-    // With credit-based system, all users see the same requests via useTrialRequests
-    // No need to fetch separately for non-trial users
-    setLoadingRequests(false);
-  }, [user, profile]);
-
   // Scroll to highlighted request when loaded
   useEffect(() => {
-    if (highlightedRequestId && highlightedRef.current && !trialLoading && !loadingRequests) {
+    if (highlightedRequestId && highlightedRef.current && !trialLoading) {
       setTimeout(() => {
         highlightedRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 300);
     }
-  }, [highlightedRequestId, trialLoading, loadingRequests]);
-
-  const fetchRequests = async () => {
-    setLoadingRequests(true);
-    
-    // Use the secure view that masks contact info for non-unlocked requests
-    const { data, error } = await supabase
-      .from('service_requests_plumber_view')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error fetching requests:', error);
-      toast.error('Errore nel caricamento delle richieste');
-    } else {
-      let filteredData = data || [];
-      if (profile?.service_areas && profile.service_areas.length > 0) {
-        filteredData = (data || []).filter(request => 
-          profile.service_areas.some(area => 
-            request.city.toLowerCase().includes(area.toLowerCase()) ||
-            area.toLowerCase().includes(request.city.toLowerCase())
-          )
-        );
-      }
-      
-      setRequests(filteredData.map(r => ({
-        ...r,
-        intervention_type: r.intervention_type as InterventionType,
-        urgency: r.urgency as UrgencyType,
-        property_type: r.property_type as PropertyType,
-        accessibility: r.accessibility as AccessibilityType,
-        is_exclusive: r.is_exclusive ?? false,
-      })));
-    }
-    
-    setLoadingRequests(false);
-  };
-
-  const handleUnlock = async (requestId: string) => {
-    const plan = getCurrentPlan();
-    const isExclusive = plan?.contacts_are_exclusive ?? false;
-    return await unlockContact(requestId, isExclusive);
-  };
+  }, [highlightedRequestId, trialLoading]);
 
   // Function to unlock a request using credits (for trial exhausted users)
   const handleUnlockWithCredits = async (requestId: string): Promise<UnlockWithCreditsResult> => {
@@ -165,18 +117,6 @@ function RequestsContent() {
     return { success: false, message: 'Nessun risultato dalla funzione' };
   };
 
-  // Filter requests (for non-trial users)
-  const filteredRequests = requests.filter(request => {
-    const matchesSearch = searchQuery === '' || 
-      request.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      request.city.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesUrgency = urgencyFilter === 'all' || request.urgency === urgencyFilter;
-    const matchesType = typeFilter === 'all' || request.intervention_type === typeFilter;
-    
-    return matchesSearch && matchesUrgency && matchesType;
-  });
-
   // Filter trial requests
   const filteredTrialRequests = trialRequests.filter(request => {
     const matchesSearch = searchQuery === '' || 
@@ -210,7 +150,7 @@ function RequestsContent() {
       </Helmet>
       <div className="space-y-6">
         {/* Trial Accepted Requests - Show client contact details */}
-        {isTrial && trialAcceptedRequests.length > 0 && (
+        {trialAcceptedRequests.length > 0 && (
           <Card className="border-success/50 bg-success/5">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">

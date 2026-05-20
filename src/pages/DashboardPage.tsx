@@ -191,7 +191,7 @@ function DashboardContent() {
       return { success: false, message: 'Profilo non trovato' };
     }
 
-    const { data, error } = await supabase.rpc('unlock_contact_with_credits', {
+    const { data, error } = await supabase.rpc('unlock_contact_with_balance', {
       p_plumber_id: profile.id,
       p_request_id: requestId,
     });
@@ -213,8 +213,8 @@ function DashboardContent() {
         return {
           success: true,
           message: result.message,
-          credits_spent: result.credits_spent,
-          new_balance: result.new_balance,
+          amount_spent_cents: result.amount_spent_cents,
+          new_balance_cents: result.new_balance_cents,
           client_name: result.client_name,
           client_phone: result.client_phone,
           client_email: result.client_email,
@@ -335,8 +335,8 @@ function DashboardContent() {
           </Card>
         )}
 
-        {/* Trial Accepted Requests - Show client contact details (for trial users) */}
-        {isInTrialMode && trialAcceptedRequests.length > 0 && (
+        {/* Accepted unlocked requests - Show client contact details */}
+        {trialAcceptedRequests.length > 0 && (
           <Card className="border-green-500/50 bg-green-500/5">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-green-700 dark:text-green-400">
@@ -412,7 +412,7 @@ function DashboardContent() {
                       onUnlockWithCredits={handleUnlockWithCredits}
                       claiming={claimingTrialRequestId === request.id}
                       freeRequestsRemaining={trialFreeRequestsRemaining}
-                      creditBalance={credits?.balance ?? 0}
+                      balanceCents={credits?.balance_cents ?? 0}
                       onAccepted={() => fetchAssignedRequests()}
                     />
                   ))

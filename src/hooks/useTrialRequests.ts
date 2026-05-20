@@ -153,7 +153,7 @@ export function useTrialRequests(profileOverride?: PlumberProfile | null) {
     }
 
     if (freeRequestsRemaining <= 0) {
-      return { success: false, message: 'Hai esaurito le richieste gratuite. Usa i crediti per sbloccare.' };
+      return { success: false, message: 'Hai esaurito le richieste gratuite. Usa il saldo per sbloccare.' };
     }
 
     // Get the request data before claiming (we need city and intervention_type for the email)

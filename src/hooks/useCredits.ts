@@ -121,6 +121,27 @@ export function useCredits() {
     }
   }, [profile, fetchCredits, fetchTransactions]);
 
+  useEffect(() => {
+    if (!profile) return;
+
+    const syncCredits = () => {
+      void fetchCredits();
+    };
+    const intervalId = window.setInterval(syncCredits, 5000);
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') syncCredits();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', syncCredits);
+
+    return () => {
+      window.clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', syncCredits);
+    };
+  }, [profile, fetchCredits]);
+
   const purchaseCredits = async (packageId: string): Promise<{ url?: string; error?: string }> => {
     setPurchasing(true);
     try {

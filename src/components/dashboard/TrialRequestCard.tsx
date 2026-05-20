@@ -14,6 +14,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { formatEuroFromCents } from '@/lib/currency';
 import type { UrgencyType } from '@/lib/types';
 import { 
   INTERVENTION_LABELS, 
@@ -23,18 +24,18 @@ import {
 } from '@/lib/types';
 import type { TrialRequest, ClaimResult } from '@/hooks/useTrialRequests';
 
-// Credit costs per urgency level
-const UNLOCK_COSTS: Record<UrgencyType, number> = {
-  subito: 5,
-  entro_24_ore: 3,
-  prossimi_giorni: 2,
+// Costo sblocco in centesimi per livello di urgenza
+const UNLOCK_COSTS_CENTS: Record<UrgencyType, number> = {
+  subito: 600,
+  entro_24_ore: 400,
+  prossimi_giorni: 250,
 };
 
 export interface UnlockWithCreditsResult {
   success: boolean;
   message: string;
-  credits_spent?: number;
-  new_balance?: number;
+  amount_spent_cents?: number;
+  new_balance_cents?: number;
   client_name?: string;
   client_phone?: string;
   client_email?: string;
@@ -46,7 +47,7 @@ interface TrialRequestCardProps {
   onUnlockWithCredits?: (requestId: string) => Promise<UnlockWithCreditsResult>;
   claiming: boolean;
   freeRequestsRemaining: number;
-  creditBalance?: number;
+  balanceCents?: number;
   onAccepted?: () => void;
 }
 
@@ -56,7 +57,7 @@ export function TrialRequestCard({
   onUnlockWithCredits,
   claiming, 
   freeRequestsRemaining,
-  creditBalance = 0,
+  balanceCents = 0,
   onAccepted
 }: TrialRequestCardProps) {
   const [claimResult, setClaimResult] = useState<ClaimResult | null>(null);
@@ -110,9 +111,9 @@ export function TrialRequestCard({
     }
   };
 
-  const unlockCost = UNLOCK_COSTS[request.urgency];
+  const unlockCostCents = UNLOCK_COSTS_CENTS[request.urgency];
   const trialExhausted = freeRequestsRemaining <= 0;
-  const hasInsufficientCredits = trialExhausted && creditBalance < unlockCost;
+  const hasInsufficientBalance = trialExhausted && balanceCents < unlockCostCents;
   const isProcessing = claiming || unlocking;
 
   // Show unlocked state with client info (credit unlock)
@@ -129,7 +130,7 @@ export function TrialRequestCard({
               </div>
               <Badge variant="secondary" className="gap-1">
                 <Coins className="h-3 w-3" />
-                -{creditUnlockResult.credits_spent} crediti
+                -{formatEuroFromCents(creditUnlockResult.amount_spent_cents)}
               </Badge>
             </div>
           </div>
@@ -284,17 +285,17 @@ export function TrialRequestCard({
                 <>
                   <span className="font-medium text-foreground flex items-center gap-1">
                     <Lock className="h-3.5 w-3.5" />
-                    Contatto bloccato
+                    {hasInsufficientBalance ? 'Contatto bloccato' : 'Contatto da sbloccare'}
                   </span>
-                  {hasInsufficientCredits ? (
+                  {hasInsufficientBalance ? (
                     <p className="text-xs flex items-center gap-1 mt-0.5 text-destructive">
                       <Coins className="h-3 w-3" />
-                      Crediti insufficienti ({creditBalance}/{unlockCost})
+                      Saldo insufficiente ({formatEuroFromCents(balanceCents)} / {formatEuroFromCents(unlockCostCents)})
                     </p>
                   ) : (
                     <p className="text-xs flex items-center gap-1 mt-0.5">
                       <Coins className="h-3 w-3" />
-                      Servono <span className="font-semibold text-primary">{unlockCost} crediti</span> per sbloccare
+                      Servono <span className="font-semibold text-primary">{formatEuroFromCents(unlockCostCents)}</span> per sbloccare
                     </p>
                   )}
                 </>
@@ -307,10 +308,10 @@ export function TrialRequestCard({
             </div>
             <Button
               onClick={trialExhausted ? handleUnlockWithCredits : handleClaim}
-              disabled={isProcessing || (trialExhausted && (!onUnlockWithCredits || hasInsufficientCredits))}
+              disabled={isProcessing || (trialExhausted && (!onUnlockWithCredits || hasInsufficientBalance))}
               size="sm"
               className="gap-2 shrink-0"
-              variant={hasInsufficientCredits ? "outline" : "default"}
+              variant={hasInsufficientBalance ? "outline" : "default"}
             >
               {isProcessing ? (
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -319,10 +320,10 @@ export function TrialRequestCard({
               ) : (
                 <Zap className="h-4 w-4" />
               )}
-              {hasInsufficientCredits 
-                ? 'Crediti insufficienti' 
+              {hasInsufficientBalance 
+                ? 'Saldo insufficiente' 
                 : trialExhausted 
-                  ? `Sblocca (${unlockCost} crediti)` 
+                  ? `Sblocca (${formatEuroFromCents(unlockCostCents)})` 
                   : 'Accetta ora'}
             </Button>
           </div>

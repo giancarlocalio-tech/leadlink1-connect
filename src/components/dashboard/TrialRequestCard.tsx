@@ -26,9 +26,9 @@ import type { TrialRequest, ClaimResult } from '@/hooks/useTrialRequests';
 
 // Costo sblocco in centesimi per livello di urgenza
 const UNLOCK_COSTS_CENTS: Record<UrgencyType, number> = {
-  subito: 500,
-  entro_24_ore: 300,
-  prossimi_giorni: 200,
+  subito: 600,
+  entro_24_ore: 400,
+  prossimi_giorni: 250,
 };
 
 export interface UnlockWithCreditsResult {

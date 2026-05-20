@@ -190,7 +190,7 @@ export default function SienaLandingPage() {
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
-        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <meta name="robots" content="noindex,nofollow" />
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />

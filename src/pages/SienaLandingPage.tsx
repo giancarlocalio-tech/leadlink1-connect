@@ -198,9 +198,9 @@ export default function SienaLandingPage() {
       </Helmet>
 
       {/* HERO — clean white background + Siena skyline silhouette */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-background via-background to-primary/5 border-b border-border">
-        {/* Decorative skyline at bottom */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 opacity-[0.10] md:opacity-[0.13]">
+      <section className="relative overflow-hidden bg-white border-b border-border">
+        {/* Decorative skyline at bottom — desaturated, very subtle */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 opacity-[0.05] md:opacity-[0.06] grayscale">
           <img
             src={sienaSkyline}
             alt=""
@@ -209,8 +209,6 @@ export default function SienaLandingPage() {
             loading="eager"
           />
         </div>
-        {/* Subtle radial brand glow */}
-        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.08),transparent_60%)]" />
 
         <div className="container mx-auto px-4 relative z-10 text-center pt-14 md:pt-20 pb-32 md:pb-40">
           <div className="inline-flex items-center gap-2 mb-5 bg-primary/10 border border-primary/20 rounded-full px-4 py-1.5">

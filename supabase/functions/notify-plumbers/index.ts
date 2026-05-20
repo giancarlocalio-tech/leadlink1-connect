@@ -75,6 +75,7 @@ const handler = async (req: Request): Promise<Response> => {
         client_email: z.string().trim().email().nullable().optional(),
         client_user_id: z.string().uuid().nullable().optional(),
         privacy_accepted: z.literal(true),
+        phone_contact_allowed: z.boolean().optional(),
         wizard_answers: z.array(z.object({
           questionId: z.string(),
           questionTitle: z.string(),

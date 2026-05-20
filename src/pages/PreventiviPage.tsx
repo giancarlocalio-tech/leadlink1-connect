@@ -56,7 +56,7 @@ const initials = (name?: string | null) =>
 export default function PreventiviPage() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
-  const { profile, loading: profileLoading } = usePlumberProfile();
+  const { profile, loading: profileLoading, hasFetched } = usePlumberProfile();
   const [conversations, setConversations] = useState<EnrichedConversation[]>([]);
   const [loadingConvs, setLoadingConvs] = useState(true);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -70,6 +70,12 @@ export default function PreventiviPage() {
       navigate('/auth?returnUrl=' + encodeURIComponent('/dashboard/preventivi'));
     }
   }, [user, authLoading, navigate]);
+
+  useEffect(() => {
+    if (!authLoading && user && hasFetched && !profile) {
+      navigate('/account', { replace: true });
+    }
+  }, [authLoading, user, hasFetched, profile, navigate]);
 
   const fetchConversations = useCallback(async () => {
     if (!profile?.id) return;
@@ -195,7 +201,7 @@ export default function PreventiviPage() {
     setSending(false);
   };
 
-  if (authLoading || profileLoading) {
+  if (authLoading || profileLoading || (user && !hasFetched) || (user && hasFetched && !profile)) {
     return (
       <DashboardLayout title="Preventivi" breadcrumbs={[{ label: 'Preventivi' }]}>
         <div className="py-16 flex items-center justify-center">

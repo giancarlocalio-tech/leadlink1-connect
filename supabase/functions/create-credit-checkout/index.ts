@@ -7,126 +7,100 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const logStep = (step: string, details?: Record<string, unknown>) => {
-  const detailsStr = details ? ` - ${JSON.stringify(details)}` : '';
-  console.log(`[CREATE-CREDIT-CHECKOUT] ${step}${detailsStr}`);
+const log = (step: string, details?: Record<string, unknown>) => {
+  const d = details ? ` - ${JSON.stringify(details)}` : "";
+  console.log(`[CREATE-TOPUP-CHECKOUT] ${step}${d}`);
 };
 
 serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   const supabaseClient = createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
     Deno.env.get("SUPABASE_ANON_KEY") ?? ""
   );
-
   const supabaseAdmin = createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
   );
 
   try {
-    logStep("Function started");
-
-    // Authenticate user
     const authHeader = req.headers.get("Authorization");
-    if (!authHeader) throw new Error("No authorization header provided");
-
+    if (!authHeader) throw new Error("No authorization header");
     const token = authHeader.replace("Bearer ", "");
     const { data: userData, error: userError } = await supabaseClient.auth.getUser(token);
-    if (userError) throw new Error(`Authentication error: ${userError.message}`);
-    
+    if (userError) throw new Error(`Auth: ${userError.message}`);
     const user = userData.user;
-    if (!user?.email) throw new Error("User not authenticated or email not available");
-    logStep("User authenticated", { userId: user.id, email: user.email });
+    if (!user?.email) throw new Error("User not authenticated");
+    log("User authenticated", { userId: user.id });
 
-    // Get package_id from request body
     const { package_id } = await req.json();
     if (!package_id) throw new Error("package_id is required");
-    logStep("Package requested", { package_id });
 
-    // Fetch package details
-    const { data: packageData, error: packageError } = await supabaseAdmin
+    const { data: pkg, error: pkgErr } = await supabaseAdmin
       .from("credit_packages")
       .select("*")
       .eq("id", package_id)
       .eq("is_active", true)
       .single();
+    if (pkgErr || !pkg) throw new Error("Package not found");
 
-    if (packageError || !packageData) {
-      throw new Error("Package not found or inactive");
-    }
-    logStep("Package found", { 
-      name: packageData.name, 
-      credits: packageData.credits,
-      price_id: packageData.stripe_price_id 
-    });
+    const amountCents = pkg.amount_cents || pkg.price_cents;
+    if (!amountCents || amountCents < 100) throw new Error("Invalid package amount");
 
-    if (!packageData.stripe_price_id) {
-      throw new Error("Package does not have a Stripe price configured");
-    }
-
-    // Get plumber profile
-    const { data: profileData, error: profileError } = await supabaseAdmin
+    const { data: profile, error: profErr } = await supabaseAdmin
       .from("plumber_profiles")
-      .select("id")
+      .select("id, full_name")
       .eq("user_id", user.id)
       .single();
+    if (profErr || !profile) throw new Error("Plumber profile not found");
 
-    if (profileError || !profileData) {
-      throw new Error("Plumber profile not found");
-    }
-    logStep("Plumber profile found", { plumber_id: profileData.id });
-
-    // Initialize Stripe
     const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
-    if (!stripeKey) throw new Error("STRIPE_SECRET_KEY is not set");
-
+    if (!stripeKey) throw new Error("STRIPE_SECRET_KEY not set");
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
 
-    // Check if customer already exists
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
-    let customerId: string | undefined;
-    if (customers.data.length > 0) {
-      customerId = customers.data[0].id;
-      logStep("Existing Stripe customer found", { customerId });
-    }
+    const customerId = customers.data[0]?.id;
 
-    // Create checkout session
     const origin = req.headers.get("origin") || "https://leadlink1-connect.lovable.app";
-    
+    const euros = (amountCents / 100).toFixed(2).replace(".", ",");
+
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
       line_items: [
         {
-          price: packageData.stripe_price_id,
+          price_data: {
+            currency: "eur",
+            product_data: {
+              name: `Ricarica saldo ${euros} €`,
+              description: "Ricarica del saldo Idraulici Subito",
+            },
+            unit_amount: amountCents,
+          },
           quantity: 1,
         },
       ],
       mode: "payment",
-      success_url: `${origin}/dashboard/crediti?success=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/dashboard/crediti?canceled=true`,
+      success_url: `${origin}/dashboard/conto/ricarica?success=true&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/dashboard/conto/ricarica?canceled=true`,
       metadata: {
-        plumber_id: profileData.id,
-        package_id: package_id,
-        credits: packageData.credits.toString(),
+        plumber_id: profile.id,
+        package_id,
+        amount_cents: amountCents.toString(),
         user_id: user.id,
       },
     });
 
-    logStep("Checkout session created", { sessionId: session.id, url: session.url });
-
+    log("Session created", { id: session.id });
     return new Response(JSON.stringify({ url: session.url }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
     });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    logStep("ERROR", { message: errorMessage });
-    return new Response(JSON.stringify({ error: errorMessage }), {
+    const msg = error instanceof Error ? error.message : String(error);
+    log("ERROR", { msg });
+    return new Response(JSON.stringify({ error: msg }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
     });

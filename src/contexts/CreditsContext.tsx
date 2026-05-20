@@ -9,8 +9,9 @@ interface CreditsContextValue {
   loading: boolean;
   purchasing: boolean;
   purchaseCredits: (packageId: string) => Promise<{ url?: string; error?: string }>;
-  verifyPurchase: (sessionId: string) => Promise<{ success: boolean; credits_added?: number; new_balance?: number; error?: string }>;
+  verifyPurchase: (sessionId: string) => Promise<{ success: boolean; amount_added_cents?: number; new_balance_cents?: number; error?: string }>;
   getUnlockCost: (urgency: string) => number;
+  getUnlockCostCents: (urgency: string) => number;
   canUnlockWithCredits: (urgency: string) => { allowed: boolean; reason?: string };
   refreshCredits: () => Promise<void>;
   refreshTransactions: () => Promise<void>;

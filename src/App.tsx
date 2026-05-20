@@ -14,6 +14,7 @@ import DashboardPage from "./pages/DashboardPage";
 import RequestsPage from "./pages/RequestsPage";
 import SubscriptionPage from "./pages/SubscriptionPage";
 import CreditsPage from "./pages/CreditsPage";
+import TopUpPage from "./pages/TopUpPage";
 import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 import ProfilePage from "./pages/ProfilePage";
 import PrivacyPage from "./pages/PrivacyPage";
@@ -70,6 +71,7 @@ const App = () => (
             <Route path="/dashboard/richieste" element={<RequestsPage />} />
             <Route path="/dashboard/abbonamento" element={<Navigate to="/dashboard/crediti" replace />} />
             <Route path="/dashboard/crediti" element={<CreditsPage />} />
+            <Route path="/dashboard/crediti/ricarica" element={<TopUpPage />} />
             <Route path="/dashboard/pagamento-completato" element={<PaymentSuccessPage />} />
             <Route path="/dashboard/profilo" element={<ProfilePage />} />
             <Route path="/privacy" element={<PrivacyPage />} />

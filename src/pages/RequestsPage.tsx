@@ -149,6 +149,14 @@ function RequestsContent() {
     if (data && data.length > 0) {
       const result = data[0];
       if (result.success) {
+        // Notify client (email + WhatsApp con link alla chat)
+        try {
+          await supabase.functions.invoke('notify-client-chat', {
+            body: { request_id: requestId, plumber_id: profile.id },
+          });
+        } catch (e) {
+          console.error('notify-client-chat failed', e);
+        }
         // Refresh credits balance and transactions
         await Promise.all([refreshCredits(), refreshTransactions()]);
         return {

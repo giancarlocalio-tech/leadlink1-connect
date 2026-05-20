@@ -31,13 +31,7 @@ import {
   ACCESSIBILITY_LABELS 
 } from '@/lib/types';
 import type { TrialRequest, ClaimResult } from '@/hooks/useTrialRequests';
-
-// Costo sblocco in centesimi per livello di urgenza
-const UNLOCK_COSTS_CENTS: Record<UrgencyType, number> = {
-  subito: 600,
-  entro_24_ore: 400,
-  prossimi_giorni: 250,
-};
+import { computeUnlockPriceCents } from '@/lib/pricing';
 
 export interface UnlockWithCreditsResult {
   success: boolean;

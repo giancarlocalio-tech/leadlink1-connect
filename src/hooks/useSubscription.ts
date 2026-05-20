@@ -197,6 +197,15 @@ export function useSubscription() {
       setUnlocks(prev => [...prev, data]);
     }
 
+    // Notify client (email + WhatsApp con magic link alla chat)
+    try {
+      await supabase.functions.invoke('notify-client-chat', {
+        body: { request_id: requestId, plumber_id: profile.id },
+      });
+    } catch (e) {
+      console.error('notify-client-chat failed', e);
+    }
+
     return { error: null };
   };
 

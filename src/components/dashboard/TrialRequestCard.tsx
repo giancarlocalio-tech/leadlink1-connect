@@ -49,10 +49,15 @@ export interface UnlockWithCreditsResult {
   client_email?: string;
 }
 
+export interface QuoteSubmission {
+  quote_amount_cents: number;
+  quote_message: string;
+}
+
 interface TrialRequestCardProps {
   request: TrialRequest;
-  onClaim: (requestId: string) => Promise<ClaimResult>;
-  onUnlockWithCredits?: (requestId: string) => Promise<UnlockWithCreditsResult>;
+  onClaim: (requestId: string, quote?: QuoteSubmission) => Promise<ClaimResult>;
+  onUnlockWithCredits?: (requestId: string, quote?: QuoteSubmission) => Promise<UnlockWithCreditsResult>;
   claiming: boolean;
   freeRequestsRemaining: number;
   balanceCents?: number;

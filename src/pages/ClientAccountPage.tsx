@@ -51,8 +51,8 @@ export default function ClientAccountPage() {
       setLoading(true);
       const { data: reqs } = await supabase
         .from('service_requests')
-        .select('id, intervention_type, city, description, urgency, status, created_at, client_user_id, client_email')
-        .or(`client_user_id.eq.${user.id}${user.email ? `,client_email.eq.${user.email}` : ''}`)
+        .select('id, intervention_type, city, description, urgency, status, created_at')
+        .eq('client_user_id', user.id)
         .order('created_at', { ascending: false });
       setRequests((reqs as Req[]) || []);
       if (reqs && reqs.length > 0) {

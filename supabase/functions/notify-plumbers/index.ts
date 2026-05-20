@@ -430,8 +430,8 @@ const handler = async (req: Request): Promise<Response> => {
             from: "IdrauliciSubito <noreply@idraulicisubito.com>",
             reply_to: "supporto@idraulicisubito.com",
             to: [plumber.email],
-            subject: `🔧 Nuova richiesta: ${interventionLabel} a ${serviceRequest.city}`,
-            text: `Ciao ${plumber.full_name || plumber.business_name},\n\nNuova richiesta a ${serviceRequest.city}.\nIntervento: ${interventionLabel}\nUrgenza: ${urgencyLabel}\n\nAccetta subito: https://www.idraulicisubito.com/dashboard/richieste?id=${serviceRequest.id}&email=${encodeURIComponent(plumber.email)}\n\nChi accetta per primo ottiene i dati del cliente!`,
+            subject: `Hai 1 nuova opportunità di lavoro a ${serviceRequest.city}`,
+            text: `Ciao ${plumber.full_name || plumber.business_name},\n\nHai 1 nuova opportunità di lavoro!\n\n${interventionLabel}\nDove: ${serviceRequest.city}\nQuando: ${urgencyLabel}\nContatto: Sblocca per chiamare il cliente\n\nDettagli: ${serviceRequest.description}\n\nSblocca subito: https://www.idraulicisubito.com/dashboard/richieste?id=${serviceRequest.id}&email=${encodeURIComponent(plumber.email)}\n\nChi risponde per primo ha più probabilità di ottenere il lavoro!`,
             headers: {
               "List-Unsubscribe": "<mailto:supporto@idraulicisubito.com?subject=unsubscribe>",
             },
@@ -442,65 +442,100 @@ const handler = async (req: Request): Promise<Response> => {
                 <meta charset="utf-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
               </head>
-              <body style="margin:0;padding:0;background-color:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;">
+              <body style="margin:0;padding:0;background-color:#f5f5f5;font-family:'Nunito',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;">
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5;">
                   <tr>
                     <td align="center" style="padding:20px;">
-                      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+                      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:#ffffff;border-radius:12px;overflow:hidden;">
                         
-                        <!-- Header -->
+                        <!-- Header brand bar -->
                         <tr>
-                          <td style="background:linear-gradient(135deg,#0284c7 0%,#075985 100%);padding:30px;text-align:center;border-radius:12px 12px 0 0;">
-                            <h1 style="margin:0;color:#ffffff;font-size:24px;font-weight:bold;">🔧 Nuova Richiesta di Intervento</h1>
+                          <td style="background-color:#1e40af;padding:28px 32px;">
+                            <p style="margin:0 0 6px 0;color:#ffffff;font-size:18px;font-weight:700;letter-spacing:0.3px;">IdrauliciSubito</p>
+                            <h1 style="margin:0;color:#ffffff;font-size:26px;font-weight:800;line-height:1.2;">Nuova opportunità di lavoro</h1>
                           </td>
                         </tr>
                         
-                        <!-- Content -->
+                        <!-- Greeting -->
                         <tr>
-                          <td style="background-color:#ffffff;padding:30px;">
-                            <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:#333333;">
-                              Ciao <strong>${plumber.full_name || plumber.business_name}</strong>,
-                            </p>
-                            
-                            <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:#333333;">
-                              Un nuovo cliente ha bisogno del tuo intervento a <strong>${serviceRequest.city}</strong>.
-                            </p>
-                            
-                            <!-- Request Details -->
-                            <div style="background-color:#e0f2fe;border-left:4px solid #0284c7;padding:20px;margin:20px 0;border-radius:0 8px 8px 0;">
-                              <h3 style="margin:0 0 15px 0;color:#0284c7;font-size:16px;">📋 Dettagli richiesta</h3>
-                              <p style="margin:0 0 8px 0;font-size:14px;color:#333;">
-                                <strong>Tipo intervento:</strong> ${interventionLabel}
-                              </p>
-                              <p style="margin:0 0 8px 0;font-size:14px;color:#333;">
-                                <strong>Urgenza:</strong> ${urgencyLabel}
-                              </p>
-                              <p style="margin:0 0 8px 0;font-size:14px;color:#333;">
-                                <strong>Città:</strong> ${serviceRequest.city}
-                              </p>
-                              <p style="margin:0;font-size:14px;color:#333;">
-                                <strong>Descrizione:</strong> ${serviceRequest.description}
-                              </p>
-                            </div>
-                            
-                            <!-- CTA Button -->
-                            <div style="text-align:center;margin:30px 0;">
-                              <a href="https://www.idraulicisubito.com/dashboard/richieste?id=${serviceRequest.id}&email=${encodeURIComponent(plumber.email)}" 
-                                 style="display:inline-block;background:linear-gradient(135deg,#0284c7 0%,#075985 100%);color:#ffffff;text-decoration:none;padding:16px 40px;border-radius:8px;font-size:16px;font-weight:bold;">
-                                ⚡ Accetta Richiesta
-                              </a>
-                            </div>
-                            
-                            <p style="margin:20px 0 0 0;font-size:14px;color:#666666;text-align:center;">
-                              <strong>Chi accetta per primo ottiene i dati del cliente!</strong>
-                            </p>
+                          <td style="padding:28px 32px 0 32px;">
+                            <p style="margin:0 0 6px 0;font-size:16px;color:#111827;">Ciao <strong>${plumber.full_name || plumber.business_name}</strong>,</p>
+                            <p style="margin:0 0 20px 0;font-size:18px;color:#111827;font-weight:700;">Hai 1 nuova opportunità di lavoro!</p>
+                          </td>
+                        </tr>
+
+                        <!-- Request card -->
+                        <tr>
+                          <td style="padding:0 32px;">
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:10px;">
+                              <tr>
+                                <td style="padding:20px 22px;">
+                                  <p style="margin:0 0 14px 0;font-size:17px;font-weight:700;color:#1e40af;">${interventionLabel}</p>
+                                  <p style="margin:0 0 8px 0;font-size:14px;color:#374151;">
+                                    <span style="color:#6b7280;">📍 <strong style="color:#111827;">Dove:</strong></span> ${serviceRequest.city}
+                                  </p>
+                                  <p style="margin:0 0 8px 0;font-size:14px;color:#374151;">
+                                    <span style="color:#6b7280;">📅 <strong style="color:#111827;">Quando:</strong></span> ${urgencyLabel}
+                                  </p>
+                                  <p style="margin:0 0 8px 0;font-size:14px;color:#374151;">
+                                    <span style="color:#6b7280;">📞 <strong style="color:#111827;">Contatto:</strong></span> Sblocca per chiamare il cliente
+                                  </p>
+                                  <p style="margin:0 0 14px 0;font-size:14px;color:#374151;">
+                                    <span style="color:#6b7280;">🕒 <strong style="color:#111827;">Richiesta creata:</strong></span> pochi minuti fa
+                                  </p>
+                                  <p style="margin:0;font-size:14px;color:#374151;line-height:1.5;">
+                                    <strong style="color:#111827;">Dettagli:</strong> ${serviceRequest.description}
+                                  </p>
+
+                                  <!-- Primary CTA -->
+                                  <div style="text-align:center;margin:22px 0 4px 0;">
+                                    <a href="https://www.idraulicisubito.com/dashboard/richieste?id=${serviceRequest.id}&email=${encodeURIComponent(plumber.email)}" 
+                                       style="display:block;background-color:#1e40af;color:#ffffff;text-decoration:none;padding:16px 24px;border-radius:8px;font-size:16px;font-weight:700;">
+                                      Sblocca contatto
+                                    </a>
+                                  </div>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+
+                        <!-- Secondary CTA -->
+                        <tr>
+                          <td style="padding:18px 32px 8px 32px;">
+                            <a href="https://www.idraulicisubito.com/dashboard/richieste?email=${encodeURIComponent(plumber.email)}" 
+                               style="display:block;text-align:center;background-color:#22c55e;color:#ffffff;text-decoration:none;padding:16px 24px;border-radius:8px;font-size:16px;font-weight:700;">
+                              Guarda tutte le opportunità di lavoro
+                            </a>
+                          </td>
+                        </tr>
+
+                        <!-- Tips -->
+                        <tr>
+                          <td style="padding:24px 32px 8px 32px;">
+                            <h3 style="margin:0 0 10px 0;font-size:16px;color:#111827;font-weight:700;">Perché è importante rispondere velocemente?</h3>
+                            <p style="margin:0 0 6px 0;font-size:14px;color:#374151;line-height:1.6;">• Le richieste vengono inviate a più idraulici della tua zona contemporaneamente.</p>
+                            <p style="margin:0 0 6px 0;font-size:14px;color:#374151;line-height:1.6;">• Il cliente sceglie quasi sempre tra i primi che lo contattano.</p>
+                            <p style="margin:0;font-size:14px;color:#374151;line-height:1.6;">• Le richieste restano attive solo 3 giorni, poi scadono.</p>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td style="padding:18px 32px 4px 32px;">
+                            <h3 style="margin:0 0 10px 0;font-size:16px;color:#111827;font-weight:700;">Come ottenere più lavori?</h3>
+                            <p style="margin:0 0 6px 0;font-size:14px;color:#374151;line-height:1.6;">• Chiama il cliente subito dopo aver sbloccato il contatto.</p>
+                            <p style="margin:0 0 6px 0;font-size:14px;color:#374151;line-height:1.6;">• Presentati in modo professionale e fai domande sul problema.</p>
+                            <p style="margin:0;font-size:14px;color:#374151;line-height:1.6;">• Completa il tuo profilo con foto dei lavori per aumentare la fiducia.</p>
                           </td>
                         </tr>
                         
                         <!-- Footer -->
                         <tr>
-                          <td style="background-color:#f9fafb;padding:20px;text-align:center;border-radius:0 0 12px 12px;border-top:1px solid #e5e7eb;">
-                            <p style="margin:0 0 10px 0;font-size:12px;color:#9ca3af;">
+                          <td style="background-color:#f9fafb;padding:20px 32px;text-align:center;border-top:1px solid #e5e7eb;margin-top:24px;">
+                            <p style="margin:0 0 8px 0;font-size:12px;color:#9ca3af;">
+                              Stai ricevendo questa email perché sei un idraulico registrato su IdrauliciSubito per la zona di ${serviceRequest.city}.
+                            </p>
+                            <p style="margin:0 0 8px 0;font-size:12px;color:#9ca3af;">
                               Se non vuoi più ricevere notifiche, rispondi a questa email con "STOP".
                             </p>
                             <p style="margin:0;font-size:12px;color:#9ca3af;">

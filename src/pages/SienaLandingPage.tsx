@@ -294,8 +294,94 @@ export default function SienaLandingPage() {
           </div>
           <div className="text-center">
             <Button size="lg" onClick={handleRequestClick} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6 h-auto shadow-lg">
-              Richiedi un idraulico a Siena
+              Ricevi preventivi gratis a Siena →
             </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* WHY US — Google Ads conversion block */}
+      <section id="perche-noi" className="py-14 bg-gradient-to-b from-primary/5 to-background">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
+            Perché scegliere IdrauliciSubito invece di cercare su Google?
+          </h2>
+          <p className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto">
+            Su Google chiami un idraulico alla volta, aspetti che ti richiami, e non sai mai se il prezzo è giusto.
+            Con noi, in 60 secondi, ricevi <strong>più preventivi a confronto</strong> da idraulici verificati di Siena.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-5 mb-10">
+            {SIENA_WHY_US.map((w, i) => {
+              const Icon = w.icon === 'compare' ? Users : w.icon === 'check' ? CheckCircle : w.icon === 'clock' ? Zap : Shield;
+              return (
+                <div key={i} className="bg-card border border-border rounded-xl p-6 flex gap-4 shadow-sm">
+                  <div className="bg-primary/10 rounded-full w-12 h-12 flex items-center justify-center flex-shrink-0">
+                    <Icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg mb-1">{w.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{w.description}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="text-center">
+            <Button size="lg" onClick={handleRequestClick} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6 h-auto shadow-lg">
+              Ricevi i miei preventivi gratis →
+            </Button>
+            <p className="text-muted-foreground text-sm mt-3">
+              ✓ Più preventivi a confronto · ✓ Idraulici verificati · ✓ Risposta in 15 minuti
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* CONTRADE — Siena-friendly section */}
+      <section id="contrade" className="py-14 bg-background">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <Heart className="h-6 w-6 text-primary" />
+            <span className="uppercase text-sm font-bold tracking-wide text-primary">Made in Siena</span>
+          </div>
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
+            Serviamo tutte le 17 Contrade di Siena
+          </h2>
+          <p className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto">
+            Dai vicoli dell'<strong>Oca</strong> e della <strong>Selva</strong> alle case-torri della <strong>Torre</strong>,
+            fino ai palazzi di <strong>Pantera</strong>, <strong>Tartuca</strong> e <strong>Onda</strong>:
+            i nostri idraulici conoscono ogni Terzo, ogni vicolo e ogni Contrada del centro UNESCO.
+          </p>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-8">
+            {SIENA_CONTRADE.map((c) => (
+              <div
+                key={c.name}
+                className="group bg-card border border-border rounded-xl overflow-hidden hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <div
+                  className="h-2 w-full"
+                  style={{
+                    background: `linear-gradient(90deg, ${c.colors[0]} 0%, ${c.colors[0]} 33%, ${c.colors[1]} 33%, ${c.colors[1]} 66%, ${c.colors[2]} 66%, ${c.colors[2]} 100%)`,
+                  }}
+                  aria-hidden="true"
+                />
+                <div className="p-3 text-center">
+                  <div className="text-2xl mb-1" aria-hidden="true">{c.symbol}</div>
+                  <div className="font-bold text-sm leading-tight">{c.name}</div>
+                  <div className="text-[10px] uppercase tracking-wide text-muted-foreground mt-0.5">
+                    Terzo di {c.terzo}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="bg-accent/30 border-l-4 border-primary p-5 rounded-r-lg text-sm leading-relaxed">
+            <strong>Idraulici locali, non call center.</strong> I tecnici della rete IdrauliciSubito vivono e lavorano a Siena:
+            sanno cosa significa intervenire in un vicolo della Chiocciola con il furgone che non passa, riparare una colonna
+            di scarico in un palazzo dell'Aquila con vincoli della Soprintendenza, o gestire la pressione idrica in una
+            casa-torre del Bruco. <em>Forza e Onore</em> a chi lavora bene. 🏇
           </div>
         </div>
       </section>

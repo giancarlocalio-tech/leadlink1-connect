@@ -54,6 +54,7 @@ import NapoliQuartierePage from "./pages/NapoliQuartierePage";
 import MilanoQuartierePage from "./pages/MilanoQuartierePage";
 import MilanoLandingPage from "./pages/MilanoLandingPage";
 import SienaLandingPage from "./pages/SienaLandingPage";
+import DashboardRedirect from "./components/DashboardRedirect";
 
 const queryClient = new QueryClient();
 
@@ -70,7 +71,7 @@ const App = () => (
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/auth/confirm" element={<AuthConfirmPage />} />
-            <Route path="/dashboard" element={<Navigate to="/dashboard/richieste" replace />} />
+            <Route path="/dashboard" element={<DashboardRedirect />} />
             <Route path="/dashboard/richieste" element={<RequestsPage />} />
             <Route path="/dashboard/opportunita" element={<Navigate to="/dashboard/richieste" replace />} />
             <Route path="/dashboard/preventivi" element={<PreventiviPage />} />

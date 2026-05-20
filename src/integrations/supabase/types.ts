@@ -701,6 +701,7 @@ export type Database = {
           id: string
           intervention_type: Database["public"]["Enums"]["intervention_type"]
           is_exclusive: boolean
+          phone_contact_allowed: boolean
           privacy_accepted: boolean
           property_type: Database["public"]["Enums"]["property_type"]
           status: string | null
@@ -728,6 +729,7 @@ export type Database = {
           id?: string
           intervention_type: Database["public"]["Enums"]["intervention_type"]
           is_exclusive?: boolean
+          phone_contact_allowed?: boolean
           privacy_accepted?: boolean
           property_type: Database["public"]["Enums"]["property_type"]
           status?: string | null
@@ -755,6 +757,7 @@ export type Database = {
           id?: string
           intervention_type?: Database["public"]["Enums"]["intervention_type"]
           is_exclusive?: boolean
+          phone_contact_allowed?: boolean
           privacy_accepted?: boolean
           property_type?: Database["public"]["Enums"]["property_type"]
           status?: string | null

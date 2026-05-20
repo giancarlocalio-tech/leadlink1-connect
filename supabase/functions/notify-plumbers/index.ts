@@ -420,6 +420,10 @@ const handler = async (req: Request): Promise<Response> => {
         const plumber = matchingPlumbers[i];
         const interventionLabel = INTERVENTION_LABELS[serviceRequest.intervention_type] || serviceRequest.intervention_type;
         const urgencyLabel = URGENCY_LABELS[serviceRequest.urgency] || serviceRequest.urgency;
+        const phoneAllowed = serviceRequest.phone_contact_allowed !== false;
+        const contactLine = phoneAllowed
+          ? "Contattabile via chat e telefono"
+          : "Contattabile solo via chat/email";
 
         try {
           // Add delay between emails to respect Resend rate limit (2 emails/second)

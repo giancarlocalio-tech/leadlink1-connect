@@ -82,7 +82,7 @@ async function sendWelcomeEmail(
 <td align="center" style="padding:20px;">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
 <tr>
-<td style="background-color:#16a34a;padding:30px;text-align:center;border-radius:8px 8px 0 0;">
+<td style="background-color:#0284c7;padding:30px;text-align:center;border-radius:8px 8px 0 0;">
 <h1 style="margin:0;color:#ffffff;font-family:Arial,sans-serif;font-size:24px;font-weight:bold;">🎉 Pagamento Completato!</h1>
 </td>
 </tr>
@@ -94,10 +94,10 @@ Ciao <strong>${fullName}</strong>,
 <p style="margin:0 0 20px 0;font-size:16px;line-height:1.5;color:#333333;">
 Il tuo abbonamento è stato attivato con successo! Ora puoi iniziare a ricevere richieste di lavoro nella tua zona.
 </p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;background-color:#f0fdf4;border-left:4px solid #16a34a;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;background-color:#e0f2fe;border-left:4px solid #0284c7;">
 <tr>
 <td style="padding:20px;">
-<h3 style="margin:0 0 15px 0;font-size:16px;color:#16a34a;font-family:Arial,sans-serif;">Riepilogo Abbonamento</h3>
+<h3 style="margin:0 0 15px 0;font-size:16px;color:#0284c7;font-family:Arial,sans-serif;">Riepilogo Abbonamento</h3>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
 <td style="padding:5px 0;color:#666666;font-size:14px;width:120px;font-family:Arial,sans-serif;"><strong>Attività:</strong></td>
@@ -106,7 +106,7 @@ Il tuo abbonamento è stato attivato con successo! Ora puoi iniziare a ricevere 
 <tr>
 <td style="padding:5px 0;color:#666666;font-size:14px;font-family:Arial,sans-serif;"><strong>Piano:</strong></td>
 <td style="padding:5px 0;font-size:14px;font-family:Arial,sans-serif;">
-<span style="background-color:#16a34a;color:#ffffff;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:bold;">${planLabel}</span>
+<span style="background-color:#0284c7;color:#ffffff;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:bold;">${planLabel}</span>
 </td>
 </tr>
 </table>
@@ -116,7 +116,7 @@ Il tuo abbonamento è stato attivato con successo! Ora puoi iniziare a ricevere 
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:25px 0;">
 <tr>
 <td align="center">
-<a href="${loginUrl}" style="display:inline-block;background-color:#16a34a;color:#ffffff;padding:14px 30px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Vai alla Dashboard</a>
+<a href="${loginUrl}" style="display:inline-block;background-color:#0284c7;color:#ffffff;padding:14px 30px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Vai alla Dashboard</a>
 </td>
 </tr>
 </table>

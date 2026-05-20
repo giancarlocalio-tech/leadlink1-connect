@@ -361,7 +361,12 @@ export function TrialRequestCard({
                   {freeRequestsRemaining > 0 ? (
                     <>Hai <span className="font-semibold text-primary">{freeRequestsRemaining}</span> risposte gratuite</>
                   ) : (
-                    <>Costo invio: <span className="font-semibold text-primary">{formatEuroFromCents(unlockCostCents)}</span>{!phoneAllowed && <span className="ml-1 text-green-600">(solo chat, -30%)</span>}</>
+                    <>
+                      Costo invio: <span className="font-semibold text-primary">{formatEuroFromCents(unlockCostCents)}</span>
+                      <span className="ml-1 text-muted-foreground">
+                        ({URGENCY_LABELS[request.urgency]} · tier {priceBreakdown.tier}{!phoneAllowed && ' · solo chat'})
+                      </span>
+                    </>
                   )}
                 </p>
               </div>

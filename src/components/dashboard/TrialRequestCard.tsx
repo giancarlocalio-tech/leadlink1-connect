@@ -14,6 +14,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { formatEuroFromCents } from '@/lib/currency';
 import type { UrgencyType } from '@/lib/types';
 import { 
   INTERVENTION_LABELS, 
@@ -23,18 +24,18 @@ import {
 } from '@/lib/types';
 import type { TrialRequest, ClaimResult } from '@/hooks/useTrialRequests';
 
-// Credit costs per urgency level
-const UNLOCK_COSTS: Record<UrgencyType, number> = {
-  subito: 5,
-  entro_24_ore: 3,
-  prossimi_giorni: 2,
+// Costo sblocco in centesimi per livello di urgenza
+const UNLOCK_COSTS_CENTS: Record<UrgencyType, number> = {
+  subito: 500,
+  entro_24_ore: 300,
+  prossimi_giorni: 200,
 };
 
 export interface UnlockWithCreditsResult {
   success: boolean;
   message: string;
-  credits_spent?: number;
-  new_balance?: number;
+  amount_spent_cents?: number;
+  new_balance_cents?: number;
   client_name?: string;
   client_phone?: string;
   client_email?: string;
@@ -110,9 +111,9 @@ export function TrialRequestCard({
     }
   };
 
-  const unlockCost = UNLOCK_COSTS[request.urgency];
+  const unlockCostCents = UNLOCK_COSTS_CENTS[request.urgency];
   const trialExhausted = freeRequestsRemaining <= 0;
-  const hasInsufficientCredits = trialExhausted && creditBalance < unlockCost;
+  const hasInsufficientBalance = trialExhausted && creditBalance < unlockCostCents;
   const isProcessing = claiming || unlocking;
 
   // Show unlocked state with client info (credit unlock)
@@ -129,7 +130,7 @@ export function TrialRequestCard({
               </div>
               <Badge variant="secondary" className="gap-1">
                 <Coins className="h-3 w-3" />
-                -{creditUnlockResult.credits_spent} crediti
+                -{formatEuroFromCents(creditUnlockResult.amount_spent_cents)}
               </Badge>
             </div>
           </div>

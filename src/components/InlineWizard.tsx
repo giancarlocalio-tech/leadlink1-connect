@@ -220,6 +220,7 @@ export default function InlineWizard({ onClose, defaultCity = '' }: InlineWizard
       client_phone: clientPhone.trim(),
       client_email: clientEmail?.trim() || null,
       privacy_accepted: privacyAccepted,
+      phone_contact_allowed: !noPhoneContact,
       wizard_answers: answers.length > 0 ? answers : null,
     };
 

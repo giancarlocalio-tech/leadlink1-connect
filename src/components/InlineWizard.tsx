@@ -121,6 +121,7 @@ export default function InlineWizard({ onClose, defaultCity = '' }: InlineWizard
   const [clientPhone, setClientPhone] = useState('');
   const [clientEmail, setClientEmail] = useState('');
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const [noPhoneContact, setNoPhoneContact] = useState(false);
 
   const filteredTypes = ALL_INTERVENTION_TYPES.filter(type =>
     INTERVENTION_LABELS[type].toLowerCase().includes(searchFilter.toLowerCase())

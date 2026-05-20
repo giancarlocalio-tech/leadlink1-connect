@@ -1,12 +1,13 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Send, Phone, Loader2 } from 'lucide-react';
+import { Send, Phone, Loader2, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { useAuth } from '@/hooks/useAuth';
 
 const FN_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/client-chat`;
 
@@ -40,6 +41,8 @@ const initials = (name?: string | null) =>
 
 export default function ClientChatPage() {
   const { token } = useParams<{ token: string }>();
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [info, setInfo] = useState<ConversationInfo | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
@@ -141,6 +144,23 @@ export default function ClientChatPage() {
         {/* Header */}
         <header className="bg-card border-b border-border sticky top-0 z-10">
           <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="-ml-2 shrink-0"
+              aria-label="Indietro"
+              onClick={() => {
+                if (user) {
+                  navigate('/account');
+                } else if (window.history.length > 1) {
+                  navigate(-1);
+                } else {
+                  navigate('/');
+                }
+              }}
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
             <Avatar className="h-11 w-11">
               {info.plumber_photo && <AvatarImage src={info.plumber_photo} alt={info.plumber_name} />}
               <AvatarFallback className="bg-primary/10 text-primary font-semibold">

@@ -31,7 +31,7 @@ import { Layout } from '@/components/Layout';
 import { BASE_URL } from '@/lib/seoJsonLd';
 import InlineWizard from '@/components/InlineWizard';
 import { Button } from '@/components/ui/button';
-import heroBg from '@/assets/hero-bg.avif';
+import sienaSkyline from '@/assets/siena-skyline.png';
 
 // Generic city sections that already take cityName/citySlug
 import { CityCommonProblemsSection } from '@/components/city/CityCommonProblemsSection';

@@ -227,6 +227,7 @@ export default function RequestPage() {
       client_email: email,
       client_user_id: clientUserId,
       privacy_accepted: formData.privacyAccepted,
+      phone_contact_allowed: !noPhoneContact,
       wizard_answers: wizardAnswers.length > 0 ? wizardAnswers : null,
     };
 

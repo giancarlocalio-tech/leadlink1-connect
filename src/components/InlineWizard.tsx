@@ -658,6 +658,16 @@ export default function InlineWizard({ onClose, defaultCity = '' }: InlineWizard
                   value={clientPhone}
                   onChange={(e) => setClientPhone(e.target.value)}
                 />
+                <div className="flex items-start gap-2 mt-2">
+                  <Checkbox
+                    id="inline-no-phone"
+                    checked={noPhoneContact}
+                    onCheckedChange={(checked) => setNoPhoneContact(checked === true)}
+                  />
+                  <Label htmlFor="inline-no-phone" className="text-xs leading-relaxed cursor-pointer text-muted-foreground">
+                    Non desidero essere contattato telefonicamente (solo via chat/email)
+                  </Label>
+                </div>
               </div>
 
               <div>

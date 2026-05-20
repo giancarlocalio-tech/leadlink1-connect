@@ -485,7 +485,7 @@ const handler = async (req: Request): Promise<Response> => {
                             
                             <!-- CTA Button -->
                             <div style="text-align:center;margin:30px 0;">
-                              <a href="https://www.idraulicisubito.com/dashboard/richieste?id=${serviceRequest.id}" 
+                              <a href="https://www.idraulicisubito.com/dashboard/richieste?id=${serviceRequest.id}&email=${encodeURIComponent(plumber.email)}" 
                                  style="display:inline-block;background:linear-gradient(135deg,#0284c7 0%,#075985 100%);color:#ffffff;text-decoration:none;padding:16px 40px;border-radius:8px;font-size:16px;font-weight:bold;">
                                 ⚡ Accetta Richiesta
                               </a>

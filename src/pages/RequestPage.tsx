@@ -400,6 +400,16 @@ export default function RequestPage() {
                 onBlur={(e) => analytics.leadFormFieldBlur('clientPhone', 'contact', !!e.target.value)}
                 className="text-base"
               />
+              <div className="flex items-start gap-2 mt-2">
+                <Checkbox
+                  id="no-phone-contact"
+                  checked={noPhoneContact}
+                  onCheckedChange={(checked) => setNoPhoneContact(checked === true)}
+                />
+                <Label htmlFor="no-phone-contact" className="text-sm leading-relaxed cursor-pointer text-muted-foreground">
+                  Non desidero essere contattato telefonicamente (solo via chat/email)
+                </Label>
+              </div>
             </div>
 
             <div>

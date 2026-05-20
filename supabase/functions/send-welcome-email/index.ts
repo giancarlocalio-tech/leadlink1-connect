@@ -156,7 +156,7 @@ ${appOrigin}`;
 
 <!-- Header -->
 <tr>
-<td style="background-color:#16a34a;padding:30px;text-align:center;border-radius:8px 8px 0 0;">
+<td style="background-color:#0284c7;padding:30px;text-align:center;border-radius:8px 8px 0 0;">
 <h1 style="margin:0;color:#ffffff;font-family:Arial,sans-serif;font-size:24px;font-weight:bold;">Benvenuto su IdrauliciSubito</h1>
 </td>
 </tr>
@@ -174,10 +174,10 @@ Siamo entusiasti di averti con noi! La tua registrazione come idraulico professi
 </p>
 
 <!-- Account Summary Box -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;background-color:#f0fdf4;border-left:4px solid #16a34a;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;background-color:#e0f2fe;border-left:4px solid #0284c7;">
 <tr>
 <td style="padding:20px;">
-<h3 style="margin:0 0 15px 0;font-size:16px;color:#16a34a;font-family:Arial,sans-serif;">Riepilogo Account</h3>
+<h3 style="margin:0 0 15px 0;font-size:16px;color:#0284c7;font-family:Arial,sans-serif;">Riepilogo Account</h3>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
 <td style="padding:5px 0;color:#666666;font-size:14px;width:140px;font-family:Arial,sans-serif;"><strong>Attivita:</strong></td>
@@ -186,12 +186,12 @@ Siamo entusiasti di averti con noi! La tua registrazione come idraulico professi
 <tr>
 <td style="padding:5px 0;color:#666666;font-size:14px;font-family:Arial,sans-serif;"><strong>Piano:</strong></td>
 <td style="padding:5px 0;font-size:14px;font-family:Arial,sans-serif;">
-<span style="background-color:#16a34a;color:#ffffff;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:bold;">Prova gratuita</span>
+<span style="background-color:#0284c7;color:#ffffff;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:bold;">Prova gratuita</span>
 </td>
 </tr>
 <tr>
 <td style="padding:5px 0;color:#666666;font-size:14px;font-family:Arial,sans-serif;"><strong>Richieste gratuite:</strong></td>
-<td style="padding:5px 0;font-size:14px;color:#16a34a;font-weight:bold;font-family:Arial,sans-serif;">3 richieste</td>
+<td style="padding:5px 0;font-size:14px;color:#0284c7;font-weight:bold;font-family:Arial,sans-serif;">3 richieste</td>
 </tr>
 </table>
 </td>
@@ -222,7 +222,7 @@ Potrai visualizzare le informazioni del cliente e contattarlo direttamente per o
 <table role="presentation" cellpadding="0" cellspacing="0">
 <tr>
 <td style="width:30px;vertical-align:top;">
-<span style="display:inline-block;width:24px;height:24px;background-color:#16a34a;color:#ffffff;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:bold;">1</span>
+<span style="display:inline-block;width:24px;height:24px;background-color:#0284c7;color:#ffffff;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:bold;">1</span>
 </td>
 <td style="padding-left:10px;">
 <strong style="color:#333333;font-size:14px;">Completa il tuo profilo</strong>
@@ -237,7 +237,7 @@ Potrai visualizzare le informazioni del cliente e contattarlo direttamente per o
 <table role="presentation" cellpadding="0" cellspacing="0">
 <tr>
 <td style="width:30px;vertical-align:top;">
-<span style="display:inline-block;width:24px;height:24px;background-color:#16a34a;color:#ffffff;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:bold;">2</span>
+<span style="display:inline-block;width:24px;height:24px;background-color:#0284c7;color:#ffffff;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:bold;">2</span>
 </td>
 <td style="padding-left:10px;">
 <strong style="color:#333333;font-size:14px;">Controlla la tua email</strong>
@@ -252,7 +252,7 @@ Potrai visualizzare le informazioni del cliente e contattarlo direttamente per o
 <table role="presentation" cellpadding="0" cellspacing="0">
 <tr>
 <td style="width:30px;vertical-align:top;">
-<span style="display:inline-block;width:24px;height:24px;background-color:#16a34a;color:#ffffff;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:bold;">3</span>
+<span style="display:inline-block;width:24px;height:24px;background-color:#0284c7;color:#ffffff;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:bold;">3</span>
 </td>
 <td style="padding-left:10px;">
 <strong style="color:#333333;font-size:14px;">Rispondi velocemente</strong>
@@ -268,7 +268,7 @@ Potrai visualizzare le informazioni del cliente e contattarlo direttamente per o
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:25px 0;">
 <tr>
 <td align="center">
-<a href="${loginUrl}" style="display:inline-block;background-color:#16a34a;color:#ffffff;padding:14px 30px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Accedi alla Dashboard</a>
+<a href="${loginUrl}" style="display:inline-block;background-color:#0284c7;color:#ffffff;padding:14px 30px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Accedi alla Dashboard</a>
 </td>
 </tr>
 </table>

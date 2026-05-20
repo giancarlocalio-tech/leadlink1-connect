@@ -192,12 +192,12 @@ serve(async (req) => {
             <style>
               body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
               .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .header { background: linear-gradient(135deg, #22c55e, #16a34a); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
+              .header { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
               .content { background: #f8fafc; padding: 30px; border-radius: 0 0 10px 10px; }
-              .info-box { background: white; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #22c55e; }
+              .info-box { background: white; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #0ea5e9; }
               .label { font-weight: 600; color: #64748b; font-size: 12px; text-transform: uppercase; }
               .value { font-size: 16px; color: #1e293b; margin-top: 5px; }
-              .success-badge { display: inline-block; padding: 8px 16px; border-radius: 20px; font-weight: 600; background: #dcfce7; color: #166534; }
+              .success-badge { display: inline-block; padding: 8px 16px; border-radius: 20px; font-weight: 600; background: #e0f2fe; color: #166534; }
               .footer { text-align: center; padding: 20px; color: #64748b; font-size: 12px; }
             </style>
           </head>
@@ -275,7 +275,7 @@ serve(async (req) => {
               .info-box { background: white; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #8b5cf6; }
               .label { font-weight: 600; color: #64748b; font-size: 12px; text-transform: uppercase; }
               .value { font-size: 16px; color: #1e293b; margin-top: 5px; }
-              .plan-badge { display: inline-block; padding: 8px 16px; border-radius: 20px; font-weight: 600; background: #22c55e; color: white; }
+              .plan-badge { display: inline-block; padding: 8px 16px; border-radius: 20px; font-weight: 600; background: #0ea5e9; color: white; }
               .footer { text-align: center; padding: 20px; color: #64748b; font-size: 12px; }
             </style>
           </head>

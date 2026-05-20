@@ -73,7 +73,7 @@ serve(async (req) => {
             .info-box { background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #3b82f6; }
             .label { font-weight: 600; color: #64748b; font-size: 12px; text-transform: uppercase; margin-bottom: 5px; }
             .value { font-size: 16px; color: #1e293b; }
-            .plan-badge { display: inline-block; background: #22c55e; color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; }
+            .plan-badge { display: inline-block; background: #0ea5e9; color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; }
             .footer { text-align: center; padding: 20px; color: #64748b; font-size: 12px; }
           </style>
         </head>

@@ -183,7 +183,7 @@ const handler = async (req: Request): Promise<Response> => {
                       
                       <!-- Header -->
                       <tr>
-                        <td style="background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);padding:30px;text-align:center;border-radius:12px 12px 0 0;">
+                        <td style="background:linear-gradient(135deg,#0284c7 0%,#075985 100%);padding:30px;text-align:center;border-radius:12px 12px 0 0;">
                           <h1 style="margin:0;color:#ffffff;font-size:24px;font-weight:bold;">✅ Richiesta Ricevuta!</h1>
                         </td>
                       </tr>
@@ -200,8 +200,8 @@ const handler = async (req: Request): Promise<Response> => {
                           </p>
                           
                           <!-- Request Summary -->
-                          <div style="background-color:#f0fdf4;border-left:4px solid #16a34a;padding:20px;margin:20px 0;border-radius:0 8px 8px 0;">
-                            <h3 style="margin:0 0 15px 0;color:#16a34a;font-size:16px;">📋 Riepilogo richiesta</h3>
+                          <div style="background-color:#e0f2fe;border-left:4px solid #0284c7;padding:20px;margin:20px 0;border-radius:0 8px 8px 0;">
+                            <h3 style="margin:0 0 15px 0;color:#0284c7;font-size:16px;">📋 Riepilogo richiesta</h3>
                             <p style="margin:0 0 8px 0;font-size:14px;color:#333;">
                               <strong>Tipo intervento:</strong> ${interventionLabel}
                             </p>
@@ -224,7 +224,7 @@ const handler = async (req: Request): Promise<Response> => {
                           </ul>
                           
                           <p style="margin:0;font-size:14px;color:#666666;line-height:1.6;">
-                            Se hai domande, rispondi a questa email o contattaci a <a href="mailto:supporto@idraulicisubito.com" style="color:#16a34a;">supporto@idraulicisubito.com</a>
+                            Se hai domande, rispondi a questa email o contattaci a <a href="mailto:supporto@idraulicisubito.com" style="color:#0284c7;">supporto@idraulicisubito.com</a>
                           </p>
                         </td>
                       </tr>
@@ -448,7 +448,7 @@ const handler = async (req: Request): Promise<Response> => {
                         
                         <!-- Header -->
                         <tr>
-                          <td style="background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);padding:30px;text-align:center;border-radius:12px 12px 0 0;">
+                          <td style="background:linear-gradient(135deg,#0284c7 0%,#075985 100%);padding:30px;text-align:center;border-radius:12px 12px 0 0;">
                             <h1 style="margin:0;color:#ffffff;font-size:24px;font-weight:bold;">🔧 Nuova Richiesta di Intervento</h1>
                           </td>
                         </tr>
@@ -465,8 +465,8 @@ const handler = async (req: Request): Promise<Response> => {
                             </p>
                             
                             <!-- Request Details -->
-                            <div style="background-color:#f0fdf4;border-left:4px solid #16a34a;padding:20px;margin:20px 0;border-radius:0 8px 8px 0;">
-                              <h3 style="margin:0 0 15px 0;color:#16a34a;font-size:16px;">📋 Dettagli richiesta</h3>
+                            <div style="background-color:#e0f2fe;border-left:4px solid #0284c7;padding:20px;margin:20px 0;border-radius:0 8px 8px 0;">
+                              <h3 style="margin:0 0 15px 0;color:#0284c7;font-size:16px;">📋 Dettagli richiesta</h3>
                               <p style="margin:0 0 8px 0;font-size:14px;color:#333;">
                                 <strong>Tipo intervento:</strong> ${interventionLabel}
                               </p>
@@ -484,7 +484,7 @@ const handler = async (req: Request): Promise<Response> => {
                             <!-- CTA Button -->
                             <div style="text-align:center;margin:30px 0;">
                               <a href="https://www.idraulicisubito.com/dashboard/richieste?id=${serviceRequest.id}" 
-                                 style="display:inline-block;background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);color:#ffffff;text-decoration:none;padding:16px 40px;border-radius:8px;font-size:16px;font-weight:bold;">
+                                 style="display:inline-block;background:linear-gradient(135deg,#0284c7 0%,#075985 100%);color:#ffffff;text-decoration:none;padding:16px 40px;border-radius:8px;font-size:16px;font-weight:bold;">
                                 ⚡ Accetta Richiesta
                               </a>
                             </div>

@@ -8,17 +8,20 @@ export function usePlumberProfile() {
   const [profile, setProfile] = useState<PlumberProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [hasFetched, setHasFetched] = useState(false);
+  const [fetchedUserId, setFetchedUserId] = useState<string | null>(null);
 
   const fetchProfile = useCallback(async () => {
     if (!user) {
       setProfile(null);
       setLoading(false);
+      setFetchedUserId(null);
       setHasFetched(true);
       return;
     }
 
     setProfile(null);
     setHasFetched(false);
+    setFetchedUserId(null);
     setLoading(true);
     try {
       const { data, error } = await supabase
@@ -45,6 +48,7 @@ export function usePlumberProfile() {
       setProfile(null);
     }
     setLoading(false);
+    setFetchedUserId(user.id);
     setHasFetched(true);
   }, [user]);
 
@@ -59,6 +63,7 @@ export function usePlumberProfile() {
     } else {
       setProfile(null);
       setLoading(false);
+      setFetchedUserId(null);
       setHasFetched(true);
     }
   }, [user, authLoading, fetchProfile]);
@@ -157,10 +162,13 @@ export function usePlumberProfile() {
     return { error: null };
   };
 
+  const resolvedHasFetched = !user ? hasFetched : hasFetched && fetchedUserId === user.id;
+  const resolvedProfile = user && fetchedUserId === user.id ? profile : null;
+
   return {
-    profile,
+    profile: resolvedProfile,
     loading,
-    hasFetched,
+    hasFetched: resolvedHasFetched,
     createProfile,
     updateProfile,
     refreshProfile: fetchProfile,

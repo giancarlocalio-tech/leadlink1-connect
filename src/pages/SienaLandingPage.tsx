@@ -200,7 +200,7 @@ export default function SienaLandingPage() {
       {/* HERO — clean white background + Siena skyline silhouette */}
       <section className="relative overflow-hidden bg-white border-b border-border">
         {/* Decorative skyline at bottom — desaturated, very subtle */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 opacity-[0.05] md:opacity-[0.06] grayscale">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 opacity-25 md:opacity-30 grayscale">
           <img
             src={sienaSkyline}
             alt=""

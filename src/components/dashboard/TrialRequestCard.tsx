@@ -336,56 +336,107 @@ export function TrialRequestCard({
           </div>
         </div>
 
-        {/* Action section */}
-        <div className="p-4 border-t border-border">
-          <div className="flex items-center justify-between gap-4">
-            <div className="text-sm text-muted-foreground">
-              {trialExhausted ? (
-                <>
-                  <span className="font-medium text-foreground flex items-center gap-1">
-                    <Lock className="h-3.5 w-3.5" />
-                    {hasInsufficientBalance ? 'Contatto bloccato' : 'Contatto da sbloccare'}
-                  </span>
-                  {hasInsufficientBalance ? (
-                    <p className="text-xs flex items-center gap-1 mt-0.5 text-destructive">
-                      <Coins className="h-3 w-3" />
-                      Saldo insufficiente ({formatEuroFromCents(balanceCents)} / {formatEuroFromCents(unlockCostCents)})
-                    </p>
-                  ) : (
-                    <p className="text-xs flex items-center gap-1 mt-0.5">
-                      <Coins className="h-3 w-3" />
-                      Servono <span className="font-semibold text-primary">{formatEuroFromCents(unlockCostCents)}</span> per sbloccare
-                    </p>
-                  )}
-                </>
-              ) : (
-                <>
-                  <span className="font-medium text-foreground">Chi prima arriva, meglio alloggia!</span>
-                  <p className="text-xs">Accetta per primo per ottenere i dati del cliente</p>
-                </>
-              )}
+        {/* Action section — ProntoPro style: price + quote text + "Rispondi (€X)" */}
+        <div className="p-4 border-t border-border space-y-4">
+          {hasInsufficientBalance ? (
+            <div className="flex items-center justify-between gap-4">
+              <div className="text-sm">
+                <span className="font-medium text-foreground flex items-center gap-1">
+                  <Lock className="h-3.5 w-3.5" />
+                  Saldo insufficiente
+                </span>
+                <p className="text-xs text-destructive mt-0.5">
+                  Hai {formatEuroFromCents(balanceCents)}, servono {formatEuroFromCents(unlockCostCents)}.
+                </p>
+              </div>
+              <Button onClick={() => navigate('/dashboard/crediti/ricarica')} size="sm" variant="default">
+                Ricarica saldo
+              </Button>
             </div>
-            <Button
-              onClick={trialExhausted ? handleUnlockWithCredits : handleClaim}
-              disabled={isProcessing || (trialExhausted && (!onUnlockWithCredits || hasInsufficientBalance))}
-              size="sm"
-              className="gap-2 shrink-0"
-              variant={hasInsufficientBalance ? "outline" : "default"}
-            >
-              {isProcessing ? (
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-              ) : trialExhausted ? (
-                <Coins className="h-4 w-4" />
-              ) : (
+          ) : !showQuoteForm ? (
+            <div className="flex items-center justify-between gap-4">
+              <div className="text-sm text-muted-foreground">
+                <span className="font-medium text-foreground">Invia il tuo preventivo</span>
+                <p className="text-xs mt-0.5">
+                  {freeRequestsRemaining > 0 ? (
+                    <>Hai <span className="font-semibold text-primary">{freeRequestsRemaining}</span> risposte gratuite</>
+                  ) : (
+                    <>Costo risposta: <span className="font-semibold text-primary">{formatEuroFromCents(unlockCostCents)}</span></>
+                  )}
+                </p>
+              </div>
+              <Button onClick={() => setShowQuoteForm(true)} size="sm" className="gap-2 shrink-0">
                 <Zap className="h-4 w-4" />
-              )}
-              {hasInsufficientBalance 
-                ? 'Saldo insufficiente' 
-                : trialExhausted 
-                  ? `Sblocca (${formatEuroFromCents(unlockCostCents)})` 
-                  : 'Accetta ora'}
-            </Button>
-          </div>
+                Rispondi
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-[160px_1fr] gap-3">
+                <div>
+                  <Label htmlFor={`price-${request.id}`} className="text-xs font-semibold mb-1.5 block">
+                    Prezzo (€) *
+                  </Label>
+                  <div className="relative">
+                    <Euro className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id={`price-${request.id}`}
+                      type="text"
+                      inputMode="decimal"
+                      placeholder="120"
+                      value={priceStr}
+                      onChange={(e) => setPriceStr(e.target.value)}
+                      className="pl-9"
+                      disabled={isProcessing}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor={`msg-${request.id}`} className="text-xs font-semibold mb-1.5 block">
+                    Messaggio per il cliente *
+                  </Label>
+                  <Textarea
+                    id={`msg-${request.id}`}
+                    placeholder="Es. Salve, posso intervenire domani mattina alle 9. Il prezzo include manodopera e materiali standard..."
+                    value={quoteMessage}
+                    onChange={(e) => setQuoteMessage(e.target.value)}
+                    rows={3}
+                    maxLength={1000}
+                    disabled={isProcessing}
+                    className="resize-none"
+                  />
+                  <p className="text-[11px] text-muted-foreground mt-1">
+                    {quoteMessage.length}/1000 — min. 10 caratteri
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <Button
+                  onClick={() => setShowQuoteForm(false)}
+                  size="sm"
+                  variant="ghost"
+                  disabled={isProcessing}
+                >
+                  Annulla
+                </Button>
+                <Button
+                  onClick={handleSendQuote}
+                  size="sm"
+                  className="gap-2"
+                  disabled={isProcessing || !quoteValid}
+                >
+                  {isProcessing ? (
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                  ) : (
+                    <Send className="h-4 w-4" />
+                  )}
+                  {freeRequestsRemaining > 0
+                    ? 'Rispondi (gratis)'
+                    : `Rispondi (${formatEuroFromCents(unlockCostCents)})`}
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>

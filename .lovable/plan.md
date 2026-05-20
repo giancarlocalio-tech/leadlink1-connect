@@ -1,107 +1,66 @@
+## Obiettivo
 
-# Piano: Opportunità + Preventivi + Chat stile ProntoPro
+Far variare il costo del lead che l'idraulico sblocca in base a 3 fattori del form cliente:
 
-## 1. Sidebar idraulico — 2 sezioni
+1. **Urgenza** (già attivo: `subito` 6€, `entro_24_ore` 4€, `prossimi_giorni` 2,50€)
+2. **Tipo di intervento** (NUOVO): un rifacimento bagno vale molto più di una sostituzione rubinetto
+3. **Contatto telefonico** (già attivo: −30% se solo chat)
 
-In `DashboardSidebar.tsx` sostituisco la voce unica "Richieste" con:
+Il prezzo finale mostrato all'idraulico sarà:
 
-- **Opportunità** → `/dashboard/opportunita` — richieste matchate **non ancora sbloccate** dall'idraulico loggato. Card grandi stile ProntoPro: nome cliente con iniziale (es. "Mario M."), titolo servizio + città + scadenza, descrizione troncata, tag categorie, badge "telefono disponibile", pulsante **Rispondi (X €)** dove X = costo crediti.
-- **Preventivi** → `/dashboard/preventivi` — richieste **già sbloccate** (presenti in `contact_unlocks` per quel plumber). Lista a sinistra (nome cliente, titolo, prezzo offerto, data), dettaglio + chat a destra. Click → apre conversazione.
-
-Rinomino l'attuale "Richieste" → "Opportunità" e creo la pagina nuova "Preventivi".
-
-## 2. Flusso pagamento (invariato)
-
-Il pulsante "Rispondi (X €)" nella card Opportunità chiama `unlock_contact_with_balance` (già esistente). Allo sblocco:
-- la richiesta sparisce da Opportunità e appare in Preventivi
-- si crea automaticamente una **conversation** (vedi sotto) tra plumber e client
-- al cliente viene inviata email + WhatsApp con un **magic link** per accedere alla chat
-
-Nessuna modifica al sistema crediti.
-
-## 3. Chat in-app bidirezionale
-
-### Modello dati (nuova migration)
-
-```sql
--- una conversazione per coppia (richiesta, idraulico)
-conversations (
-  id uuid PK,
-  request_id uuid,
-  plumber_id uuid,
-  client_access_token text UNIQUE,  -- per magic link cliente
-  quote_amount_cents integer,        -- prezzo offerto dall'idraulico
-  created_at, updated_at
-)
-
-conversation_messages (
-  id uuid PK,
-  conversation_id uuid,
-  sender_type text CHECK ('plumber','client'),
-  sender_id uuid,                    -- plumber_id se plumber, null se client
-  content text,
-  created_at
-)
+```text
+prezzo = costo_base(urgenza) × moltiplicatore(tipo_intervento) × (chat_only ? 0.7 : 1)
 ```
 
-RLS:
-- plumber legge/scrive solo conversazioni dove `plumber_id` è il suo
-- client accede via edge function pubblica con `client_access_token` (no auth Supabase)
-- abilito Realtime su `conversation_messages`
+## Tiering tipi di intervento
 
-### Edge function `client-chat`
-Endpoint pubblico parametrizzato da `?token=xxx`. Operazioni:
-- `GET messages` → lista messaggi della conversazione
-- `POST message` → inserisce messaggio come client
+Raggruppo i 20 `intervention_type` esistenti in 4 tier con un moltiplicatore:
 
-### Pagina pubblica cliente
-Nuova route `/chat/:token` (no auth richiesta). Layout semplice:
-- header: nome idraulico + servizio richiesto
-- thread messaggi (bolla dx = cliente, bolla sx = idraulico)
-- input + bottone invia
+| Tier | × | Tipi inclusi |
+|---|---|---|
+| **S — micro** | 0.6 | `sostituzione_rubinetto`, `rubinetto_rotto`, `termosifone`, `contatore`, `altro` |
+| **M — standard** | 1.0 | `perdita_acqua`, `scarico_intasato`, `sturare_spurgo`, `riparazione`, `installazione_sostituzione`, `box_doccia`, `addolcitore_acqua`, `depuratore_acqua` |
+| **L — impianto** | 1.4 | `caldaia`, `impianto_idraulico`, `impianto_riscaldamento`, `termoidraulico`, `condizionatori`, `certificazione` |
+| **XL — opera** | 1.8 | `ristrutturazione` |
 
-Polling ogni 3s o Supabase Realtime tramite token.
+Esempi (urgenza `subito` = 6€ base):
+- Sostituzione rubinetto + telefono → 6 × 0.6 = **3,60 €**
+- Perdita acqua + telefono → 6 × 1.0 = **6,00 €**
+- Caldaia + telefono → 6 × 1.4 = **8,40 €**
+- Ristrutturazione + telefono → 6 × 1.8 = **10,80 €**
+- Ristrutturazione + chat-only → 10,80 × 0.7 = **7,56 €**
 
-### Pagina Preventivi idraulico
-Layout 2 colonne (responsive: lista sopra, chat sotto su mobile):
-- **Sinistra:** lista conversazioni ordinate per `updated_at DESC`. Card con avatar iniziali, nome cliente, snippet ultimo messaggio, data.
-- **Destra:** header (nome cliente + "Dettagli" che apre sheet con tutti i dati richiesta), thread messaggi, input in basso. Realtime su `conversation_messages`.
+## Modifiche DB
 
-## 4. Notifiche cliente
+1. Nuova tabella `intervention_pricing` (admin-editable):
+   ```text
+   intervention_type (PK, enum) | tier text | multiplier numeric | updated_at
+   ```
+   Seed con i 20 tipi mappati come sopra. RLS: lettura pubblica, scrittura solo admin.
 
-Allo sblocco → invio:
-- **Email** (via `send-welcome-email` riusato/nuova edge function `notify-client-quote`): "L'idraulico X ha risposto alla tua richiesta. [Apri chat]"
-- **WhatsApp** (via Respond.io): stesso link
+2. Aggiornare `unlock_contact_with_balance(p_plumber_id, p_request_id)`:
+   - leggere `sr.intervention_type`
+   - moltiplicare `v_cost_cents` per `multiplier` (default 1.0 se mancante)
+   - applicare poi lo sconto chat-only esistente
+   - `ROUND` finale a centesimi
 
-## 5. Stile
+3. Aggiornare `description` della `credit_transactions` per includere tier + tipo + sconto chat (utile per supporto/contabilità).
 
-Colori Siena (azzurro `199 89% 48%`) già attivi. Card ProntoPro-style: bordi arrotondati `rounded-2xl`, shadow leggera, hover, tag pill grigi. Bottone "Rispondi (X €)" full-width primario blu.
+## Modifiche UI idraulico
+
+- `TrialRequestCard.tsx` (e card simili): mostrare il prezzo calcolato in anteprima usando una funzione client `computeUnlockPriceCents({urgency, intervention_type, phone_contact_allowed})` che replica la formula. Niente RPC: i 3 dati sono già visibili al lead prima dello sblocco.
+- Esporre il breakdown sotto il pulsante: «Urgenza subito · Caldaia · solo chat → **5,88 €**» con tooltip dei 3 fattori.
+- L'edge function `unlock_contact_with_balance` resta la sorgente di verità.
 
 ## File toccati
 
-**Nuovi:**
-- `supabase/migrations/` (conversations + messages + RLS)
-- `supabase/functions/client-chat/index.ts`
-- `supabase/functions/notify-client-quote/index.ts`
-- `src/pages/dashboard/OpportunitaPage.tsx` (rinomina/refactor di RichiestePage)
-- `src/pages/dashboard/PreventiviPage.tsx`
-- `src/pages/ClientChatPage.tsx` (route pubblica `/chat/:token`)
-- `src/components/dashboard/OpportunityCard.tsx`
-- `src/components/dashboard/ConversationList.tsx`
-- `src/components/dashboard/ChatWindow.tsx`
+- Migrazione: crea `intervention_pricing`, seed, RLS, update RPC.
+- `src/lib/pricing.ts` (nuovo): tabella tier + helper `computeUnlockPriceCents`.
+- `src/components/dashboard/TrialRequestCard.tsx`: usa l'helper, breakdown UI.
+- Eventuali altri punti che mostrano il costo (pricing page interna, admin): aggiornare se mostrano il vecchio costo fisso.
 
-**Modificati:**
-- `src/components/dashboard/DashboardSidebar.tsx` (2 voci nuove)
-- `src/App.tsx` (route nuove)
-- `unlock_contact_with_balance` RPC (aggiunta: crea conversazione + token al successo) — oppure trigger su `contact_unlocks` INSERT
+## Non incluso
 
-## Aggiornamenti memoria
-
-Aggiorno `mem://constraints/platform-model` rimuovendo "no chat / no quotes" perché il modello cambia: ora la piattaforma **ospita la chat e il preventivo** dopo lo sblocco a crediti.
-
-## Cosa NON faccio
-
-- Niente account cliente completo (uso magic link via token).
-- Niente Stripe per singola risposta (resta sistema crediti).
-- Niente file upload nella chat (solo testo per MVP).
-- Niente notifiche push real-time al cliente (solo email + WhatsApp iniziale + polling/realtime quando apre la chat).
+- Pricing dinamico per città / orario.
+- Modifica del listino base per urgenza (resta com'è oggi in `unlock_costs`).
+- Pannello admin di editing dei moltiplicatori (la tabella è già editabile via Cloud, UI dedicata in futuro).

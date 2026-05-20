@@ -31,13 +31,7 @@ import {
   ACCESSIBILITY_LABELS 
 } from '@/lib/types';
 import type { TrialRequest, ClaimResult } from '@/hooks/useTrialRequests';
-
-// Costo sblocco in centesimi per livello di urgenza
-const UNLOCK_COSTS_CENTS: Record<UrgencyType, number> = {
-  subito: 600,
-  entro_24_ore: 400,
-  prossimi_giorni: 250,
-};
+import { computeUnlockPriceCents } from '@/lib/pricing';
 
 export interface UnlockWithCreditsResult {
   success: boolean;
@@ -170,9 +164,13 @@ export function TrialRequestCard({
     }
   };
 
-  const baseUnlockCostCents = UNLOCK_COSTS_CENTS[request.urgency];
+  const priceBreakdown = computeUnlockPriceCents({
+    urgency: request.urgency,
+    intervention_type: request.intervention_type,
+    phone_contact_allowed: request.phone_contact_allowed,
+  });
   const phoneAllowed = request.phone_contact_allowed !== false;
-  const unlockCostCents = phoneAllowed ? baseUnlockCostCents : Math.round(baseUnlockCostCents * 0.7);
+  const unlockCostCents = priceBreakdown.finalCents;
   const trialExhausted = freeRequestsRemaining <= 0;
   const hasInsufficientBalance = trialExhausted && balanceCents < unlockCostCents;
   const isProcessing = claiming || unlocking;
@@ -363,7 +361,12 @@ export function TrialRequestCard({
                   {freeRequestsRemaining > 0 ? (
                     <>Hai <span className="font-semibold text-primary">{freeRequestsRemaining}</span> risposte gratuite</>
                   ) : (
-                    <>Costo invio: <span className="font-semibold text-primary">{formatEuroFromCents(unlockCostCents)}</span>{!phoneAllowed && <span className="ml-1 text-green-600">(solo chat, -30%)</span>}</>
+                    <>
+                      Costo invio: <span className="font-semibold text-primary">{formatEuroFromCents(unlockCostCents)}</span>
+                      <span className="ml-1 text-muted-foreground">
+                        ({URGENCY_LABELS[request.urgency]} · tier {priceBreakdown.tier}{!phoneAllowed && ' · solo chat'})
+                      </span>
+                    </>
                   )}
                 </p>
               </div>

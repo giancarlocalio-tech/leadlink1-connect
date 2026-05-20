@@ -17,9 +17,23 @@ interface DashboardLayoutProps {
   breadcrumbs?: { label: string; href?: string }[];
 }
 
+// Siena palette (azzurro acqua) applied across the whole plumber dashboard
+const SIENA_THEME = {
+  ['--primary' as any]: '199 89% 48%',
+  ['--primary-foreground' as any]: '0 0% 100%',
+  ['--accent' as any]: '199 89% 94%',
+  ['--accent-foreground' as any]: '215 55% 20%',
+  ['--ring' as any]: '199 89% 48%',
+  ['--secondary' as any]: '199 70% 96%',
+  ['--secondary-foreground' as any]: '215 55% 20%',
+  ['--sidebar-primary' as any]: '199 89% 48%',
+  ['--sidebar-primary-foreground' as any]: '0 0% 100%',
+  ['--sidebar-ring' as any]: '199 89% 48%',
+};
+
 export function DashboardLayout({ children, title, breadcrumbs }: DashboardLayoutProps) {
   return (
-    <SidebarProvider>
+    <SidebarProvider style={SIENA_THEME as React.CSSProperties}>
       <div className="min-h-screen flex w-full bg-background">
         <DashboardSidebar />
         <SidebarInset className="flex-1 flex flex-col min-w-0">

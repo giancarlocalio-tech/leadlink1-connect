@@ -1,12 +1,11 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import {
   LayoutDashboard,
   FileText,
   Wallet,
   User,
-  LogOut,
   Shield,
-  Plus,
+  Settings,
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import {
@@ -14,7 +13,6 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -22,16 +20,15 @@ import {
   SidebarFooter,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { useAdmin } from '@/hooks/useAdmin';
 import { useCredits } from '@/hooks/useCredits';
+import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import { formatEuro } from '@/lib/currency';
 
 const menuItems = [
   { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
   { title: 'Opportunità', url: '/dashboard/richieste', icon: FileText },
-  { title: 'Il mio conto', url: '/dashboard/crediti', icon: Wallet },
   { title: 'Profilo', url: '/dashboard/profilo', icon: User },
 ];
 
@@ -40,99 +37,99 @@ export function DashboardSidebar() {
   const collapsed = state === 'collapsed';
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   const { isAdmin } = useAdmin(user);
   const { credits } = useCredits();
+  const { profile } = usePlumberProfile();
 
   const isActive = (path: string) => location.pathname === path;
   const balanceCents = credits?.balance_cents ?? 0;
 
+  const displayName = profile?.full_name || profile?.business_name || user?.email?.split('@')[0] || 'Account';
+  const initials = (profile?.full_name || profile?.business_name || user?.email || '?')
+    .split(' ')
+    .map((s) => s[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+
+  // ProntoPro-style: solid pill background on active item (neutral muted, not colored)
+  const activeClass = 'bg-muted text-foreground font-semibold';
+  const inactiveClass = 'text-muted-foreground hover:bg-muted/60 hover:text-foreground';
+
   return (
     <Sidebar collapsible="icon" className="border-r border-border">
-      <SidebarHeader className="p-4">
+      <SidebarHeader className="p-5 pb-4">
         {!collapsed ? (
-          <div className="flex items-center gap-2">
-            <div className="h-9 w-9 rounded-xl bg-primary flex items-center justify-center shadow-sm">
-              <span className="text-primary-foreground font-bold text-sm">IS</span>
-            </div>
-            <span className="font-semibold text-foreground text-base">Idraulici Subito</span>
-          </div>
+          <Link to="/dashboard" className="block">
+            <span className="font-extrabold text-xl tracking-tight text-primary">
+              IdrauliciSubito
+            </span>
+          </Link>
         ) : (
-          <div className="h-9 w-9 rounded-xl bg-primary flex items-center justify-center mx-auto shadow-sm">
-            <span className="text-primary-foreground font-bold text-sm">IS</span>
-          </div>
+          <Link to="/dashboard" className="block text-center">
+            <span className="font-extrabold text-lg text-primary">IS</span>
+          </Link>
         )}
       </SidebarHeader>
 
-      {/* Saldo evidenziato in stile ProntoPro */}
-      {!collapsed && (
-        <div className="px-4 pb-3">
-          <button
-            type="button"
-            onClick={() => navigate('/dashboard/crediti/ricarica')}
-            className="w-full text-left rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 p-3 hover:from-primary/10 hover:to-primary/15 transition-colors"
-          >
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                Saldo
-              </span>
-              <Plus className="h-3.5 w-3.5 text-primary" />
-            </div>
-            <div className="text-xl font-bold text-foreground">
-              {formatEuro(balanceCents)}
-            </div>
-            <div className="text-xs text-primary mt-0.5">Ricarica ora</div>
-          </button>
-        </div>
-      )}
-
-      <SidebarContent>
+      <SidebarContent className="px-2">
         <SidebarGroup>
-          <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="gap-1">
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
                     isActive={isActive(item.url)}
                     tooltip={collapsed ? item.title : undefined}
+                    className="h-11 rounded-full px-4 data-[active=true]:bg-muted data-[active=true]:text-foreground data-[active=true]:font-semibold hover:bg-muted/60"
                   >
-                    <NavLink
-                      to={item.url}
-                      end
-                      className="flex items-center gap-3 rounded-lg"
-                      activeClassName="bg-accent text-accent-foreground font-medium"
-                    >
-                      <item.icon className="h-4 w-4 shrink-0" />
-                      {!collapsed && <span>{item.title}</span>}
+                    <NavLink to={item.url} end className="flex items-center gap-3">
+                      <item.icon className="h-[18px] w-[18px] shrink-0" />
+                      {!collapsed && <span className="text-[15px]">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+
+              {/* Saldo come voce di menu, stile ProntoPro */}
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={location.pathname.startsWith('/dashboard/crediti')}
+                  tooltip={collapsed ? `Saldo: ${formatEuro(balanceCents)}` : undefined}
+                  className="h-11 rounded-full px-4 data-[active=true]:bg-muted data-[active=true]:text-foreground data-[active=true]:font-semibold hover:bg-muted/60"
+                >
+                  <NavLink to="/dashboard/crediti" end className="flex items-center gap-3">
+                    <Wallet className="h-[18px] w-[18px] shrink-0" />
+                    {!collapsed && (
+                      <span className="text-[15px]">
+                        Saldo: <span className="font-semibold text-foreground">{formatEuro(balanceCents)}</span>
+                      </span>
+                    )}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
         {isAdmin && (
           <SidebarGroup>
-            <SidebarGroupLabel>Amministrazione</SidebarGroupLabel>
             <SidebarGroupContent>
-              <SidebarMenu>
+              <SidebarMenu className="gap-1">
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     asChild
                     isActive={isActive('/admin')}
                     tooltip={collapsed ? 'Admin' : undefined}
+                    className="h-11 rounded-full px-4 data-[active=true]:bg-muted data-[active=true]:text-foreground data-[active=true]:font-semibold hover:bg-muted/60"
                   >
-                    <NavLink
-                      to="/admin"
-                      end
-                      className="flex items-center gap-3 rounded-lg"
-                      activeClassName="bg-accent text-accent-foreground font-medium"
-                    >
-                      <Shield className="h-4 w-4 shrink-0" />
-                      {!collapsed && <span>Admin</span>}
+                    <NavLink to="/admin" end className="flex items-center gap-3">
+                      <Shield className="h-[18px] w-[18px] shrink-0" />
+                      {!collapsed && <span className="text-[15px]">Admin</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -142,19 +139,25 @@ export function DashboardSidebar() {
         )}
       </SidebarContent>
 
-      <SidebarFooter className="p-4">
-        <Button
-          variant="ghost"
-          className="w-full justify-start gap-3 text-muted-foreground hover:text-foreground"
-          onClick={async () => {
-            const { error } = await signOut();
-            navigate('/');
-            if (error) window.location.reload();
-          }}
+      <SidebarFooter className="p-4 border-t border-border">
+        <button
+          type="button"
+          onClick={() => navigate('/dashboard/profilo')}
+          className="w-full flex items-center gap-3 text-left rounded-xl hover:bg-muted/60 p-2 -m-2 transition-colors"
         >
-          <LogOut className="h-4 w-4 shrink-0" />
-          {!collapsed && <span>Esci</span>}
-        </Button>
+          <div className="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm shrink-0">
+            {initials}
+          </div>
+          {!collapsed && (
+            <div className="min-w-0 flex-1">
+              <div className="text-sm font-semibold text-foreground truncate">{displayName}</div>
+              <div className="text-xs text-muted-foreground flex items-center gap-1">
+                <Settings className="h-3 w-3" />
+                Impostazioni
+              </div>
+            </div>
+          )}
+        </button>
       </SidebarFooter>
     </Sidebar>
   );

@@ -240,6 +240,9 @@ const handler = async (req: Request): Promise<Response> => {
                           <p style="margin:0;font-size:14px;color:#666666;line-height:1.6;">
                             Se hai domande, rispondi a questa email o contattaci a <a href="mailto:supporto@idraulicisubito.com" style="color:#0284c7;">supporto@idraulicisubito.com</a>
                           </p>
+                        </td>
+                      </tr>
+                      
                       
                       <!-- Footer -->
                       <tr>

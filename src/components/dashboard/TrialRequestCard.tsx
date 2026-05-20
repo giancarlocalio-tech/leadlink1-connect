@@ -285,7 +285,7 @@ export function TrialRequestCard({
                 <>
                   <span className="font-medium text-foreground flex items-center gap-1">
                     <Lock className="h-3.5 w-3.5" />
-                    Contatto bloccato
+                    {hasInsufficientBalance ? 'Contatto bloccato' : 'Contatto da sbloccare'}
                   </span>
                   {hasInsufficientBalance ? (
                     <p className="text-xs flex items-center gap-1 mt-0.5 text-destructive">

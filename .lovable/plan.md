@@ -1,66 +1,89 @@
-## Obiettivo
+# 🤖 Preventivatore AI nel wizard `/richiedi-preventivo`
 
-Far variare il costo del lead che l'idraulico sblocca in base a 3 fattori del form cliente:
+Aggiungiamo uno step **"Stima AI istantanea"** dopo la descrizione del problema. Il cliente vede subito range prezzo, diagnosi, cosa farà l'idraulico, urgenza e rischio se rimanda — poi prosegue al form contatti già esistente.
 
-1. **Urgenza** (già attivo: `subito` 6€, `entro_24_ore` 4€, `prossimi_giorni` 2,50€)
-2. **Tipo di intervento** (NUOVO): un rifacimento bagno vale molto più di una sostituzione rubinetto
-3. **Contatto telefonico** (già attivo: −30% se solo chat)
-
-Il prezzo finale mostrato all'idraulico sarà:
+## Flusso utente
 
 ```text
-prezzo = costo_base(urgenza) × moltiplicatore(tipo_intervento) × (chat_only ? 0.7 : 1)
+[1 Descrizione + 📸 foto opzionali]   ← step potenziato
+        ↓
+[2 ✨ Stima AI in 20 sec]              ← NUOVO step
+   ├─ Range prezzo 80-150€
+   ├─ Tempi 1-2 ore
+   ├─ Diagnosi probabile
+   ├─ Cosa farà l'idraulico (checklist)
+   ├─ 🔥 Livello urgenza
+   └─ ⚠️ Rischio se rimandi
+        ↓
+[3 Urgenza] → [4 Tipo immobile] → [5 Accessibilità] → [6 Contatti] → [7 Password]
+        ↓
+   notify-plumbers (con foto + stima AI allegate al lead)
 ```
 
-## Tiering tipi di intervento
+La stima è un **gancio di conversione**: il cliente che la vede ha 3-5× più probabilità di completare il form (pattern Thumbtack Instant Estimate).
 
-Raggruppo i 20 `intervention_type` esistenti in 4 tier con un moltiplicatore:
+## Cosa costruiamo
 
-| Tier | × | Tipi inclusi |
-|---|---|---|
-| **S — micro** | 0.6 | `sostituzione_rubinetto`, `rubinetto_rotto`, `termosifone`, `contatore`, `altro` |
-| **M — standard** | 1.0 | `perdita_acqua`, `scarico_intasato`, `sturare_spurgo`, `riparazione`, `installazione_sostituzione`, `box_doccia`, `addolcitore_acqua`, `depuratore_acqua` |
-| **L — impianto** | 1.4 | `caldaia`, `impianto_idraulico`, `impianto_riscaldamento`, `termoidraulico`, `condizionatori`, `certificazione` |
-| **XL — opera** | 1.8 | `ristrutturazione` |
+### 1. Upload foto nello step descrizione
+- Componente `PhotoUploader` (max 3 foto, drag&drop, preview, compressione client-side a 1280px)
+- Upload su **Lovable Cloud Storage** in bucket `request-photos` (privato, signed URL 7 giorni)
+- Le foto vengono allegate al `service_request` (nuovo campo `photo_urls text[]`)
 
-Esempi (urgenza `subito` = 6€ base):
-- Sostituzione rubinetto + telefono → 6 × 0.6 = **3,60 €**
-- Perdita acqua + telefono → 6 × 1.0 = **6,00 €**
-- Caldaia + telefono → 6 × 1.4 = **8,40 €**
-- Ristrutturazione + telefono → 6 × 1.8 = **10,80 €**
-- Ristrutturazione + chat-only → 10,80 × 0.7 = **7,56 €**
+### 2. Nuovo step "stima" nel wizard
+- `STEPS` diventa: `['description', 'aiEstimate', 'urgency', 'propertyType', 'accessibility', 'contact', 'password']`
+- Entrando nello step parte automaticamente la chiamata AI con animazione "🔍 Analizzo il tuo problema…"
+- Risultato in card scrollabile con CTA "Continua →"
 
-## Modifiche DB
+### 3. Edge function `ai-estimate`
+- Input: `interventionType`, `description`, `answers` (risposte wizard), `photoUrls[]`, `city`
+- Modello: **`google/gemini-3-flash-preview`** (multimodale gratis su Lovable AI Gateway, gestisce foto+testo)
+- System prompt: "Sei un idraulico esperto italiano. Analizza il problema e fornisci una stima professionale onesta. NON garantire prezzi: usa range. Considera complessità, accesso, urgenza, mercato di {city}."
+- Structured output con schema Zod:
+  ```ts
+  { priceMin, priceMax, durationMin, durationMax,
+    diagnosis, plumberSteps[], urgencyLevel, urgencyReason,
+    riskIfPostponed, confidence }
+  ```
+- Salva la stima in colonna `ai_estimate jsonb` del request finale (utile per idraulico + analytics)
 
-1. Nuova tabella `intervention_pricing` (admin-editable):
-   ```text
-   intervention_type (PK, enum) | tier text | multiplier numeric | updated_at
-   ```
-   Seed con i 20 tipi mappati come sopra. RLS: lettura pubblica, scrittura solo admin.
+### 4. Dashboard idraulico
+- `RequestCard` mostra badge "📸 3 foto" e "🤖 Stima AI: 80-150€" → l'idraulico arriva preparato e sblocca con più fiducia (↑ unlock rate)
 
-2. Aggiornare `unlock_contact_with_balance(p_plumber_id, p_request_id)`:
-   - leggere `sr.intervention_type`
-   - moltiplicare `v_cost_cents` per `multiplier` (default 1.0 se mancante)
-   - applicare poi lo sconto chat-only esistente
-   - `ROUND` finale a centesimi
+### 5. SEO + analytics
+- Evento `ai_estimate_generated` (tempo risposta, prezzo, confidence)
+- Evento `ai_estimate_converted` (cliente prosegue dopo aver visto stima)
+- Meta tag wizard aggiornato: "Preventivo idraulico AI gratis in 20 secondi"
 
-3. Aggiornare `description` della `credit_transactions` per includere tier + tipo + sconto chat (utile per supporto/contabilità).
+## Dettagli tecnici
 
-## Modifiche UI idraulico
+**Schema DB** (1 migrazione):
+```sql
+ALTER TABLE service_requests
+  ADD COLUMN photo_urls text[] DEFAULT '{}',
+  ADD COLUMN ai_estimate jsonb;
+```
++ bucket storage `request-photos` (privato) + policy: solo owner request + idraulici che hanno sbloccato.
 
-- `TrialRequestCard.tsx` (e card simili): mostrare il prezzo calcolato in anteprima usando una funzione client `computeUnlockPriceCents({urgency, intervention_type, phone_contact_allowed})` che replica la formula. Niente RPC: i 3 dati sono già visibili al lead prima dello sblocco.
-- Esporre il breakdown sotto il pulsante: «Urgenza subito · Caldaia · solo chat → **5,88 €**» con tooltip dei 3 fattori.
-- L'edge function `unlock_contact_with_balance` resta la sorgente di verità.
+**Files nuovi:**
+- `supabase/functions/ai-estimate/index.ts`
+- `src/components/wizard/PhotoUploader.tsx`
+- `src/components/wizard/AIEstimateCard.tsx`
+- `src/hooks/useAIEstimate.ts`
 
-## File toccati
+**Files modificati:**
+- `src/pages/RequestPage.tsx` (nuovo step + upload foto + chiamata AI)
+- `src/components/dashboard/RequestCard.tsx` (badge foto + stima)
+- `supabase/functions/notify-plumbers/index.ts` (passa photo_urls + ai_estimate)
 
-- Migrazione: crea `intervention_pricing`, seed, RLS, update RPC.
-- `src/lib/pricing.ts` (nuovo): tabella tier + helper `computeUnlockPriceCents`.
-- `src/components/dashboard/TrialRequestCard.tsx`: usa l'helper, breakdown UI.
-- Eventuali altri punti che mostrano il costo (pricing page interna, admin): aggiornare se mostrano il vecchio costo fisso.
+**Costo AI:** `gemini-3-flash-preview` è **gratis nel periodo promozionale Lovable AI** (fino a fine 2026), poi ~0.0003€/stima → trascurabile anche a 10k stime/mese.
 
-## Non incluso
+**Disclaimer legale:** ogni stima mostra in piccolo *"Stima orientativa generata da AI sulla base delle informazioni fornite. Il prezzo definitivo verrà confermato dall'idraulico dopo sopralluogo."* → zero rischio legale.
 
-- Pricing dinamico per città / orario.
-- Modifica del listino base per urgenza (resta com'è oggi in `unlock_costs`).
-- Pannello admin di editing dei moltiplicatori (la tabella è già editabile via Cloud, UI dedicata in futuro).
+## Cosa NON facciamo in questa iterazione
+- Niente landing dedicata `/preventivo-istantaneo` (rimandata a fase 2 se questa converte)
+- Niente preventivo "vincolante" → resta orientativo
+- Niente confronto multi-idraulico → coerente col modello attuale "shared lead"
+
+---
+
+Confermi che procedo o vuoi aggiustare qualcosa (es: limite foto, modello AI, copy disclaimer)?

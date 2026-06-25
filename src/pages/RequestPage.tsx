@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
@@ -12,6 +12,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Progress } from '@/components/ui/progress';
 import analytics from '@/lib/analytics';
+import { PhotoUploader } from '@/components/wizard/PhotoUploader';
+import { AIEstimateCard } from '@/components/wizard/AIEstimateCard';
+import { useAIEstimate } from '@/hooks/useAIEstimate';
 import type { 
   InterventionType, 
   UrgencyType, 
@@ -33,7 +36,8 @@ const ACCESSIBILITY_TYPES: AccessibilityType[] = ['facile', 'media', 'difficile'
 // Step definitions
 const STEPS = [
   'description',
-  'urgency', 
+  'aiEstimate',
+  'urgency',
   'propertyType',
   'accessibility',
   'contact',
@@ -62,12 +66,17 @@ export default function RequestPage() {
     password: '',
   });
   const [noPhoneContact, setNoPhoneContact] = useState(false);
+  const [photoUrls, setPhotoUrls] = useState<string[]>([]);
 
   const currentStep = STEPS[currentStepIndex];
   const progress = ((currentStepIndex + 1) / STEPS.length) * 100;
 
-  // Store wizard answers from previous page
+  // Wizard answers from previous page
   const [wizardAnswers, setWizardAnswers] = useState<Array<{ questionId: string; questionTitle: string; answer: string }>>([]);
+
+  // AI estimate
+  const { estimate, loading: estimateLoading, error: estimateError, generate: generateEstimate, reset: resetEstimate } = useAIEstimate();
+  const estimateRequestedRef = useRef(false);
 
   useEffect(() => {
     interface WizardAnswer {
@@ -90,7 +99,6 @@ export default function RequestPage() {
         city: state.city!,
         description: '',
       }));
-      // Store wizard answers with question titles
       if (state.answers && state.answers.length > 0) {
         setWizardAnswers(state.answers.map(a => ({
           questionId: a.questionId,
@@ -103,6 +111,42 @@ export default function RequestPage() {
     }
   }, [location.state, navigate]);
 
+  const runEstimate = () => {
+    if (estimateRequestedRef.current) return;
+    estimateRequestedRef.current = true;
+    const started = Date.now();
+    generateEstimate({
+      interventionType: formData.interventionType,
+      description: formData.description,
+      city: formData.city,
+      urgency: formData.urgency || undefined,
+      answers: wizardAnswers,
+      photoUrls,
+    })
+      .then((est) => {
+        try {
+          analytics.track?.('ai_estimate_generated', {
+            ms: Date.now() - started,
+            price_min: est.priceMin,
+            price_max: est.priceMax,
+            confidence: est.confidence,
+            photos: photoUrls.length,
+          });
+        } catch {/* noop */}
+      })
+      .catch(() => {
+        // error state is handled by hook
+      });
+  };
+
+  // Trigger estimate when entering the aiEstimate step
+  useEffect(() => {
+    if (currentStep === 'aiEstimate' && !estimate && !estimateLoading && !estimateError) {
+      runEstimate();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStep]);
+
   const updateFormData = <K extends keyof RequestFormData>(
     key: K,
     value: RequestFormData[K]
@@ -113,7 +157,10 @@ export default function RequestPage() {
   const canProceed = (): boolean => {
     switch (currentStep) {
       case 'description':
-        return formData.description.trim().length > 0;
+        return formData.description.trim().length >= 10;
+      case 'aiEstimate':
+        // Si può sempre continuare; se l'AI è in loading aspettiamo
+        return !estimateLoading;
       case 'urgency':
         return !!formData.urgency;
       case 'propertyType':
@@ -136,25 +183,26 @@ export default function RequestPage() {
     if (currentStepIndex < STEPS.length - 1) {
       const nextStep = currentStepIndex + 1;
       setCurrentStepIndex(nextStep);
-      // Track step progression with timing
       analytics.leadFormStep(nextStep + 1, STEPS[nextStep]);
     }
   };
 
   const goBack = () => {
     if (currentStepIndex > 0) {
-      // Track going back
       analytics.leadFormStep(currentStepIndex, STEPS[currentStepIndex - 1]);
       setCurrentStepIndex(prev => prev - 1);
+      // Se torno alla descrizione e modifico, permetto rigenerazione stima
+      if (STEPS[currentStepIndex - 1] === 'description') {
+        estimateRequestedRef.current = false;
+        resetEstimate();
+      }
     } else {
-      // Track abandonment when going back to home from first step
       analytics.leadFormAbandon('description', formData.interventionType);
       navigate('/');
     }
   };
 
   const handleSubmit = async () => {
-    // Full validation before submit
     const missingFields: string[] = [];
     if (!formData.interventionType) missingFields.push('interventionType');
     if (!formData.city) missingFields.push('city');
@@ -182,7 +230,6 @@ export default function RequestPage() {
       formData.urgency
     );
 
-    // 1) Create client account (or sign in if already exists)
     let clientUserId: string | null = null;
     const email = formData.clientEmail.trim();
     const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
@@ -199,7 +246,6 @@ export default function RequestPage() {
     });
 
     if (signUpError) {
-      // If user exists, try sign in with provided password
       const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password: formData.password,
@@ -229,6 +275,8 @@ export default function RequestPage() {
       privacy_accepted: formData.privacyAccepted,
       phone_contact_allowed: !noPhoneContact,
       wizard_answers: wizardAnswers.length > 0 ? wizardAnswers : null,
+      photo_urls: photoUrls,
+      ai_estimate: estimate ?? null,
     };
 
     const startTime = Date.now();
@@ -268,6 +316,8 @@ export default function RequestPage() {
     switch (currentStep) {
       case 'description':
         return 'Descrivi il problema';
+      case 'aiEstimate':
+        return '✨ La tua stima istantanea';
       case 'urgency':
         return 'Quanto è urgente?';
       case 'propertyType':
@@ -287,17 +337,35 @@ export default function RequestPage() {
     switch (currentStep) {
       case 'description':
         return (
-          <div className="space-y-4">
+          <div className="space-y-5">
             <Textarea
               id="description"
-              placeholder="Es. Ho una perdita sotto il lavandino del bagno..."
+              placeholder="Es. Ho una perdita sotto il lavandino del bagno, gocciola da circa 2 giorni..."
               value={formData.description}
               onChange={(e) => updateFormData('description', e.target.value)}
               rows={5}
               className="text-base"
               autoFocus
             />
+            <p className="text-xs text-muted-foreground -mt-2">
+              Più dettagli dai, più precisa sarà la stima AI nel prossimo passo.
+            </p>
+            <PhotoUploader photos={photoUrls} onChange={setPhotoUrls} maxPhotos={3} />
           </div>
+        );
+
+      case 'aiEstimate':
+        return (
+          <AIEstimateCard
+            estimate={estimate}
+            loading={estimateLoading}
+            error={estimateError}
+            onRetry={() => {
+              estimateRequestedRef.current = false;
+              resetEstimate();
+              runEstimate();
+            }}
+          />
         );
 
       case 'urgency':
@@ -480,14 +548,19 @@ export default function RequestPage() {
     }
   };
 
+  const showContinueButton =
+    currentStep === 'description' ||
+    currentStep === 'aiEstimate' ||
+    currentStep === 'contact';
+
   return (
     <Layout>
       <Helmet>
-        <title>Richiedi Preventivo Idraulico Gratuito | Idraulici Subito</title>
-        <meta name="description" content="Compila il modulo per ricevere preventivi gratuiti da idraulici professionisti nella tua zona. Risposta rapida garantita." />
+        <title>Preventivo Idraulico AI Gratis in 30 Secondi | Idraulici Subito</title>
+        <meta name="description" content="Descrivi il problema, allega una foto, ricevi una stima AI istantanea con prezzo e diagnosi. Poi gli idraulici della tua zona ti contattano gratis." />
         <link rel="canonical" href="https://www.idraulicisubito.com/richiesta" />
-        <meta property="og:title" content="Richiedi Preventivo Idraulico Gratuito | Idraulici Subito" />
-        <meta property="og:description" content="Compila il modulo per ricevere preventivi gratuiti da idraulici professionisti nella tua zona." />
+        <meta property="og:title" content="Preventivo Idraulico AI Gratis in 30 Secondi | Idraulici Subito" />
+        <meta property="og:description" content="Stima AI istantanea + preventivi reali da idraulici verificati nella tua zona." />
         <meta property="og:url" content="https://www.idraulicisubito.com/richiesta" />
         <meta name="robots" content="noindex, follow" />
       </Helmet>
@@ -549,22 +622,13 @@ export default function RequestPage() {
                     {isSubmitting ? 'Invio...' : 'Invia richiesta'}
                     {!isSubmitting && <Check className="h-4 w-4 ml-2" />}
                   </Button>
-                ) : currentStep === 'contact' ? (
+                ) : showContinueButton ? (
                   <Button
                     onClick={goNext}
                     disabled={!canProceed()}
                     className="flex-1"
                   >
-                    Continua
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
-                ) : currentStep === 'description' ? (
-                  <Button
-                    onClick={goNext}
-                    disabled={!canProceed()}
-                    className="flex-1"
-                  >
-                    Continua
+                    {currentStep === 'aiEstimate' ? 'Continua e ricevi preventivi' : 'Continua'}
                     <ArrowRight className="h-4 w-4 ml-2" />
                   </Button>
                 ) : null}

@@ -125,7 +125,7 @@ export default function RequestPage() {
     })
       .then((est) => {
         try {
-          analytics.track?.('ai_estimate_generated', {
+          (analytics as any).track?.('ai_estimate_generated', {
             ms: Date.now() - started,
             price_min: est.priceMin,
             price_max: est.priceMax,

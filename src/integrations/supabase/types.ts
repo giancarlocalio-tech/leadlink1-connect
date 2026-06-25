@@ -706,6 +706,7 @@ export type Database = {
           accepted_at: string | null
           accepted_by_id: string | null
           accessibility: Database["public"]["Enums"]["accessibility_type"]
+          ai_estimate: Json | null
           assigned_at: string | null
           assigned_plumber_id: string | null
           assignment_expires_at: string | null
@@ -723,6 +724,7 @@ export type Database = {
           intervention_type: Database["public"]["Enums"]["intervention_type"]
           is_exclusive: boolean
           phone_contact_allowed: boolean
+          photo_urls: string[]
           privacy_accepted: boolean
           property_type: Database["public"]["Enums"]["property_type"]
           status: string | null
@@ -734,6 +736,7 @@ export type Database = {
           accepted_at?: string | null
           accepted_by_id?: string | null
           accessibility: Database["public"]["Enums"]["accessibility_type"]
+          ai_estimate?: Json | null
           assigned_at?: string | null
           assigned_plumber_id?: string | null
           assignment_expires_at?: string | null
@@ -751,6 +754,7 @@ export type Database = {
           intervention_type: Database["public"]["Enums"]["intervention_type"]
           is_exclusive?: boolean
           phone_contact_allowed?: boolean
+          photo_urls?: string[]
           privacy_accepted?: boolean
           property_type: Database["public"]["Enums"]["property_type"]
           status?: string | null
@@ -762,6 +766,7 @@ export type Database = {
           accepted_at?: string | null
           accepted_by_id?: string | null
           accessibility?: Database["public"]["Enums"]["accessibility_type"]
+          ai_estimate?: Json | null
           assigned_at?: string | null
           assigned_plumber_id?: string | null
           assignment_expires_at?: string | null
@@ -779,6 +784,7 @@ export type Database = {
           intervention_type?: Database["public"]["Enums"]["intervention_type"]
           is_exclusive?: boolean
           phone_contact_allowed?: boolean
+          photo_urls?: string[]
           privacy_accepted?: boolean
           property_type?: Database["public"]["Enums"]["property_type"]
           status?: string | null

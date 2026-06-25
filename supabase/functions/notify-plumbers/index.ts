@@ -81,6 +81,8 @@ const handler = async (req: Request): Promise<Response> => {
           questionTitle: z.string(),
           answer: z.string(),
         })).nullable().optional(),
+        photo_urls: z.array(z.string().url()).max(10).optional(),
+        ai_estimate: z.record(z.any()).nullable().optional(),
       })
       .strict();
 
@@ -122,6 +124,8 @@ const handler = async (req: Request): Promise<Response> => {
           client_email: parsed.client_email ?? null,
           client_user_id: parsed.client_user_id ?? null,
           wizard_answers: parsed.wizard_answers ?? null,
+          photo_urls: parsed.photo_urls ?? [],
+          ai_estimate: parsed.ai_estimate ?? null,
         })
         .select("*")
         .single();

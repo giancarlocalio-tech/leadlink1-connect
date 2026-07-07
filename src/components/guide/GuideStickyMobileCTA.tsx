@@ -1,11 +1,12 @@
 /**
- * GuideStickyMobileCTA - Sticky WhatsApp CTA on mobile
+ * GuideStickyMobileCTA - Sticky bottom CTA on mobile
+ * Punta alla chat con l'Idraulico AI (prima diagnosi gratis).
  */
 
 import { useState, useEffect } from 'react';
-import { MessageCircle } from 'lucide-react';
+import { Sparkles, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { buildWhatsAppUrl } from '@/lib/whatsappConfig';
 
 export function GuideStickyMobileCTA() {
   const isMobile = useIsMobile();
@@ -19,19 +20,19 @@ export function GuideStickyMobileCTA() {
 
   if (!isMobile || !isVisible) return null;
 
-  const href = buildWhatsAppUrl();
-
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 p-3 bg-background/95 backdrop-blur-sm border-t border-border shadow-lg">
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center justify-center gap-2 w-full bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold rounded-full px-6 py-3 shadow-lg transition-all"
+      <Link
+        to="/consulenza"
+        className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-primary to-sky-500 text-primary-foreground font-bold rounded-full px-6 py-3 shadow-lg transition-all"
       >
-        <MessageCircle className="h-5 w-5 fill-white" />
-        Contattaci su WhatsApp
-      </a>
+        <Sparkles className="h-5 w-5" />
+        Parla con l'Idraulico AI · Gratis
+        <ArrowRight className="h-4 w-4" />
+      </Link>
+      <p className="text-[10px] text-muted-foreground text-center mt-1.5">
+        Diagnosi immediata · Foto e video · Nessuna registrazione
+      </p>
     </div>
   );
 }

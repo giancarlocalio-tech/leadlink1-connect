@@ -61,46 +61,59 @@ export default function HomePage() {
       </Helmet>
 
       {/* Hero + Chat */}
-      <section className="relative bg-gradient-to-b from-primary/10 via-background to-background pt-6 md:pt-10 pb-8">
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-6 md:mb-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-4">
+      <section className="relative overflow-hidden bg-gradient-to-b from-primary/10 via-sky-500/5 to-background pt-8 md:pt-14 pb-10">
+        {/* Decorative blobs */}
+        <div className="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-primary/20 blur-3xl pointer-events-none" aria-hidden />
+        <div className="absolute -bottom-32 -right-24 w-80 h-80 rounded-full bg-sky-400/20 blur-3xl pointer-events-none" aria-hidden />
+
+        <div className="container mx-auto px-4 relative">
+          <div className="text-center max-w-3xl mx-auto mb-8 md:mb-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/70 backdrop-blur border border-primary/20 text-primary text-xs font-bold mb-5 shadow-sm">
               <Sparkles className="w-3.5 h-3.5" />
-              Prima consulenza gratuita · Nessuna registrazione
+              Prima diagnosi gratis · Nessuna registrazione
             </div>
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight mb-4 leading-tight">
-              Il tuo <span className="text-primary">Idraulico AI</span>
-              <br />
-              risponde in <span className="text-sky-500">30 secondi</span>
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight mb-5 leading-[1.05]">
+              Risolvi il tuo problema<br className="hidden md:block" />{" "}
+              <span className="bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent">
+                idraulico in 30 secondi
+              </span>
             </h1>
             <p className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto">
-              Descrivi il problema, invia una foto. Ricevi diagnosi e procedura passo-passo.
-              Se non riesci, <strong>ti troviamo un idraulico vero vicino a te</strong>.
+              Chatta con l'<strong className="text-foreground">Idraulico AI</strong>, invia una foto e ricevi la soluzione passo-passo.
+              Se serve, ti troviamo un idraulico vero vicino a te.
             </p>
           </div>
 
-          <div className="max-w-4xl mx-auto h-[65vh] min-h-[520px] max-h-[720px]">
+          <div className="max-w-3xl mx-auto h-[62vh] min-h-[520px] max-h-[720px] shadow-2xl shadow-primary/10 rounded-2xl">
             <AIConsultationChat />
           </div>
 
+          {/* Trust bar */}
+          <div className="max-w-3xl mx-auto mt-5 flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-xs md:text-sm text-muted-foreground">
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Risposta immediata</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Analisi foto & video</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Idraulici vicino a te</span>
+          </div>
+
           {/* Quick problems */}
-          <div className="max-w-4xl mx-auto mt-8">
-            <p className="text-center text-sm text-muted-foreground mb-3">Problemi più chiesti:</p>
+          <div className="max-w-4xl mx-auto mt-10">
+            <p className="text-center text-sm font-semibold text-muted-foreground mb-3">Oppure parti da un problema comune:</p>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
               {problemi.map((p) => (
                 <Link
                   key={p.slug}
                   to={`/consulenza?problema=${p.slug}`}
-                  className="flex items-center gap-2 px-3 py-2 rounded-xl border bg-card hover:border-primary hover:bg-primary/5 transition text-sm"
+                  className="group flex items-center gap-2 px-3 py-2.5 rounded-xl border bg-card hover:border-primary hover:bg-primary/5 hover:shadow-md transition-all text-sm"
                 >
-                  <p.icon className="w-4 h-4 text-primary shrink-0" />
-                  <span className="truncate">{p.label}</span>
+                  <p.icon className="w-4 h-4 text-primary shrink-0 group-hover:scale-110 transition-transform" />
+                  <span className="truncate font-medium">{p.label}</span>
                 </Link>
               ))}
             </div>
           </div>
         </div>
       </section>
+
 
       {/* Come funziona */}
       <section className="py-12 md:py-16 bg-muted/30">

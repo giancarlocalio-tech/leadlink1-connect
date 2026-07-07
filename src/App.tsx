@@ -5,6 +5,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { CookieConsent } from "@/components/CookieConsent";
 import HomePage from "./pages/HomePage";
+import ConsulenzaPage from "./pages/ConsulenzaPage";
+import ConsulenzaSuccessoPage from "./pages/ConsulenzaSuccessoPage";
 import RequestPage from "./pages/RequestPage";
 import ConfirmationPage from "./pages/ConfirmationPage";
 import AuthPage from "./pages/AuthPage";
@@ -66,7 +68,12 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/richiesta" element={<RequestPage />} />
+            <Route path="/consulenza" element={<ConsulenzaPage />} />
+            <Route path="/consulenza/successo" element={<ConsulenzaSuccessoPage />} />
+            <Route path="/richiesta" element={<Navigate to="/consulenza" replace />} />
+            <Route path="/richiedi-preventivo" element={<Navigate to="/consulenza" replace />} />
+            <Route path="/_legacy/richiesta" element={<RequestPage />} />
+
             <Route path="/conferma" element={<ConfirmationPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/login" element={<LoginPage />} />

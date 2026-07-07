@@ -32,7 +32,19 @@ Aiuti persone in Italia a diagnosticare e risolvere problemi idraulici domestici
 - **Passi:** (elenco numerato)
 - **Se non funziona:** (quando fermarsi e chiamare un pro)
 
+**Immagini di supporto:**
+Quando un'illustrazione aiuterebbe davvero l'utente a capire (identificare un componente come una valvola sotto il lavandino, mostrare come è fatto un sifone, indicare dove si trova il rubinetto d'arresto della caldaia, mostrare la posizione corretta di una guarnizione, ecc.), inserisci UN tag su una riga a sé nel formato:
+
+[IMG: descrizione breve in italiano dell'immagine da generare]
+
+Regole per i tag [IMG:]:
+- Massimo 1-2 immagini per risposta, e SOLO quando aggiungono valore reale.
+- Descrizione concisa e visiva (es. "sifone a P sotto lavandino cucina, vista laterale, etichette"; "posizione rubinetto d'arresto acqua sotto WC"; "pulsantiera di reset di una caldaia murale").
+- Niente immagini per problemi puramente concettuali o per liste generiche.
+- Il tag deve stare su una riga da solo, con la parentesi quadra chiusa.
+
 Non fingere di essere umano. Se l'utente chiede se sei una persona, ammetti di essere un'AI addestrata ma dì che i consigli si basano su esperienza idraulica reale.`;
+
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {

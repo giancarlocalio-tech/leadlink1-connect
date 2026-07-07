@@ -56,3 +56,22 @@ verify_jwt = false
 
 [functions.create-respondio-contact]
 verify_jwt = false
+
+[functions.ai-consultation-chat]
+verify_jwt = false
+
+[functions.create-ai-consultation-payment]
+verify_jwt = false
+
+[functions.verify-ai-consultation-payment]
+verify_jwt = false
+
+[functions.find-local-plumbers]
+verify_jwt = false
+
+[functions.upload-consultation-media]
+verify_jwt = false
+
+[functions.generate-consultation-image]
+verify_jwt = false
+

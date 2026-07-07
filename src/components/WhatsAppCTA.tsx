@@ -16,7 +16,10 @@ interface CTAProps {
   cityName?: string;
   problema?: string;
   className?: string;
+  fullWidth?: boolean;
+  [key: string]: any;
 }
+
 
 function buildHref({ cityName, problema }: { cityName?: string; problema?: string }) {
   const params = new URLSearchParams();
@@ -65,7 +68,10 @@ interface BoxProps {
   cityName?: string;
   problema?: string;
   className?: string;
+  compact?: boolean;
+  [key: string]: any;
 }
+
 
 export function WhatsAppCTABox({
   title = "🔧 Non riesci a risolvere? Chiedi all'Idraulico AI",

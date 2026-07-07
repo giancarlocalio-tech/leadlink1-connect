@@ -150,26 +150,49 @@ export function AIConsultationChat({ initialPrompt, problemHint, cityHint }: Pro
                   {text && <div className="whitespace-pre-wrap text-sm">{text}</div>}
                 </div>
               ) : (
-                <div className="max-w-[90%]">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs">🔧</div>
-                    <span className="text-xs font-medium text-muted-foreground">Idraulico AI</span>
+                <div className="max-w-[92%] md:max-w-[85%]">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-sky-500 flex items-center justify-center text-sm shadow-sm">🔧</div>
+                    <span className="text-xs font-semibold text-foreground">Idraulico AI</span>
                   </div>
-                  <div className="prose prose-sm max-w-none dark:prose-invert prose-p:my-2 prose-headings:my-2 prose-ul:my-2 prose-ol:my-2 prose-strong:text-foreground">
-                    <ReactMarkdown>{text}</ReactMarkdown>
+                  <div className="rounded-2xl rounded-tl-sm bg-card border px-4 py-3 shadow-sm">
+                    <div className="prose prose-sm max-w-none text-[15px] leading-[1.65]
+                      prose-p:my-2.5 prose-p:leading-[1.65]
+                      prose-headings:font-bold prose-headings:mt-4 prose-headings:mb-2 prose-headings:text-foreground
+                      prose-h1:text-lg prose-h2:text-base prose-h3:text-[15px]
+                      prose-ul:my-2.5 prose-ol:my-2.5 prose-ul:pl-5 prose-ol:pl-5
+                      prose-li:my-1.5 prose-li:leading-[1.6] prose-li:marker:text-primary
+                      prose-strong:text-foreground prose-strong:font-bold
+                      prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+                      prose-hr:my-4 prose-hr:border-border
+                      prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-[13px] prose-code:before:content-none prose-code:after:content-none">
+                      {splitByImageTags(text).map((seg, i) =>
+                        seg.type === "img" ? (
+                          <AIGeneratedImage key={i} prompt={seg.value} />
+                        ) : (
+                          <ReactMarkdown key={i}>{seg.value}</ReactMarkdown>
+                        ),
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
+
             </div>
           );
         })}
 
         {isLoading && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Loader2 className="w-4 h-4 animate-spin" />
-            <span>L'AI sta pensando...</span>
+          <div className="flex items-center gap-2 pl-9">
+            <span className="flex gap-1">
+              <span className="w-2 h-2 rounded-full bg-primary/60 animate-bounce [animation-delay:-0.3s]" />
+              <span className="w-2 h-2 rounded-full bg-primary/60 animate-bounce [animation-delay:-0.15s]" />
+              <span className="w-2 h-2 rounded-full bg-primary/60 animate-bounce" />
+            </span>
+            <span className="text-xs text-muted-foreground">L'AI sta scrivendo…</span>
           </div>
         )}
+
 
         {paywallError && (
           <div className="text-sm text-destructive px-3 py-2 rounded-lg bg-destructive/10">

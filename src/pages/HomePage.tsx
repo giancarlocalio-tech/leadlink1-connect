@@ -61,39 +61,39 @@ export default function HomePage() {
       </Helmet>
 
       {/* Hero + Chat */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-primary/10 via-sky-500/5 to-background pt-8 md:pt-14 pb-10">
+      <section className="relative overflow-hidden bg-gradient-to-b from-primary/10 via-sky-500/5 to-background pt-5 md:pt-14 pb-8 md:pb-10">
         {/* Decorative blobs */}
         <div className="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-primary/20 blur-3xl pointer-events-none" aria-hidden />
         <div className="absolute -bottom-32 -right-24 w-80 h-80 rounded-full bg-sky-400/20 blur-3xl pointer-events-none" aria-hidden />
 
-        <div className="container mx-auto px-4 relative">
-          <div className="text-center max-w-3xl mx-auto mb-8 md:mb-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/70 backdrop-blur border border-primary/20 text-primary text-xs font-bold mb-5 shadow-sm">
-              <Sparkles className="w-3.5 h-3.5" />
-              Prima diagnosi gratis · Nessuna registrazione
+        <div className="container mx-auto px-3 md:px-4 relative">
+          <div className="text-center max-w-3xl mx-auto mb-5 md:mb-10">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/70 backdrop-blur border border-primary/20 text-primary text-[11px] md:text-xs font-bold mb-3 md:mb-5 shadow-sm">
+              <Sparkles className="w-3 h-3 md:w-3.5 md:h-3.5" />
+              Prima diagnosi gratis · No registrazione
             </div>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight mb-5 leading-[1.05]">
-              Risolvi il tuo problema<br className="hidden md:block" />{" "}
+            <h1 className="text-[26px] leading-[1.1] md:text-6xl lg:text-7xl font-black tracking-tight mb-3 md:mb-5">
+              Risolvi il tuo problema{" "}
               <span className="bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent">
                 idraulico in 30 secondi
               </span>
             </h1>
-            <p className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-sm md:text-xl text-muted-foreground max-w-2xl mx-auto px-2">
               Chatta con l'<strong className="text-foreground">Idraulico AI</strong>, invia una foto e ricevi la soluzione passo-passo.
-              Se serve, ti troviamo un idraulico vero vicino a te.
             </p>
           </div>
 
-          <div className="max-w-3xl mx-auto h-[62vh] min-h-[520px] max-h-[720px] shadow-2xl shadow-primary/10 rounded-2xl">
+          <div className="max-w-3xl mx-auto h-[70vh] min-h-[460px] md:min-h-[520px] max-h-[720px] shadow-2xl shadow-primary/10 rounded-2xl">
             <AIConsultationChat />
           </div>
 
           {/* Trust bar */}
-          <div className="max-w-3xl mx-auto mt-5 flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-xs md:text-sm text-muted-foreground">
-            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Risposta immediata</span>
-            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Analisi foto & video</span>
-            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Idraulici vicino a te</span>
+          <div className="max-w-3xl mx-auto mt-4 md:mt-5 flex flex-wrap justify-center items-center gap-x-4 md:gap-x-6 gap-y-1.5 text-[11px] md:text-sm text-muted-foreground">
+            <span className="flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary" /> Risposta immediata</span>
+            <span className="flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary" /> Foto & video</span>
+            <span className="flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary" /> Idraulici vicino</span>
           </div>
+
 
           {/* Quick problems */}
           <div className="max-w-4xl mx-auto mt-10">

@@ -35,6 +35,7 @@ export function WhatsAppCTA({
   cityName,
   problema,
   className,
+  fullWidth,
 }: CTAProps) {
   const sizeCls =
     size === "lg"
@@ -51,9 +52,11 @@ export function WhatsAppCTA({
         "bg-gradient-to-r from-primary to-sky-500 text-primary-foreground",
         "hover:shadow-lg hover:scale-[1.02] transition-all",
         sizeCls,
+        fullWidth && "w-full",
         className,
       )}
     >
+
       <Sparkles className="w-4 h-4" />
       {label}
       <ArrowRight className="w-4 h-4" />

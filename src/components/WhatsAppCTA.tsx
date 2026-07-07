@@ -30,13 +30,22 @@ function buildHref({ cityName, problema }: { cityName?: string; problema?: strin
 }
 
 export function WhatsAppCTA({
-  label = "Parla ora con l'Idraulico AI",
+  label,
   size = "md",
   cityName,
   problema,
   className,
   fullWidth,
 }: CTAProps) {
+  // Ignore any legacy WhatsApp copy still passed by old call sites.
+  const cleanLabel =
+    !label || /whatsapp/i.test(label)
+      ? cityName
+        ? `Parla con l'Idraulico AI · ${cityName}`
+        : "Parla ora con l'Idraulico AI"
+      : label;
+
+
   const sizeCls =
     size === "lg"
       ? "h-14 px-8 text-base"
@@ -58,8 +67,9 @@ export function WhatsAppCTA({
     >
 
       <Sparkles className="w-4 h-4" />
-      {label}
+      {cleanLabel}
       <ArrowRight className="w-4 h-4" />
+
     </Link>
   );
 }
@@ -77,13 +87,26 @@ interface BoxProps {
 
 
 export function WhatsAppCTABox({
-  title = "🔧 Non riesci a risolvere? Chiedi all'Idraulico AI",
-  description = "Descrivi il problema in chat, invia una foto o un breve video: l'AI ti risponde in 30 secondi con la soluzione passo-passo. Se serve, ti troviamo un idraulico vicino a te.",
-  buttonLabel = "Parla ora con l'Idraulico AI",
+  title,
+  description,
+  buttonLabel,
   cityName,
   problema,
   className,
 }: BoxProps) {
+  const cleanTitle =
+    !title || /whatsapp/i.test(title)
+      ? "🔧 Non riesci a risolvere? Chiedi all'Idraulico AI"
+      : title;
+  const cleanDescription =
+    !description || /whatsapp/i.test(description)
+      ? "Descrivi il problema in chat, invia una foto o un breve video: l'AI ti risponde in 30 secondi con la soluzione passo-passo. Se serve, ti troviamo un idraulico vicino a te."
+      : description;
+  const cleanButton =
+    !buttonLabel || /whatsapp/i.test(buttonLabel)
+      ? "Parla ora con l'Idraulico AI"
+      : buttonLabel;
+
   return (
     <div
       className={cn(
@@ -98,13 +121,13 @@ export function WhatsAppCTABox({
           🔧
         </div>
         <div>
-          <h3 className="font-black text-base md:text-lg leading-tight">{title}</h3>
+          <h3 className="font-black text-base md:text-lg leading-tight">{cleanTitle}</h3>
           <p className="text-xs text-primary font-semibold mt-0.5">
             Prima diagnosi gratis · nessuna registrazione
           </p>
         </div>
       </div>
-      <p className="text-sm text-muted-foreground mb-4">{description}</p>
+      <p className="text-sm text-muted-foreground mb-4">{cleanDescription}</p>
 
       <div className="grid grid-cols-3 gap-2 mb-4 text-[11px] md:text-xs">
         <div className="flex items-center gap-1.5 rounded-lg bg-background/60 border px-2 py-1.5">
@@ -122,7 +145,7 @@ export function WhatsAppCTABox({
       </div>
 
       <WhatsAppCTA
-        label={buttonLabel}
+        label={cleanButton}
         size="lg"
         cityName={cityName}
         problema={problema}
@@ -131,3 +154,4 @@ export function WhatsAppCTABox({
     </div>
   );
 }
+

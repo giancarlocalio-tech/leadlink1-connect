@@ -31,10 +31,10 @@ export default function HomePage() {
   return (
     <Layout>
       <Helmet>
-        <title>Idraulico AI · Diagnosi Gratis Online + Idraulico Vicino a Te</title>
+        <title>Idraulico AI · Diagnosi Gratis + Idraulico Vicino a Te</title>
         <meta
           name="description"
-          content="Chatta con l'Idraulico AI: descrivi il problema, invia foto o video, ricevi la soluzione passo-passo. Prima diagnosi gratis. Se serve, ti troviamo un idraulico vero vicino."
+          content="Idraulico AI in chat: descrivi il problema, invia foto o video, ricevi la soluzione. Prima diagnosi gratis. Se serve, ti troviamo un idraulico vicino."
         />
         <link rel="canonical" href="https://www.idraulicisubito.com/" />
         <meta property="og:title" content="Idraulico AI · Risolvi i tuoi problemi idraulici" />

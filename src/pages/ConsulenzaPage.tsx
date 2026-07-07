@@ -26,6 +26,7 @@ export default function ConsulenzaPage() {
       </Helmet>
 
       <div className="h-[calc(100vh-4rem)] bg-background">
+        <h1 className="sr-only">Idraulico AI: Diagnosi e Soluzioni in Tempo Reale</h1>
         <AIConsultationChat
           initialPrompt={initialPrompt}
           problemHint={problemHint}

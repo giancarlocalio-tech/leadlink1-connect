@@ -1,0 +1,33 @@
+# Idraulici Subito
+
+> Piattaforma italiana che collega chi ha un problema idraulico con idraulici professionisti verificati nella propria zona. Include un assistente AI (Idraulico AI) che offre diagnosi gratuita in chat con foto e video.
+
+Idraulici Subito è un marketplace di lead: il cliente descrive il problema (in chat con l'AI oppure via form), riceve una stima e viene messo in contatto off-platform con idraulici della sua provincia. Non gestiamo pagamenti tra cliente e idraulico, non prendiamo commissioni, non ospitiamo chat tra le parti. Gli idraulici pagano crediti per sbloccare i contatti dei clienti.
+
+## Pages
+
+- [Home](/): Diagnosi con Idraulico AI e ricerca idraulico vicino a te.
+- [Consulenza AI](/consulenza): Chat con l'Idraulico AI, prima diagnosi gratis.
+- [Richiedi preventivo](/richiesta): Form guidato per ricevere preventivi da idraulici locali.
+- [Per idraulici](/per-idraulici): Registrazione per idraulici che vogliono ricevere nuovi clienti.
+- [Come funziona](/come-funziona): Spiegazione del servizio lato cliente.
+- [Prezzi interventi](/prezzi): Tariffe indicative per i principali interventi idraulici.
+
+## Guide
+
+- [Guide e articoli](/guide): Guide su perdite, scarichi, caldaie e problemi comuni.
+- [Cassetta WC che perde](/guide/cassetta-wc-perde-soluzioni): Come diagnosticare e riparare.
+- [Scarico intasato](/guide/scarico-intasato-come-fare): Rimedi fai-da-te e quando chiamare l'idraulico.
+- [Caldaia non parte](/guide/caldaia-non-parte-cosa-fare): Checklist di diagnosi.
+
+## Città principali
+
+- [Idraulico Roma](/idraulico-roma): Interventi idraulici a Roma e provincia.
+- [Idraulico Milano](/idraulico-milano): Interventi idraulici a Milano e provincia.
+- [Idraulico Napoli](/idraulico-napoli): Interventi idraulici a Napoli e provincia.
+- [Idraulico Torino](/idraulico-torino): Interventi idraulici a Torino e provincia.
+
+## Optional
+
+- [Privacy Policy](/privacy): Informativa privacy e trattamento dati.
+- [Termini di Servizio](/termini): Termini e condizioni.

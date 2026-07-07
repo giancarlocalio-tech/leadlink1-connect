@@ -14,6 +14,133 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_consultation_events: {
+        Row: {
+          created_at: string
+          event_data: Json | null
+          event_type: string
+          id: string
+          session_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_data?: Json | null
+          event_type: string
+          id?: string
+          session_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_data?: Json | null
+          event_type?: string
+          id?: string
+          session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_consultation_events_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "ai_consultation_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_consultation_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          media_urls: string[] | null
+          metadata: Json | null
+          role: string
+          session_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          media_urls?: string[] | null
+          metadata?: Json | null
+          role: string
+          session_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          media_urls?: string[] | null
+          metadata?: Json | null
+          role?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_consultation_messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "ai_consultation_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_consultation_sessions: {
+        Row: {
+          access_token: string
+          amount_paid_cents: number | null
+          created_at: string
+          detected_city: string | null
+          detected_problem: string | null
+          id: string
+          ip_hash: string | null
+          last_activity_at: string
+          messages_used: number
+          paid_at: string | null
+          referer: string | null
+          stripe_session_id: string | null
+          unlocked: boolean
+          updated_at: string
+          user_agent: string | null
+          user_email: string | null
+        }
+        Insert: {
+          access_token: string
+          amount_paid_cents?: number | null
+          created_at?: string
+          detected_city?: string | null
+          detected_problem?: string | null
+          id?: string
+          ip_hash?: string | null
+          last_activity_at?: string
+          messages_used?: number
+          paid_at?: string | null
+          referer?: string | null
+          stripe_session_id?: string | null
+          unlocked?: boolean
+          updated_at?: string
+          user_agent?: string | null
+          user_email?: string | null
+        }
+        Update: {
+          access_token?: string
+          amount_paid_cents?: number | null
+          created_at?: string
+          detected_city?: string | null
+          detected_problem?: string | null
+          id?: string
+          ip_hash?: string | null
+          last_activity_at?: string
+          messages_used?: number
+          paid_at?: string | null
+          referer?: string | null
+          stripe_session_id?: string | null
+          unlocked?: boolean
+          updated_at?: string
+          user_agent?: string | null
+          user_email?: string | null
+        }
+        Relationships: []
+      }
       assignment_config: {
         Row: {
           created_at: string

@@ -27,16 +27,18 @@ export function AIConsultationChat({ initialPrompt, problemHint, cityHint }: Pro
     setPaywallVisible,
   } = useAIConsultation(problemHint);
 
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, paywallVisible, showPlumbers]);
+    const el = messagesRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [messages, paywallVisible, showPlumbers, status]);
 
   useEffect(() => {
-    textareaRef.current?.focus();
+    // Do not autofocus on mount — on mobile it opens the keyboard and scrolls the page.
   }, []);
+
 
   const isLoading = status === "submitted" || status === "streaming";
   const disabled = isLoading || paywallVisible;
@@ -81,7 +83,7 @@ export function AIConsultationChat({ initialPrompt, problemHint, cityHint }: Pro
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div ref={messagesRef} className="flex-1 overflow-y-auto overscroll-contain p-3 md:p-4 space-y-4">
         {messages.length === 0 && (
           <div className="text-center py-6 md:py-10 max-w-lg mx-auto">
             <div className="text-5xl mb-3">👋</div>

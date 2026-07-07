@@ -66,21 +66,14 @@ export function Header() {
               </>
             ) : (
               <>
-                {!isLoginPage && (
-                  <Link to="/login">
-                    <Button variant="ghost" size="sm">
-                      Login
-                    </Button>
-                  </Link>
-                )}
-                {!isRegisterPage && (
-                  <Link to="/auth">
-                    <Button size="sm" className="text-xs sm:text-sm px-2 sm:px-4 bg-sky-500 hover:bg-sky-600 text-white">
-                      Registrati come idraulico
-                    </Button>
-                  </Link>
-                )}
+                <Link to="/consulenza">
+                  <Button size="sm" className="text-xs sm:text-sm px-3 sm:px-4 bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5 font-semibold">
+                    <span className="text-base leading-none">✨</span>
+                    <span>Parla con l'AI</span>
+                  </Button>
+                </Link>
               </>
+
             )}
           </nav>
         </div>

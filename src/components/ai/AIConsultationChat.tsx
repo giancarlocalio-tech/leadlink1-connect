@@ -6,6 +6,23 @@ import { useAIConsultation } from "@/hooks/useAIConsultation";
 import { MediaUploader } from "./MediaUploader";
 import { PaywallCard } from "./PaywallCard";
 import { LocalPlumbersCard } from "./LocalPlumbersCard";
+import { AIGeneratedImage } from "./AIGeneratedImage";
+
+// Splits assistant text into markdown segments and inline [IMG: ...] tags.
+function splitByImageTags(text: string): Array<{ type: "text" | "img"; value: string }> {
+  const re = /\[IMG:\s*([^\]\n]+)\]/gi;
+  const out: Array<{ type: "text" | "img"; value: string }> = [];
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > last) out.push({ type: "text", value: text.slice(last, m.index) });
+    out.push({ type: "img", value: m[1].trim() });
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) out.push({ type: "text", value: text.slice(last) });
+  return out;
+}
+
 
 interface Props {
   initialPrompt?: string;

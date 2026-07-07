@@ -30,13 +30,22 @@ function buildHref({ cityName, problema }: { cityName?: string; problema?: strin
 }
 
 export function WhatsAppCTA({
-  label = "Parla ora con l'Idraulico AI",
+  label,
   size = "md",
   cityName,
   problema,
   className,
   fullWidth,
 }: CTAProps) {
+  // Ignore any legacy WhatsApp copy still passed by old call sites.
+  const cleanLabel =
+    !label || /whatsapp/i.test(label)
+      ? cityName
+        ? `Parla con l'Idraulico AI · ${cityName}`
+        : "Parla ora con l'Idraulico AI"
+      : label;
+
+
   const sizeCls =
     size === "lg"
       ? "h-14 px-8 text-base"

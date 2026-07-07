@@ -83,15 +83,33 @@ export function AIConsultationChat({ initialPrompt, problemHint, cityHint }: Pro
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 && (
-          <div className="text-center py-8">
-            <div className="text-4xl mb-3">👋</div>
-            <h3 className="font-bold mb-2">Ciao! Sono il tuo Idraulico AI</h3>
-            <p className="text-sm text-muted-foreground max-w-md mx-auto">
-              Descrivimi il tuo problema idraulico. Puoi anche caricare foto o brevi video: analizzo tutto e ti guido passo-passo alla soluzione.
+          <div className="text-center py-6 md:py-10 max-w-lg mx-auto">
+            <div className="text-5xl mb-3">👋</div>
+            <h3 className="font-black text-lg md:text-xl mb-2">Ciao! Sono il tuo Idraulico AI</h3>
+            <p className="text-sm text-muted-foreground mb-5">
+              Descrivimi cosa succede oppure scegli un problema qui sotto. Puoi anche caricare foto o video.
             </p>
-            <p className="text-xs text-muted-foreground/70 mt-3">Prima diagnosi gratis · niente registrazione</p>
+            <div className="grid grid-cols-2 gap-2 text-left">
+              {[
+                { emoji: "💧", label: "Perdita d'acqua", prompt: "Ho una perdita d'acqua, non so da dove viene." },
+                { emoji: "🚿", label: "Scarico otturato", prompt: "Il mio scarico è otturato e non defluisce." },
+                { emoji: "🔥", label: "Caldaia in blocco", prompt: "La caldaia si è bloccata e non si accende." },
+                { emoji: "🚽", label: "WC che perde", prompt: "Il WC perde acqua continuamente." },
+              ].map((s) => (
+                <button
+                  key={s.label}
+                  onClick={() => { setInput(s.prompt); setTimeout(() => textareaRef.current?.focus(), 50); }}
+                  className="flex items-center gap-2 rounded-xl border bg-card hover:border-primary hover:bg-primary/5 px-3 py-2.5 text-sm text-left transition"
+                >
+                  <span className="text-lg">{s.emoji}</span>
+                  <span className="font-medium truncate">{s.label}</span>
+                </button>
+              ))}
+            </div>
+            <p className="text-[11px] text-muted-foreground/70 mt-4">Prima diagnosi gratis · niente registrazione</p>
           </div>
         )}
+
 
         {messages.map((m) => {
           const text = m.parts

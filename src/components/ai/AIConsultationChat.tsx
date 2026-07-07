@@ -164,8 +164,8 @@ export function AIConsultationChat({ initialPrompt, problemHint, cityHint }: Pro
 
         {showPlumbers && <LocalPlumbersCard defaultCity={cityHint} />}
 
-        <div ref={bottomRef} />
       </div>
+
 
       {/* Composer */}
       <div className="border-t bg-card p-3 space-y-2">

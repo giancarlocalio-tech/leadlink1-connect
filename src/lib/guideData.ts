@@ -930,7 +930,8 @@ export const GUIDES: Guide[] = [
   ...PERDITE_GUIDES,
   ...SCARICHI_GUIDES,
   ...CALDAIE_GUIDES,
-  ...GUIDES_V2
+  ...GUIDES_V2,
+  ...GUIDES_V3
 ];
 
 

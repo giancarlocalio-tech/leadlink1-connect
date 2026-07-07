@@ -84,6 +84,7 @@ export const GUIDE_CATEGORIES: GuideCategory[] = [
 
 import { PERDITE_GUIDES, SCARICHI_GUIDES, CALDAIE_GUIDES } from './guidesExpanded';
 import { GUIDES_V2 } from './guidesV2';
+import { GUIDES_V3 } from './guidesV3';
 
 
 export const GUIDES: Guide[] = [
@@ -929,7 +930,8 @@ export const GUIDES: Guide[] = [
   ...PERDITE_GUIDES,
   ...SCARICHI_GUIDES,
   ...CALDAIE_GUIDES,
-  ...GUIDES_V2
+  ...GUIDES_V2,
+  ...GUIDES_V3
 ];
 
 

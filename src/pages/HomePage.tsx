@@ -5,8 +5,6 @@ import {
   Zap,
   Camera,
   MessageCircle,
-  Shield,
-  MapPin,
   ArrowRight,
   Wrench,
   Droplets,

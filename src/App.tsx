@@ -7,29 +7,12 @@ import { CookieConsent } from "@/components/CookieConsent";
 import HomePage from "./pages/HomePage";
 import ConsulenzaPage from "./pages/ConsulenzaPage";
 import ConsulenzaSuccessoPage from "./pages/ConsulenzaSuccessoPage";
-import RequestPage from "./pages/RequestPage";
-import ConfirmationPage from "./pages/ConfirmationPage";
 import AuthPage from "./pages/AuthPage";
 import AuthConfirmPage from "./pages/AuthConfirmPage";
 import LoginPage from "./pages/LoginPage";
-import DashboardPage from "./pages/DashboardPage";
-import RequestsPage from "./pages/RequestsPage";
-import PreventiviPage from "./pages/PreventiviPage";
-import ClientChatPage from "./pages/ClientChatPage";
-import ClientAccountPage from "./pages/ClientAccountPage";
-import SubscriptionPage from "./pages/SubscriptionPage";
-import CreditsPage from "./pages/CreditsPage";
-import TopUpPage from "./pages/TopUpPage";
-import PaymentSuccessPage from "./pages/PaymentSuccessPage";
-import ProfilePage from "./pages/ProfilePage";
 import PrivacyPage from "./pages/PrivacyPage";
 import TermsPage from "./pages/TermsPage";
 import AdminPage from "./pages/AdminPage";
-import PlumberLandingPage from "./pages/PlumberLandingPage";
-import PlumberPlanSelectionPage from "./pages/PlumberPlanSelectionPage";
-import LandingPage from "./pages/LandingPage";
-import LandingLavoriZonaPage from "./pages/LandingLavoriZonaPage";
-import LandingComeFunzionaPage from "./pages/LandingComeFunzionaPage";
 import DynamicLandingPage from "./pages/DynamicLandingPage";
 import KeywordLandingPage from "./pages/KeywordLandingPage";
 import BlogPage from "./pages/BlogPage";
@@ -43,7 +26,6 @@ import ApprofondimentiIndexPage from "./pages/ApprofondimentiIndexPage";
 import StatisticsPage from "./pages/StatisticsPage";
 import ChecklistPage from "./pages/ChecklistPage";
 import ServiceNationalPage from "./pages/ServiceNationalPage";
-import PricingPage from "./pages/PricingPage";
 import ChiSiamoPage from "./pages/ChiSiamoPage";
 import ComeFunzionaPage from "./pages/ComeFunzionaPage";
 import ContattiPage from "./pages/ContattiPage";
@@ -56,7 +38,6 @@ import NapoliQuartierePage from "./pages/NapoliQuartierePage";
 import MilanoQuartierePage from "./pages/MilanoQuartierePage";
 import MilanoLandingPage from "./pages/MilanoLandingPage";
 import SienaLandingPage from "./pages/SienaLandingPage";
-import DashboardRedirect from "./components/DashboardRedirect";
 
 const queryClient = new QueryClient();
 
@@ -72,34 +53,29 @@ const App = () => (
             <Route path="/consulenza/successo" element={<ConsulenzaSuccessoPage />} />
             <Route path="/richiesta" element={<Navigate to="/consulenza" replace />} />
             <Route path="/richiedi-preventivo" element={<Navigate to="/consulenza" replace />} />
-            <Route path="/_legacy/richiesta" element={<RequestPage />} />
+            <Route path="/_legacy/richiesta" element={<Navigate to="/consulenza" replace />} />
 
-            <Route path="/conferma" element={<ConfirmationPage />} />
+            <Route path="/conferma" element={<Navigate to="/" replace />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/auth/confirm" element={<AuthConfirmPage />} />
-            <Route path="/dashboard" element={<DashboardRedirect />} />
-            <Route path="/dashboard/richieste" element={<RequestsPage />} />
-            <Route path="/dashboard/opportunita" element={<Navigate to="/dashboard/richieste" replace />} />
-            <Route path="/dashboard/preventivi" element={<PreventiviPage />} />
-            <Route path="/chat/:token" element={<ClientChatPage />} />
-            <Route path="/account" element={<ClientAccountPage />} />
-            <Route path="/dashboard/abbonamento" element={<Navigate to="/dashboard/crediti" replace />} />
-            <Route path="/dashboard/crediti" element={<CreditsPage />} />
-            <Route path="/dashboard/crediti/ricarica" element={<TopUpPage />} />
-            <Route path="/dashboard/pagamento-completato" element={<PaymentSuccessPage />} />
-            <Route path="/dashboard/profilo" element={<ProfilePage />} />
+            {/* Plumber-facing routes removed — model pivoted to AI-only */}
+            <Route path="/dashboard" element={<Navigate to="/" replace />} />
+            <Route path="/dashboard/*" element={<Navigate to="/" replace />} />
+            <Route path="/chat/:token" element={<Navigate to="/" replace />} />
+            <Route path="/account" element={<Navigate to="/" replace />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/termini" element={<TermsPage />} />
             <Route path="/chi-siamo" element={<ChiSiamoPage />} />
             <Route path="/come-funziona" element={<ComeFunzionaPage />} />
             <Route path="/contatti" element={<ContattiPage />} />
             <Route path="/admin" element={<AdminPage />} />
-            <Route path="/per-idraulici" element={<PlumberLandingPage />} />
-            <Route path="/registrazione/piano" element={<PlumberPlanSelectionPage />} />
-            <Route path="/lp/idraulico" element={<LandingPage />} />
-            <Route path="/lp/lavori-zona" element={<LandingLavoriZonaPage />} />
-            <Route path="/lp/come-funziona" element={<LandingComeFunzionaPage />} />
+            <Route path="/per-idraulici" element={<Navigate to="/" replace />} />
+            <Route path="/registrazione/piano" element={<Navigate to="/" replace />} />
+            <Route path="/lp/idraulico" element={<Navigate to="/" replace />} />
+            <Route path="/lp/lavori-zona" element={<Navigate to="/consulenza" replace />} />
+            <Route path="/lp/come-funziona" element={<Navigate to="/come-funziona" replace />} />
+
             
             {/* Generic keyword SEO pages */}
             <Route path="/idraulico-vicino-a-me" element={<KeywordLandingPage slug="idraulico-vicino-a-me" />} />
@@ -633,17 +609,17 @@ const App = () => (
             <Route path="/servizi/manutenzione-caldaie" element={<ServiceNationalPage />} />
             <Route path="/servizi/installazione-sanitari" element={<ServiceNationalPage />} />
             
-            {/* Pricing Pages - SEO */}
-            <Route path="/costi-idraulico" element={<PricingPage />} />
-            <Route path="/costo-riparazione-perdita-acqua" element={<PricingPage />} />
-            <Route path="/prezzo-spurgo-scarichi" element={<PricingPage />} />
-            <Route path="/costo-wc-intasato" element={<PricingPage />} />
-            <Route path="/costo-sostituzione-sifone" element={<PricingPage />} />
-            <Route path="/costo-manutenzione-caldaia" element={<PricingPage />} />
-            <Route path="/costo-idraulico-urgente" element={<PricingPage />} />
-            <Route path="/costo-riparazione-tubo-perdita" element={<PricingPage />} />
-            <Route path="/costo-installazione-sanitari" element={<PricingPage />} />
-            <Route path="/costo-sostituzione-rubinetto" element={<PricingPage />} />
+            {/* Legacy pricing SEO pages → redirect to AI consultation */}
+            <Route path="/costi-idraulico" element={<Navigate to="/consulenza" replace />} />
+            <Route path="/costo-riparazione-perdita-acqua" element={<Navigate to="/consulenza" replace />} />
+            <Route path="/prezzo-spurgo-scarichi" element={<Navigate to="/consulenza" replace />} />
+            <Route path="/costo-wc-intasato" element={<Navigate to="/consulenza" replace />} />
+            <Route path="/costo-sostituzione-sifone" element={<Navigate to="/consulenza" replace />} />
+            <Route path="/costo-manutenzione-caldaia" element={<Navigate to="/consulenza" replace />} />
+            <Route path="/costo-idraulico-urgente" element={<Navigate to="/consulenza" replace />} />
+            <Route path="/costo-riparazione-tubo-perdita" element={<Navigate to="/consulenza" replace />} />
+            <Route path="/costo-installazione-sanitari" element={<Navigate to="/consulenza" replace />} />
+            <Route path="/costo-sostituzione-rubinetto" element={<Navigate to="/consulenza" replace />} />
             
             {/* Problem + City SEO Pages - Lavandino Intasato */}
             <Route path="/lavandino-intasato-milano" element={<ProblemCityPage />} />

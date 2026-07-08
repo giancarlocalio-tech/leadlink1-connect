@@ -5,8 +5,6 @@ import {
   Zap,
   Camera,
   MessageCircle,
-  Shield,
-  MapPin,
   ArrowRight,
   Wrench,
   Droplets,
@@ -31,14 +29,14 @@ export default function HomePage() {
   return (
     <Layout>
       <Helmet>
-        <title>Idraulico AI · Diagnosi Gratis + Idraulico Vicino a Te</title>
+        <title>Idraulico AI · Diagnosi e Soluzione in Chat a 4,95€</title>
         <meta
           name="description"
-          content="Idraulico AI in chat: descrivi il problema, invia foto o video, ricevi la soluzione. Prima diagnosi gratis. Se serve, ti troviamo un idraulico vicino."
+          content="Idraulico AI in chat: descrivi il problema, invia foto o video, ricevi la soluzione passo-passo. Prima diagnosi gratis, chat illimitata a 4,95€ una tantum."
         />
         <link rel="canonical" href="https://www.idraulicisubito.com/" />
-        <meta property="og:title" content="Idraulico AI · Risolvi i tuoi problemi idraulici" />
-        <meta property="og:description" content="Diagnosi AI in chat + foto/video. Prima domanda gratis. Se non basta, ti troviamo un idraulico vicino." />
+        <meta property="og:title" content="Idraulico AI · Risolvi i tuoi problemi idraulici a 4,95€" />
+        <meta property="og:description" content="Diagnosi AI in chat + foto/video. Prima domanda gratis, chat illimitata a 4,95€ una tantum." />
         <meta property="og:type" content="website" />
         <script type="application/ld+json">
           {JSON.stringify({
@@ -46,14 +44,14 @@ export default function HomePage() {
             "@type": "WebApplication",
             name: "Idraulico AI - IdrauliciSubito",
             description:
-              "Consulenza idraulica AI 24/7 con analisi di foto e video. Diagnosi gratuita, soluzione passo-passo. Trova idraulici vicino a te.",
+              "Consulenza idraulica AI 24/7 con analisi di foto e video. Prima diagnosi gratis, chat illimitata a 4,95€ una tantum.",
             applicationCategory: "UtilitiesApplication",
             operatingSystem: "Any",
             offers: {
               "@type": "Offer",
-              price: "4.90",
+              price: "4.95",
               priceCurrency: "EUR",
-              description: "Consulenza AI completa",
+              description: "Chat illimitata con l'Idraulico AI",
             },
             url: "https://www.idraulicisubito.com/",
           })}
@@ -91,7 +89,7 @@ export default function HomePage() {
           <div className="max-w-3xl mx-auto mt-4 md:mt-5 flex flex-wrap justify-center items-center gap-x-4 md:gap-x-6 gap-y-1.5 text-[11px] md:text-sm text-muted-foreground">
             <span className="flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary" /> Risposta immediata</span>
             <span className="flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary" /> Foto & video</span>
-            <span className="flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary" /> Idraulici vicino</span>
+            <span className="flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary" /> Chat illimitata a 4,95€</span>
           </div>
 
 
@@ -122,12 +120,11 @@ export default function HomePage() {
             <h2 className="text-2xl md:text-4xl font-black mb-3">Come funziona</h2>
             <p className="text-muted-foreground">Semplice, veloce, senza registrazione.</p>
           </div>
-          <div className="grid md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {[
               { icon: MessageCircle, title: "1. Racconta il problema", text: "Descrivi cosa succede in chat. L'AI ti fa le domande giuste." },
               { icon: Camera, title: "2. Invia foto o video", text: "Un'immagine vale mille parole. L'AI analizza direttamente il problema." },
-              { icon: Zap, title: "3. Soluzione passo-passo", text: "Diagnosi, attrezzi, procedura ordinata. Se puoi risolvere da solo, lo fai." },
-              { icon: MapPin, title: "4. Idraulico vicino", text: "Se serve un pro, ti mostriamo i migliori idraulici vicino a te con recensioni." },
+              { icon: Zap, title: "3. Soluzione passo-passo", text: "Diagnosi, attrezzi, procedura ordinata. Risolvi da solo e risparmi la chiamata." },
             ].map((s, i) => (
               <div key={i} className="text-center">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
@@ -144,39 +141,32 @@ export default function HomePage() {
       {/* Pricing */}
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl md:text-4xl font-black mb-3">Trasparente e onesto</h2>
+          <div className="max-w-md mx-auto text-center">
+            <h2 className="text-2xl md:text-4xl font-black mb-3">Un unico prezzo, per sempre</h2>
             <p className="text-muted-foreground mb-8">
-              Nessun abbonamento. Paghi solo se vuoi la soluzione completa.
+              Prima diagnosi gratis. Poi 4,95€ una tantum e la chat resta illimitata per sempre.
             </p>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="rounded-2xl border-2 bg-card p-6 text-left">
-                <div className="text-3xl font-bold mb-1">Gratis</div>
-                <div className="text-sm text-muted-foreground mb-4">per sempre</div>
-                <ul className="space-y-2 text-sm mb-4">
-                  <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />Prima diagnosi con l'AI</li>
-                  <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />Consigli iniziali</li>
-                  <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />Ricerca idraulici locali</li>
-                </ul>
-              </div>
-              <div className="rounded-2xl border-2 border-primary bg-primary/5 p-6 text-left relative">
-                <span className="absolute -top-3 right-4 px-2 py-0.5 rounded-full bg-primary text-primary-foreground text-xs font-bold">Popolare</span>
-                <div className="text-3xl font-bold mb-1 text-primary">€4,90</div>
-                <div className="text-sm text-muted-foreground mb-4">una tantum, niente rinnovi</div>
-                <ul className="space-y-2 text-sm mb-4">
-                  <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />Chat illimitata con l'AI</li>
-                  <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />Analisi foto e video approfondita</li>
-                  <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />Procedura passo-passo dettagliata</li>
-                  <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />Lista attrezzi e sicurezza</li>
-                </ul>
-              </div>
+            <div className="rounded-2xl border-2 border-primary bg-primary/5 p-8 text-left relative">
+              <span className="absolute -top-3 right-4 px-2 py-0.5 rounded-full bg-primary text-primary-foreground text-xs font-bold">Tutto incluso</span>
+              <div className="text-4xl font-black mb-1 text-primary">€4,95</div>
+              <div className="text-sm text-muted-foreground mb-5">una tantum · nessun rinnovo · nessun abbonamento</div>
+              <ul className="space-y-2 text-sm mb-6">
+                <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />Chat <strong>illimitata per sempre</strong> con l'Idraulico AI</li>
+                <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />Analisi <strong>foto e video</strong> approfondita</li>
+                <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />Procedura passo-passo dettagliata</li>
+                <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />Lista attrezzi e istruzioni di sicurezza</li>
+                <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />Assistenza su <strong>ogni nuovo problema</strong>, senza altri pagamenti</li>
+              </ul>
+              <Link to="/consulenza" className="block">
+                <Button size="lg" className="w-full gap-2 h-12">
+                  Inizia gratis
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+              <p className="text-xs text-muted-foreground text-center mt-3">
+                Pagamento sicuro con Stripe · Carte · Apple Pay · Google Pay
+              </p>
             </div>
-            <Link to="/consulenza" className="inline-block mt-8">
-              <Button size="lg" className="gap-2 h-12 px-8">
-                Inizia gratis
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-            </Link>
           </div>
         </div>
       </section>
@@ -189,15 +179,15 @@ export default function HomePage() {
             {[
               {
                 q: "L'AI può davvero risolvere il mio problema?",
-                a: "Per problemi comuni (perdite di rubinetti, scarichi otturati, sifoni, WC che perde, cassette, sfiati termosifoni, ecc.) la percentuale di successo è alta: l'AI ti fa le domande giuste, analizza le foto e ti spiega passo-passo. Per problemi complessi o urgenze (allagamenti, gas, guasti caldaie) ti indirizza subito a un idraulico vero.",
+                a: "Per problemi comuni (perdite di rubinetti, scarichi otturati, sifoni, WC che perde, cassette, sfiati termosifoni, ecc.) la percentuale di successo è alta: l'AI ti fa le domande giuste, analizza le foto e ti spiega passo-passo. Per situazioni complesse o urgenze (allagamenti, gas, guasti caldaie) l'AI ti dice chiaramente quando è meglio chiamare un professionista.",
               },
               {
                 q: "Come funziona il pagamento?",
-                a: "La prima diagnosi è gratis. Se vuoi la soluzione completa e la chat illimitata, sblocchi tutto a €4,90 una tantum con Stripe (carte, Apple Pay, Google Pay). Niente abbonamenti, niente rinnovi.",
+                a: "La prima diagnosi è gratis. Se vuoi la chat illimitata per sempre, sblocchi tutto a €4,95 una tantum con Stripe (carte, Apple Pay, Google Pay). Niente abbonamenti, niente rinnovi.",
               },
               {
-                q: "Cosa succede se non riesco a risolvere?",
-                a: "Nessun problema: cerchiamo per te i migliori idraulici vicino a te su Google, con rating e recensioni verificate. Li chiami direttamente, senza intermediari.",
+                q: "Vale per tutti i problemi futuri?",
+                a: "Sì. Una volta sbloccata la chat, puoi tornare quando vuoi con qualsiasi nuovo problema idraulico. Non ci sono altri pagamenti da fare.",
               },
               {
                 q: "I miei dati sono al sicuro?",

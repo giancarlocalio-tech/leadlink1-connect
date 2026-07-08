@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef, forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { MapPin, Loader2 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { MapPin } from 'lucide-react';
+
+// Stubbed after pivot: italian_cities table removed. Kept as free-text input
+// so legacy blog/city forms keep compiling. Emits the raw string as displayValue.
 
 export interface ItalianCity {
   id: string;
@@ -24,197 +25,21 @@ interface CityAutocompleteProps {
 export const CityAutocomplete = forwardRef<HTMLDivElement, CityAutocompleteProps>(({
   value,
   onChange,
-  placeholder = "Cerca città o CAP...",
+  placeholder = "Città",
   className = "",
   autoFocus = false,
 }, ref) => {
-  const [inputValue, setInputValue] = useState(value);
-  const [suggestions, setSuggestions] = useState<ItalianCity[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Sync input value with external value
-  useEffect(() => {
-    setInputValue(value);
-  }, [value]);
-
-  // Search cities when input changes
-  useEffect(() => {
-    const searchCities = async () => {
-      if (inputValue.length < 2) {
-        setSuggestions([]);
-        return;
-      }
-
-      setIsLoading(true);
-      try {
-        // Check if input looks like a CAP (5 digits)
-        const isCAP = /^\d{2,5}$/.test(inputValue);
-
-        let query = supabase
-          .from('italian_cities')
-          .select('*')
-          .limit(10);
-
-        if (isCAP) {
-          // Search by CAP
-          query = query.contains('cap', [inputValue]);
-        } else {
-          // Search by city name (case insensitive)
-          query = query.ilike('name', `${inputValue}%`);
-        }
-
-        const { data, error } = await query;
-
-        if (error) {
-          console.error('Error searching cities:', error);
-          setSuggestions([]);
-        } else {
-          setSuggestions(data || []);
-        }
-      } catch (err) {
-        console.error('Error in city search:', err);
-        setSuggestions([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    const debounceTimer = setTimeout(searchCities, 200);
-    return () => clearTimeout(debounceTimer);
-  }, [inputValue]);
-
-  // Handle click outside to close suggestions
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setShowSuggestions(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setInputValue(newValue);
-    setShowSuggestions(true);
-    setSelectedIndex(-1);
-    onChange(null, newValue);
-  };
-
-  const handleSelectCity = (city: ItalianCity) => {
-    const displayValue = `${city.name} (${city.province_code})`;
-    setInputValue(displayValue);
-    setSuggestions([]);
-    setShowSuggestions(false);
-    onChange(city, displayValue);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!showSuggestions || suggestions.length === 0) return;
-
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        setSelectedIndex(prev => 
-          prev < suggestions.length - 1 ? prev + 1 : prev
-        );
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        setSelectedIndex(prev => prev > 0 ? prev - 1 : -1);
-        break;
-      case 'Enter':
-        e.preventDefault();
-        if (selectedIndex >= 0 && selectedIndex < suggestions.length) {
-          handleSelectCity(suggestions[selectedIndex]);
-        }
-        break;
-      case 'Escape':
-        setShowSuggestions(false);
-        setSelectedIndex(-1);
-        break;
-    }
-  };
-
   return (
-    <div ref={containerRef} className={`relative ${className}`}>
-      <div className="relative">
-        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          ref={inputRef}
-          value={inputValue}
-          onChange={handleInputChange}
-          onFocus={() => setShowSuggestions(true)}
-          onKeyDown={handleKeyDown}
-          placeholder={placeholder}
-          className="pl-10 pr-10"
-          autoFocus={autoFocus}
-          autoComplete="off"
-        />
-        {isLoading && (
-          <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground animate-spin" />
-        )}
-      </div>
-
-      {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-xl overflow-hidden animate-fade-in">
-          <ScrollArea className="max-h-[280px]">
-            <div className="p-1.5">
-              {suggestions.map((city, index) => (
-                <button
-                  key={city.id}
-                  onClick={() => handleSelectCity(city)}
-                  className={`w-full flex items-start gap-3 p-3 rounded-lg text-left transition-all duration-150 ${
-                    index === selectedIndex
-                      ? 'bg-primary/10 border border-primary/20'
-                      : 'hover:bg-accent/60 border border-transparent'
-                  }`}
-                >
-                  <div className="flex items-center justify-center h-9 w-9 rounded-full bg-primary/10 shrink-0">
-                    <MapPin className="h-4 w-4 text-primary" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <p className="font-semibold text-foreground">
-                        {city.name}
-                      </p>
-                      <span className="text-xs font-medium px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
-                        {city.province_code}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1.5 mt-0.5">
-                      <p className="text-sm text-muted-foreground">
-                        {city.province_name}
-                      </p>
-                      <span className="text-muted-foreground/50">•</span>
-                      <p className="text-sm font-medium text-primary/80">
-                        {city.region}
-                      </p>
-                    </div>
-                    {city.cap && city.cap.length > 0 && (
-                      <p className="text-xs text-muted-foreground/70 mt-1">
-                        CAP: {city.cap.slice(0, 3).join(', ')}{city.cap.length > 3 ? ` +${city.cap.length - 3}` : ''}
-                      </p>
-                    )}
-                  </div>
-                </button>
-              ))}
-            </div>
-          </ScrollArea>
-        </div>
-      )}
-
-      {showSuggestions && inputValue.length >= 2 && !isLoading && suggestions.length === 0 && (
-        <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg p-4 text-center text-sm text-muted-foreground">
-          Nessuna città trovata per "{inputValue}"
-        </div>
-      )}
+    <div ref={ref} className={`relative ${className}`}>
+      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+      <Input
+        type="text"
+        value={value}
+        onChange={(e) => onChange(null, e.target.value)}
+        placeholder={placeholder}
+        autoFocus={autoFocus}
+        className="pl-9"
+      />
     </div>
   );
 });

@@ -7,7 +7,7 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-session-token",
 };
 
-const PRICE_ID = "price_1TqU15GG40HuLABOHCc0bxeJ";
+const PRICE_ID = "price_1TqtEkGG40HuLABOHrmXUJTU"; // €4,95 one-shot
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {

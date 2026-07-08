@@ -4,7 +4,7 @@ import { ArrowUp, Loader2 } from "lucide-react";
 import { useAIConsultation } from "@/hooks/useAIConsultation";
 import { MediaUploader } from "./MediaUploader";
 import { PaywallCard } from "./PaywallCard";
-import { LocalPlumbersCard } from "./LocalPlumbersCard";
+// LocalPlumbersCard removed after AI-only pivot
 import { AIGeneratedImage } from "./AIGeneratedImage";
 
 function splitByImageTags(text: string): Array<{ type: "text" | "img"; value: string }> {
@@ -220,11 +220,6 @@ export function AIConsultationChat({ initialPrompt, problemHint, cityHint }: Pro
           <p className="text-[11px] text-muted-foreground text-center mt-2">
             L'Idraulico AI può sbagliare. Per gas, caldaie o elettricità serve un tecnico abilitato.
           </p>
-          {cityHint && messages.length > 3 && (
-            <div className="mt-3">
-              <LocalPlumbersCard defaultCity={cityHint} />
-            </div>
-          )}
         </div>
       </div>
     </div>

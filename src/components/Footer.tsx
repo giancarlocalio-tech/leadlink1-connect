@@ -15,25 +15,25 @@ export function Footer() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
               <h2 className="text-3xl md:text-4xl font-black tracking-tight">
-                Hai un'emergenza idraulica?
+                Hai un problema idraulico?
               </h2>
               <p className="text-background/70 mt-2 max-w-xl">
-                Invia la tua richiesta e ricevi più preventivi gratis da idraulici verificati della tua zona. Senza impegno, risposta in pochi minuti.
+                Parla subito con l'Idraulico AI: descrivi il problema, invia una foto e ricevi la soluzione passo-passo. Prima diagnosi gratis, chat illimitata a 4,95€ una tantum.
               </p>
             </div>
             <Link
-              to="/richiesta"
+              to="/consulenza"
               className="inline-flex items-center justify-center gap-2 bg-sky-500 hover:bg-sky-600 text-white font-bold px-6 py-4 rounded-2xl transition-all hover:-translate-y-0.5 shadow-[0_10px_30px_-10px_rgba(14,165,233,0.5)] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-foreground"
             >
-              Ricevi preventivi gratis →
+              ✨ Parla con l'AI →
             </Link>
           </div>
 
           {/* Trust micro-row */}
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-8 text-xs text-background/60">
-            <span className="inline-flex items-center gap-1.5"><Shield className="h-3.5 w-3.5" /> Professionisti verificati</span>
-            <span className="inline-flex items-center gap-1.5"><Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" /> 4.8/5 · 500+ recensioni</span>
-            <span className="inline-flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> Risposta media ~8 minuti</span>
+            <span className="inline-flex items-center gap-1.5"><Shield className="h-3.5 w-3.5" /> Privato e senza registrazione</span>
+            <span className="inline-flex items-center gap-1.5"><Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" /> Diagnosi in 30 secondi</span>
+            <span className="inline-flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> Disponibile 24/7</span>
           </div>
         </div>
       </div>
@@ -44,16 +44,17 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2.5 mb-4">
-              <img src={logoIcon} alt="Idraulici Subito" className="h-10 w-auto object-contain" width={64} height={64} />
-              <span className="text-lg font-extrabold tracking-tight">Idraulici Subito</span>
+              <img src={logoIcon} alt="Idraulico AI" className="h-10 w-auto object-contain" width={64} height={64} />
+              <span className="text-lg font-extrabold tracking-tight">Idraulico AI</span>
             </div>
             <p className="text-background/60 text-sm leading-relaxed mb-6">
-              Il marketplace che mette in contatto clienti e idraulici professionisti verificati in tutta Italia. Senza commissioni, senza intermediari.
+              L'assistente AI che risolve i tuoi problemi idraulici in chat. Diagnosi, foto, video e soluzioni passo-passo 24/7.
             </p>
             <div className="text-xs text-background/40">
-              Attivo in oltre <span className="text-background font-bold">50 città</span> italiane.
+              Attivo <span className="text-background font-bold">24 ore su 24</span>, in tutta Italia.
             </div>
           </div>
+
 
           {/* Link Utili */}
           <div>
@@ -62,7 +63,7 @@ export function Footer() {
               <li><Link to="/" className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">Home</Link></li>
               <li><Link to="/contatti" className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">Contattaci</Link></li>
               <li><Link to="/guide" className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">Guide e Consigli</Link></li>
-              <li><Link to="/per-idraulici" className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">Sei un idraulico?</Link></li>
+              <li><Link to="/consulenza" className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">Parla con l'AI</Link></li>
               {KEYWORD_PAGES.slice(0, 4).map((page) => (
                 <li key={page.slug}>
                   <Link to={`/${page.slug}`} className="text-background/70 hover:text-background text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-foreground">

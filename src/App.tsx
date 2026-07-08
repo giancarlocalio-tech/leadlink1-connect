@@ -72,34 +72,29 @@ const App = () => (
             <Route path="/consulenza/successo" element={<ConsulenzaSuccessoPage />} />
             <Route path="/richiesta" element={<Navigate to="/consulenza" replace />} />
             <Route path="/richiedi-preventivo" element={<Navigate to="/consulenza" replace />} />
-            <Route path="/_legacy/richiesta" element={<RequestPage />} />
+            <Route path="/_legacy/richiesta" element={<Navigate to="/consulenza" replace />} />
 
-            <Route path="/conferma" element={<ConfirmationPage />} />
+            <Route path="/conferma" element={<Navigate to="/" replace />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/auth/confirm" element={<AuthConfirmPage />} />
-            <Route path="/dashboard" element={<DashboardRedirect />} />
-            <Route path="/dashboard/richieste" element={<RequestsPage />} />
-            <Route path="/dashboard/opportunita" element={<Navigate to="/dashboard/richieste" replace />} />
-            <Route path="/dashboard/preventivi" element={<PreventiviPage />} />
-            <Route path="/chat/:token" element={<ClientChatPage />} />
-            <Route path="/account" element={<ClientAccountPage />} />
-            <Route path="/dashboard/abbonamento" element={<Navigate to="/dashboard/crediti" replace />} />
-            <Route path="/dashboard/crediti" element={<CreditsPage />} />
-            <Route path="/dashboard/crediti/ricarica" element={<TopUpPage />} />
-            <Route path="/dashboard/pagamento-completato" element={<PaymentSuccessPage />} />
-            <Route path="/dashboard/profilo" element={<ProfilePage />} />
+            {/* Plumber-facing routes removed — model pivoted to AI-only */}
+            <Route path="/dashboard" element={<Navigate to="/" replace />} />
+            <Route path="/dashboard/*" element={<Navigate to="/" replace />} />
+            <Route path="/chat/:token" element={<Navigate to="/" replace />} />
+            <Route path="/account" element={<Navigate to="/" replace />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/termini" element={<TermsPage />} />
             <Route path="/chi-siamo" element={<ChiSiamoPage />} />
             <Route path="/come-funziona" element={<ComeFunzionaPage />} />
             <Route path="/contatti" element={<ContattiPage />} />
             <Route path="/admin" element={<AdminPage />} />
-            <Route path="/per-idraulici" element={<PlumberLandingPage />} />
-            <Route path="/registrazione/piano" element={<PlumberPlanSelectionPage />} />
-            <Route path="/lp/idraulico" element={<LandingPage />} />
-            <Route path="/lp/lavori-zona" element={<LandingLavoriZonaPage />} />
-            <Route path="/lp/come-funziona" element={<LandingComeFunzionaPage />} />
+            <Route path="/per-idraulici" element={<Navigate to="/" replace />} />
+            <Route path="/registrazione/piano" element={<Navigate to="/" replace />} />
+            <Route path="/lp/idraulico" element={<Navigate to="/" replace />} />
+            <Route path="/lp/lavori-zona" element={<Navigate to="/consulenza" replace />} />
+            <Route path="/lp/come-funziona" element={<Navigate to="/come-funziona" replace />} />
+
             
             {/* Generic keyword SEO pages */}
             <Route path="/idraulico-vicino-a-me" element={<KeywordLandingPage slug="idraulico-vicino-a-me" />} />

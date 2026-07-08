@@ -52,7 +52,7 @@ export function PaywallCard({ onClose }: Props) {
       <ul className="space-y-2 mb-5 text-sm">
         <li className="flex gap-2">
           <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-          <span><strong>Conversazione illimitata</strong> con l'AI idraulico</span>
+          <span><strong>Chat illimitata per sempre</strong> con l'Idraulico AI</span>
         </li>
         <li className="flex gap-2">
           <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
@@ -64,11 +64,11 @@ export function PaywallCard({ onClose }: Props) {
         </li>
         <li className="flex gap-2">
           <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-          <span>Se non riesci, ti troviamo <strong>un idraulico vicino</strong> con recensioni Google</span>
+          <span>Assistenza su <strong>ogni nuovo problema</strong> idraulico, senza altri pagamenti</span>
         </li>
       </ul>
       <div className="flex items-baseline gap-2 mb-4">
-        <span className="text-3xl font-bold text-primary">€4,90</span>
+        <span className="text-3xl font-bold text-primary">€4,95</span>
         <span className="text-sm text-muted-foreground">una tantum · niente abbonamenti</span>
       </div>
       <Button

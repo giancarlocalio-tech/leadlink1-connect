@@ -215,16 +215,9 @@ export default function ApprofondimentoPage() {
                 )}
               </div>
 
-              {/* Soft CTA at bottom only */}
-              <Card className="mt-12 bg-primary/5 border-primary/20">
-                <CardContent className="p-6 text-center">
-                  <h3 className="font-semibold mb-2">Hai un problema idraulico?</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Trova un professionista disponibile nella tua zona.
-                  </p>
-                  <WhatsAppCTA label="Contattaci su WhatsApp" size="md" />
-                </CardContent>
-              </Card>
+              {/* AI Chat CTA at bottom */}
+              <AIChatCTA variant="default" className="mt-12" />
+
             </article>
           </div>
         </div>

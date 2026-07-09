@@ -3,7 +3,7 @@
  *
  * Storicamente si chiamava WhatsAppCTA. Il nome è mantenuto per compatibilità
  * con i molti call site sparsi in guide/città/blog: ora però il CTA porta
- * l'utente alla chat con l'Idraulico AI (prima diagnosi gratis, poi €4,90).
+ * l'utente alla chat con l'Idraulico AI (prima diagnosi gratis, poi €4,95).
  */
 
 import { Link } from "react-router-dom";

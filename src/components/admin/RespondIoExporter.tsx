@@ -3,7 +3,8 @@ import { Download, Users, Phone, Mail, RefreshCw, MessageCircle } from 'lucide-r
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase as _sb } from '@/integrations/supabase/client';
+const supabase = _sb as any;
 import { toast } from 'sonner';
 
 interface PlumberContact {

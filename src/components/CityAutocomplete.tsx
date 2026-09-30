@@ -2,7 +2,8 @@ import { useState, useEffect, useRef, forwardRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { MapPin, Loader2 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase as _sb } from '@/integrations/supabase/client';
+const supabase = _sb as any;
 
 export interface ItalianCity {
   id: string;

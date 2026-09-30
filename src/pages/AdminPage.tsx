@@ -51,7 +51,8 @@ import {
 import { Layout } from '@/components/Layout';
 import { useAuth } from '@/hooks/useAuth';
 import { useAdmin } from '@/hooks/useAdmin';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase as _sb } from '@/integrations/supabase/client';
+const supabase = _sb as any;
 import { toast } from 'sonner';
 import type { 
   PlumberProfile, 

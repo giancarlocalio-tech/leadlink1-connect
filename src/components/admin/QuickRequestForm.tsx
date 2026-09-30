@@ -18,7 +18,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase as _sb } from '@/integrations/supabase/client';
+const supabase = _sb as any;
 import { toast } from 'sonner';
 import { 
   INTERVENTION_LABELS, 

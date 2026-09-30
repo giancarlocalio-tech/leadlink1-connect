@@ -18,7 +18,8 @@ import { SubscriptionProvider, useSubscriptionContext } from '@/contexts/Subscri
 import { useTrialRequests } from '@/hooks/useTrialRequests';
 import { useCredits } from '@/hooks/useCredits';
 import type { UnlockWithCreditsResult } from '@/components/dashboard/TrialRequestCard';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase as _sb } from '@/integrations/supabase/client';
+const supabase = _sb as any;
 import { toast } from 'sonner';
 import type { ServiceRequest, InterventionType, UrgencyType, PropertyType, AccessibilityType } from '@/lib/types';
 

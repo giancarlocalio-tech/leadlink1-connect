@@ -17,7 +17,8 @@ import { usePlumberProfile } from '@/hooks/usePlumberProfile';
 import { useCredits } from '@/hooks/useCredits';
 import { SubscriptionProvider } from '@/contexts/SubscriptionContext';
 import { useTrialRequests } from '@/hooks/useTrialRequests';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase as _sb } from '@/integrations/supabase/client';
+const supabase = _sb as any;
 import { INTERVENTION_LABELS, URGENCY_LABELS } from '@/lib/types';
 
 // Wrapper component to provide subscription context

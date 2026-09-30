@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase as _sb } from '@/integrations/supabase/client';
+const supabase = _sb as any;
 import { useAuth } from './useAuth';
 import type { PlumberProfile, InterventionType, AvailabilityType } from '@/lib/types';
 

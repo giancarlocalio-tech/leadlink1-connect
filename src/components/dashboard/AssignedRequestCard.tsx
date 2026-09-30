@@ -27,7 +27,8 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase as _sb } from '@/integrations/supabase/client';
+const supabase = _sb as any;
 import type { ServiceRequest, UrgencyType } from '@/lib/types';
 import { 
   INTERVENTION_LABELS, 

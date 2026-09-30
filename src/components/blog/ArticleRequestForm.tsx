@@ -1,4 +1,4 @@
-import { AIChatCTA } from '@/components/AIChatCTA';
+import { WhatsAppCTABox } from '@/components/WhatsAppCTA';
 
 interface ArticleRequestFormProps {
   interventionType?: string;
@@ -9,17 +9,19 @@ interface ArticleRequestFormProps {
 }
 
 export function ArticleRequestForm({
+  interventionType = 'altro',
   problemContext = '',
-  title,
-  description,
+  title = 'Non si è ancora risolto?',
+  description = 'Scrivici subito su WhatsApp: ti mettiamo in contatto con un idraulico qualificato nella tua zona.',
   compact = false,
 }: ArticleRequestFormProps) {
   return (
-    <AIChatCTA
-      variant={compact ? 'minimal' : 'inline'}
-      title={title}
-      description={description}
+    <WhatsAppCTABox
+      title={title || undefined}
+      description={description || undefined}
+      interventionType={interventionType}
       problemContext={problemContext}
+      compact={compact}
     />
   );
 }

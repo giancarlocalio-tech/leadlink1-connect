@@ -4,9 +4,10 @@
  * Final conversion section linking to city landing pages.
  */
 
+import { WhatsAppCTA } from '@/components/WhatsAppCTA';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { MapPin, ArrowRight, Sparkles } from 'lucide-react';
+import { MapPin, ArrowRight } from 'lucide-react';
 import { TOP_50_CITIES } from '@/lib/seoConfig';
 
 interface GuideCityLinksProps {
@@ -50,13 +51,7 @@ export function GuideCityLinks({ maxCities = 15 }: GuideCityLinksProps) {
       </div>
 
       <div className="text-center">
-        <Button asChild size="lg" className="font-semibold">
-          <Link to="/consulenza">
-            <Sparkles className="h-4 w-4 mr-2" />
-            Prova prima la diagnosi gratis con l'Idraulico AI
-            <ArrowRight className="h-4 w-4 ml-2" />
-          </Link>
-        </Button>
+        <WhatsAppCTA label="Contattaci ora su WhatsApp" size="lg" fullWidth={false} />
       </div>
     </section>
   );

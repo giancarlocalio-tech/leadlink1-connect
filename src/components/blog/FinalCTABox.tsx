@@ -1,4 +1,4 @@
-import { AIChatCTA } from '@/components/AIChatCTA';
+import { WhatsAppCTABox } from '@/components/WhatsAppCTA';
 
 interface FinalCTABoxProps {
   title?: string;
@@ -8,15 +8,16 @@ interface FinalCTABoxProps {
 }
 
 export function FinalCTABox({
-  title,
-  description,
+  title = 'Hai bisogno di un professionista?',
+  description = 'Scrivici subito su WhatsApp: ti rispondiamo in pochi minuti e troviamo un idraulico nella tua zona.',
+  interventionType = 'altro',
   problemContext = '',
 }: FinalCTABoxProps) {
   return (
-    <AIChatCTA
-      variant="default"
-      title={title}
+    <WhatsAppCTABox
+      title={`🔧 ${title}`}
       description={description}
+      interventionType={interventionType}
       problemContext={problemContext}
     />
   );
